@@ -1,0 +1,479 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AF3FC42C1DF858690021F050 /* AssemblerDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AF3FC42B1DF858690021F050 /* AssemblerDocument.m */; };
+		AF5CF8B11DFF30F400C08E36 /* AssemblerOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF5CF8B31DFF30F400C08E36 /* AssemblerOptionsView.xib */; };
+		AFADBC351DF9D4DE000AD2F2 /* XDTools99.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */; };
+		AFADBC371DF9D5B7000AD2F2 /* XDTools99.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AFB73F191E002FF40063BBCC /* NSViewAutolayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB73F181E002FF40063BBCC /* NSViewAutolayoutAdditions.m */; };
+		AFDC40B31DFB254A006B2A27 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = AFF958511DF178EC00062DEB /* README.md */; };
+		AFDECF291DF176B1008870F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AFDECF281DF176B1008870F7 /* AppDelegate.m */; };
+		AFDECF2C1DF176B1008870F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AFDECF2B1DF176B1008870F7 /* main.m */; };
+		AFDECF2F1DF176B1008870F7 /* SourceCodeDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AFDECF2E1DF176B1008870F7 /* SourceCodeDocument.m */; };
+		AFDECF321DF176B1008870F7 /* Document.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF301DF176B1008870F7 /* Document.xib */; };
+		AFDECF341DF176B1008870F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF331DF176B1008870F7 /* Assets.xcassets */; };
+		AFDECF371DF176B1008870F7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF351DF176B1008870F7 /* MainMenu.xib */; };
+		AFFDB6871DFC6A95006788CC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AFFDB6831DFC6A95006788CC /* InfoPlist.strings */; };
+		AFFDB6881DFC6A95006788CC /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = AFFDB6851DFC6A95006788CC /* Credits.html */; };
+		AFFF3A3A1E05640700909C6C /* HWHexNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = AFFF3A391E05640700909C6C /* HWHexNumberFormatter.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AFADBC331DF9D28A000AD2F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AFE630531DF9BB67005FFD01;
+			remoteInfo = XDTools99;
+		};
+		AFADBC391DF9D63D000AD2F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AFE630521DF9BB67005FFD01;
+			remoteInfo = XDTools99;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		AFE630481DF9B785005FFD01 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				AFADBC371DF9D5B7000AD2F2 /* XDTools99.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		AF3FC42A1DF858690021F050 /* AssemblerDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssemblerDocument.h; sourceTree = "<group>"; };
+		AF3FC42B1DF858690021F050 /* AssemblerDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssemblerDocument.m; sourceTree = "<group>"; };
+		AF5CF8B21DFF30F400C08E36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AssemblerOptionsView.xib; sourceTree = "<group>"; };
+		AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XDTools99.xcodeproj; path = ../XDTools99/XDTools99.xcodeproj; sourceTree = "<group>"; };
+		AFADBC381DF9D5B7000AD2F2 /* SimpleXDT99IDE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleXDT99IDE.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFB73F171E002FF40063BBCC /* NSViewAutolayoutAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSViewAutolayoutAdditions.h; path = Categories/NSViewAutolayoutAdditions.h; sourceTree = "<group>"; };
+		AFB73F181E002FF40063BBCC /* NSViewAutolayoutAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSViewAutolayoutAdditions.m; path = Categories/NSViewAutolayoutAdditions.m; sourceTree = "<group>"; };
+		AFDECF271DF176B1008870F7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		AFDECF281DF176B1008870F7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		AFDECF2B1DF176B1008870F7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		AFDECF2D1DF176B1008870F7 /* SourceCodeDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SourceCodeDocument.h; sourceTree = "<group>"; };
+		AFDECF2E1DF176B1008870F7 /* SourceCodeDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceCodeDocument.m; sourceTree = "<group>"; };
+		AFDECF311DF176B1008870F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Document.xib; sourceTree = "<group>"; };
+		AFDECF331DF176B1008870F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AFDECF361DF176B1008870F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		AFDECF381DF176B1008870F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AFF958511DF178EC00062DEB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		AFFDB6841DFC6A95006788CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AFFDB6861DFC6A95006788CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Credits.html; sourceTree = "<group>"; };
+		AFFF3A381E05640700909C6C /* HWHexNumberFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HWHexNumberFormatter.h; sourceTree = "<group>"; };
+		AFFF3A391E05640700909C6C /* HWHexNumberFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HWHexNumberFormatter.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AFDECF211DF176B1008870F7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AFADBC351DF9D4DE000AD2F2 /* XDTools99.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AF3FC4291DF8583D0021F050 /* Document Types */ = {
+			isa = PBXGroup;
+			children = (
+				AFDECF2D1DF176B1008870F7 /* SourceCodeDocument.h */,
+				AFDECF2E1DF176B1008870F7 /* SourceCodeDocument.m */,
+				AF3FC42A1DF858690021F050 /* AssemblerDocument.h */,
+				AF3FC42B1DF858690021F050 /* AssemblerDocument.m */,
+			);
+			name = "Document Types";
+			sourceTree = "<group>";
+		};
+		AFADBC301DF9D28A000AD2F2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AFADBC3B1DF9D68F000AD2F2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AFADBC381DF9D5B7000AD2F2 /* SimpleXDT99IDE.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AFB73F161E002F280063BBCC /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				AFB73F171E002FF40063BBCC /* NSViewAutolayoutAdditions.h */,
+				AFB73F181E002FF40063BBCC /* NSViewAutolayoutAdditions.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		AFDECF1B1DF176B1008870F7 = {
+			isa = PBXGroup;
+			children = (
+				AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */,
+				AFF958511DF178EC00062DEB /* README.md */,
+				AFDECF261DF176B1008870F7 /* SimpleXDT99IDE */,
+				AFF9585D1DF1A7C200062DEB /* Frameworks */,
+				AFADBC3B1DF9D68F000AD2F2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AFDECF261DF176B1008870F7 /* SimpleXDT99IDE */ = {
+			isa = PBXGroup;
+			children = (
+				AFB73F161E002F280063BBCC /* Categories */,
+				AF3FC4291DF8583D0021F050 /* Document Types */,
+				AFDECF271DF176B1008870F7 /* AppDelegate.h */,
+				AFDECF281DF176B1008870F7 /* AppDelegate.m */,
+				AF5CF8B31DFF30F400C08E36 /* AssemblerOptionsView.xib */,
+				AFDECF301DF176B1008870F7 /* Document.xib */,
+				AFDECF351DF176B1008870F7 /* MainMenu.xib */,
+				AFDECF331DF176B1008870F7 /* Assets.xcassets */,
+				AFDECF381DF176B1008870F7 /* Info.plist */,
+				AFFDB6831DFC6A95006788CC /* InfoPlist.strings */,
+				AFFDB6851DFC6A95006788CC /* Credits.html */,
+				AFDECF2A1DF176B1008870F7 /* Supporting Files */,
+				AFFF3A381E05640700909C6C /* HWHexNumberFormatter.h */,
+				AFFF3A391E05640700909C6C /* HWHexNumberFormatter.m */,
+			);
+			path = SimpleXDT99IDE;
+			sourceTree = "<group>";
+		};
+		AFDECF2A1DF176B1008870F7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AFDECF2B1DF176B1008870F7 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AFF9585D1DF1A7C200062DEB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AFDECF231DF176B1008870F7 /* SimpleXDT99IDE */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AFDECF3B1DF176B1008870F7 /* Build configuration list for PBXNativeTarget "SimpleXDT99IDE" */;
+			buildPhases = (
+				AFDECF201DF176B1008870F7 /* Sources */,
+				AFDECF211DF176B1008870F7 /* Frameworks */,
+				AFDECF221DF176B1008870F7 /* Resources */,
+				AFE630481DF9B785005FFD01 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AFADBC3A1DF9D63D000AD2F2 /* PBXTargetDependency */,
+			);
+			name = SimpleXDT99IDE;
+			productName = SimpleXDT99IDE;
+			productReference = AFADBC381DF9D5B7000AD2F2 /* SimpleXDT99IDE.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AFDECF1C1DF176B1008870F7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				KnownAssetTags = (
+					New,
+				);
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = hackmac;
+				TargetAttributes = {
+					AFDECF231DF176B1008870F7 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = AFDECF1F1DF176B1008870F7 /* Build configuration list for PBXProject "SimpleXDT99IDE" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AFDECF1B1DF176B1008870F7;
+			productRefGroup = AFDECF1B1DF176B1008870F7;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = AFADBC301DF9D28A000AD2F2 /* Products */;
+					ProjectRef = AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				AFDECF231DF176B1008870F7 /* SimpleXDT99IDE */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = XDTools99.framework;
+			remoteRef = AFADBC331DF9D28A000AD2F2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AFDECF221DF176B1008870F7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AFDC40B31DFB254A006B2A27 /* README.md in Resources */,
+				AFFDB6881DFC6A95006788CC /* Credits.html in Resources */,
+				AFDECF341DF176B1008870F7 /* Assets.xcassets in Resources */,
+				AFDECF321DF176B1008870F7 /* Document.xib in Resources */,
+				AFDECF371DF176B1008870F7 /* MainMenu.xib in Resources */,
+				AFFDB6871DFC6A95006788CC /* InfoPlist.strings in Resources */,
+				AF5CF8B11DFF30F400C08E36 /* AssemblerOptionsView.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AFDECF201DF176B1008870F7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AFDECF2F1DF176B1008870F7 /* SourceCodeDocument.m in Sources */,
+				AF3FC42C1DF858690021F050 /* AssemblerDocument.m in Sources */,
+				AFFF3A3A1E05640700909C6C /* HWHexNumberFormatter.m in Sources */,
+				AFB73F191E002FF40063BBCC /* NSViewAutolayoutAdditions.m in Sources */,
+				AFDECF291DF176B1008870F7 /* AppDelegate.m in Sources */,
+				AFDECF2C1DF176B1008870F7 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AFADBC3A1DF9D63D000AD2F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = XDTools99;
+			targetProxy = AFADBC391DF9D63D000AD2F2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		AF5CF8B31DFF30F400C08E36 /* AssemblerOptionsView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AF5CF8B21DFF30F400C08E36 /* Base */,
+			);
+			name = AssemblerOptionsView.xib;
+			sourceTree = "<group>";
+		};
+		AFDECF301DF176B1008870F7 /* Document.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AFDECF311DF176B1008870F7 /* Base */,
+			);
+			name = Document.xib;
+			sourceTree = "<group>";
+		};
+		AFDECF351DF176B1008870F7 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AFDECF361DF176B1008870F7 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		AFFDB6831DFC6A95006788CC /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AFFDB6841DFC6A95006788CC /* Base */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		AFFDB6851DFC6A95006788CC /* Credits.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AFFDB6861DFC6A95006788CC /* Base */,
+			);
+			name = Credits.html;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		AFDECF391DF176B1008870F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		AFDECF3A1DF176B1008870F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		AFDECF3C1DF176B1008870F7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 82LG3342G3;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../XDTools99/\"/**";
+				INFOPLIST_FILE = SimpleXDT99IDE/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_BUNDLE_IDENTIFIER = de.hackmac.SimpleXDT99IDE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AFDECF3D1DF176B1008870F7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 82LG3342G3;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../XDTools99/\"/**";
+				INFOPLIST_FILE = SimpleXDT99IDE/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_BUNDLE_IDENTIFIER = de.hackmac.SimpleXDT99IDE;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AFDECF1F1DF176B1008870F7 /* Build configuration list for PBXProject "SimpleXDT99IDE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AFDECF391DF176B1008870F7 /* Debug */,
+				AFDECF3A1DF176B1008870F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AFDECF3B1DF176B1008870F7 /* Build configuration list for PBXNativeTarget "SimpleXDT99IDE" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AFDECF3C1DF176B1008870F7 /* Debug */,
+				AFDECF3D1DF176B1008870F7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AFDECF1C1DF176B1008870F7 /* Project object */;
+}
