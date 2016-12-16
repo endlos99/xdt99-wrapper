@@ -1,8 +1,8 @@
 //
-//  xdt99wrapper.h
-//  xdt99wrapper
+//  XDGPL.h
+//  XDTools99
 //
-//  Created by Henrik Wedekind on 08.12.16.
+//  Created by Henrik Wedekind on 16.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
 //  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
@@ -22,16 +22,14 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#import <Cocoa/Cocoa.h>
+#ifndef XDGPL_h
+#define XDGPL_h
 
-//! Project version number for xdt99wrapper.
-FOUNDATION_EXPORT double xdt99wrapperVersionNumber;
+#import <XDTools99/XDTObject.h>
 
-//! Project version string for xdt99wrapper.
-FOUNDATION_EXPORT const unsigned char xdt99wrapperVersionString[];
+#import <XDTools99/XDGPL/XDTGPLObjcode.h>
+#import <XDTools99/XDGPL/XDTGPLAssembler.h>
 
-// In this header, you should import all the public headers of your framework using statements like #import <xdt99wrapper/PublicHeader.h>
+#import <XDTools99/XDTZipFile.h>
 
-#import <XDTools99/XDAssembler.h>
-#import <XDTools99/XDBasic.h>
-#import <XDTools99/XDGPL.h>
+#endif /* XDGPL_h */

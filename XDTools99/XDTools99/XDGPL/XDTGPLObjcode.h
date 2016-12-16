@@ -1,8 +1,8 @@
 //
-//  xdt99wrapper.h
-//  xdt99wrapper
+//  XDTGPLObjcode.h
+//  XDTools99
 //
-//  Created by Henrik Wedekind on 08.12.16.
+//  Created by Henrik Wedekind on 18.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
 //  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
@@ -22,16 +22,18 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#import <Cocoa/Cocoa.h>
+#import "XDTObject.h"
 
-//! Project version number for xdt99wrapper.
-FOUNDATION_EXPORT double xdt99wrapperVersionNumber;
 
-//! Project version string for xdt99wrapper.
-FOUNDATION_EXPORT const unsigned char xdt99wrapperVersionString[];
+NS_ASSUME_NONNULL_BEGIN
+@interface XDTGPLObjcode : XDTObject
 
-// In this header, you should import all the public headers of your framework using statements like #import <xdt99wrapper/PublicHeader.h>
++ (nullable instancetype)gplObjectcodeWithPythonInstance:(void *)object;
 
-#import <XDTools99/XDAssembler.h>
-#import <XDTools99/XDBasic.h>
-#import <XDTools99/XDGPL.h>
+- (nullable NSData *)generateDump;
+- (nullable NSArray<NSArray<id> *> *)generateByteCode;
+- (nullable NSData *)generateImageWithName:(NSString *)cartridgeName;
+- (nullable NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName;
+
+@end
+NS_ASSUME_NONNULL_END

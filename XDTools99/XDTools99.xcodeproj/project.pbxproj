@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF125EBB1E0414A600F659AA /* XDGPL.h in Headers */ = {isa = PBXBuildFile; fileRef = AF125EBA1E0414A000F659AA /* XDGPL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96A91DFABAA0006EE618 /* XDAssembler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF2D96B31DFABF39006EE618 /* XDTSymbols.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96AB1DFABF39006EE618 /* XDTSymbols.h */; };
 		AF2D96B41DFABF39006EE618 /* XDTSymbols.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96AC1DFABF39006EE618 /* XDTSymbols.m */; };
@@ -21,6 +22,10 @@
 		AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A21DFF246400C08E36 /* XDTBasic.h */; };
 		AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CF8A31DFF246400C08E36 /* XDTBasic.m */; };
 		AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A61DFF266B00C08E36 /* XDBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */; };
+		AF9C22081E06D88A00BB02FC /* XDTGPLAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */; };
+		AF9C220B1E06FD4E00BB02FC /* XDTGPLObjcode.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22091E06FD4E00BB02FC /* XDTGPLObjcode.h */; };
+		AF9C220C1E06FD4E00BB02FC /* XDTGPLObjcode.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C220A1E06FD4E00BB02FC /* XDTGPLObjcode.m */; };
 		AFADBC431DF9DD8B000AD2F2 /* xas99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFADBC3F1DF9DD8B000AD2F2 /* xas99.py */; };
 		AFADBC451DF9DD8B000AD2F2 /* xbas99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFADBC411DF9DD8B000AD2F2 /* xbas99.py */; };
 		AFADBC461DF9DD8B000AD2F2 /* xga99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFADBC421DF9DD8B000AD2F2 /* xga99.py */; };
@@ -36,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AF125EBA1E0414A000F659AA /* XDGPL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDGPL.h; sourceTree = "<group>"; };
 		AF2D96A91DFABAA0006EE618 /* XDAssembler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDAssembler.h; sourceTree = "<group>"; };
 		AF2D96AB1DFABF39006EE618 /* XDTSymbols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTSymbols.h; path = XDAssembler/XDTSymbols.h; sourceTree = "<group>"; };
 		AF2D96AC1DFABF39006EE618 /* XDTSymbols.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTSymbols.m; path = XDAssembler/XDTSymbols.m; sourceTree = "<group>"; };
@@ -50,6 +56,10 @@
 		AF5CF8A21DFF246400C08E36 /* XDTBasic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTBasic.h; path = XDBasic/XDTBasic.h; sourceTree = "<group>"; };
 		AF5CF8A31DFF246400C08E36 /* XDTBasic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTBasic.m; path = XDBasic/XDTBasic.m; sourceTree = "<group>"; };
 		AF5CF8A61DFF266B00C08E36 /* XDBasic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDBasic.h; sourceTree = "<group>"; };
+		AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTGPLAssembler.h; path = XDGPL/XDTGPLAssembler.h; sourceTree = "<group>"; };
+		AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTGPLAssembler.m; path = XDGPL/XDTGPLAssembler.m; sourceTree = "<group>"; };
+		AF9C22091E06FD4E00BB02FC /* XDTGPLObjcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTGPLObjcode.h; path = XDGPL/XDTGPLObjcode.h; sourceTree = "<group>"; };
+		AF9C220A1E06FD4E00BB02FC /* XDTGPLObjcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTGPLObjcode.m; path = XDGPL/XDTGPLObjcode.m; sourceTree = "<group>"; };
 		AFADBC3F1DF9DD8B000AD2F2 /* xas99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xas99.py; path = ../xdt99/xas99.py; sourceTree = "<group>"; };
 		AFADBC411DF9DD8B000AD2F2 /* xbas99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xbas99.py; path = ../xdt99/xbas99.py; sourceTree = "<group>"; };
 		AFADBC421DF9DD8B000AD2F2 /* xga99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xga99.py; path = ../xdt99/xga99.py; sourceTree = "<group>"; };
@@ -101,6 +111,17 @@
 			name = XDBasic;
 			sourceTree = "<group>";
 		};
+		AF9C22041E06D80E00BB02FC /* XDGPL */ = {
+			isa = PBXGroup;
+			children = (
+				AF9C22091E06FD4E00BB02FC /* XDTGPLObjcode.h */,
+				AF9C220A1E06FD4E00BB02FC /* XDTGPLObjcode.m */,
+				AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */,
+				AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */,
+			);
+			name = XDGPL;
+			sourceTree = "<group>";
+		};
 		AFADBC3E1DF9DD69000AD2F2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,15 +156,17 @@
 			isa = PBXGroup;
 			children = (
 				AFE630561DF9BB67005FFD01 /* XDTools99.h */,
+				AF125EBA1E0414A000F659AA /* XDGPL.h */,
+				AF9C22041E06D80E00BB02FC /* XDGPL */,
 				AF2D96A91DFABAA0006EE618 /* XDAssembler.h */,
+				AF2D96A81DFAB8DE006EE618 /* XDAssembler */,
 				AF5CF8A61DFF266B00C08E36 /* XDBasic.h */,
+				AF5CF8A11DFF23FB00C08E36 /* XDBasic */,
 				AF2D96B21DFABF39006EE618 /* XDTObject.h */,
 				AF2D96B11DFABF39006EE618 /* XDTObject.m */,
-				AF2D96A81DFAB8DE006EE618 /* XDAssembler */,
-				AF5CF8A11DFF23FB00C08E36 /* XDBasic */,
+				AFE6305E1DF9BB9E005FFD01 /* Categories */,
 				AFE6306B1DF9BB9E005FFD01 /* XDTZipFile.h */,
 				AFE630671DF9BB9E005FFD01 /* XDTZipFile.m */,
-				AFE6305E1DF9BB9E005FFD01 /* Categories */,
 				AFE630571DF9BB67005FFD01 /* Info.plist */,
 			);
 			path = XDTools99;
@@ -180,6 +203,7 @@
 				AF2D96B71DFABF39006EE618 /* XDTObjcode.h in Headers */,
 				AFE630581DF9BB67005FFD01 /* XDTools99.h in Headers */,
 				AF2D96B81DFABF39006EE618 /* XDTAssembler.h in Headers */,
+				AF9C220B1E06FD4E00BB02FC /* XDTGPLObjcode.h in Headers */,
 				AF2D96B31DFABF39006EE618 /* XDTSymbols.h in Headers */,
 				AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */,
 				AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */,
@@ -188,6 +212,8 @@
 				AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */,
 				AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */,
 				AF2D96BA1DFABF39006EE618 /* XDTObject.h in Headers */,
+				AF125EBB1E0414A600F659AA /* XDGPL.h in Headers */,
+				AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */,
 				AF2D96C91DFAFF29006EE618 /* NSDataPythonAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -266,6 +292,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF2D96B91DFABF39006EE618 /* XDTObject.m in Sources */,
+				AF9C22081E06D88A00BB02FC /* XDTGPLAssembler.m in Sources */,
+				AF9C220C1E06FD4E00BB02FC /* XDTGPLObjcode.m in Sources */,
 				AF2D96B41DFABF39006EE618 /* XDTSymbols.m in Sources */,
 				AFE6306E1DF9BB9E005FFD01 /* NSArrayPythonAdditions.m in Sources */,
 				AF2D96B51DFABF39006EE618 /* XDTObjcode.m in Sources */,
