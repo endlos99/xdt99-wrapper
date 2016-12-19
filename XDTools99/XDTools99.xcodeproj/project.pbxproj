@@ -18,6 +18,9 @@
 		AF2D96BA1DFABF39006EE618 /* XDTObject.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96B21DFABF39006EE618 /* XDTObject.h */; };
 		AF2D96C91DFAFF29006EE618 /* NSDataPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96C71DFAFF29006EE618 /* NSDataPythonAdditions.h */; };
 		AF2D96CA1DFAFF29006EE618 /* NSDataPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96C81DFAFF29006EE618 /* NSDataPythonAdditions.m */; };
+		AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A21DFF246400C08E36 /* XDTBasic.h */; };
+		AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CF8A31DFF246400C08E36 /* XDTBasic.m */; };
+		AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A61DFF266B00C08E36 /* XDBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFADBC431DF9DD8B000AD2F2 /* xas99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFADBC3F1DF9DD8B000AD2F2 /* xas99.py */; };
 		AFADBC451DF9DD8B000AD2F2 /* xbas99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFADBC411DF9DD8B000AD2F2 /* xbas99.py */; };
 		AFADBC461DF9DD8B000AD2F2 /* xga99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFADBC421DF9DD8B000AD2F2 /* xga99.py */; };
@@ -44,6 +47,9 @@
 		AF2D96B21DFABF39006EE618 /* XDTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDTObject.h; sourceTree = "<group>"; };
 		AF2D96C71DFAFF29006EE618 /* NSDataPythonAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataPythonAdditions.h; sourceTree = "<group>"; };
 		AF2D96C81DFAFF29006EE618 /* NSDataPythonAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataPythonAdditions.m; sourceTree = "<group>"; };
+		AF5CF8A21DFF246400C08E36 /* XDTBasic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTBasic.h; path = XDBasic/XDTBasic.h; sourceTree = "<group>"; };
+		AF5CF8A31DFF246400C08E36 /* XDTBasic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTBasic.m; path = XDBasic/XDTBasic.m; sourceTree = "<group>"; };
+		AF5CF8A61DFF266B00C08E36 /* XDBasic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDBasic.h; sourceTree = "<group>"; };
 		AFADBC3F1DF9DD8B000AD2F2 /* xas99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xas99.py; path = ../xdt99/xas99.py; sourceTree = "<group>"; };
 		AFADBC411DF9DD8B000AD2F2 /* xbas99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xbas99.py; path = ../xdt99/xbas99.py; sourceTree = "<group>"; };
 		AFADBC421DF9DD8B000AD2F2 /* xga99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xga99.py; path = ../xdt99/xga99.py; sourceTree = "<group>"; };
@@ -86,6 +92,15 @@
 			name = XDAssembler;
 			sourceTree = "<group>";
 		};
+		AF5CF8A11DFF23FB00C08E36 /* XDBasic */ = {
+			isa = PBXGroup;
+			children = (
+				AF5CF8A21DFF246400C08E36 /* XDTBasic.h */,
+				AF5CF8A31DFF246400C08E36 /* XDTBasic.m */,
+			);
+			name = XDBasic;
+			sourceTree = "<group>";
+		};
 		AFADBC3E1DF9DD69000AD2F2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,9 +136,11 @@
 			children = (
 				AFE630561DF9BB67005FFD01 /* XDTools99.h */,
 				AF2D96A91DFABAA0006EE618 /* XDAssembler.h */,
+				AF5CF8A61DFF266B00C08E36 /* XDBasic.h */,
 				AF2D96B21DFABF39006EE618 /* XDTObject.h */,
 				AF2D96B11DFABF39006EE618 /* XDTObject.m */,
 				AF2D96A81DFAB8DE006EE618 /* XDAssembler */,
+				AF5CF8A11DFF23FB00C08E36 /* XDBasic */,
 				AFE6306B1DF9BB9E005FFD01 /* XDTZipFile.h */,
 				AFE630671DF9BB9E005FFD01 /* XDTZipFile.m */,
 				AFE6305E1DF9BB9E005FFD01 /* Categories */,
@@ -164,6 +181,8 @@
 				AFE630581DF9BB67005FFD01 /* XDTools99.h in Headers */,
 				AF2D96B81DFABF39006EE618 /* XDTAssembler.h in Headers */,
 				AF2D96B31DFABF39006EE618 /* XDTSymbols.h in Headers */,
+				AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */,
+				AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */,
 				AFE630791DF9BB9E005FFD01 /* XDTZipFile.h in Headers */,
 				AFE6306F1DF9BB9E005FFD01 /* NSErrorPythonAdditions.h in Headers */,
 				AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */,
@@ -250,6 +269,7 @@
 				AF2D96B41DFABF39006EE618 /* XDTSymbols.m in Sources */,
 				AFE6306E1DF9BB9E005FFD01 /* NSArrayPythonAdditions.m in Sources */,
 				AF2D96B51DFABF39006EE618 /* XDTObjcode.m in Sources */,
+				AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */,
 				AF2D96B61DFABF39006EE618 /* XDTAssembler.m in Sources */,
 				AFE630701DF9BB9E005FFD01 /* NSErrorPythonAdditions.m in Sources */,
 				AF2D96CA1DFAFF29006EE618 /* NSDataPythonAdditions.m in Sources */,
