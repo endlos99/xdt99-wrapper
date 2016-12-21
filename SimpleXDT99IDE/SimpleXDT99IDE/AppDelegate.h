@@ -38,6 +38,11 @@
 #define UserDefaultKeyBasicOptionShouldProtectFile @"BasicOptionShouldProtectFile"
 #define UserDefaultKeyBasicOptionShouldJoinSourceLines @"BasicOptionShouldJoinSourceLines"
 
+#define UserDefaultKeyGPLOptionOutputTypePopupIndex @"GPLOptionOutputFileTypePopupButtonIndex"
+#define UserDefaultKeyGPLOptionSyntaxTypePopupIndex @"GPLOptionSyntaxTypePopupButtonIndex"
+#define UserDefaultKeyGPLOptionAORGAddress @"GPLOptionAORGAddress"
+#define UserDefaultKeyGPLOptionGROMAddress @"GPLOptionGROMAddress"
+
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
