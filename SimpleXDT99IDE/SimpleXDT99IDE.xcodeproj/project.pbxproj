@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		AF3FC42C1DF858690021F050 /* AssemblerDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AF3FC42B1DF858690021F050 /* AssemblerDocument.m */; };
+		AF5CF8A01DFF1FEC00C08E36 /* BasicCodeDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CF89F1DFF1FEC00C08E36 /* BasicCodeDocument.m */; };
 		AF5CF8B11DFF30F400C08E36 /* AssemblerOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF5CF8B31DFF30F400C08E36 /* AssemblerOptionsView.xib */; };
+		AF5CF8B41DFF30F900C08E36 /* BasicOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF5CF8B61DFF30F900C08E36 /* BasicOptionsView.xib */; };
 		AFADBC351DF9D4DE000AD2F2 /* XDTools99.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */; };
 		AFADBC371DF9D5B7000AD2F2 /* XDTools99.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AFB73F191E002FF40063BBCC /* NSViewAutolayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB73F181E002FF40063BBCC /* NSViewAutolayoutAdditions.m */; };
@@ -58,7 +60,10 @@
 /* Begin PBXFileReference section */
 		AF3FC42A1DF858690021F050 /* AssemblerDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssemblerDocument.h; sourceTree = "<group>"; };
 		AF3FC42B1DF858690021F050 /* AssemblerDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssemblerDocument.m; sourceTree = "<group>"; };
+		AF5CF89E1DFF1FEC00C08E36 /* BasicCodeDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicCodeDocument.h; sourceTree = "<group>"; };
+		AF5CF89F1DFF1FEC00C08E36 /* BasicCodeDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicCodeDocument.m; sourceTree = "<group>"; };
 		AF5CF8B21DFF30F400C08E36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AssemblerOptionsView.xib; sourceTree = "<group>"; };
+		AF5CF8B51DFF30F900C08E36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/BasicOptionsView.xib; sourceTree = "<group>"; };
 		AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XDTools99.xcodeproj; path = ../XDTools99/XDTools99.xcodeproj; sourceTree = "<group>"; };
 		AFADBC381DF9D5B7000AD2F2 /* SimpleXDT99IDE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleXDT99IDE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFB73F171E002FF40063BBCC /* NSViewAutolayoutAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSViewAutolayoutAdditions.h; path = Categories/NSViewAutolayoutAdditions.h; sourceTree = "<group>"; };
@@ -98,6 +103,8 @@
 				AFDECF2E1DF176B1008870F7 /* SourceCodeDocument.m */,
 				AF3FC42A1DF858690021F050 /* AssemblerDocument.h */,
 				AF3FC42B1DF858690021F050 /* AssemblerDocument.m */,
+				AF5CF89E1DFF1FEC00C08E36 /* BasicCodeDocument.h */,
+				AF5CF89F1DFF1FEC00C08E36 /* BasicCodeDocument.m */,
 			);
 			name = "Document Types";
 			sourceTree = "<group>";
@@ -145,6 +152,7 @@
 				AF3FC4291DF8583D0021F050 /* Document Types */,
 				AFDECF271DF176B1008870F7 /* AppDelegate.h */,
 				AFDECF281DF176B1008870F7 /* AppDelegate.m */,
+				AF5CF8B61DFF30F900C08E36 /* BasicOptionsView.xib */,
 				AF5CF8B31DFF30F400C08E36 /* AssemblerOptionsView.xib */,
 				AFDECF301DF176B1008870F7 /* Document.xib */,
 				AFDECF351DF176B1008870F7 /* MainMenu.xib */,
@@ -259,6 +267,7 @@
 				AFDECF321DF176B1008870F7 /* Document.xib in Resources */,
 				AFDECF371DF176B1008870F7 /* MainMenu.xib in Resources */,
 				AFFDB6871DFC6A95006788CC /* InfoPlist.strings in Resources */,
+				AF5CF8B41DFF30F900C08E36 /* BasicOptionsView.xib in Resources */,
 				AF5CF8B11DFF30F400C08E36 /* AssemblerOptionsView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,6 +285,7 @@
 				AFB73F191E002FF40063BBCC /* NSViewAutolayoutAdditions.m in Sources */,
 				AFDECF291DF176B1008870F7 /* AppDelegate.m in Sources */,
 				AFDECF2C1DF176B1008870F7 /* main.m in Sources */,
+				AF5CF8A01DFF1FEC00C08E36 /* BasicCodeDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +306,14 @@
 				AF5CF8B21DFF30F400C08E36 /* Base */,
 			);
 			name = AssemblerOptionsView.xib;
+			sourceTree = "<group>";
+		};
+		AF5CF8B61DFF30F900C08E36 /* BasicOptionsView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AF5CF8B51DFF30F900C08E36 /* Base */,
+			);
+			name = BasicOptionsView.xib;
 			sourceTree = "<group>";
 		};
 		AFDECF301DF176B1008870F7 /* Document.xib */ = {

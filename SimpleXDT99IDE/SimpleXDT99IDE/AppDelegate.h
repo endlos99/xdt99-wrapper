@@ -34,6 +34,10 @@
 #define UserDefaultKeyAssemblerOptionGenerateSymbolTable @"AssemblerOptionGenerateSymbolTable"
 #define UserDefaultKeyAssemblerOptionBaseAddress @"AssemblerOptionBaseAddress"
 
+#define UserDefaultKeyBasicOptionOutputTypePopupIndex @"BasicOptionOutputTypePopupIndex"
+#define UserDefaultKeyBasicOptionShouldProtectFile @"BasicOptionShouldProtectFile"
+#define UserDefaultKeyBasicOptionShouldJoinSourceLines @"BasicOptionShouldJoinSourceLines"
+
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 

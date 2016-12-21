@@ -32,10 +32,10 @@
     if (oldView == newView) {
         return;
     }
-    if (![oldView isDescendantOf:self]) {
+    if (nil == oldView || ![oldView isDescendantOf:self]) {
         return;
     }
-    if ([newView isDescendantOf:self]) {
+    if (nil == newView || [newView isDescendantOf:self]) {
         return;
     }
 

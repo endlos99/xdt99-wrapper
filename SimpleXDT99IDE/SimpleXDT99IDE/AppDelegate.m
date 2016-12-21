@@ -27,6 +27,7 @@
 #import "XDTAssembler.h"
 #import "XDTObjcode.h"
 #import "XDTZipFile.h"
+#import <XDTools99/XDBasic.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -34,6 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /* Three views for save panel */
 @property IBOutlet NSView *assemblerOptionsView;
+@property IBOutlet NSView *basicOptionsView;
+
+@property (assign) NSView *actualOptionsView;
 
 @property IBOutlet NSPopUpButton *assemblerOutputTypePopUpButton;
 @property IBOutlet NSTextField *assemblerCartridgeNameTextFiled;
@@ -42,8 +46,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly) BOOL shouldBaseAddressActivated;
 
 - (IBAction)runAssembler:(nullable id)sender;
+- (IBAction)runBasicEncoder:(nullable id)sender;
 
 - (nullable NSURL *)selectInputFileWithExtension:(NSString *)extension;
+
+- (void)panel:(NSSavePanel *)panel didChangeAssemblerOutputType:(NSInteger) outputFileType;
+- (void)panel:(NSSavePanel *)panel didChangeBasicOutputType:(NSInteger) outputFileType;
+
 - (BOOL)processSourceFileURL:(NSURL *)sourceFile withXDTprocess:(BOOL(^)(NSURL *outputFileURL))process;
 
 @end
@@ -65,8 +74,12 @@ NS_ASSUME_NONNULL_END
                                    UserDefaultKeyAssemblerOptionUseRegisterSymbols: @YES,
                                    UserDefaultKeyAssemblerOptionGenerateListOutput: @NO,
                                    UserDefaultKeyAssemblerOptionGenerateSymbolTable: @NO,
-                                   UserDefaultKeyAssemblerOptionBaseAddress: [NSNumber numberWithInteger:0xa000]
-                              };
+                                   UserDefaultKeyAssemblerOptionBaseAddress: [NSNumber numberWithInteger:0xa000],
+
+                                   UserDefaultKeyBasicOptionOutputTypePopupIndex: @1,
+                                   UserDefaultKeyBasicOptionShouldProtectFile: @NO,
+                                   UserDefaultKeyBasicOptionShouldJoinSourceLines: @NO
+                                   };
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultsDict];
 }
 
@@ -86,6 +99,7 @@ NS_ASSUME_NONNULL_END
         return;
     }
 
+    _actualOptionsView = _assemblerOptionsView;
     [self processSourceFileURL:assemblerFileURL withXDTprocess:^BOOL(NSURL *outputFileURL) {
         NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
         NSInteger selectedTypeIndenx = [defaults integerForKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex];
@@ -226,6 +240,79 @@ NS_ASSUME_NONNULL_END
 }
 
 
+- (IBAction)runBasicEncoder:(nullable id)sender
+{
+    NSURL *basicFileURL = [self selectInputFileWithExtension:@"bas"];
+    if (nil == basicFileURL) {
+        return;
+    }
+
+    _actualOptionsView = _basicOptionsView;
+    [self processSourceFileURL:basicFileURL withXDTprocess:^BOOL(NSURL * _Nonnull outputFileURL) {
+        NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
+        NSDictionary *options = @{
+                                  XDTBasicOptionProtectFile: [defaults objectForKey:UserDefaultKeyBasicOptionShouldProtectFile],
+                                  XDTBasicOptionJoinLines: [defaults objectForKey:UserDefaultKeyBasicOptionShouldJoinSourceLines]
+                                  };
+        XDTBasic *basic = [XDTBasic basicWithOptions:options];
+        if (nil == basic) {
+            return NO;
+        }
+        NSError *error = nil;
+        /*
+         If you will implement to load binary files formats for converting them, i.e. from internal to long format, 
+         try to implement something like this:
+
+        NSData *data = [NSData dataWithContentsOfURL:basicFileURL];
+        [basic loadProgramData:data error:&error];
+        if (nil != error) {
+            NSAlert *alert = [NSAlert alertWithError:error];
+            [alert runModal];
+            return NO;
+        }*/
+        NSString *sourceCode = [NSString stringWithContentsOfURL:basicFileURL encoding:NSUTF8StringEncoding error:&error];
+        if (nil == sourceCode) {
+            if (nil != error) {
+                NSAlert *alert = [NSAlert alertWithError:error];
+                [alert runModal];
+            }
+            return NO;
+        }
+        if (![basic parseSourceCode:sourceCode error:&error]) {
+            if (nil != error) {
+                NSAlert *alert = [NSAlert alertWithError:error];
+                [alert runModal];
+            }
+            return NO;
+        }
+
+        NSInteger selectedTypeIndenx = [defaults integerForKey:UserDefaultKeyBasicOptionOutputTypePopupIndex];
+        BOOL successfullySaved = NO;
+        switch (selectedTypeIndenx) {
+            case 0:
+                successfullySaved = [basic saveProgramFormatFile:outputFileURL error:&error];
+                break;
+            case 1:
+                successfullySaved = [basic saveLongFormatFile:outputFileURL error:&error];
+                break;
+            case 2:
+                successfullySaved = [basic saveMergedFormatFile:outputFileURL error:&error];
+                break;
+
+            default:
+                break;
+        }
+        if (nil != error) {
+            NSAlert *alert = [NSAlert alertWithError:error];
+            [alert runModal];
+            return NO;
+        }
+
+        return successfullySaved;
+    }];
+}
+
+
 #pragma mark - private methods
 
 
@@ -259,49 +346,80 @@ NS_ASSUME_NONNULL_END
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
+    NSUserDefaults *defaults = object;
+    NSSavePanel *panel = (__bridge NSSavePanel *)(context);
+
     if ([UserDefaultKeyAssemblerOptionOutputTypePopupIndex isEqualToString:keyPath]) {
-        NSSavePanel *panel = (__bridge NSSavePanel *)(context);
-        NSUserDefaults *defaults = object;
-
         NSInteger outputFileType = [defaults integerForKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex];
-        NSString *extension = @"";
-        switch (outputFileType) {
-            case 0:
-                extension = @"img";
-                break;
-            case 1:
-            case 2:
-                extension = @"obj";
-                break;
-            case 3:
-                extension = @"iv254";
-                break;
-            case 4:
-                extension = @"bin";
-                break;
-            case 5:
-                extension = @"dsk";
-                break;
-            case 6:
-                extension = @"rpk";
-                [defaults setObject:@0x6000 forKey:UserDefaultKeyAssemblerOptionBaseAddress];
-                break;
-
-            default:
-                break;
-        }
-        NSString *newNameFieldValue = [[panel nameFieldStringValue] stringByDeletingPathExtension];
-        newNameFieldValue = [newNameFieldValue stringByAppendingPathExtension:extension];
-        [panel setNameFieldStringValue:newNameFieldValue];
-
-        [self willChangeValueForKey:@"shouldCartridgeNameActivated"];
-        _shouldCartridgeNameActivated = (6 == outputFileType);
-        [self didChangeValueForKey:@"shouldCartridgeNameActivated"];
-
-        [self willChangeValueForKey:@"shouldBaseAddressActivated"];
-        _shouldBaseAddressActivated = (0 == outputFileType) || (4 == outputFileType);
-        [self didChangeValueForKey:@"shouldBaseAddressActivated"];
+        [self panel:panel didChangeAssemblerOutputType:outputFileType];
+    } else if ([UserDefaultKeyBasicOptionOutputTypePopupIndex isEqualToString:keyPath]) {
+        NSInteger outputFileType = [defaults integerForKey:UserDefaultKeyBasicOptionOutputTypePopupIndex];
+        [self panel:panel didChangeBasicOutputType:outputFileType];
     }
+}
+
+
+- (void)panel:(NSSavePanel *)panel didChangeAssemblerOutputType:(NSInteger) outputFileType
+{
+    NSString *extension = @"";
+    switch (outputFileType) {
+        case 0:
+            extension = @"img";
+            break;
+        case 1:
+        case 2:
+            extension = @"obj";
+            break;
+        case 3:
+            extension = @"iv254";
+            break;
+        case 4:
+            extension = @"bin";
+            break;
+        case 5:
+            extension = @"dsk";
+            break;
+        case 6:
+            extension = @"rpk";
+            break;
+
+        default:
+            break;
+    }
+    NSString *newNameFieldValue = [[panel nameFieldStringValue] stringByDeletingPathExtension];
+    newNameFieldValue = [newNameFieldValue stringByAppendingPathExtension:extension];
+    [panel setNameFieldStringValue:newNameFieldValue];
+
+    [self willChangeValueForKey:@"shouldCartridgeNameActivated"];
+    _shouldCartridgeNameActivated = (6 == outputFileType);
+    [self didChangeValueForKey:@"shouldCartridgeNameActivated"];
+
+    [self willChangeValueForKey:@"shouldBaseAddressActivated"];
+    _shouldBaseAddressActivated = (0 == outputFileType) || (4 == outputFileType);
+    [self didChangeValueForKey:@"shouldBaseAddressActivated"];
+}
+
+
+- (void)panel:(NSSavePanel *)panel didChangeBasicOutputType:(NSInteger) outputFileType
+{
+    NSString *extension = @"";
+    switch (outputFileType) {
+        case 0:
+            extension = @"bin";
+            break;
+        case 1:
+            extension = @"iv254";
+            break;
+        case 2:
+            extension = @"dv163";
+            break;
+
+        default:
+            break;
+    }
+    NSString *newNameFieldValue = [[panel nameFieldStringValue] stringByDeletingPathExtension];
+    newNameFieldValue = [newNameFieldValue stringByAppendingPathExtension:extension];
+    [panel setNameFieldStringValue:newNameFieldValue];
 }
 
 
@@ -314,19 +432,28 @@ NS_ASSUME_NONNULL_END
     [panel setCanCreateDirectories:YES];
     [panel setTitle:@"Select output file name"];
     [panel setDirectoryURL:[sourceFile URLByDeletingLastPathComponent]];
-    [panel setAccessoryView:_assemblerOptionsView];
+    [panel setAccessoryView:_actualOptionsView];
     [panel setNameFieldStringValue:[[_assemblerCartridgeNameTextFiled stringValue] stringByAppendingPathExtension:@"bin"]];
 
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
-    [self observeValueForKeyPath:UserDefaultKeyAssemblerOptionOutputTypePopupIndex ofObject:defaults change:nil context:(__bridge void * _Nullable)(panel)];
-    [defaults addObserver:self forKeyPath:UserDefaultKeyAssemblerOptionOutputTypePopupIndex options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(panel)];
+    if (_actualOptionsView == _assemblerOptionsView) {
+        [self observeValueForKeyPath:UserDefaultKeyAssemblerOptionOutputTypePopupIndex ofObject:defaults change:nil context:(__bridge void * _Nullable)(panel)];
+        [defaults addObserver:self forKeyPath:UserDefaultKeyAssemblerOptionOutputTypePopupIndex options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(panel)];
+    } else if (_actualOptionsView == _basicOptionsView) {
+        [self observeValueForKeyPath:UserDefaultKeyBasicOptionOutputTypePopupIndex ofObject:defaults change:nil context:(__bridge void * _Nullable)(panel)];
+        [defaults addObserver:self forKeyPath:UserDefaultKeyBasicOptionOutputTypePopupIndex options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(panel)];
+    }
 
     if (NSFileHandlingPanelOKButton == [panel runModal]) {
         process([panel URL]);
         retVal = YES;
     }
 
-    [defaults removeObserver:self forKeyPath:UserDefaultKeyAssemblerOptionOutputTypePopupIndex];
+    if (_actualOptionsView == _assemblerOptionsView) {
+        [defaults removeObserver:self forKeyPath:UserDefaultKeyAssemblerOptionOutputTypePopupIndex];
+    } else if (_actualOptionsView == _basicOptionsView) {
+        [defaults removeObserver:self forKeyPath:UserDefaultKeyBasicOptionOutputTypePopupIndex];
+    }
 
     return retVal;
 }
