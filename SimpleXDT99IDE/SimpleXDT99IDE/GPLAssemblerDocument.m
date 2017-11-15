@@ -40,8 +40,12 @@
 
 @property (nonatomic, assign) NSUInteger outputFormatPopupButtonIndex;
 @property (nonatomic, assign) NSUInteger syntaxFormatPopupButtonIndex;
+@property (assign, nonatomic) BOOL shouldShowListingInLog;
+@property (assign, nonatomic) BOOL shouldShowSymbolsInListing;
+@property (assign, nonatomic) BOOL shouldShowSymbolsAsEqus;
 
 @property (retain) XDTGPLObjcode *assemblingResult;
+@property (readonly) NSString *listOutput;
 
 @property (readonly) XDTGPLAssemblerTargetType targetType;
 @property (readonly) XDTGPLAssemblerSyntaxType syntaxType;
@@ -65,6 +69,9 @@
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [self setOutputFormatPopupButtonIndex:[defaults integerForKey:UserDefaultKeyGPLOptionOutputTypePopupIndex]];
     [self setSyntaxFormatPopupButtonIndex:[defaults integerForKey:UserDefaultKeyGPLOptionSyntaxTypePopupIndex]];
+    [self setShouldShowListingInLog:[defaults boolForKey:UserDefaultKeyGPLOptionGenerateListOutput]];
+    [self setShouldShowSymbolsInListing:[defaults boolForKey:UserDefaultKeyGPLOptionGenerateSymbolTable]];
+    [self setShouldShowSymbolsAsEqus:[defaults boolForKey:UserDefaultKeyGPLOptionGenerateSymbolsAsEqus]];
     [self setAorgAddress:[defaults integerForKey:UserDefaultKeyGPLOptionAORGAddress]];
     [self setGromAddress:[defaults integerForKey:UserDefaultKeyGPLOptionGROMAddress]];
 
@@ -74,6 +81,8 @@
 #endif
         return nil;
     }
+    _assemblingResult = nil;
+    _cartridgeName = nil;
 
     return self;
 }
@@ -82,6 +91,8 @@
 - (void)dealloc
 {
 #if !__has_feature(objc_arc)
+    [_assemblingResult release];
+    [_cartridgeName release];
 
     [super dealloc];
 #endif
@@ -95,27 +106,20 @@
 
     NSToolbarItem *optionsItem = [self xdt99OptionsToolbarItem];
     if (nil != optionsItem) {
-        NSSize newMinSize = [[self xdt99OptionsToolbarView] frame].size;
-        [optionsItem setMinSize:newMinSize];
         [optionsItem setView:[self xdt99OptionsToolbarView]];
-        NSSize windowMinSize = [[aController window] minSize];
-        windowMinSize.width = newMinSize.width + 20;
-        [[aController window] setMinSize:windowMinSize];
-        NSRect windowsFrame = [[aController window] frame];
-        if (windowsFrame.size.width < windowMinSize.width) {
-            windowsFrame.size.width = windowMinSize.width;
-            [[aController window] setFrame:windowsFrame display:YES];
-        }
     }
 }
 
 
 - (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo
 {
-    /* Save the latest assembler options to user defaults before closing. */
+    /* Save the latest GPL Assembler options to user defaults before closing. */
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [defaults setInteger:_outputFormatPopupButtonIndex forKey:UserDefaultKeyGPLOptionOutputTypePopupIndex];
     [defaults setInteger:_syntaxFormatPopupButtonIndex forKey:UserDefaultKeyGPLOptionSyntaxTypePopupIndex];
+    [defaults setBool:_shouldShowListingInLog forKey:UserDefaultKeyGPLOptionGenerateListOutput];
+    [defaults setBool:_shouldShowSymbolsInListing forKey:UserDefaultKeyGPLOptionGenerateSymbolTable];
+    [defaults setBool:_shouldShowSymbolsAsEqus forKey:UserDefaultKeyGPLOptionGenerateSymbolsAsEqus];
     [defaults setInteger:_aorgAddress forKey:UserDefaultKeyGPLOptionAORGAddress];
     [defaults setInteger:_gromAddress forKey:UserDefaultKeyGPLOptionGROMAddress];
 
@@ -143,7 +147,8 @@
 
     [self setSourceCode:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
 
-    [self setOutputFileName:[[[[self fileURL] lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"-obj"]];
+    [self setCartridgeName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]];
+    [self setOutputFileName:[_cartridgeName stringByAppendingString:@"-obj"]];
     [self setOutputBasePathURL:[[self fileURL] URLByDeletingLastPathComponent]];
 
     [self checkCode:nil];
@@ -168,6 +173,72 @@
 - (BOOL)shouldUseCartName
 {
     return (1 == _outputFormatPopupButtonIndex) || (2 == _outputFormatPopupButtonIndex);
+}
+
+
++ (NSSet *)keyPathsForValuesAffectingListOutput
+{
+    return [NSSet setWithObjects:@"assemblingResult", @"shouldShowSymbolsInListing", @"shouldShowSymbolsAsEqus", nil];
+}
+
+
+- (NSString *)listOutput
+{
+    NSMutableString *retVal = nil;
+    NSError *error = nil;
+    if (nil == _assemblingResult) {
+        return @"";
+    }
+
+    NSData *data = [_assemblingResult generateListing:_shouldShowSymbolsInListing && !_shouldShowSymbolsAsEqus error:&error];
+    if (nil == error && nil != data) {
+        retVal = [[NSMutableString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+#if !__has_feature(objc_arc)
+        [retVal autorelease];
+#endif
+        if (_shouldShowSymbolsInListing && _shouldShowSymbolsAsEqus) {
+            data = [_assemblingResult generateSymbols:YES error:&error];
+            if (nil == error && nil != data) {
+                [retVal appendFormat:@"\n%@\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+            }
+        }
+    }
+    if (nil != error) {
+        [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+        return @"";
+    }
+    return retVal;
+}
+
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
+{
+    NSSet *retVal = [super keyPathsForValuesAffectingValueForKey:key];
+    if ([@"generatedLogMessage" isEqualToString:key]) {
+        NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
+        [newSet addObject:@"shouldShowListingInLog"];
+        [newSet unionSet:[self keyPathsForValuesAffectingListOutput]];
+        [newSet removeObject:@"errorMessage"];  /* 'errorMessage' from the super class is overlayed by 'assemblingResult', so remove it */
+        retVal = newSet;
+    }
+    return retVal;
+}
+
+
+- (NSString *)generatedLogMessage
+{
+    if (![self shouldShowLog]) {
+        return @"";
+    }
+
+    NSMutableString *retVal = [NSMutableString string];
+    if ([self shouldShowErrorsInLog]) {
+        [retVal appendFormat:@"%@\n", [self errorMessage]];
+    }
+    if (_shouldShowListingInLog) {
+        [retVal appendFormat:@"%@\n", [self listOutput]];
+    }
+    return retVal;
 }
 
 
@@ -295,12 +366,12 @@
 
     XDTGPLObjcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
     if (nil != error && nil != *error) {
-        [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [*error localizedDescription], [*error localizedFailureReason]]];
-        [self setAssemblingResult:nil];
+        [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@\n", [*error localizedDescription], [*error localizedFailureReason]]];
+        [self setAssemblingResult:result];
 
         return NO;
     }
-    [self setErrorMessage:@""];
+    [self setErrorMessage:@"No errors found!\n"];
     [self setAssemblingResult:result];
 
     return YES;

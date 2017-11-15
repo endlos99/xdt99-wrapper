@@ -41,6 +41,9 @@
 
 #define UserDefaultKeyGPLOptionOutputTypePopupIndex @"GPLOptionOutputFileTypePopupButtonIndex"
 #define UserDefaultKeyGPLOptionSyntaxTypePopupIndex @"GPLOptionSyntaxTypePopupButtonIndex"
+#define UserDefaultKeyGPLOptionGenerateListOutput @"GPLOptionGenerateListOutput"
+#define UserDefaultKeyGPLOptionGenerateSymbolTable @"GPLOptionGenerateSymbolTable"
+#define UserDefaultKeyGPLOptionGenerateSymbolsAsEqus @"GPLOptionGenerateSymbolsAsEqus"
 #define UserDefaultKeyGPLOptionAORGAddress @"GPLOptionAORGAddress"
 #define UserDefaultKeyGPLOptionGROMAddress @"GPLOptionGROMAddress"
 

@@ -1036,17 +1036,17 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
             <point key="canvasLocation" x="-57" y="209"/>
         </customView>
         <customView id="QJ9-Wt-33n" userLabel="xga99 Option View">
-            <rect key="frame" x="0.0" y="0.0" width="321" height="167"/>
+            <rect key="frame" x="0.0" y="0.0" width="342" height="195"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <box title="GPL Assembler Options" translatesAutoresizingMaskIntoConstraints="NO" id="N7b-vu-2jc">
-                    <rect key="frame" x="-3" y="12" width="327" height="155"/>
+                    <rect key="frame" x="-3" y="12" width="348" height="183"/>
                     <view key="contentView" id="ATp-OE-26q">
-                        <rect key="frame" x="2" y="2" width="323" height="138"/>
+                        <rect key="frame" x="2" y="2" width="344" height="166"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c2L-Xn-SCH">
-                                <rect key="frame" x="18" y="100" width="78" height="17"/>
+                                <rect key="frame" x="18" y="128" width="78" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="h1x-nt-dNg">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1054,7 +1054,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </textFieldCell>
                             </textField>
                             <popUpButton toolTip="Select the output file type." horizontalHuggingPriority="25" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Phc-mV-akD">
-                                <rect key="frame" x="100" y="94" width="206" height="26"/>
+                                <rect key="frame" x="100" y="122" width="227" height="26"/>
                                 <popUpButtonCell key="cell" type="push" title="Plain GPL Byte Code" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="mff-MI-tU8" id="5XS-Ct-QOW">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -1078,10 +1078,10 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </popUpButton>
                             <box horizontalHuggingPriority="25" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="gc7-Ly-i0o">
-                                <rect key="frame" x="20" y="89" width="283" height="5"/>
+                                <rect key="frame" x="20" y="117" width="304" height="5"/>
                             </box>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2go-Aa-2CR">
-                                <rect key="frame" x="18" y="66" width="78" height="17"/>
+                                <rect key="frame" x="18" y="70" width="78" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="GPL Syntax:" id="Kyx-WJ-wk3">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1089,7 +1089,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </textFieldCell>
                             </textField>
                             <popUpButton horizontalHuggingPriority="24" translatesAutoresizingMaskIntoConstraints="NO" id="0qg-OI-m6y">
-                                <rect key="frame" x="100" y="60" width="119" height="26"/>
+                                <rect key="frame" x="100" y="64" width="119" height="26"/>
                                 <popUpButtonCell key="cell" type="push" title="Native xga99" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ZZ0-xn-XWe" id="2E7-cd-NKB">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -1105,8 +1105,51 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="mgF-NG-uKE" name="selectedIndex" keyPath="values.GPLOptionSyntaxTypePopupButtonIndex" id="M1P-7D-IjQ"/>
                                 </connections>
                             </popUpButton>
+                            <button toolTip="Generates an additionally file with a list output. This is the equivalent to the option 'L' of the TI Editor/Assembler module." translatesAutoresizingMaskIntoConstraints="NO" id="xZz-vw-Tqb">
+                                <rect key="frame" x="100" y="94" width="69" height="18"/>
+                                <buttonCell key="cell" type="check" title="List File" bezelStyle="regularSquare" imagePosition="left" inset="2" id="L8r-cM-ZBs">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="mgF-NG-uKE" name="value" keyPath="values.GPLOptionGenerateListOutput" id="ONQ-BQ-xeM"/>
+                                </connections>
+                            </button>
+                            <button toolTip="This is the equivalent to the option 'S' of the TI Editor/Assembler module." translatesAutoresizingMaskIntoConstraints="NO" id="Wac-w4-daU">
+                                <rect key="frame" x="173" y="94" width="74" height="18"/>
+                                <buttonCell key="cell" type="check" title="Symbols" bezelStyle="regularSquare" imagePosition="left" enabled="NO" state="on" inset="2" id="5TM-aO-4Oa">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="mgF-NG-uKE" name="enabled" keyPath="values.GPLOptionGenerateListOutput" id="aui-l4-3ex"/>
+                                    <binding destination="mgF-NG-uKE" name="value" keyPath="values.GPLOptionGenerateSymbolTable" id="tnS-hS-yHG"/>
+                                </connections>
+                            </button>
+                            <button toolTip="Outputs the symbols as an EQU notation." translatesAutoresizingMaskIntoConstraints="NO" id="Ijm-yZ-hNQ">
+                                <rect key="frame" x="251" y="94" width="75" height="18"/>
+                                <buttonCell key="cell" type="check" title="use EQU" bezelStyle="regularSquare" imagePosition="left" enabled="NO" state="on" inset="2" id="x0P-FY-59U">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <connections>
+                                        <binding destination="mgF-NG-uKE" name="value" keyPath="values.AssemblerOptionGenerateSymbolsAsEqus" id="q9R-lP-AhA"/>
+                                    </connections>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="mgF-NG-uKE" name="enabled2" keyPath="values.GPLOptionGenerateListOutput" previousBinding="ULn-f4-p8S" id="wJX-Hs-Mj8">
+                                        <dictionary key="options">
+                                            <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                            <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                            <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                            <integer key="NSNullPlaceholder" value="-1"/>
+                                        </dictionary>
+                                    </binding>
+                                    <binding destination="mgF-NG-uKE" name="enabled" keyPath="values.GPLOptionGenerateSymbolTable" id="ULn-f4-p8S"/>
+                                    <binding destination="mgF-NG-uKE" name="value" keyPath="values.GPLOptionGenerateSymbolsAsEqus" id="AtJ-Sn-xP6"/>
+                                </connections>
+                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J63-CN-mbn">
-                                <rect key="frame" x="18" y="41" width="78" height="17"/>
+                                <rect key="frame" x="18" y="45" width="78" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="GROM:" id="TJa-Qh-DJi">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1114,9 +1157,9 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yU2-za-HQs">
-                                <rect key="frame" x="102" y="38" width="58" height="22"/>
+                                <rect key="frame" x="102" y="42" width="56" height="22"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="58" id="gRD-IQ-fyh"/>
+                                    <constraint firstAttribute="width" constant="56" id="gRD-IQ-fyh"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="0xA000" drawsBackground="YES" usesSingleLineMode="YES" id="NAg-qk-OYh">
                                     <customFormatter key="formatter" id="uJO-yl-dy7" customClass="HWHexNumberFormatter"/>
@@ -1131,7 +1174,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OGw-SQ-QAL">
-                                <rect key="frame" x="166" y="41" width="73" height="17"/>
+                                <rect key="frame" x="164" y="45" width="45" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="AORG:" id="qRx-AT-iD1">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1139,9 +1182,9 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="310-Kt-N4x">
-                                <rect key="frame" x="245" y="38" width="58" height="22"/>
+                                <rect key="frame" x="212" y="42" width="56" height="22"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="58" id="Qtt-IN-FFU"/>
+                                    <constraint firstAttribute="width" constant="56" id="HtG-Uo-i2e"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="0x0030" drawsBackground="YES" usesSingleLineMode="YES" id="mxe-Tm-gRs">
                                     <customFormatter key="formatter" id="L49-bG-MNR" customClass="HWHexNumberFormatter"/>
@@ -1156,7 +1199,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wlY-ZH-xMo">
-                                <rect key="frame" x="18" y="16" width="78" height="17"/>
+                                <rect key="frame" x="18" y="20" width="78" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Cart Name:" id="dgb-Md-GnE">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1164,7 +1207,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="25" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4SC-nS-7Ec">
-                                <rect key="frame" x="102" y="13" width="201" height="22"/>
+                                <rect key="frame" x="102" y="17" width="222" height="22"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="y9v-Gb-3qK">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1175,39 +1218,56 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.shouldCartridgeNameActivated" previousBinding="bJN-qD-H2V" id="zW7-OM-4jB"/>
                                 </connections>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1CE-fc-Z9H">
+                                <rect key="frame" x="18" y="95" width="78" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="NPE-vR-1xY">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="J63-CN-mbn" firstAttribute="trailing" secondItem="2go-Aa-2CR" secondAttribute="trailing" id="0Nm-Bp-lSa"/>
-                            <constraint firstItem="310-Kt-N4x" firstAttribute="baseline" secondItem="OGw-SQ-QAL" secondAttribute="baseline" id="4b4-Ea-jQU"/>
+                            <constraint firstItem="xZz-vw-Tqb" firstAttribute="leading" secondItem="1CE-fc-Z9H" secondAttribute="trailing" constant="8" symbolic="YES" id="1es-8K-Ugs"/>
                             <constraint firstItem="yU2-za-HQs" firstAttribute="leading" secondItem="Phc-mV-akD" secondAttribute="leading" id="5gl-e6-DmL"/>
-                            <constraint firstItem="310-Kt-N4x" firstAttribute="leading" secondItem="OGw-SQ-QAL" secondAttribute="trailing" constant="8" symbolic="YES" id="6l0-gO-aIf"/>
+                            <constraint firstItem="1CE-fc-Z9H" firstAttribute="leading" secondItem="gc7-Ly-i0o" secondAttribute="leading" id="5zf-7u-CJu"/>
+                            <constraint firstItem="1CE-fc-Z9H" firstAttribute="top" secondItem="gc7-Ly-i0o" secondAttribute="bottom" constant="7" id="6iY-8w-jXg"/>
+                            <constraint firstItem="Ijm-yZ-hNQ" firstAttribute="baseline" secondItem="Wac-w4-daU" secondAttribute="baseline" id="8ul-BV-s1d"/>
                             <constraint firstAttribute="trailing" secondItem="gc7-Ly-i0o" secondAttribute="trailing" constant="20" symbolic="YES" id="9Vh-Nu-m0Q"/>
                             <constraint firstItem="wlY-ZH-xMo" firstAttribute="baseline" secondItem="4SC-nS-7Ec" secondAttribute="baseline" id="ABq-ge-c4U"/>
                             <constraint firstItem="OGw-SQ-QAL" firstAttribute="baseline" secondItem="yU2-za-HQs" secondAttribute="baseline" id="Bha-Px-yp1"/>
                             <constraint firstItem="J63-CN-mbn" firstAttribute="top" secondItem="2go-Aa-2CR" secondAttribute="bottom" constant="8" symbolic="YES" id="CxP-oW-3wB"/>
                             <constraint firstItem="c2L-Xn-SCH" firstAttribute="leading" secondItem="ATp-OE-26q" secondAttribute="leading" constant="20" symbolic="YES" id="GFc-7g-TTs"/>
+                            <constraint firstItem="Wac-w4-daU" firstAttribute="baseline" secondItem="xZz-vw-Tqb" secondAttribute="baseline" id="GZd-mn-VcG"/>
                             <constraint firstItem="0qg-OI-m6y" firstAttribute="baseline" secondItem="2go-Aa-2CR" secondAttribute="baseline" id="I8G-vd-Kvw"/>
                             <constraint firstAttribute="trailing" secondItem="Phc-mV-akD" secondAttribute="trailing" constant="20" symbolic="YES" id="IPC-TC-U5r"/>
+                            <constraint firstItem="310-Kt-N4x" firstAttribute="leading" secondItem="OGw-SQ-QAL" secondAttribute="trailing" constant="5" id="IUM-zL-2sW"/>
                             <constraint firstItem="J63-CN-mbn" firstAttribute="leading" secondItem="ATp-OE-26q" secondAttribute="leading" constant="20" symbolic="YES" id="JdJ-2H-oQi"/>
+                            <constraint firstItem="2go-Aa-2CR" firstAttribute="top" secondItem="1CE-fc-Z9H" secondAttribute="bottom" constant="8" symbolic="YES" id="NPU-LK-VT4"/>
                             <constraint firstItem="yU2-za-HQs" firstAttribute="baseline" secondItem="J63-CN-mbn" secondAttribute="baseline" id="PWH-hP-CUA"/>
+                            <constraint firstItem="Wac-w4-daU" firstAttribute="leading" secondItem="xZz-vw-Tqb" secondAttribute="trailing" constant="8" symbolic="YES" id="Pq3-QJ-Z2e"/>
                             <constraint firstItem="2go-Aa-2CR" firstAttribute="leading" secondItem="ATp-OE-26q" secondAttribute="leading" constant="20" symbolic="YES" id="R5C-vJ-9kZ"/>
-                            <constraint firstItem="2go-Aa-2CR" firstAttribute="top" secondItem="gc7-Ly-i0o" secondAttribute="bottom" constant="8" symbolic="YES" id="TSG-TH-Kau"/>
+                            <constraint firstItem="Ijm-yZ-hNQ" firstAttribute="height" secondItem="Wac-w4-daU" secondAttribute="height" id="SfM-3C-GrG"/>
+                            <constraint firstItem="310-Kt-N4x" firstAttribute="baseline" secondItem="OGw-SQ-QAL" secondAttribute="baseline" id="V8s-JI-vA9"/>
                             <constraint firstItem="OGw-SQ-QAL" firstAttribute="leading" secondItem="yU2-za-HQs" secondAttribute="trailing" constant="8" symbolic="YES" id="Ztj-3R-x7v"/>
+                            <constraint firstItem="1CE-fc-Z9H" firstAttribute="baseline" secondItem="xZz-vw-Tqb" secondAttribute="baseline" id="aqX-UB-DFL"/>
                             <constraint firstItem="gc7-Ly-i0o" firstAttribute="top" secondItem="c2L-Xn-SCH" secondAttribute="bottom" constant="8" symbolic="YES" id="bNm-vE-pKe"/>
+                            <constraint firstItem="Ijm-yZ-hNQ" firstAttribute="leading" secondItem="Wac-w4-daU" secondAttribute="trailing" constant="8" symbolic="YES" id="dYj-2C-cUP"/>
                             <constraint firstItem="Phc-mV-akD" firstAttribute="leading" secondItem="c2L-Xn-SCH" secondAttribute="trailing" constant="8" symbolic="YES" id="eEV-Xj-5cN"/>
+                            <constraint firstItem="1CE-fc-Z9H" firstAttribute="trailing" secondItem="2go-Aa-2CR" secondAttribute="trailing" id="ePc-vX-VK5"/>
                             <constraint firstItem="0qg-OI-m6y" firstAttribute="baseline" secondItem="2go-Aa-2CR" secondAttribute="baseline" id="ijV-dv-hpH"/>
                             <constraint firstItem="4SC-nS-7Ec" firstAttribute="leading" secondItem="Phc-mV-akD" secondAttribute="leading" id="itl-3E-s1x"/>
                             <constraint firstItem="gc7-Ly-i0o" firstAttribute="leading" secondItem="ATp-OE-26q" secondAttribute="leading" constant="20" symbolic="YES" id="j1x-rd-dlX"/>
                             <constraint firstItem="0qg-OI-m6y" firstAttribute="leading" secondItem="2go-Aa-2CR" secondAttribute="trailing" constant="8" symbolic="YES" id="kDW-Uy-uHR"/>
                             <constraint firstItem="yU2-za-HQs" firstAttribute="leading" secondItem="J63-CN-mbn" secondAttribute="trailing" constant="8" symbolic="YES" id="m6f-GX-2Ba"/>
+                            <constraint firstItem="4SC-nS-7Ec" firstAttribute="trailing" secondItem="Phc-mV-akD" secondAttribute="trailing" id="naD-oi-eQw"/>
                             <constraint firstItem="Phc-mV-akD" firstAttribute="leading" secondItem="c2L-Xn-SCH" secondAttribute="trailing" constant="8" symbolic="YES" id="orI-4b-zs0"/>
                             <constraint firstItem="wlY-ZH-xMo" firstAttribute="top" secondItem="J63-CN-mbn" secondAttribute="bottom" constant="8" symbolic="YES" id="pIv-cT-mi5"/>
-                            <constraint firstItem="310-Kt-N4x" firstAttribute="trailing" secondItem="4SC-nS-7Ec" secondAttribute="trailing" id="rbW-43-lgb"/>
+                            <constraint firstItem="Ijm-yZ-hNQ" firstAttribute="baseline" secondItem="xZz-vw-Tqb" secondAttribute="baseline" id="pk5-YG-mgo"/>
                             <constraint firstItem="wlY-ZH-xMo" firstAttribute="leading" secondItem="ATp-OE-26q" secondAttribute="leading" constant="20" symbolic="YES" id="taK-oq-3Zn"/>
                             <constraint firstItem="wlY-ZH-xMo" firstAttribute="trailing" secondItem="c2L-Xn-SCH" secondAttribute="trailing" id="v4f-Zg-1TR"/>
-                            <constraint firstItem="310-Kt-N4x" firstAttribute="baseline" secondItem="OGw-SQ-QAL" secondAttribute="baseline" id="yZF-ir-uMK"/>
                             <constraint firstItem="Phc-mV-akD" firstAttribute="top" secondItem="ATp-OE-26q" secondAttribute="top" constant="20" symbolic="YES" id="yz6-Kw-hO5"/>
-                            <constraint firstItem="4SC-nS-7Ec" firstAttribute="trailing" secondItem="Phc-mV-akD" secondAttribute="trailing" id="z4u-M6-6zE"/>
                             <constraint firstItem="c2L-Xn-SCH" firstAttribute="baseline" secondItem="Phc-mV-akD" secondAttribute="baseline" id="zsj-L8-xzX"/>
                         </constraints>
                     </view>
@@ -1219,7 +1279,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                 <constraint firstItem="N7b-vu-2jc" firstAttribute="leading" secondItem="QJ9-Wt-33n" secondAttribute="leading" id="wMt-Ig-dBY"/>
                 <constraint firstItem="N7b-vu-2jc" firstAttribute="top" secondItem="QJ9-Wt-33n" secondAttribute="top" id="zoc-eS-DT9"/>
             </constraints>
-            <point key="canvasLocation" x="-237" y="131"/>
+            <point key="canvasLocation" x="-155" y="139"/>
         </customView>
     </objects>
 </document>

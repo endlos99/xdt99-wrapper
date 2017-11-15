@@ -88,6 +88,9 @@ NS_ASSUME_NONNULL_END
 
                                    UserDefaultKeyGPLOptionOutputTypePopupIndex: @1,
                                    UserDefaultKeyGPLOptionSyntaxTypePopupIndex: @1,
+                                   UserDefaultKeyGPLOptionGenerateListOutput: @NO,
+                                   UserDefaultKeyGPLOptionGenerateSymbolTable: @NO,
+                                   UserDefaultKeyGPLOptionGenerateSymbolsAsEqus: @NO,
                                    UserDefaultKeyGPLOptionAORGAddress: @0x0030,
                                    UserDefaultKeyGPLOptionGROMAddress: @0x6000
                                    };
@@ -447,6 +450,20 @@ NS_ASSUME_NONNULL_END
                 
             default:
                 break;
+        }
+        if ([defaults boolForKey:UserDefaultKeyGPLOptionGenerateListOutput]) {
+            NSURL *listingURL = [[outputFileURL URLByDeletingPathExtension] URLByAppendingPathExtension:@"dv80"];
+            BOOL outputSymbols = [defaults boolForKey:UserDefaultKeyGPLOptionGenerateSymbolTable];
+            BOOL useEqus = [defaults boolForKey:UserDefaultKeyGPLOptionGenerateSymbolsAsEqus];
+            NSData *data = [assemblingResult generateListing:outputSymbols && !useEqus error:&error];
+            NSMutableString *retVal = [[NSMutableString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            if (nil == error && outputSymbols && useEqus) {
+                data = [assemblingResult generateSymbols:YES error:&error];
+                [retVal appendFormat:@"\n%@\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+            }
+            if (nil == error && nil != retVal && [retVal length] > 0) {
+                [retVal writeToURL:listingURL atomically:YES encoding:NSUTF8StringEncoding error:&error];
+            }
         }
 
         if (nil != error) {
