@@ -36,6 +36,27 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
+@interface XDTGPLObjcode () {
+    PyObject *objectcodePythonClass;
+}
+
+/**
+ *
+ * The visibility of all allocators / initializers are effectivly package private!
+ * They are only visible for the XDTGPLAssembler. Objects of this class are created by calling any of
+ * the assembleSourceFile: methods from an instance of the XDTGPLAssembler class.
+ *
+ **/
+
++ (nullable instancetype)gplObjectcodeWithPythonInstance:(void *)object;
+
+- (nullable instancetype)initWithPythonInstance:(PyObject *)object;
+
+@end
+NS_ASSUME_NONNULL_END
+
+
+NS_ASSUME_NONNULL_BEGIN
 @interface XDTGPLAssembler () {
     const PyObject *assemblerPythonModule;
     PyObject *assemblerPythonClass;

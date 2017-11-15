@@ -37,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
     PyObject *objectcodePythonClass;
 }
 
++ (nullable instancetype)gplObjectcodeWithPythonInstance:(void *)object;
+
 - (nullable instancetype)initWithPythonInstance:(PyObject *)object;
 
 @end
@@ -46,6 +48,15 @@ NS_ASSUME_NONNULL_END
 @implementation XDTGPLObjcode
 
 #pragma mark Initializers
+
+/**
+ *
+ * The visibility of all allocators / initializers are effectivly package private!
+ * They are only visible for the XDTGPLAssembler. Objects of this class are created by calling any of
+ * the assembleSourceFile: methods from an instance of the XDTGPLAssembler class.
+ *
+ **/
+
 
 + (instancetype)gplObjectcodeWithPythonInstance:(void *)object
 {
@@ -214,6 +225,66 @@ NS_ASSUME_NONNULL_END
                                                   };
 
     Py_DECREF(cartTuple);
+
+    return retVal;
+}
+
+
+- (NSData *)generateListing:(BOOL)outputSymbols error:(NSError **)error
+{
+    /*
+     Function call in Python:
+     genList(gensymbols)
+     */
+    PyObject *methodName = PyString_FromString("genList");
+    PyObject *pOutputSymbols = PyBool_FromLong(outputSymbols);
+    PyObject *listingString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pOutputSymbols, NULL);
+    Py_XDECREF(pOutputSymbols);
+    Py_XDECREF(methodName);
+    if (NULL == listingString) {
+        NSLog(@"ERROR: genList(\"%@\") returns NULL!", outputSymbols? @"true" : @"false");
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return nil;
+    }
+
+    NSData *retVal = [NSData dataWithPythonString:listingString];
+    Py_DECREF(listingString);
+
+    return retVal;
+}
+
+
+- (NSData *)generateSymbols:(BOOL)useEqu error:(NSError **)error
+{
+    /*
+     Function call in Python:
+     genSymbols(useEqu)
+     */
+    PyObject *methodName = PyString_FromString("genSymbols");
+    PyObject *pUseEqu = PyBool_FromLong(useEqu);
+    PyObject *symbolsString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pUseEqu, NULL);
+    Py_XDECREF(pUseEqu);
+    Py_XDECREF(methodName);
+    if (NULL == symbolsString) {
+        NSLog(@"ERROR: genSymbols(\"%@\") returns NULL!", useEqu? @"true" : @"false");
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return nil;
+    }
+
+    NSData *retVal = [NSData dataWithPythonString:symbolsString];
+    Py_DECREF(symbolsString);
 
     return retVal;
 }

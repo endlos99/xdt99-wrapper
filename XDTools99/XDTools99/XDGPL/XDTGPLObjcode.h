@@ -28,12 +28,19 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface XDTGPLObjcode : XDTObject
 
-+ (nullable instancetype)gplObjectcodeWithPythonInstance:(void *)object;
+/**
+ *
+ * There are intentionally no visible/public constructors or initializers for this class!
+ *
+ **/
 
 - (nullable NSData *)generateDump:(NSError **)error;
 - (nullable NSArray<NSArray<id> *> *)generateByteCode:(NSError **)error;
 - (nullable NSData *)generateImageWithName:(NSString *)cartridgeName error:(NSError **)error;
 - (nullable NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName error:(NSError **)error;
+
+- (nullable NSData *)generateListing:(BOOL)outputSymbols error:(NSError **)error;
+- (nullable NSData *)generateSymbols:(BOOL)useEqu error:(NSError **)error;
 
 @end
 NS_ASSUME_NONNULL_END
