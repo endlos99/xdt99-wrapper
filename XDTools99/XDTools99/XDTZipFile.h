@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable instancetype)zipFileForWritingToURL:(NSURL *)url error:(NSError **)error;
 
-- (void)writeFile:(NSString *)fileName withData:(NSData *)data;
+- (BOOL)writeFile:(NSString *)fileName withData:(NSData *)data error:(NSError **)error;
 
 @end
 NS_ASSUME_NONNULL_END

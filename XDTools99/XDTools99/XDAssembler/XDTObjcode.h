@@ -41,17 +41,17 @@ NS_ASSUME_NONNULL_BEGIN
  *
  **/
 
-- (nullable NSData *)generateDump;
-- (nullable NSData *)generateObjCode:(BOOL)shouldCompress;
-- (nullable NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr;
-- (nullable NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr withRanges:(NSArray<NSValue *> *)ranges;
-- (nullable NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr;
-- (nullable NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr withChunkSize:(NSUInteger)chunkSize;
-- (nullable NSData *)generateBasicLoader;
-- (nullable NSData *)generateJumpstart;
-- (nullable NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName;
+- (nullable NSData *)generateDump:(NSError **)error;
+- (nullable NSData *)generateObjCode:(BOOL)shouldCompress error:(NSError **)error;
+- (nullable NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr error:(NSError **)error;
+- (nullable NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr withRanges:(NSArray<NSValue *> *)ranges error:(NSError **)error;
+- (nullable NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr error:(NSError **)error;
+- (nullable NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr withChunkSize:(NSUInteger)chunkSize error:(NSError **)error;
+- (nullable NSData *)generateBasicLoader:(NSError **)error;
+- (nullable NSData *)generateJumpstart:(NSError **)error;
+- (nullable NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName error:(NSError **)error;
 
-- (nullable NSData *)generateListing;
+- (nullable NSData *)generateListing:(NSError **)error;
 
 @end
 NS_ASSUME_NONNULL_END

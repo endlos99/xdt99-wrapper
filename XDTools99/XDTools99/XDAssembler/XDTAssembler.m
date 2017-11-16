@@ -87,7 +87,12 @@ NS_ASSUME_NONNULL_END
         PyObject *pModule = PyImport_Import(pName);
         Py_XDECREF(pName);
         if (NULL == pModule) {
-            if (PyErr_Occurred()) {
+            NSLog(@"ERROR: Importing module '%@' failed!", pName);
+            PyObject *exeption = PyErr_Occurred();
+            if (NULL != exeption) {
+//            if (nil != error) {
+//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//            }
                 PyErr_Print();
             }
             return nil;
@@ -159,7 +164,13 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
     if (NULL == assembler) {
-        if (PyErr_Occurred()) {
+        NSLog(@"ERROR: calling constructor %@(\"%s\", %@, %@, %@, []) failed!", pFunc,
+              [self targetTypeAsCString], _useRegisterSymbols? @"true" : @"false", _beStrict? @"true" : @"false", urls);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+//            if (nil != error) {
+//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//            }
             PyErr_Print();
         }
 #if !__has_feature(objc_arc)
@@ -178,8 +189,8 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_XDECREF(assemblerPythonClass);
-    Py_XDECREF(assemblerPythonModule);
+    Py_CLEAR(assemblerPythonClass);
+    Py_CLEAR(assemblerPythonModule);
 
 #if !__has_feature(objc_arc)
     [super dealloc];
@@ -237,6 +248,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pDirName);
     Py_XDECREF(methodName);
     if (NULL == pValueTupel) {
+        NSLog(@"ERROR: assemble(\"%s\", \"%s\") returns NULL!", [dirname UTF8String], [basename UTF8String]);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {

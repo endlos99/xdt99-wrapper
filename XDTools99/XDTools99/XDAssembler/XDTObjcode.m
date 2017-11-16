@@ -26,6 +26,7 @@
 
 #import "NSArrayPythonAdditions.h"
 #import "NSDataPythonAdditions.h"
+#import "NSErrorPythonAdditions.h"
 #import "XDTSymbols.h"
 
 
@@ -84,7 +85,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_XDECREF(objectcodePythonClass);
+    Py_CLEAR(objectcodePythonClass);
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif
@@ -113,13 +114,27 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Generator Method Wrapper
 
 
-- (NSData *)generateDump
+- (NSData *)generateDump:(NSError **)error
 {
+    // TODO: Implement function
+    NSLog(@"ERROR: genDump() not implemented in wrapper class!");
+    //PyObject *exeption = PyErr_Occurred();
+    //if (NULL != exeption) {
+    if (nil != error) {
+        NSDictionary *errorDict = @{
+                                    NSLocalizedDescriptionKey: @"Unimplemented method",
+                                    NSLocalizedRecoverySuggestionErrorKey: @"generateCump: is not implemented for now."
+                                    };
+        *error = [NSError errorWithDomain:XDTErrorDomain code:-2 userInfo:errorDict];
+        //*error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+    }
+    //    PyErr_Print();
+    //}
     return nil;
 }
 
 
-- (NSData *)generateObjCode:(BOOL)shouldCompress
+- (NSData *)generateObjCode:(BOOL)shouldCompress error:(NSError **)error
 {
     /*
      Function call in Python:
@@ -131,6 +146,14 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pCompressed);
     Py_XDECREF(methodName);
     if (NULL == binaryString) {
+        NSLog(@"ERROR: genObjCode(%@) returns NULL!", shouldCompress? @"true" : @"false");
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
         return nil;
     }
 
@@ -141,7 +164,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr
+- (NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr error:(NSError **)error
 {
     /*
      Function call in Python:
@@ -153,6 +176,14 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
     if (NULL == binaryList) {
+        NSLog(@"ERROR: genBinaries(0x%lxd) returns NULL!", baseAddr);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
         return nil;
     }
 
@@ -163,7 +194,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr withRanges:(NSArray<NSValue *> *)ranges
+- (NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr withRanges:(NSArray<NSValue *> *)ranges error:(NSError **)error
 {
     /*
      Function call in Python:
@@ -177,6 +208,14 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
     if (NULL == binaryList) {
+        NSLog(@"ERROR: genBinaries(0x%lxd) returns NULL!", baseAddr);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
         return nil;
     }
 
@@ -187,13 +226,13 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr
+- (NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr error:(NSError **)error
 {
-    return [self generateImageAt:baseAddr withChunkSize:0x2000];
+    return [self generateImageAt:baseAddr withChunkSize:0x2000 error:error];
 }
 
 
-- (NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr withChunkSize:(NSUInteger)chunkSize
+- (NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr withChunkSize:(NSUInteger)chunkSize error:(NSError **)error
 {
     /*
      Function call in Python:
@@ -207,6 +246,14 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
     if (NULL == imageList) {
+        NSLog(@"ERROR: genImage(0x%lxd, 0x%lxd) returns NULL!", baseAddr, chunkSize);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
         return nil;
     }
 
@@ -217,7 +264,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSData *)generateJumpstart
+- (NSData *)generateJumpstart:(NSError **)error
 {
     /*
      Function call in Python:
@@ -227,6 +274,14 @@ NS_ASSUME_NONNULL_END
     PyObject *diskImageString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == diskImageString) {
+        NSLog(@"ERROR: genJumpstart() returns NULL!");
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
         return nil;
     }
 
@@ -237,7 +292,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSData *)generateBasicLoader
+- (NSData *)generateBasicLoader:(NSError **)error
 {
     /*
      Function call in Python:
@@ -247,6 +302,14 @@ NS_ASSUME_NONNULL_END
     PyObject *basicString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == basicString) {
+        NSLog(@"ERROR: genXbLoader() returns NULL!");
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
         return nil;
     }
 
@@ -263,7 +326,7 @@ NS_ASSUME_NONNULL_END
     - layout.xml: NSString
     - meta-inf.xml: NSString
  */
-- (NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName
+- (NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName error:(NSError **)error
 {
     if (nil == cartridgeName || [cartridgeName length] == 0) {
         return nil;
@@ -278,6 +341,14 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartTuple) {
+        NSLog(@"ERROR: genCart(\"%@\") returns NULL!", cartridgeName);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
         return nil;
     }
 
@@ -303,7 +374,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSData *)generateListing
+- (NSData *)generateListing:(NSError **)error
 {
     /*
      In the Python class all methods which generates output calling self.prepare() before they do their actual work,
@@ -328,6 +399,14 @@ NS_ASSUME_NONNULL_END
     PyObject *listingString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == listingString) {
+        NSLog(@"ERROR: genList() returns NULL!");
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
         return nil;
     }
 

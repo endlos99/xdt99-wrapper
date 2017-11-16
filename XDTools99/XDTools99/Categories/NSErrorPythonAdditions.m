@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 05.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2017 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 //
 
 #import "NSErrorPythonAdditions.h"
+#import "NSStringPythonAdditions.h"
 
 #import "XDTObject.h"
 
@@ -31,6 +32,12 @@
 
 + (instancetype)errorWithPythonError:(PyObject *)error code:(NSInteger)code RecoverySuggestion:(NSString *)recoverySuggestion
 {
+    return [self errorWithPythonError:error code:code RecoverySuggestion:recoverySuggestion clearErrorIndicator:NO];
+}
+
+
++ (instancetype)errorWithPythonError:(PyObject *)error code:(NSInteger)code RecoverySuggestion:(NSString *)recoverySuggestion clearErrorIndicator:(BOOL)clearIndicator
+{
     NSString *errorString = nil;
     NSString *errorDescription = nil;
 
@@ -38,30 +45,40 @@
         /* The error is just a simple error message */
         errorString = [NSString stringWithUTF8String:PyString_AsString(error)];
         errorDescription = @"Python error occured!";
-    } else {
+    } else if (PyExceptionClass_Check(error)) {
         /* Or the error can be an exception, so fetch more information here. */
-        PyObject *ptype = NULL;
-        PyObject *pvalue = NULL;
-        PyObject *ptraceback = NULL;
-        PyErr_Fetch(&ptype, &pvalue, &ptraceback);
-        errorString = [NSString stringWithFormat:@"Python Exception: \"%s\"", PyString_AsString(pvalue)];
-        Py_XDECREF(ptype);
-        Py_XDECREF(pvalue);
-        Py_XDECREF(ptraceback);
+        PyTypeObject *eType = NULL;
+        PyObject *eObject = NULL;
+        PyTracebackObject *eTraceBack = NULL;
+        PyErr_Fetch((PyObject **)&eType, &eObject, (PyObject **)&eTraceBack);
+        PyErr_NormalizeException((PyObject **)&eType, &eObject, (PyObject **)&eTraceBack);
+        errorString = [NSString stringWithFormat:@"Exception %s: \"%@\"",
+                       PyExceptionClass_Name(error), [NSString stringWithPythonString:eObject encoding:NSUTF8StringEncoding]];
+        /* If the exception will not be handle here, restore it. */
+        if (clearIndicator) {
+            Py_XDECREF(eType);
+            Py_XDECREF(eObject);
+            Py_XDECREF(eTraceBack);
+        } else {
+            // When using PyErr_Restore() there is no need to use Py_XDECREF for these 3 pointers
+            PyErr_Restore((PyObject *)eType, eObject, (PyObject *)eTraceBack);
+        }
         errorDescription = @"Python exception occured!";
+    } else {
+        /* unknow Python class, don't know how to generate strings */
+        return nil;
     }
 
     NSDictionary *errorDict = nil;
     if (nil == recoverySuggestion) {
         errorDict = @{
                       NSLocalizedDescriptionKey: errorDescription,
-                      NSLocalizedFailureReasonErrorKey: errorString
+                      NSLocalizedRecoverySuggestionErrorKey: errorString
                       };
     } else {
         errorDict = @{
                       NSLocalizedDescriptionKey: errorDescription,
-                      NSLocalizedFailureReasonErrorKey: errorString,
-                      NSLocalizedRecoverySuggestionErrorKey: recoverySuggestion
+                      NSLocalizedRecoverySuggestionErrorKey: [NSString stringWithFormat:@"%@\n%@", errorString, recoverySuggestion]
                       };
     }
     return [NSError errorWithDomain:XDTErrorDomain code:code userInfo:errorDict];

@@ -27,6 +27,7 @@
 #include <Python/Python.h>
 
 #import "NSErrorPythonAdditions.h"
+#import "XDTException.h"
 #include "XDTGPLObjcode.h"
 
 
@@ -66,8 +67,14 @@ NS_ASSUME_NONNULL_END
         PyObject *pModule = PyImport_Import(pName);
         Py_XDECREF(pName);
         if (NULL == pModule) {
-            if (PyErr_Occurred()) {
+            NSLog(@"ERROR: Importing module '%@' failed!", pName);
+            PyObject *exeption = PyErr_Occurred();
+            if (NULL != exeption) {
+//            if (nil != error) {
+//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//            }
                 PyErr_Print();
+                @throw [XDTException exceptionWithError:[NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil]];
             }
             return nil;
         }
@@ -136,8 +143,15 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
     if (NULL == assembler) {
-        if (PyErr_Occurred()) {
+        NSLog(@"ERROR: calling constructor %@(\"%s\", 0x%lx, 0x%lx, \"%s\", %@, None) failed!", pFunc,
+              [self syntaxTypeAsCString], _gromAddress, _aorgAddress, [self targetTypeAsCString], urls);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+//            if (nil != error) {
+//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//            }
             PyErr_Print();
+            @throw [XDTException exceptionWithError:[NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil]];
         }
 #if !__has_feature(objc_arc)
         [self release];
@@ -155,8 +169,8 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_XDECREF(assemblerPythonClass);
-    Py_XDECREF(assemblerPythonModule);
+    Py_CLEAR(assemblerPythonClass);
+    Py_CLEAR(assemblerPythonModule);
 
 #if !__has_feature(objc_arc)
     [super dealloc];
@@ -221,6 +235,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pbaseName);
     Py_XDECREF(methodName);
     if (NULL == pValueTupel) {
+        NSLog(@"ERROR: assemble(\"%s\") returns NULL!", [basename UTF8String]);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -243,8 +258,7 @@ NS_ASSUME_NONNULL_END
             if (nil != error) {
                 NSDictionary *errorDict = @{
                                             NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Error occured while assembling '%@'", basename],
-                                            NSLocalizedFailureReasonErrorKey: errorString,
-                                            NSLocalizedRecoverySuggestionErrorKey: @"Please check all assembler options and try again."
+                                            NSLocalizedRecoverySuggestionErrorKey: [NSString stringWithFormat:@"%@\n%@", errorString, @"Please check all assembler options and try again."]
                                             };
                 *error = [NSError errorWithDomain:XDTErrorDomain code:-1 userInfo:errorDict];
             }

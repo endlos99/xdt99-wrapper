@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_XDECREF(symbolsPythonClass);
+    Py_CLEAR(symbolsPythonClass);
 
 #if !__has_feature(objc_arc)
     [super dealloc];

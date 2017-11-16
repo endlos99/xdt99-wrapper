@@ -103,6 +103,7 @@
     Py_XDECREF(pArgs);
     Py_DECREF(pFunc);
     if (NULL == zipfile) {
+        NSLog(@"ERROR: Can't open/create ZIP archive for writing!\n%@", [url path]);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -126,8 +127,8 @@
 
 - (void)dealloc
 {
-    Py_XDECREF(zipfilePythonClass);
-    Py_XDECREF(zipfilePythonModule);
+    Py_CLEAR(zipfilePythonClass);
+    Py_CLEAR(zipfilePythonModule);
 
 #if !__has_feature(objc_arc)
     [super dealloc];
@@ -135,7 +136,7 @@
 }
 
 
-- (void)writeFile:(NSString *)fileName withData:(NSData *)data
+- (BOOL)writeFile:(NSString *)fileName withData:(NSData *)data error:(NSError **)error
 {
     /*
      Function call in Python:
@@ -149,12 +150,18 @@
     Py_XDECREF(pFileName);
     Py_XDECREF(methodName);
     if (NULL == pValueTupel) {
-        if (PyErr_Occurred()) {
+        NSLog(@"ERROR: writestr(%@, %@) fails!", fileName, data);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
             PyErr_Print();
         }
-        return;
+        return NO;
     }
     Py_DECREF(pValueTupel);
+    return YES;
 }
 
 @end

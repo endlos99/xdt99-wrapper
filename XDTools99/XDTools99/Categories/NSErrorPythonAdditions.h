@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 05.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2017 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSError (NSErrorPythonAdditions)
 
 + (nullable instancetype)errorWithPythonError:(PyObject *)error code:(NSInteger)code RecoverySuggestion:(nullable NSString *)recoverySuggestion;
++ (nullable instancetype)errorWithPythonError:(PyObject *)error code:(NSInteger)code RecoverySuggestion:(nullable NSString *)recoverySuggestion clearErrorIndicator:(BOOL)clearIndicator;
 
 @end
 NS_ASSUME_NONNULL_END

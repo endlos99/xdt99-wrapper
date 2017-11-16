@@ -31,9 +31,7 @@
 
 + (nullable NSArray<id> *)arrayWithPyTuple:(PyObject *)dataTuple
 {
-    if (NULL == dataTuple) {
-        return nil;
-    }
+    assert(NULL != dataTuple);
 
     const Py_ssize_t dataCount = PyTuple_Size(dataTuple);
     if (0 > dataCount) {
@@ -58,13 +56,14 @@
             } else if (PyTuple_Check(dataItem)) {
                 NSArray *object = [NSArray arrayWithPyTuple:dataItem];
                 [retVal addObject:object];
-            } else if (Py_None	== dataItem) {
+            } else if (Py_None == dataItem) {
                 NSNull *object = [NSNull null];
                 [retVal addObject:object];
             } else {
                 PyTypeObject *dataType = dataItem->ob_type;
                 NSLog(@"Cannot convert Python type '%s' to an Objective-C type", dataType->tp_name);
             }
+            Py_DECREF(dataItem);
         }
     }
 
@@ -74,9 +73,7 @@
 
 + (nullable NSArray<NSArray<id> *> *)arrayWithPyListOfTuple:(PyObject *)dataList
 {
-    if (NULL == dataList) {
-        return nil;
-    }
+    assert(NULL != dataList);
 
     const Py_ssize_t dataCount = PyList_Size(dataList);
     if (0 > dataCount) {
@@ -91,6 +88,7 @@
         if (NULL != dataTupel) {
             NSArray<id> *dataArray = [NSArray arrayWithPyTuple:dataTupel];
             [retVal addObject:dataArray];
+            Py_DECREF(dataTupel);
         }
     }
 
@@ -100,9 +98,7 @@
 
 + (nullable NSMutableArray<NSData *> *)arrayWithPyListOfString:(PyObject *)dataList
 {
-    if (NULL == dataList) {
-        return nil;
-    }
+    assert(NULL != dataList);
 
     const Py_ssize_t dataCount = PyList_Size(dataList);
     if (0 > dataCount) {
@@ -119,6 +115,7 @@
             char *codeStr = PyString_AsString(dataItem);
             NSData *imageData = [NSData dataWithBytes:codeStr length:codeSize];
             [retVal addObject:imageData];
+            Py_DECREF(dataItem);
         }
     }
 

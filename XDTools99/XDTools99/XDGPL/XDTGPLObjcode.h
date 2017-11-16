@@ -30,10 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable instancetype)gplObjectcodeWithPythonInstance:(void *)object;
 
-- (nullable NSData *)generateDump;
-- (nullable NSArray<NSArray<id> *> *)generateByteCode;
-- (nullable NSData *)generateImageWithName:(NSString *)cartridgeName;
-- (nullable NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName;
+- (nullable NSData *)generateDump:(NSError **)error;
+- (nullable NSArray<NSArray<id> *> *)generateByteCode:(NSError **)error;
+- (nullable NSData *)generateImageWithName:(NSString *)cartridgeName error:(NSError **)error;
+- (nullable NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName error:(NSError **)error;
 
 @end
 NS_ASSUME_NONNULL_END

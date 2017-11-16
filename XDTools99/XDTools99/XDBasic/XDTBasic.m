@@ -65,8 +65,12 @@ NS_ASSUME_NONNULL_END
         PyObject *pModule = PyImport_Import(pName);
         Py_XDECREF(pName);
         if (NULL == pModule) {
-            if (PyErr_Occurred()) {
-                PyErr_Print();
+            NSLog(@"ERROR: Importing module '%@' failed!", pName);
+            PyObject *exeption = PyErr_Occurred();
+            if (NULL != exeption) {
+//            if (nil != error) {
+//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//            }
             }
             return nil;
         }
@@ -119,7 +123,12 @@ NS_ASSUME_NONNULL_END
     PyObject *basicObject = PyObject_CallObject(pFunc, NULL);
     Py_XDECREF(pFunc);
     if (NULL == basicObject) {
-        if (PyErr_Occurred()) {
+        NSLog(@"ERROR: calling constructor %@(None, None, False) failed!", pFunc);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+//            if (nil != error) {
+//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//            }
             PyErr_Print();
         }
 #if !__has_feature(objc_arc)
@@ -140,8 +149,8 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_XDECREF(basicProgramPythonClass);
-    Py_XDECREF(basicPythonModule);
+    Py_CLEAR(basicProgramPythonClass);
+    Py_CLEAR(basicPythonModule);
 
 #if !__has_feature(objc_arc)
     [super dealloc];
@@ -230,6 +239,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pData);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
+        NSLog(@"ERROR: load(%@, %@) returns NULL!", data, useLongFormat? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -257,6 +267,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pData);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
+        NSLog(@"ERROR: merge(%@) returns NULL!", data);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -273,7 +284,7 @@ NS_ASSUME_NONNULL_END
 
 
 /* textual representation of token sequence */
-- (NSString *)getSource
+- (NSString *)getSource:(NSError **)error
 {
     /* calling:
      text = getSource()
@@ -282,6 +293,14 @@ NS_ASSUME_NONNULL_END
     PyObject *pSourceCode = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == pSourceCode) {
+        NSLog(@"ERROR: getSource() returns NULL!");
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
         return nil;
     }
 
@@ -325,6 +344,7 @@ NS_ASSUME_NONNULL_END
         Py_XDECREF(pLineDelta);
         Py_XDECREF(methodName);
         if (NULL == joinedLines) {  /* if result is null, the line delta could be wrong configured. */
+            NSLog(@"ERROR: join(%@, 10) returns NULL!", lines);
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
                 if (nil != error) {
@@ -346,6 +366,7 @@ NS_ASSUME_NONNULL_END
     Py_DECREF(pLinesList);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
+        NSLog(@"ERROR: parse(%@) returns NULL!", lines);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -386,6 +407,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pLongOpt);
     Py_XDECREF(methodName);
     if (NULL == pProgramData) {
+        NSLog(@"ERROR: getImage(%@, %@) returns NULL!", useLongFormat? @"true" : @"false", _protect? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -416,7 +438,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSString *)dumpTokenList
+- (NSString *)dumpTokenList:(NSError **)error
 {
     /* calling:
      result = dumpTokens()
@@ -425,8 +447,12 @@ NS_ASSUME_NONNULL_END
     PyObject *pDumpString = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == pDumpString) {
+        NSLog(@"ERROR: dumpTokens() returns NULL!");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
             PyErr_Print();
         }
         return nil;

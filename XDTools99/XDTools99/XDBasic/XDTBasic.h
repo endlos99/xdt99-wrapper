@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)loadLongData:(NSData *)data error:(NSError **)error;    // load tokenized BASIC program in long format
 - (BOOL)loadMergedData:(NSData *)data error:(NSError **)error;  // load tokenized BASIC program in merge format
 
-- (nullable NSString *)getSource;    // textual representation of token sequence
+- (nullable NSString *)getSource:(NSError **)error;    // textual representation of token sequence
 
 /* Source code to program conversion */
 - (BOOL)parseSourceCode:(NSString *)sourceCode error:(NSError **)error;  // parse and tokenize BASIC source code
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)saveLongFormatFile:(NSURL *)fileURL error:(NSError **)error;
 - (BOOL)saveMergedFormatFile:(NSURL *)fileURL error:(NSError **)error;
 
-- (nullable NSString *)dumpTokenList;
+- (nullable NSString *)dumpTokenList:(NSError **)error;
 
 @end
 NS_ASSUME_NONNULL_END

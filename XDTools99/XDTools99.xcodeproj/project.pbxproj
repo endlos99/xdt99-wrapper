@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		AF125EBB1E0414A600F659AA /* XDGPL.h in Headers */ = {isa = PBXBuildFile; fileRef = AF125EBA1E0414A000F659AA /* XDGPL.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF157DFE1FBF06B300679D82 /* NSStringPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AF157DFC1FBF06B300679D82 /* NSStringPythonAdditions.h */; };
+		AF157DFF1FBF06B300679D82 /* NSStringPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AF157DFD1FBF06B300679D82 /* NSStringPythonAdditions.m */; };
+		AF157E021FBF4D4000679D82 /* XDTException.h in Headers */ = {isa = PBXBuildFile; fileRef = AF157E001FBF4D4000679D82 /* XDTException.h */; };
+		AF157E031FBF4D4000679D82 /* XDTException.m in Sources */ = {isa = PBXBuildFile; fileRef = AF157E011FBF4D4000679D82 /* XDTException.m */; };
 		AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96A91DFABAA0006EE618 /* XDAssembler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF2D96B31DFABF39006EE618 /* XDTSymbols.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96AB1DFABF39006EE618 /* XDTSymbols.h */; };
 		AF2D96B41DFABF39006EE618 /* XDTSymbols.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96AC1DFABF39006EE618 /* XDTSymbols.m */; };
@@ -42,6 +46,10 @@
 
 /* Begin PBXFileReference section */
 		AF125EBA1E0414A000F659AA /* XDGPL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDGPL.h; sourceTree = "<group>"; };
+		AF157DFC1FBF06B300679D82 /* NSStringPythonAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringPythonAdditions.h; sourceTree = "<group>"; };
+		AF157DFD1FBF06B300679D82 /* NSStringPythonAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringPythonAdditions.m; sourceTree = "<group>"; };
+		AF157E001FBF4D4000679D82 /* XDTException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDTException.h; sourceTree = "<group>"; };
+		AF157E011FBF4D4000679D82 /* XDTException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XDTException.m; sourceTree = "<group>"; };
 		AF2D96A91DFABAA0006EE618 /* XDAssembler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDAssembler.h; sourceTree = "<group>"; };
 		AF2D96AB1DFABF39006EE618 /* XDTSymbols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTSymbols.h; path = XDAssembler/XDTSymbols.h; sourceTree = "<group>"; };
 		AF2D96AC1DFABF39006EE618 /* XDTSymbols.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTSymbols.m; path = XDAssembler/XDTSymbols.m; sourceTree = "<group>"; };
@@ -168,6 +176,8 @@
 				AFE6306B1DF9BB9E005FFD01 /* XDTZipFile.h */,
 				AFE630671DF9BB9E005FFD01 /* XDTZipFile.m */,
 				AFE630571DF9BB67005FFD01 /* Info.plist */,
+				AF157E001FBF4D4000679D82 /* XDTException.h */,
+				AF157E011FBF4D4000679D82 /* XDTException.m */,
 			);
 			path = XDTools99;
 			sourceTree = "<group>";
@@ -181,6 +191,8 @@
 				AFE630601DF9BB9E005FFD01 /* NSArrayPythonAdditions.m */,
 				AFE630611DF9BB9E005FFD01 /* NSErrorPythonAdditions.h */,
 				AFE630621DF9BB9E005FFD01 /* NSErrorPythonAdditions.m */,
+				AF157DFC1FBF06B300679D82 /* NSStringPythonAdditions.h */,
+				AF157DFD1FBF06B300679D82 /* NSStringPythonAdditions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -208,12 +220,14 @@
 				AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */,
 				AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */,
 				AFE630791DF9BB9E005FFD01 /* XDTZipFile.h in Headers */,
+				AF157DFE1FBF06B300679D82 /* NSStringPythonAdditions.h in Headers */,
 				AFE6306F1DF9BB9E005FFD01 /* NSErrorPythonAdditions.h in Headers */,
 				AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */,
 				AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */,
 				AF2D96BA1DFABF39006EE618 /* XDTObject.h in Headers */,
 				AF125EBB1E0414A600F659AA /* XDGPL.h in Headers */,
 				AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */,
+				AF157E021FBF4D4000679D82 /* XDTException.h in Headers */,
 				AF2D96C91DFAFF29006EE618 /* NSDataPythonAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,11 +305,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF157E031FBF4D4000679D82 /* XDTException.m in Sources */,
 				AF2D96B91DFABF39006EE618 /* XDTObject.m in Sources */,
 				AF9C22081E06D88A00BB02FC /* XDTGPLAssembler.m in Sources */,
 				AF9C220C1E06FD4E00BB02FC /* XDTGPLObjcode.m in Sources */,
 				AF2D96B41DFABF39006EE618 /* XDTSymbols.m in Sources */,
 				AFE6306E1DF9BB9E005FFD01 /* NSArrayPythonAdditions.m in Sources */,
+				AF157DFF1FBF06B300679D82 /* NSStringPythonAdditions.m in Sources */,
 				AF2D96B51DFABF39006EE618 /* XDTObjcode.m in Sources */,
 				AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */,
 				AF2D96B61DFABF39006EE618 /* XDTAssembler.m in Sources */,
