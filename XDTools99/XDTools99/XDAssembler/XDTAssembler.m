@@ -206,6 +206,8 @@ NS_ASSUME_NONNULL_END
     switch (_targetType) {
         case XDTAssemblerTargetTypeRawBinary:
             return "bin";
+        case XDTAssemblerTargetTypeTextBinary:
+            return "text";
         case XDTAssemblerTargetTypeObjectCode:
             return "obj";
         case XDTAssemblerTargetTypeProgramImage:

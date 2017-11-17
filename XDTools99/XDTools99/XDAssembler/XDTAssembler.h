@@ -38,6 +38,7 @@ NS_ENUM(XDTAssemblerTargetType) {
     XDTAssemblerTargetTypeProgramImage,     /* The format used by the Editor/Assembler Option 5 */
     XDTAssemblerTargetTypeMESSCartridge,    /* Create an RPK cartridge file that can be used with the MESS emulator */
     XDTAssemblerTargetTypeRawBinary,        /* An image format without any metadata, i.e. suitable for burning EPROMs */
+    XDTAssemblerTargetTypeTextBinary,       /* Text file with binary values, useful for including it into some foreign source source */
     XDTAssemblerTargetTypeEmbededXBasic,    /* This format wraps a XBasic program around the generated code */
     XDTAssemblerTargetTypeJumpstart,        /* Executed by the Jumpstart cartridge included with xdt99 */
 };

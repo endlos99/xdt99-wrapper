@@ -51,7 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSData *)generateJumpstart:(NSError **)error;
 - (nullable NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName error:(NSError **)error;
 
-- (nullable NSData *)generateListing:(NSError **)error;
+- (nullable NSData *)generateListing:(BOOL)outputSymbols error:(NSError **)error;
+- (nullable NSData *)generateSymbols:(BOOL)useEqu error:(NSError **)error;
 
 @end
 NS_ASSUME_NONNULL_END
