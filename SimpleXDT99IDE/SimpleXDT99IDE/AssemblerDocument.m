@@ -194,7 +194,7 @@
     if (nil == _assemblingResult) {
         return @"";
     }
-    NSData *data = [_assemblingResult generateListing];
+    NSData *data = [_assemblingResult generateListing:nil];
     NSString *retVal = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 #if !__has_feature(objc_arc)
     [retVal autorelease];
@@ -290,7 +290,7 @@
 
     BOOL shouldCompressObjectCode = 1 == _outputFormatPopupButtonIndex;
     XDTAssemblerTargetType xdtTargetType = [self targetType];
-    if (![self assembleCode:xdtTargetType error:&error] || ![self exportBinaries:xdtTargetType compressObjectCode:shouldCompressObjectCode error:&error]) {
+    if (![self assembleCode:xdtTargetType error:&error] || nil != error || ![self exportBinaries:xdtTargetType compressObjectCode:shouldCompressObjectCode error:&error]) {
         if (nil != error) {
             [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
             return;
@@ -349,7 +349,7 @@
     XDTAssembler *assembler = [XDTAssembler assemblerWithOptions:options includeURL:[self fileURL]];
 
     XDTObjcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
-    if (nil != *error) {
+    if (nil != error && nil != *error) {
         [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [*error localizedDescription], [*error localizedFailureReason]]];
         [self setAssemblingResult:nil];
 
@@ -369,9 +369,17 @@
     switch (xdtTargetType) {
         case XDTAssemblerTargetTypeProgramImage: {
             NSString *newOutpuFileName = [self outputFileName];
-            for (NSData *data in [_assemblingResult generateImageAt:_baseAddress]) {
+            for (NSData *data in [_assemblingResult generateImageAt:_baseAddress error:error]) {
+                if ((nil != error && nil != *error) || nil == data) {
+                    retVal = NO;
+                    break;
+                }
                 NSURL *newOutpuFileURL = [NSURL URLWithString:newOutpuFileName relativeToURL:[self outputBasePathURL]];
-                [data writeToURL:newOutpuFileURL atomically:YES];
+                [data writeToURL:newOutpuFileURL options:NSDataWritingAtomic error:error];
+                if (nil != error && nil != *error) {
+                    retVal = NO;
+                    break;
+                }
 
                 NSString *fileName = [NSMutableString stringWithString:[newOutpuFileName stringByDeletingPathExtension]];
                 unichar nextChar = [fileName characterAtIndex:[fileName length]-1] + 1;
@@ -380,7 +388,11 @@
             break;
         }
         case XDTAssemblerTargetTypeRawBinary: {
-            for (NSArray<id> *element in [_assemblingResult generateRawBinaryAt:_baseAddress]) {
+            for (NSArray<id> *element in [_assemblingResult generateRawBinaryAt:_baseAddress error:error]) {
+                if ((nil != error && nil != *error) || nil == element) {
+                    retVal = NO;
+                    break;
+                }
                 NSNumber *address = [element objectAtIndex:0];
                 NSNumber *bank = [element objectAtIndex:1];
                 NSData *data = [element objectAtIndex:2];
@@ -393,29 +405,45 @@
                 }
                 NSURL *newOutputFileURL = [NSURL URLWithString:[[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[[self outputFileName] pathExtension]]
                                                  relativeToURL:[self outputBasePathURL]];
-                [data writeToURL:newOutputFileURL atomically:YES];
+                [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
+                if (nil != error && nil != *error) {
+                    retVal = NO;
+                    break;
+                }
             }
             break;
         }
         case XDTAssemblerTargetTypeObjectCode: {
-            NSData *data = [_assemblingResult generateObjCode:shouldCompressObjectCode];
-            if (nil != data) {
-                [data writeToURL:[NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]] atomically:YES];
+            NSData *data = [_assemblingResult generateObjCode:shouldCompressObjectCode error:error];
+            if ((nil != error && nil != *error) || nil == data) {
+                retVal = NO;
+                break;
             }
+            NSURL *newOutputFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+            [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
+            retVal = nil != error && nil == *error;
             break;
         }
         case XDTAssemblerTargetTypeEmbededXBasic: {
-            NSData *data = [_assemblingResult generateBasicLoader];
-            if (nil != data) {
-                [data writeToURL:[NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]] atomically:YES];
+            NSData *data = [_assemblingResult generateBasicLoader:error];
+            if ((nil != error && nil != *error) || nil == data) {
+                retVal = NO;
+                break;
             }
+            NSURL *newOutputFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+            [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
+            retVal = nil != error && nil == *error;
             break;
         }
         case XDTAssemblerTargetTypeJumpstart: {
-            NSData *data = [_assemblingResult generateJumpstart];
-            if (nil != data) {
-                [data writeToURL:[NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]] atomically:YES];
+            NSData *data = [_assemblingResult generateJumpstart:error];
+            if ((nil != error && nil != *error) || nil == data) {
+                retVal = NO;
+                break;
             }
+            NSURL *newOutputFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+            [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
+            retVal = nil != error && nil == *error;
             break;
         }
         case XDTAssemblerTargetTypeMESSCartridge: {
@@ -433,22 +461,29 @@
                 break;
             }
 
-            XDTZipFile *zipfile = [XDTZipFile zipFileForWritingToURL:[NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:error];
-            if (nil != *error || nil == zipfile) {
+            NSURL *newOutputFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+            XDTZipFile *zipfile = [XDTZipFile zipFileForWritingToURL:newOutputFileURL error:error];
+            if ((nil != error && nil != *error) || nil == zipfile) {
                 retVal = NO;
                 break;
             }
 
-            if (nil != zipfile) {
-                NSDictionary *tripel = [_assemblingResult generateMESSCartridgeWithName:_cartridgeName];
-                for (NSString *fName in [tripel keyEnumerator]) {
-                    NSData *data = [tripel objectForKey:fName];
-                    [zipfile writeFile:fName withData:data];
+            NSDictionary *tripel = [_assemblingResult generateMESSCartridgeWithName:_cartridgeName error:error];
+            if ((nil != error && nil != *error) || nil == tripel) {
+                retVal = NO;
+                break;
+            }
+            for (NSString *fName in [tripel keyEnumerator]) {
+                NSData *data = [tripel objectForKey:fName];
+                [zipfile writeFile:fName withData:data error:error];
+                if (nil != error && nil != *error) {
+                    retVal = NO;
+                    break;
                 }
             }
             break;
         }
-            
+
         default:
             break;
     }

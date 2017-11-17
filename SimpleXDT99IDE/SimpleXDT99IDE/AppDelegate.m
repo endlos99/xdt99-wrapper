@@ -160,9 +160,15 @@ NS_ASSUME_NONNULL_END
             case XDTAssemblerTargetTypeProgramImage: {
                 NSUInteger baseAddress = [defaults integerForKey:UserDefaultKeyAssemblerOptionBaseAddress];
                 NSString *countingFileName = [NSMutableString stringWithString:[[outputFileURL lastPathComponent] stringByDeletingPathExtension]];
-                for (NSData *data in [assemblingResult generateImageAt:baseAddress]) {
+                for (NSData *data in [assemblingResult generateImageAt:baseAddress error:&error]) {
+                    if (nil != error || nil == data) {
+                        break;
+                    }
                     NSURL *countingFileURL = [[outputFileURL URLByDeletingLastPathComponent] URLByAppendingPathComponent:[countingFileName stringByAppendingPathExtension:[outputFileURL pathExtension]]];
-                    [data writeToURL:countingFileURL atomically:YES];
+                    [data writeToURL:countingFileURL options:NSDataWritingAtomic error:&error];
+                    if (nil != error) {
+                        break;
+                    }
 
                     unichar nextChar = [countingFileName characterAtIndex:[countingFileName length]-1] + 1;
                     countingFileName = [[countingFileName substringToIndex:[countingFileName length]-1] stringByAppendingFormat:@"%c", nextChar];
@@ -171,7 +177,10 @@ NS_ASSUME_NONNULL_END
             }
             case XDTAssemblerTargetTypeRawBinary: {
                 NSUInteger baseAddress = [defaults integerForKey:UserDefaultKeyAssemblerOptionBaseAddress];
-                for (NSArray<id> *element in [assemblingResult generateRawBinaryAt:baseAddress]) {
+                for (NSArray<id> *element in [assemblingResult generateRawBinaryAt:baseAddress error:&error]) {
+                    if (nil != error || nil == element) {
+                        break;
+                    }
                     NSNumber *address = [element objectAtIndex:0];
                     NSNumber *bank = [element objectAtIndex:1];
                     NSData *data = [element objectAtIndex:2];
@@ -184,28 +193,31 @@ NS_ASSUME_NONNULL_END
                     }
                     NSURL *newOutputFileURL = [NSURL URLWithString:[[[[outputFileURL lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[outputFileURL pathExtension]]
                                                      relativeToURL:[outputFileURL URLByDeletingLastPathComponent]];
-                    [data writeToURL:newOutputFileURL atomically:YES];
+                    [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:&error];
+                    if (nil != error) {
+                        break;
+                    }
                 }
                 break;
             }
             case XDTAssemblerTargetTypeObjectCode: {
-                NSData *data = [assemblingResult generateObjCode:compressedObjectCode];
-                if (nil != data) {
-                    [data writeToURL:outputFileURL atomically:YES];
+                NSData *data = [assemblingResult generateObjCode:compressedObjectCode error:&error];
+                if (nil == error && nil != data) {
+                    [data writeToURL:outputFileURL options:NSDataWritingAtomic error:&error];
                 }
                 break;
             }
             case XDTAssemblerTargetTypeEmbededXBasic: {
-                NSData *data = [assemblingResult generateBasicLoader];
-                if (nil != data) {
-                    [data writeToURL:outputFileURL atomically:YES];
+                NSData *data = [assemblingResult generateBasicLoader:&error];
+                if (nil == error && nil != data) {
+                    [data writeToURL:outputFileURL options:NSDataWritingAtomic error:&error];
                 }
                 break;
             }
             case XDTAssemblerTargetTypeJumpstart: {
-                NSData *data = [assemblingResult generateJumpstart];
-                if (nil != data) {
-                    [data writeToURL:outputFileURL atomically:YES];
+                NSData *data = [assemblingResult generateJumpstart:&error];
+                if (nil == error && nil != data) {
+                    [data writeToURL:outputFileURL options:NSDataWritingAtomic error:&error];
                 }
                 break;
             }
@@ -217,20 +229,23 @@ NS_ASSUME_NONNULL_END
                     return NO;
                 }
 
-                error = nil;
                 XDTZipFile *zipfile = [XDTZipFile zipFileForWritingToURL:outputFileURL error:&error];
+                if (nil == error && nil != zipfile) {
+                    NSDictionary *tripel = [assemblingResult generateMESSCartridgeWithName:cartName error:&error];
+                    if (nil == error && nil != tripel) {
+                        for (NSString *fName in [tripel keyEnumerator]) {
+                            NSData *data = [tripel objectForKey:fName];
+                            [zipfile writeFile:fName withData:data error:&error];
+                            if (nil != error) {
+                                break;
+                            }
+                        }
+                    }
+                }
                 if (nil != error) {
                     NSAlert *alert = [NSAlert alertWithError:error];
                     [alert runModal];
                     return NO;
-                }
-                
-                if (nil != zipfile) {
-                    NSDictionary *tripel = [assemblingResult generateMESSCartridgeWithName:cartName];
-                    for (NSString *fName in [tripel keyEnumerator]) {
-                        NSData *data = [tripel objectForKey:fName];
-                        [zipfile writeFile:fName withData:data];
-                    }
                 }
                 break;
             }
@@ -238,12 +253,17 @@ NS_ASSUME_NONNULL_END
             default:
                 break;
         }
-        if ([defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateListOutput]) {
+        if (nil == error && [defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateListOutput]) {
             NSURL *listingURL = [[outputFileURL URLByDeletingPathExtension] URLByAppendingPathExtension:@"dv80"];
-            NSData *data = [assemblingResult generateListing];
-            if (nil != data) {
+            NSData *data = [assemblingResult generateListing:&error];
+            if (nil == error && nil != data) {
                 [data writeToURL:listingURL atomically:YES];
             }
+        }
+
+        if (nil != error) {
+            [[NSAlert alertWithError:error] runModal];
+            return NO;
         }
         return YES;
     }];
@@ -311,7 +331,10 @@ NS_ASSUME_NONNULL_END
 
         switch (xdtTargetType) {
             case XDTGPLAssemblerTargetTypePlainByteCode:    /* byte code */
-                for (NSArray<id> *element in [assemblingResult generateByteCode]) {
+                for (NSArray<id> *element in [assemblingResult generateByteCode:&error]) {
+                    if (nil != error || nil == element) {
+                        break;
+                    }
                     NSNumber *address = [element objectAtIndex:0];
                     NSNumber *base = [element objectAtIndex:1];
                     NSData *data = [element objectAtIndex:2];
@@ -324,7 +347,10 @@ NS_ASSUME_NONNULL_END
                     }
                     NSURL *newOutputFileURL = [NSURL URLWithString:[[[[outputFileURL lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[outputFileURL pathExtension]]
                                                      relativeToURL:[outputFileURL URLByDeletingLastPathComponent]];
-                    [data writeToURL:newOutputFileURL atomically:YES];
+                    [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:&error];
+                    if (nil != error) {
+                        break;
+                    }
                 }
                 break;
 
@@ -336,8 +362,10 @@ NS_ASSUME_NONNULL_END
                     return NO;
                 }
 
-                NSData *data = [assemblingResult generateImageWithName:cartName];
-                [data writeToURL:outputFileURL atomically:YES];
+                NSData *data = [assemblingResult generateImageWithName:cartName error:&error];
+                if (nil == error && nil != data) {
+                    [data writeToURL:outputFileURL options:NSDataWritingAtomic error:&error];
+                }
                 break;
             }
 
@@ -349,20 +377,23 @@ NS_ASSUME_NONNULL_END
                     return NO;
                 }
 
-                error = nil;
                 XDTZipFile *zipfile = [XDTZipFile zipFileForWritingToURL:outputFileURL error:&error];
+                if (nil != zipfile) {
+                    NSDictionary *tripel = [assemblingResult generateMESSCartridgeWithName:cartName error:&error];
+                    if (nil == error && nil != tripel) {
+                        for (NSString *fName in [tripel keyEnumerator]) {
+                            NSData *data = [tripel objectForKey:fName];
+                            [zipfile writeFile:fName withData:data error:&error];
+                            if (nil != error) {
+                                break;
+                            }
+                        }
+                    }
+                }
                 if (nil != error) {
                     NSAlert *alert = [NSAlert alertWithError:error];
                     [alert runModal];
                     return NO;
-                }
-
-                if (nil != zipfile) {
-                    NSDictionary *tripel = [assemblingResult generateMESSCartridgeWithName:cartName];
-                    for (NSString *fName in [tripel keyEnumerator]) {
-                        NSData *data = [tripel objectForKey:fName];
-                        [zipfile writeFile:fName withData:data];
-                    }
                 }
                 break;
             }
@@ -371,6 +402,10 @@ NS_ASSUME_NONNULL_END
                 break;
         }
 
+        if (nil != error) {
+            [[NSAlert alertWithError:error] runModal];
+            return NO;
+        }
         return YES;
     }];
 }
@@ -409,15 +444,13 @@ NS_ASSUME_NONNULL_END
         NSString *sourceCode = [NSString stringWithContentsOfURL:basicFileURL encoding:NSUTF8StringEncoding error:&error];
         if (nil == sourceCode) {
             if (nil != error) {
-                NSAlert *alert = [NSAlert alertWithError:error];
-                [alert runModal];
+                [[NSAlert alertWithError:error] runModal];
             }
             return NO;
         }
         if (![basic parseSourceCode:sourceCode error:&error]) {
             if (nil != error) {
-                NSAlert *alert = [NSAlert alertWithError:error];
-                [alert runModal];
+                [[NSAlert alertWithError:error] runModal];
             }
             return NO;
         }
@@ -439,8 +472,7 @@ NS_ASSUME_NONNULL_END
                 break;
         }
         if (nil != error) {
-            NSAlert *alert = [NSAlert alertWithError:error];
-            [alert runModal];
+            [[NSAlert alertWithError:error] runModal];
             return NO;
         }
 

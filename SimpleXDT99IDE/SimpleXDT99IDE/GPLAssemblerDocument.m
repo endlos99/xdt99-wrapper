@@ -217,7 +217,7 @@
     NSError *error = nil;
 
     XDTGPLAssemblerTargetType xdtTargetType = [self targetType];
-    if (![self assembleCode:xdtTargetType error:&error] || ![self exportBinaries:xdtTargetType error:&error]) {
+    if (![self assembleCode:xdtTargetType error:&error] || nil != error || ![self exportBinaries:xdtTargetType error:&error]) {
         if (nil != error) {
             [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
             return;
@@ -294,7 +294,7 @@
     XDTGPLAssembler *assembler = [XDTGPLAssembler gplAssemblerWithOptions:options includeURL:[self fileURL]];
 
     XDTGPLObjcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
-    if (nil != *error) {
+    if (nil != error && nil != *error) {
         [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [*error localizedDescription], [*error localizedFailureReason]]];
         [self setAssemblingResult:nil];
 
@@ -313,7 +313,11 @@
 
     switch (xdtTargetType) {
         case XDTGPLAssemblerTargetTypePlainByteCode:    /* byte code */
-            for (NSArray<id> *element in [_assemblingResult generateByteCode]) {
+            for (NSArray<id> *element in [_assemblingResult generateByteCode:error]) {
+                if ((nil != error && nil != *error) || nil == element) {
+                    retVal = NO;
+                    break;
+                }
                 NSNumber *address = [element objectAtIndex:0];
                 NSNumber *base = [element objectAtIndex:1];
                 NSData *data = [element objectAtIndex:2];
@@ -326,7 +330,11 @@
                 }
                 NSURL *newOutputFileURL = [NSURL URLWithString:[[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[[self outputFileName] pathExtension]]
                                                  relativeToURL:[self outputBasePathURL]];
-                [data writeToURL:newOutputFileURL atomically:YES];
+                [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
+                if (nil != error && nil != *error) {
+                    retVal = NO;
+                    break;
+                }
             }
             break;
 
@@ -345,9 +353,12 @@
                 break;
             }
 
-            NSData *data = [_assemblingResult generateImageWithName:_cartridgeName];
-            NSURL *newOutpuFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
-            [data writeToURL:newOutpuFileURL atomically:YES];
+            NSData *data = [_assemblingResult generateImageWithName:_cartridgeName error:error];
+            if ((nil != error && nil == *error) && nil != data) {
+                NSURL *newOutpuFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+                [data writeToURL:newOutpuFileURL options:NSDataWritingAtomic error:error];
+            }
+            retVal = nil != error && nil == *error;
             break;
         }
 
@@ -367,16 +378,22 @@
             }
 
             XDTZipFile *zipfile = [XDTZipFile zipFileForWritingToURL:[NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:error];
-            if (nil != *error || nil == zipfile) {
+            if ((nil != error && nil != *error) || nil == zipfile) {
                 retVal = NO;
                 break;
             }
 
-            if (nil != zipfile) {
-                NSDictionary *tripel = [_assemblingResult generateMESSCartridgeWithName:_cartridgeName];
-                for (NSString *fName in [tripel keyEnumerator]) {
-                    NSData *data = [tripel objectForKey:fName];
-                    [zipfile writeFile:fName withData:data];
+            NSDictionary *tripel = [_assemblingResult generateMESSCartridgeWithName:_cartridgeName error:error];
+            if ((nil != error && nil != *error) || nil == tripel) {
+                retVal = NO;
+                break;
+            }
+            for (NSString *fName in [tripel keyEnumerator]) {
+                NSData *data = [tripel objectForKey:fName];
+                [zipfile writeFile:fName withData:data error:error];
+                if (nil != error && nil != *error) {
+                    retVal = NO;
+                    break;
                 }
             }
             break;

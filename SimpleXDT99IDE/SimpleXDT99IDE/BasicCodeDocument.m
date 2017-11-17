@@ -187,7 +187,7 @@
         }
 
         [self setCompilingMessages:[basic warnings]];
-        [self setSourceCode:[basic getSource]];
+        [self setSourceCode:[basic getSource:outError]];
 
         /* binary Basic files cannot be handled as source code files, so force to save as a new file. */
         [self setFileURL:nil];
@@ -335,7 +335,7 @@
     }
 
     [self setCompilingMessages:[basic warnings]];
-    [self setTokenDump:[basic dumpTokenList]];
+    [self setTokenDump:[basic dumpTokenList:error]];
     
     return basic;
 }
