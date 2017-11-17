@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1108" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="15G17023" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
@@ -21,7 +21,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="133" y="235" width="605" height="505"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1050"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
             <value key="minSize" type="size" width="605" height="86"/>
             <view key="contentView" wantsLayer="YES" id="gIp-Ho-8D9">
                 <rect key="frame" x="0.0" y="0.0" width="605" height="505"/>
@@ -84,7 +84,7 @@
                                 <subviews>
                                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wDb-Rt-474">
                                         <rect key="frame" x="5" y="4" width="13" height="13"/>
-                                        <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" image="670F6A08-5784-403C-8FC8-BF97534FC3C9" imagePosition="only" alignment="left" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ghm-4k-1bg">
+                                        <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" image="3725419B-D47D-46A7-AFE1-D16D8A991532" imagePosition="only" alignment="left" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ghm-4k-1bg">
                                             <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="smallSystem"/>
                                         </buttonCell>
@@ -255,7 +255,7 @@
                     <constraint firstItem="V4H-bU-sFv" firstAttribute="top" secondItem="gIp-Ho-8D9" secondAttribute="top" id="kHa-uU-EH1"/>
                 </constraints>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="6E2C4AB8-8E9C-4A12-88CA-4B58ED5BD7AD" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="cgS-gl-WdB">
+            <toolbar key="toolbar" implicitIdentifier="6E2C4AB8-8E9C-4A12-88CA-4B58ED5BD7AD" autosavesConfiguration="NO" displayMode="iconOnly" sizeMode="regular" id="cgS-gl-WdB">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="79826006-C11A-4C8C-B3C6-A70CE7A5223C" explicitItemIdentifier="XDTOptionsToolbarItem" label="XDT99 Options" paletteLabel="XDT99 Options" tag="-1" id="x6c-tQ-6Xu">
                         <nil key="toolTip"/>
@@ -289,7 +289,7 @@
         <userDefaultsController representsSharedInstance="YES" id="7yQ-g3-ex7"/>
     </objects>
     <resources>
-        <image name="670F6A08-5784-403C-8FC8-BF97534FC3C9" width="1" height="1">
+        <image name="3725419B-D47D-46A7-AFE1-D16D8A991532" width="1" height="1">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQrLjE3OlUkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

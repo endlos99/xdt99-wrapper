@@ -79,6 +79,7 @@ NS_ASSUME_NONNULL_END
                                    UserDefaultKeyAssemblerOptionUseRegisterSymbols: @YES,
                                    UserDefaultKeyAssemblerOptionGenerateListOutput: @NO,
                                    UserDefaultKeyAssemblerOptionGenerateSymbolTable: @NO,
+                                   UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus: @NO,
                                    UserDefaultKeyAssemblerOptionBaseAddress: [NSNumber numberWithInteger:0xa000],
 
                                    UserDefaultKeyBasicOptionOutputTypePopupIndex: @1,
@@ -131,11 +132,17 @@ NS_ASSUME_NONNULL_END
                 xdtTargetType = XDTAssemblerTargetTypeRawBinary;
                 break;
             case 5:
-                xdtTargetType = XDTAssemblerTargetTypeJumpstart;
+                xdtTargetType = XDTAssemblerTargetTypeTextBinary;
                 break;
             case 6:
+                xdtTargetType = XDTAssemblerTargetTypeJumpstart;
+                break;
+            case 7:
                 xdtTargetType = XDTAssemblerTargetTypeMESSCartridge;
                 break;
+            /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
+             This feature is open to implement.
+             */
                 
             default:
                 break;
@@ -200,6 +207,37 @@ NS_ASSUME_NONNULL_END
                 }
                 break;
             }
+            case XDTAssemblerTargetTypeTextBinary: {
+                NSMutableString *fileContent = [NSMutableString string];
+                NSUInteger baseAddress = [defaults integerForKey:UserDefaultKeyAssemblerOptionBaseAddress];
+                for (NSArray<id> *element in [assemblingResult generateRawBinaryAt:baseAddress error:&error]) {
+                    if (nil != error || nil == element) {
+                        break;
+                    }
+                    NSNumber *address = [element objectAtIndex:0];
+                    //NSNumber *bank = [element objectAtIndex:1];
+                    NSData *data = [element objectAtIndex:2];
+
+                    [fileContent appendFormat:@"\n;      aorg >%04x", (unsigned int)[address longValue]];
+                    NSUInteger i = 0;
+                    while (i < [data length]) {
+                        uint8 row[8];
+                        NSRange byteRange = NSMakeRange(i, MIN([data length] - i, 8));
+                        [data getBytes:row range:byteRange];
+                        i += byteRange.length;
+
+                        NSMutableArray<NSString *> *bytes = [NSMutableArray arrayWithCapacity:8];
+                        for (int b = 0; b < byteRange.length; b++) {
+                            [bytes addObject:[NSString stringWithFormat:@">%02x", row[b]]];
+                        }
+                        [fileContent appendFormat:@"\n       byte %@", [bytes componentsJoinedByString:@", "]];
+                    }
+                }
+                if (nil == error && nil != fileContent && [fileContent length] > 0) {
+                    [fileContent writeToURL:outputFileURL atomically:YES encoding:NSUTF8StringEncoding error:&error];
+                }
+                break;
+            }
             case XDTAssemblerTargetTypeObjectCode: {
                 NSData *data = [assemblingResult generateObjCode:compressedObjectCode error:&error];
                 if (nil == error && nil != data) {
@@ -255,9 +293,18 @@ NS_ASSUME_NONNULL_END
         }
         if (nil == error && [defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateListOutput]) {
             NSURL *listingURL = [[outputFileURL URLByDeletingPathExtension] URLByAppendingPathExtension:@"dv80"];
-            NSData *data = [assemblingResult generateListing:&error];
+            BOOL outputSymbols = [defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateSymbolTable];
+            BOOL useEqus = [defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus];
+            NSData *data = [assemblingResult generateListing:outputSymbols && !useEqus error:&error];
             if (nil == error && nil != data) {
-                [data writeToURL:listingURL atomically:YES];
+                NSMutableString *retVal = [[NSMutableString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                if (outputSymbols && useEqus) {
+                    data = [assemblingResult generateSymbols:YES error:&error];
+                    [retVal appendFormat:@"\n%@\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+                }
+                if (nil == error && nil != retVal && [retVal length] > 0) {
+                    [retVal writeToURL:listingURL atomically:YES encoding:NSUTF8StringEncoding error:&error];
+                }
             }
         }
 
@@ -530,7 +577,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (void)panel:(NSSavePanel *)panel didChangeAssemblerOutputType:(NSInteger) outputFileType
+- (void)panel:(NSSavePanel *)panel didChangeAssemblerOutputType:(NSInteger)outputFileType
 {
     NSString *extension = @"";
     switch (outputFileType) {
@@ -548,11 +595,17 @@ NS_ASSUME_NONNULL_END
             extension = @"bin";
             break;
         case 5:
-            extension = @"dsk";
+            extension = @"dat";
             break;
         case 6:
+            extension = @"dsk";
+            break;
+        case 7:
             extension = @"rpk";
             break;
+        /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
+            This feature is open to implement.
+         */
 
         default:
             break;
@@ -562,11 +615,11 @@ NS_ASSUME_NONNULL_END
     [panel setNameFieldStringValue:newNameFieldValue];
 
     [self willChangeValueForKey:@"shouldCartridgeNameActivated"];
-    _shouldCartridgeNameActivated = (6 == outputFileType);
+    _shouldCartridgeNameActivated = (7 == outputFileType);
     [self didChangeValueForKey:@"shouldCartridgeNameActivated"];
 
     [self willChangeValueForKey:@"shouldBaseAddressActivated"];
-    _shouldBaseAddressActivated = (0 == outputFileType) || (4 == outputFileType);
+    _shouldBaseAddressActivated = (0 == outputFileType) || (4 == outputFileType) || (5 == outputFileType);
     [self didChangeValueForKey:@"shouldBaseAddressActivated"];
 }
 

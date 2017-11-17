@@ -32,6 +32,7 @@
 #define UserDefaultKeyAssemblerOptionUseRegisterSymbols @"AssemblerOptionUseRegisterSymbols"
 #define UserDefaultKeyAssemblerOptionGenerateListOutput @"AssemblerOptionGenerateListOutput"
 #define UserDefaultKeyAssemblerOptionGenerateSymbolTable @"AssemblerOptionGenerateSymbolTable"
+#define UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus @"AssemblerOptionGenerateSymbolsAsEqus"
 #define UserDefaultKeyAssemblerOptionBaseAddress @"AssemblerOptionBaseAddress"
 
 #define UserDefaultKeyBasicOptionOutputTypePopupIndex @"BasicOptionOutputTypePopupIndex"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="15G17023" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
@@ -718,13 +718,13 @@
             <point key="canvasLocation" x="-135" y="-262"/>
         </menu>
         <customView id="Jwq-PP-Oi8" userLabel="xas99 Option View">
-            <rect key="frame" x="0.0" y="0.0" width="318" height="167"/>
+            <rect key="frame" x="0.0" y="0.0" width="395" height="167"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <box title="Assembler Options" translatesAutoresizingMaskIntoConstraints="NO" id="wxC-ue-LoQ">
-                    <rect key="frame" x="-3" y="12" width="324" height="155"/>
+                    <rect key="frame" x="-3" y="12" width="401" height="155"/>
                     <view key="contentView" id="nVU-vP-D1T">
-                        <rect key="frame" x="2" y="2" width="320" height="138"/>
+                        <rect key="frame" x="2" y="2" width="397" height="138"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FC4-mw-aHT">
@@ -736,7 +736,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton toolTip="Select the output file type." horizontalHuggingPriority="25" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YWa-jA-we8">
-                                <rect key="frame" x="95" y="94" width="208" height="26"/>
+                                <rect key="frame" x="95" y="94" width="285" height="26"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="198" id="dhI-eA-S5L"/>
                                 </constraints>
@@ -748,16 +748,21 @@
                                             <menuItem title="Program Image" state="on" toolTip="Compiled code will be stored using PROGRAM format, which is used in Editor/Assembler Option 5" id="OB9-SM-bYa"/>
                                             <menuItem title="Compressed Object Code" toolTip="Compiled code will be stored in an compressed format using DIS/FIX 80 format, which is used in Editor/Assembler Option 3" id="XxF-mh-KWp"/>
                                             <menuItem title="Object Code" toolTip="Compiled code will be stored using DIS/FIX 80 format, which is used in Editor/Assembler Option 3" id="dl9-iq-Rpe"/>
-                                            <menuItem title="Embeded Extended Basic" id="qji-qq-7BX">
+                                            <menuItem title="Embeded Extended Basic" toolTip="This format wraps a XBasic program around the generated code." id="qji-qq-7BX">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Raw Binary" id="ADf-we-apO">
+                                            <menuItem title="Raw Binary" toolTip="Create program binaries without any metadata, i.e. suitable for burning EPROMs." id="ADf-we-apO">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Jump Start Disk Image" id="52I-Q9-pUk">
+                                            <menuItem title="Text Binary" id="OW9-tD-KBp">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                <string key="toolTip">Generates a textual version of the raw binary.
+It is useful for including the binary result of another program into some assembly or GPL source source.</string>
+                                            </menuItem>
+                                            <menuItem title="Jump Start Disk Image" toolTip="Create disk image for xdt99 Jumpstart cartridge." id="52I-Q9-pUk">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="MESS Cartridge" id="kRs-wV-cFO">
+                                            <menuItem title="MESS Cartridge" toolTip="Create an RPK cartridge file that can be used with the MESS emulator." id="kRs-wV-cFO">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -768,7 +773,7 @@
                                 </connections>
                             </popUpButton>
                             <box horizontalHuggingPriority="25" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="MUz-f6-QrD">
-                                <rect key="frame" x="20" y="89" width="280" height="5"/>
+                                <rect key="frame" x="20" y="89" width="357" height="5"/>
                             </box>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="kS8-ZL-d18">
                                 <rect key="frame" x="18" y="67" width="72" height="18"/>
@@ -802,14 +807,37 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="mgF-NG-uKE" name="value" keyPath="values.AssemblerOptionDisableXDTExtensions" id="ewx-HN-r75"/>
                                 </connections>
                             </button>
-                            <button toolTip="Currently this option is not supported by xas99. This is the equivalent to the option 'S' of the TI Editor/Assembler module." translatesAutoresizingMaskIntoConstraints="NO" id="yfG-tm-fKE">
+                            <button toolTip="This is the equivalent to the option 'S' of the TI Editor/Assembler module." translatesAutoresizingMaskIntoConstraints="NO" id="yfG-tm-fKE">
                                 <rect key="frame" x="226" y="67" width="74" height="18"/>
                                 <buttonCell key="cell" type="check" title="Symbols" bezelStyle="regularSquare" imagePosition="left" enabled="NO" state="on" inset="2" id="ooe-kQ-yLw">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
+                                    <binding destination="mgF-NG-uKE" name="enabled" keyPath="values.AssemblerOptionGenerateListOutput" id="z83-H7-nn4"/>
                                     <binding destination="mgF-NG-uKE" name="value" keyPath="values.AssemblerOptionGenerateSymbolTable" id="dkM-SN-fAd"/>
+                                </connections>
+                            </button>
+                            <button toolTip="Outputs the symbols as an EQU notation." translatesAutoresizingMaskIntoConstraints="NO" id="waS-rq-yv1">
+                                <rect key="frame" x="304" y="67" width="75" height="18"/>
+                                <buttonCell key="cell" type="check" title="use EQU" bezelStyle="regularSquare" imagePosition="left" enabled="NO" state="on" inset="2" id="qx2-hM-Df7">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <connections>
+                                        <binding destination="mgF-NG-uKE" name="value" keyPath="values.AssemblerOptionGenerateSymbolsAsEqus" id="UA5-wc-vkb"/>
+                                    </connections>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="mgF-NG-uKE" name="enabled2" keyPath="values.AssemblerOptionGenerateListOutput" previousBinding="Vmx-ZX-2h2" id="9lG-SG-fxp">
+                                        <dictionary key="options">
+                                            <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                            <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                            <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                            <integer key="NSNullPlaceholder" value="-1"/>
+                                        </dictionary>
+                                    </binding>
+                                    <binding destination="mgF-NG-uKE" name="enabled" keyPath="values.AssemblerOptionGenerateSymbolTable" id="Vmx-ZX-2h2"/>
+                                    <binding destination="mgF-NG-uKE" name="value" keyPath="values.AssemblerOptionGenerateSymbolsAsEqus" id="dHG-yT-dGa"/>
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1eN-dp-kX5">
@@ -846,7 +874,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="25" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="shZ-1d-1VD">
-                                <rect key="frame" x="97" y="16" width="203" height="22"/>
+                                <rect key="frame" x="97" y="16" width="280" height="22"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="RHI-22-Z00">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -863,10 +891,12 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                             <constraint firstItem="YWa-jA-we8" firstAttribute="leading" secondItem="FC4-mw-aHT" secondAttribute="trailing" constant="8" symbolic="YES" id="4rc-sj-qhl"/>
                             <constraint firstItem="yfG-tm-fKE" firstAttribute="height" secondItem="RTj-cq-oqc" secondAttribute="height" id="78m-h2-Ssp"/>
                             <constraint firstItem="pmy-Fm-jfX" firstAttribute="leading" secondItem="YWa-jA-we8" secondAttribute="leading" id="97h-MB-8ZC"/>
+                            <constraint firstItem="waS-rq-yv1" firstAttribute="baseline" secondItem="yfG-tm-fKE" secondAttribute="baseline" id="EEM-yJ-pSF"/>
                             <constraint firstItem="MUz-f6-QrD" firstAttribute="top" secondItem="FC4-mw-aHT" secondAttribute="bottom" constant="8" symbolic="YES" id="HVx-52-r0M"/>
                             <constraint firstItem="zKb-Xn-eiR" firstAttribute="leading" secondItem="kS8-ZL-d18" secondAttribute="trailing" constant="8" symbolic="YES" id="J4M-sg-dzj"/>
                             <constraint firstItem="FC4-mw-aHT" firstAttribute="trailing" secondItem="1eN-dp-kX5" secondAttribute="trailing" id="KRF-jc-88n"/>
                             <constraint firstItem="eAH-I8-zv5" firstAttribute="trailing" secondItem="FC4-mw-aHT" secondAttribute="trailing" id="MmL-Vi-ALj"/>
+                            <constraint firstItem="waS-rq-yv1" firstAttribute="height" secondItem="yfG-tm-fKE" secondAttribute="height" id="O0g-xr-2x4"/>
                             <constraint firstAttribute="trailing" secondItem="YWa-jA-we8" secondAttribute="trailing" constant="20" symbolic="YES" id="P08-WH-cc4"/>
                             <constraint firstItem="eAH-I8-zv5" firstAttribute="baseline" secondItem="shZ-1d-1VD" secondAttribute="baseline" id="Q7S-9Y-WzY"/>
                             <constraint firstItem="eAH-I8-zv5" firstAttribute="top" secondItem="1eN-dp-kX5" secondAttribute="bottom" constant="8" symbolic="YES" id="SK7-Be-XC6"/>
@@ -884,6 +914,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                             <constraint firstItem="zKb-Xn-eiR" firstAttribute="height" secondItem="kS8-ZL-d18" secondAttribute="height" id="mAh-zU-eP1"/>
                             <constraint firstItem="FC4-mw-aHT" firstAttribute="leading" secondItem="MUz-f6-QrD" secondAttribute="leading" id="nZo-f1-hMS"/>
                             <constraint firstItem="1eN-dp-kX5" firstAttribute="leading" secondItem="nVU-vP-D1T" secondAttribute="leading" constant="20" symbolic="YES" id="ndy-bW-vKo"/>
+                            <constraint firstItem="waS-rq-yv1" firstAttribute="leading" secondItem="yfG-tm-fKE" secondAttribute="trailing" constant="8" symbolic="YES" id="q8I-xc-EJC"/>
                             <constraint firstItem="shZ-1d-1VD" firstAttribute="trailing" secondItem="YWa-jA-we8" secondAttribute="trailing" id="qth-Qb-8jb"/>
                             <constraint firstAttribute="trailing" secondItem="MUz-f6-QrD" secondAttribute="trailing" constant="20" symbolic="YES" id="rLj-c8-SaD"/>
                             <constraint firstItem="YWa-jA-we8" firstAttribute="top" secondItem="nVU-vP-D1T" secondAttribute="top" constant="20" symbolic="YES" id="s71-OG-Rhz"/>
@@ -900,7 +931,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                 <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="kS8-ZL-d18" secondAttribute="bottom" constant="89" id="Rvf-4q-KjF"/>
                 <constraint firstItem="wxC-ue-LoQ" firstAttribute="top" secondItem="Jwq-PP-Oi8" secondAttribute="top" id="jIA-Wl-bOT"/>
             </constraints>
-            <point key="canvasLocation" x="-167" y="-88"/>
+            <point key="canvasLocation" x="-128.5" y="-88.5"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="mgF-NG-uKE"/>
         <customView id="KcT-Yy-ka8" userLabel="xbas99 Option View">

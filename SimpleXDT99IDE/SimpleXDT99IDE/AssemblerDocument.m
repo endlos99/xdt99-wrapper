@@ -46,6 +46,7 @@
 @property (assign) BOOL shouldBeStrict;
 @property (assign, nonatomic) BOOL shouldShowListingInLog;
 @property (assign, nonatomic) BOOL shouldShowSymbolsInListing;
+@property (assign, nonatomic) BOOL shouldShowSymbolsAsEqus;
 
 @property (retain) XDTObjcode *assemblingResult;
 @property (readonly) NSString *listOutput;
@@ -72,6 +73,7 @@
     [self setShouldBeStrict:[defaults boolForKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions]];
     [self setShouldShowListingInLog:[defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateListOutput]];
     [self setShouldShowSymbolsInListing:[defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateSymbolTable]];
+    [self setShouldShowSymbolsAsEqus:[defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus]];
     [self setBaseAddress:[defaults integerForKey:UserDefaultKeyAssemblerOptionBaseAddress]];
     [self setOutputFormatPopupButtonIndex:[defaults integerForKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex]];
 
@@ -120,6 +122,7 @@
     [defaults setBool:[self shouldBeStrict] forKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions];
     [defaults setBool:_shouldShowListingInLog forKey:UserDefaultKeyAssemblerOptionGenerateListOutput];
     [defaults setBool:_shouldShowSymbolsInListing forKey:UserDefaultKeyAssemblerOptionGenerateSymbolTable];
+    [defaults setBool:_shouldShowSymbolsAsEqus forKey:UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus];
     [defaults setInteger:_outputFormatPopupButtonIndex forKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex];
     [defaults setInteger:_baseAddress forKey:UserDefaultKeyAssemblerOptionBaseAddress];
 
@@ -185,20 +188,35 @@
 
 + (NSSet *)keyPathsForValuesAffectingListOutput
 {
-    return [NSSet setWithObject:@"assemblingResult"];
+    return [NSSet setWithObjects:@"assemblingResult", @"shouldShowSymbolsInListing", @"shouldShowSymbolsAsEqus", nil];
 }
 
 
 - (NSString *)listOutput
 {
+    NSMutableString *retVal = nil;
+    NSError *error = nil;
     if (nil == _assemblingResult) {
         return @"";
     }
-    NSData *data = [_assemblingResult generateListing:nil];
-    NSString *retVal = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+
+    NSData *data = [_assemblingResult generateListing:_shouldShowSymbolsInListing && !_shouldShowSymbolsAsEqus error:&error];
+    if (nil == error && nil != data) {
+        retVal = [[NSMutableString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 #if !__has_feature(objc_arc)
-    [retVal autorelease];
+        [retVal autorelease];
 #endif
+        if (_shouldShowSymbolsInListing && _shouldShowSymbolsAsEqus) {
+            data = [_assemblingResult generateSymbols:YES error:&error];
+            if (nil == error && nil != data) {
+                [retVal appendFormat:@"\n%@\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+            }
+        }
+    }
+    if (nil != error) {
+        [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+        return @"";
+    }
     return retVal;
 }
 
@@ -208,7 +226,9 @@
     NSSet *retVal = [super keyPathsForValuesAffectingValueForKey:key];
     if ([@"generatedLogMessage" isEqualToString:key]) {
         NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
-        [newSet addObjectsFromArray:@[@"shouldShowListingInLog", @"listOutput"]];
+        [newSet addObject:@"shouldShowListingInLog"];
+        [newSet unionSet:[self keyPathsForValuesAffectingListOutput]];
+        [newSet removeObject:@"errorMessage"];  /* 'errorMessage' from the super class is overlayed by 'assemblingResult', so remove it */
         retVal = newSet;
     }
     return retVal;
@@ -260,6 +280,9 @@
             [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"card"]];
             [self setBaseAddress:0x6000];
             break;
+        /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
+         This feature is open to implement.
+         */
 
         default:
             break;
@@ -326,11 +349,17 @@
             xdtTargetType = XDTAssemblerTargetTypeRawBinary;
             break;
         case 5:
-            xdtTargetType = XDTAssemblerTargetTypeJumpstart;
+            xdtTargetType = XDTAssemblerTargetTypeTextBinary;
             break;
         case 6:
+            xdtTargetType = XDTAssemblerTargetTypeJumpstart;
+            break;
+        case 7:
             xdtTargetType = XDTAssemblerTargetTypeMESSCartridge;
             break;
+        /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
+         This feature is open to implement.
+         */
 
         default:
             break;
@@ -350,12 +379,12 @@
 
     XDTObjcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
     if (nil != error && nil != *error) {
-        [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [*error localizedDescription], [*error localizedFailureReason]]];
-        [self setAssemblingResult:nil];
+        [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@\n", [*error localizedDescription], [*error localizedFailureReason]]];
+        [self setAssemblingResult:result];
 
         return NO;
     }
-    [self setErrorMessage:@""];
+    [self setErrorMessage:@"No errors found!\n"];
     [self setAssemblingResult:result];
 
     return YES;
@@ -410,6 +439,43 @@
                     retVal = NO;
                     break;
                 }
+            }
+            break;
+        }
+        case XDTAssemblerTargetTypeTextBinary: {
+            NSError *tempError = nil;
+            NSMutableString *fileContent = [NSMutableString string];
+            for (NSArray<id> *element in [_assemblingResult generateRawBinaryAt:_baseAddress error:&tempError]) {
+                if (nil != tempError || nil == element) {
+                    break;
+                }
+                NSNumber *address = [element objectAtIndex:0];
+                //NSNumber *bank = [element objectAtIndex:1];
+                NSData *data = [element objectAtIndex:2];
+
+                [fileContent appendFormat:@"\n;      aorg >%04x", (unsigned int)[address longValue]];
+                NSUInteger i = 0;
+                while (i < [data length]) {
+                    uint8 row[8];
+                    NSRange byteRange = NSMakeRange(i, MIN([data length] - i, 8));
+                    [data getBytes:row range:byteRange];
+                    i += byteRange.length;
+                    
+                    NSMutableArray<NSString *> *bytes = [NSMutableArray arrayWithCapacity:8];
+                    for (int b = 0; b < byteRange.length; b++) {
+                        [bytes addObject:[NSString stringWithFormat:@">%02x", row[b]]];
+                    }
+                    [fileContent appendFormat:@"\n       byte %@", [bytes componentsJoinedByString:@", "]];
+                }
+            }
+            if (nil == tempError && nil != fileContent && [fileContent length] > 0) {
+                NSURL *newOutpuFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+                [fileContent writeToURL:newOutpuFileURL atomically:YES encoding:NSUTF8StringEncoding error:&tempError];
+            } else {
+                retVal = NO;
+            }
+            if (nil != error) {
+                *error = tempError;
             }
             break;
         }
@@ -483,6 +549,9 @@
             }
             break;
         }
+        /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
+         This feature is open to implement.
+         */
 
         default:
             break;
