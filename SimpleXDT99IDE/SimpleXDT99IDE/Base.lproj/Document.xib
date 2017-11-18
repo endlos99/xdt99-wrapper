@@ -10,6 +10,7 @@
             <connections>
                 <outlet property="logOptionsPlaceholderView" destination="gcM-9i-Ow0" id="FbJ-GC-kqs"/>
                 <outlet property="logView" destination="jxr-ky-IFb" id="2MU-ER-XEh"/>
+                <outlet property="sourceScrollView" destination="ho4-qy-mEv" id="8ae-d8-djd"/>
                 <outlet property="sourceView" destination="Gma-Oa-hJn" id="glO-GP-hsh"/>
                 <outlet property="window" destination="xOd-HO-29H" id="JIz-fz-R2o"/>
                 <outlet property="xdt99OptionsToolbarItem" destination="x6c-tQ-6Xu" id="Ymf-Qf-IyM"/>

@@ -1,3 +1,6 @@
 [submodule "xdt99"]
 	path = xdt99
 url=https://github.com/endlos99/xdt99.git
+[submodule "NoodleKit"]
+	path = NoodleKit
+url=https://github.com/henrik-w/NoodleKit.git

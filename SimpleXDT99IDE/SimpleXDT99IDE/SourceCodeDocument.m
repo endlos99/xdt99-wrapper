@@ -26,9 +26,13 @@
 
 #import "AppDelegate.h"
 
+#import "NoodleLineNumberView.h"
 
 
-@interface SourceCodeDocument ()
+
+@interface SourceCodeDocument () {
+    NoodleLineNumberView *_lineNumberRulerView;
+}
 
 - (IBAction)generateCode:(nullable id)sender;
 - (IBAction)selectOutputFile:(nullable id)sender;
@@ -56,6 +60,7 @@
     _outputBasePathURL = nil;
     _outputFileName = nil;
     _errorMessage = nil;
+    _lineNumberRulerView = nil;
 
     return self;
 }
@@ -67,6 +72,7 @@
     [_outputBasePathURL release];
     [_outputFileName release];
     [_errorMessage release];
+    [_lineNumberRulerView release];
     
     [super dealloc];
 #endif
@@ -89,6 +95,13 @@
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [self setShouldShowLog:[defaults boolForKey:UserDefaultKeyDocumentOptionShowLog]];
     [self setShouldShowErrorsInLog:[defaults boolForKey:UserDefaultKeyDocumentOptionShowErrorsInLog]];
+
+
+    _lineNumberRulerView = [[NoodleLineNumberView alloc] initWithScrollView:_sourceScrollView];
+    [_sourceScrollView setVerticalRulerView:_lineNumberRulerView];
+    [_sourceScrollView setHasHorizontalRuler:NO];
+    [_sourceScrollView setHasVerticalRuler:YES];
+    [_sourceScrollView setRulersVisible:YES];
 }
 
 

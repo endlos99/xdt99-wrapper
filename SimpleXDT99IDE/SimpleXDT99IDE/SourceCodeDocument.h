@@ -40,6 +40,7 @@
 
 @property (assign) IBOutlet NSView *logOptionsPlaceholderView;
 
+@property (assign) IBOutlet NSScrollView *sourceScrollView;
 @property (assign) IBOutlet NSTextView *sourceView;
 @property (assign) IBOutlet NSTextView *logView;
 @property (readonly) BOOL hasLogContentToSave;

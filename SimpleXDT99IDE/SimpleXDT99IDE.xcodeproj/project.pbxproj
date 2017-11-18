@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF0944CB1E0C10CC00EE41B7 /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0944CA1E0C10CC00EE41B7 /* NoodleLineNumberView.m */; };
+		AF0944CE1E0C156C00EE41B7 /* NoodleLineNumberMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0944CD1E0C156C00EE41B7 /* NoodleLineNumberMarker.m */; };
 		AF125EBF1E0415E600F659AA /* GPLAssemblerOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF125EC11E0415E600F659AA /* GPLAssemblerOptionsView.xib */; };
 		AF3FC42C1DF858690021F050 /* AssemblerDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AF3FC42B1DF858690021F050 /* AssemblerDocument.m */; };
 		AF5CF8A01DFF1FEC00C08E36 /* BasicCodeDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CF89F1DFF1FEC00C08E36 /* BasicCodeDocument.m */; };
@@ -64,6 +66,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AF0944C91E0C10CC00EE41B7 /* NoodleLineNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberView.h; path = ../NoodleKit/NoodleLineNumberView.h; sourceTree = "<group>"; };
+		AF0944CA1E0C10CC00EE41B7 /* NoodleLineNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberView.m; path = ../NoodleKit/NoodleLineNumberView.m; sourceTree = "<group>"; };
+		AF0944CC1E0C156C00EE41B7 /* NoodleLineNumberMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberMarker.h; path = ../NoodleKit/NoodleLineNumberMarker.h; sourceTree = "<group>"; };
+		AF0944CD1E0C156C00EE41B7 /* NoodleLineNumberMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberMarker.m; path = ../NoodleKit/NoodleLineNumberMarker.m; sourceTree = "<group>"; };
 		AF125EC01E0415E600F659AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/GPLAssemblerOptionsView.xib; sourceTree = "<group>"; };
 		AF3FC42A1DF858690021F050 /* AssemblerDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AssemblerDocument.h; sourceTree = "<group>"; };
 		AF3FC42B1DF858690021F050 /* AssemblerDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AssemblerDocument.m; sourceTree = "<group>"; };
@@ -109,6 +115,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AF0944C81E0C109C00EE41B7 /* NoodleKit */ = {
+			isa = PBXGroup;
+			children = (
+				AF0944CC1E0C156C00EE41B7 /* NoodleLineNumberMarker.h */,
+				AF0944CD1E0C156C00EE41B7 /* NoodleLineNumberMarker.m */,
+				AF0944C91E0C10CC00EE41B7 /* NoodleLineNumberView.h */,
+				AF0944CA1E0C10CC00EE41B7 /* NoodleLineNumberView.m */,
+			);
+			name = NoodleKit;
+			sourceTree = "<group>";
+		};
 		AF3FC4291DF8583D0021F050 /* Document Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +215,7 @@
 		AFF9585D1DF1A7C200062DEB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AF0944C81E0C109C00EE41B7 /* NoodleKit */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -309,7 +327,9 @@
 				AFFF3A3A1E05640700909C6C /* HWHexNumberFormatter.m in Sources */,
 				AFB73F191E002FF40063BBCC /* NSViewAutolayoutAdditions.m in Sources */,
 				AFDECF291DF176B1008870F7 /* AppDelegate.m in Sources */,
+				AF0944CE1E0C156C00EE41B7 /* NoodleLineNumberMarker.m in Sources */,
 				AFDECF2C1DF176B1008870F7 /* main.m in Sources */,
+				AF0944CB1E0C10CC00EE41B7 /* NoodleLineNumberView.m in Sources */,
 				AF5CF8A01DFF1FEC00C08E36 /* BasicCodeDocument.m in Sources */,
 				AF87FF9B1E040CF800CF752F /* GPLAssemblerDocument.m in Sources */,
 			);
