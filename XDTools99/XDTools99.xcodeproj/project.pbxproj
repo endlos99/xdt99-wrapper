@@ -30,10 +30,6 @@
 		AF9C22081E06D88A00BB02FC /* XDTGPLAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */; };
 		AF9C220B1E06FD4E00BB02FC /* XDTGPLObjcode.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22091E06FD4E00BB02FC /* XDTGPLObjcode.h */; };
 		AF9C220C1E06FD4E00BB02FC /* XDTGPLObjcode.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C220A1E06FD4E00BB02FC /* XDTGPLObjcode.m */; };
-		AFADBC431DF9DD8B000AD2F2 /* xas99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFADBC3F1DF9DD8B000AD2F2 /* xas99.py */; };
-		AFADBC451DF9DD8B000AD2F2 /* xbas99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFADBC411DF9DD8B000AD2F2 /* xbas99.py */; };
-		AFADBC461DF9DD8B000AD2F2 /* xga99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFADBC421DF9DD8B000AD2F2 /* xga99.py */; };
-		AFBCB61F1E07FE1F004EC53D /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = AFBCB61D1E07FE1F004EC53D /* COPYING */; };
 		AFE630581DF9BB67005FFD01 /* XDTools99.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE630561DF9BB67005FFD01 /* XDTools99.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE6305F1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h */; };
 		AFE6306E1DF9BB9E005FFD01 /* NSArrayPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE630601DF9BB9E005FFD01 /* NSArrayPythonAdditions.m */; };
@@ -291,10 +287,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFBCB61F1E07FE1F004EC53D /* COPYING in Resources */,
-				AFADBC461DF9DD8B000AD2F2 /* xga99.py in Resources */,
-				AFADBC451DF9DD8B000AD2F2 /* xbas99.py in Resources */,
-				AFADBC431DF9DD8B000AD2F2 /* xas99.py in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
