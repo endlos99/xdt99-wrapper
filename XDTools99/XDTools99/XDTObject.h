@@ -30,4 +30,6 @@
 
 @interface XDTObject : NSObject
 
++ (void)reinitializeWithXDTModulePath:(NSString *)modulePath;
+
 @end

@@ -29,13 +29,23 @@
 
 @implementation XDTObject
 
-/* This initializer setup python related things. */
+/* This initializer sets up python related things. */
 + (void)initialize
 {
+    if (Py_IsInitialized()) {
+        return;
+    }
+    [self reinitializeWithXDTModulePath:[[NSBundle bundleForClass:[self class]] resourcePath]];
+}
+
+
++ (void)reinitializeWithXDTModulePath:(NSString *)modulePath
+{
     @synchronized (self) {
+        Py_Finalize();
         Py_Initialize();
 
-        NSString *pyModulePath = [NSString stringWithFormat:@"%s:%@", Py_GetPath(), [[NSBundle bundleForClass:[self class]] resourcePath]];
+        NSString *pyModulePath = [NSString stringWithFormat:@"%s:%s", Py_GetPath(), [modulePath fileSystemRepresentation]];
         PySys_SetPath((char *)pyModulePath.UTF8String);
     }
 }
