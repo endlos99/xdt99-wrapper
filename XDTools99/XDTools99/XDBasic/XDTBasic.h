@@ -29,6 +29,8 @@
 #define XDTBasicOptionProtectFile @"XDTBasicOptionProtectFile"
 #define XDTBasicOptionTarget @"XDTBasicOptionTarget"
 
+#define XDTBasicVersionRequired "1.5.0"
+
 
 typedef NSUInteger XDTBasicTargetType;
 NS_ENUM(XDTBasicTargetType) {
@@ -41,6 +43,7 @@ NS_ENUM(XDTBasicTargetType) {
 NS_ASSUME_NONNULL_BEGIN
 @interface XDTBasic : XDTObject
 
+@property (readonly) NSString *version;
 @property (readonly) BOOL join;
 @property (readonly) BOOL protect;
 @property (readonly) XDTBasicTargetType targetType;
@@ -51,6 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nullable,readonly) NSDictionary<NSNumber *, NSArray *> *lines;
 @property (nullable,readonly) NSArray<NSString *> *warnings;
+
++ (BOOL)checkRequiredModuleVersion;
 
 + (nullable instancetype)basicWithOptions:(NSDictionary<NSString *, NSObject *> *)options;
 

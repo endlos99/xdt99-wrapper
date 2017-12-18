@@ -30,6 +30,8 @@
 #define XDTGPLAssemblerOptionStyle @"XDTGPLAssemblerOptionStyle"
 #define XDTGPLAssemblerOptionTarget @"XDTGPLAssemblerOptionTarget"
 
+#define XDTGPLAssemblerVersionRequired "1.7.0"
+
 
 typedef NSUInteger XDTGPLAssemblerSyntaxType;
 NS_ENUM(XDTGPLAssemblerSyntaxType) {
@@ -52,10 +54,13 @@ NS_ENUM(XDTGPLAssemblerTargetType) {
 NS_ASSUME_NONNULL_BEGIN
 @interface XDTGPLAssembler : XDTObject
 
+@property (readonly) NSString *version;
 @property (readonly) NSUInteger gromAddress;
 @property (readonly) NSUInteger aorgAddress;
 @property (readonly) XDTGPLAssemblerTargetType targetType;
 @property (readonly) XDTGPLAssemblerSyntaxType syntaxType;
+
++ (BOOL)checkRequiredModuleVersion;
 
 + (nullable instancetype)gplAssemblerWithOptions:(NSDictionary<NSString *, NSObject *> *)options includeURL:(NSURL *)url;
 

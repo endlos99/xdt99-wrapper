@@ -62,6 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
     PyObject *assemblerPythonClass;
 }
 
+@property NSString *version;
 @property XDTGPLAssemblerTargetType targetType;
 @property XDTGPLAssemblerSyntaxType syntaxType;
 
@@ -75,6 +76,49 @@ NS_ASSUME_NONNULL_END
 
 
 @implementation XDTGPLAssembler
+
++ (BOOL)checkRequiredModuleVersion
+{
+    PyObject *pName = PyString_FromString(XDTModuleNameGPLAssembler);
+    PyObject *pModule = PyImport_Import(pName);
+    Py_XDECREF(pName);
+    if (NULL == pModule) {
+        NSLog(@"ERROR: Importing module '%@' failed!", pName);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+//            if (nil != error) {
+//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//            }
+            PyErr_Print();
+        }
+        return NO;
+    }
+
+    PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
+    Py_XDECREF(pModule);
+    if (NULL == pVar || !PyString_Check(pVar)) {
+        NSLog(@"Cannot get version string of module %s", PyModule_GetName(pModule));
+        if (PyErr_Occurred()) {
+            PyErr_Print();
+        }
+        Py_XDECREF(pVar);
+#if !__has_feature(objc_arc)
+        [self release];
+#endif
+        return NO;
+    }
+    if (0 != strcmp(PyString_AsString(pVar), XDTGPLAssemblerVersionRequired)) {
+        NSLog(@"Wrong GPL Assembler version %s! Required is %s", PyString_AsString(pVar), XDTGPLAssemblerVersionRequired);
+        Py_XDECREF(pVar);
+#if !__has_feature(objc_arc)
+        [self release];
+#endif
+        return NO;
+    }
+    
+    return YES;
+}
+
 
 #pragma mark Initializers
 
@@ -126,12 +170,34 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
+    PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
+    if (NULL == pVar || !PyString_Check(pVar)) {
+        NSLog(@"Cannot get version string of module %s", PyModule_GetName(pModule));
+        if (PyErr_Occurred()) {
+            PyErr_Print();
+        }
+        Py_XDECREF(pVar);
+#if !__has_feature(objc_arc)
+        [self release];
+#endif
+        return nil;
+    }
+    if (0 != strcmp(PyString_AsString(pVar), XDTGPLAssemblerVersionRequired)) {
+        NSLog(@"Wrong GPL Assembler version %s! Required is %s", PyString_AsString(pVar), XDTGPLAssemblerVersionRequired);
+        Py_XDECREF(pVar);
+#if !__has_feature(objc_arc)
+        [self release];
+#endif
+        return nil;
+    }
+
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameGPLAssembler);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
         NSLog(@"Cannot find function \"%s\" in module %s", XDTClassNameGPLAssembler, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
+        Py_XDECREF(pVar);
         Py_XDECREF(pFunc);
 #if !__has_feature(objc_arc)
         [self release];
@@ -144,6 +210,8 @@ NS_ASSUME_NONNULL_END
     _syntaxType = [[options valueForKey:XDTGPLAssemblerOptionStyle] unsignedIntegerValue];
     _aorgAddress = [[options valueForKey:XDTGPLAssemblerOptionAORG] unsignedIntegerValue];
     _gromAddress = [[options valueForKey:XDTGPLAssemblerOptionGROM] unsignedIntegerValue];
+    _version = [NSString stringWithCString:PyString_AsString(pVar) encoding:NSUTF8StringEncoding];
+    Py_XDECREF(pVar);
 
     /* preparing parameters */
     PyObject *target = PyString_FromString([self targetTypeAsCString]);

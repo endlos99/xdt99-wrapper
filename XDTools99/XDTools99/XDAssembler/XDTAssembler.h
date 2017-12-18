@@ -31,6 +31,8 @@
 #define XDTAssemblerOptionStrict @"XDTAssemblerOptionStrict"
 #define XDTAssemblerOptionTarget @"XDTAssemblerOptionTarget"
 
+#define XDTAssemblerVersionRequired "1.7.0"
+
 
 typedef NSUInteger XDTAssemblerTargetType;
 NS_ENUM(XDTAssemblerTargetType) {
@@ -50,9 +52,12 @@ NS_ENUM(XDTAssemblerTargetType) {
 NS_ASSUME_NONNULL_BEGIN
 @interface XDTAssembler : XDTObject
 
+@property (readonly) NSString *version;
 @property (readonly) BOOL beStrict;
 @property (readonly) BOOL useRegisterSymbols;
 @property (readonly) XDTAssemblerTargetType targetType;
+
++ (BOOL)checkRequiredModuleVersion;
 
 + (nullable instancetype)assemblerWithOptions:(NSDictionary<NSString *, NSObject *> *)options includeURL:(NSURL *)url;
 
