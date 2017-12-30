@@ -79,9 +79,9 @@ NS_ASSUME_NONNULL_END
 {
     PyObject *pName = PyString_FromString(XDTModuleNameAssembler);
     PyObject *pModule = PyImport_Import(pName);
-    Py_XDECREF(pName);
     if (NULL == pModule) {
         NSLog(@"ERROR: Importing module '%@' failed!", pName);
+        Py_XDECREF(pName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
@@ -91,11 +91,12 @@ NS_ASSUME_NONNULL_END
         }
         return NO;
     }
+    Py_XDECREF(pName);
 
     PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
-    Py_XDECREF(pModule);
     if (NULL == pVar || !PyString_Check(pVar)) {
         NSLog(@"Cannot get version string of module %s", PyModule_GetName(pModule));
+        Py_XDECREF(pModule);
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -105,6 +106,7 @@ NS_ASSUME_NONNULL_END
 #endif
         return NO;
     }
+    Py_XDECREF(pModule);
     if (0 != strcmp(PyString_AsString(pVar), XDTAssemblerVersionRequired)) {
         NSLog(@"Wrong Assembler version %s! Required is %s", PyString_AsString(pVar), XDTAssemblerVersionRequired);
         Py_XDECREF(pVar);
@@ -113,7 +115,8 @@ NS_ASSUME_NONNULL_END
 #endif
         return NO;
     }
-    
+    Py_XDECREF(pVar);
+
     return YES;
 }
 
@@ -250,6 +253,7 @@ NS_ASSUME_NONNULL_END
     assemblerPythonModule = pModule;
     Py_INCREF(assemblerPythonModule);
     assemblerPythonClass = assembler;
+    Py_INCREF(assemblerPythonClass);
 
     return self;
 }

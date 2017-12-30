@@ -11,13 +11,16 @@
 
 @implementation NSString (NSStringPythonAdditions)
 
-+ (instancetype)stringWithPythonString:(PyObject *)pyObj encoding:(NSStringEncoding)enc {
++ (instancetype)stringWithPythonString:(PyObject *const)pyObj encoding:(NSStringEncoding)enc {
+    if (NULL == pyObj) {
+        return nil;
+    }
     const char * cString = PyString_AsString(pyObj);
     if (NULL == cString) {
         /* If pyObj is not a string object, try to make a more generic representation. */
-        pyObj = PyObject_Str(pyObj);
-        cString = PyString_AsString(pyObj);
-        Py_XDECREF(pyObj);
+        PyObject *pyStr = PyObject_Str(pyObj);
+        cString = PyString_AsString(pyStr);
+        Py_XDECREF(pyStr);
     }
 
     return [NSString stringWithCString:cString encoding:enc];

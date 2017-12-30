@@ -63,7 +63,6 @@
                 PyTypeObject *dataType = dataItem->ob_type;
                 NSLog(@"Cannot convert Python type '%s' to an Objective-C type", dataType->tp_name);
             }
-            Py_DECREF(dataItem);
         }
     }
 
@@ -88,7 +87,6 @@
         if (NULL != dataTupel) {
             NSArray<id> *dataArray = [NSArray arrayWithPyTuple:dataTupel];
             [retVal addObject:dataArray];
-            Py_DECREF(dataTupel);
         }
     }
 
@@ -115,7 +113,6 @@
             char *codeStr = PyString_AsString(dataItem);
             NSData *imageData = [NSData dataWithBytes:codeStr length:codeSize];
             [retVal addObject:imageData];
-            Py_DECREF(dataItem);
         }
     }
 

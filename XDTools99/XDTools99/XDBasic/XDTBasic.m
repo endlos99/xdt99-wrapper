@@ -59,9 +59,9 @@ NS_ASSUME_NONNULL_END
 {
     PyObject *pName = PyString_FromString(XDTModuleNameBasic);
     PyObject *pModule = PyImport_Import(pName);
-    Py_XDECREF(pName);
     if (NULL == pModule) {
         NSLog(@"ERROR: Importing module '%@' failed!", pName);
+        Py_XDECREF(pName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
@@ -71,11 +71,12 @@ NS_ASSUME_NONNULL_END
         }
         return NO;
     }
+    Py_XDECREF(pName);
 
     PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
-    Py_XDECREF(pModule);
     if (NULL == pVar || !PyString_Check(pVar)) {
         NSLog(@"Cannot get version string of module %s", PyModule_GetName(pModule));
+        Py_XDECREF(pModule);
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -85,6 +86,7 @@ NS_ASSUME_NONNULL_END
 #endif
         return NO;
     }
+    Py_XDECREF(pModule);
     if (0 != strcmp(PyString_AsString(pVar), XDTBasicVersionRequired)) {
         NSLog(@"Wrong GPL Assembler version %s! Required is %s", PyString_AsString(pVar), XDTBasicVersionRequired);
         Py_XDECREF(pVar);
@@ -93,7 +95,8 @@ NS_ASSUME_NONNULL_END
 #endif
         return NO;
     }
-    
+    Py_XDECREF(pVar);
+
     return YES;
 }
 
