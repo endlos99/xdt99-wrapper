@@ -97,7 +97,7 @@ NS_ASSUME_NONNULL_END
 - (NSData *)generateDump:(NSError **)error
 {
     // TODO: Implement function
-    NSLog(@"ERROR: genDump() not implemented in wrapper class!");
+    NSLog(@"%s ERROR: genDump() not implemented in wrapper class!", __FUNCTION__);
     //PyObject *exeption = PyErr_Occurred();
     //if (NULL != exeption) {
         if (nil != error) {
@@ -124,7 +124,7 @@ NS_ASSUME_NONNULL_END
     PyObject *gromList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == gromList) {
-        NSLog(@"ERROR: genByteCode() returns NULL!");
+        NSLog(@"%s ERROR: genByteCode() returns NULL!", __FUNCTION__);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -157,7 +157,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartImage) {
-        NSLog(@"ERROR: genImage(\"%@\") returns NULL!", cartridgeName);
+        NSLog(@"%s ERROR: genImage(\"%@\") returns NULL!", __FUNCTION__, cartridgeName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -197,7 +197,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartTuple) {
-        NSLog(@"ERROR: genCart(\"%@\") returns NULL!", cartridgeName);
+        NSLog(@"%s ERROR: genCart(\"%@\") returns NULL!", __FUNCTION__, cartridgeName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -242,7 +242,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pOutputSymbols);
     Py_XDECREF(methodName);
     if (NULL == listingString) {
-        NSLog(@"ERROR: genList(\"%@\") returns NULL!", outputSymbols? @"true" : @"false");
+        NSLog(@"%s ERROR: genList(\"%@\") returns NULL!", __FUNCTION__, outputSymbols? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -272,7 +272,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pUseEqu);
     Py_XDECREF(methodName);
     if (NULL == symbolsString) {
-        NSLog(@"ERROR: genSymbols(\"%@\") returns NULL!", useEqu? @"true" : @"false");
+        NSLog(@"%s ERROR: genSymbols(\"%@\") returns NULL!", __FUNCTION__, useEqu? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {

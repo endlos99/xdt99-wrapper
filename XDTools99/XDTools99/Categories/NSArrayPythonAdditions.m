@@ -61,7 +61,7 @@
                 [retVal addObject:object];
             } else {
                 PyTypeObject *dataType = dataItem->ob_type;
-                NSLog(@"Cannot convert Python type '%s' to an Objective-C type", dataType->tp_name);
+                NSLog(@"%s ERROR: Cannot convert Python type '%s' to an Objective-C type", __FUNCTION__, dataType->tp_name);
             }
         }
     }

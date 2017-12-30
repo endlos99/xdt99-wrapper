@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_END
     PyObject *pName = PyString_FromString(XDTModuleNameBasic);
     PyObject *pModule = PyImport_Import(pName);
     if (NULL == pModule) {
-        NSLog(@"ERROR: Importing module '%@' failed!", pName);
+        NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
         Py_XDECREF(pName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
@@ -75,7 +75,7 @@ NS_ASSUME_NONNULL_END
 
     PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
     if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"Cannot get version string of module %s", PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
         Py_XDECREF(pModule);
         if (PyErr_Occurred()) {
             PyErr_Print();
@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_END
     }
     Py_XDECREF(pModule);
     if (0 != strcmp(PyString_AsString(pVar), XDTBasicVersionRequired)) {
-        NSLog(@"Wrong GPL Assembler version %s! Required is %s", PyString_AsString(pVar), XDTBasicVersionRequired);
+        NSLog(@"%s ERROR: Wrong Basic version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTBasicVersionRequired);
         Py_XDECREF(pVar);
 #if !__has_feature(objc_arc)
         [self release];
@@ -113,7 +113,7 @@ NS_ASSUME_NONNULL_END
         PyObject *pModule = PyImport_Import(pName);
         Py_XDECREF(pName);
         if (NULL == pModule) {
-            NSLog(@"ERROR: Importing module '%@' failed!", pName);
+            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
 //            if (nil != error) {
@@ -144,7 +144,7 @@ NS_ASSUME_NONNULL_END
 
     PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
     if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"Cannot get version string of module %s", PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -155,7 +155,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     if (0 != strcmp(PyString_AsString(pVar), XDTBasicVersionRequired)) {
-        NSLog(@"Wrong Basic version %s! Required is %s", PyString_AsString(pVar), XDTBasicVersionRequired);
+        NSLog(@"%s ERROR: Wrong Basic version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTBasicVersionRequired);
         Py_XDECREF(pVar);
 #if !__has_feature(objc_arc)
         [self release];
@@ -165,7 +165,7 @@ NS_ASSUME_NONNULL_END
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameBasic);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
-        NSLog(@"Cannot find function \"%s\" in module %s", XDTClassNameBasic, PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot find function \"%s\" in module %s", __FUNCTION__, XDTClassNameBasic, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -195,7 +195,7 @@ NS_ASSUME_NONNULL_END
     PyObject *basicObject = PyObject_CallObject(pFunc, NULL);
     Py_XDECREF(pFunc);
     if (NULL == basicObject) {
-        NSLog(@"ERROR: calling constructor %@(None, None, False) failed!", pFunc);
+        NSLog(@"%s ERROR: calling constructor %@(None, None, False) failed!", __FUNCTION__, pFunc);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
@@ -311,7 +311,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pData);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
-        NSLog(@"ERROR: load(%@, %@) returns NULL!", data, useLongFormat? @"true" : @"false");
+        NSLog(@"%s ERROR: load(%@, %@) returns NULL!", __FUNCTION__, data, useLongFormat? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -339,7 +339,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pData);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
-        NSLog(@"ERROR: merge(%@) returns NULL!", data);
+        NSLog(@"%s ERROR: merge(%@) returns NULL!", __FUNCTION__, data);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -365,7 +365,7 @@ NS_ASSUME_NONNULL_END
     PyObject *pSourceCode = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == pSourceCode) {
-        NSLog(@"ERROR: getSource() returns NULL!");
+        NSLog(@"%s ERROR: getSource() returns NULL!", __FUNCTION__);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -416,7 +416,7 @@ NS_ASSUME_NONNULL_END
         Py_XDECREF(pLineDelta);
         Py_XDECREF(methodName);
         if (NULL == joinedLines) {  /* if result is null, the line delta could be wrong configured. */
-            NSLog(@"ERROR: join(%@, 10) returns NULL!", lines);
+            NSLog(@"%s ERROR: join(%@, 10) returns NULL!", __FUNCTION__, lines);
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
                 if (nil != error) {
@@ -438,7 +438,7 @@ NS_ASSUME_NONNULL_END
     Py_DECREF(pLinesList);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
-        NSLog(@"ERROR: parse(%@) returns NULL!", lines);
+        NSLog(@"%s ERROR: parse(%@) returns NULL!", __FUNCTION__, lines);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -479,7 +479,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pLongOpt);
     Py_XDECREF(methodName);
     if (NULL == pProgramData) {
-        NSLog(@"ERROR: getImage(%@, %@) returns NULL!", useLongFormat? @"true" : @"false", _protect? @"true" : @"false");
+        NSLog(@"%s ERROR: getImage(%@, %@) returns NULL!", __FUNCTION__, useLongFormat? @"true" : @"false", _protect? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -519,7 +519,7 @@ NS_ASSUME_NONNULL_END
     PyObject *pDumpString = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == pDumpString) {
-        NSLog(@"ERROR: dumpTokens() returns NULL!");
+        NSLog(@"%s ERROR: dumpTokens() returns NULL!", __FUNCTION__);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {

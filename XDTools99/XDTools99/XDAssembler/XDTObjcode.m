@@ -117,7 +117,7 @@ NS_ASSUME_NONNULL_END
 - (NSData *)generateDump:(NSError **)error
 {
     // TODO: Implement function
-    NSLog(@"ERROR: genDump() not implemented in wrapper class!");
+    NSLog(@"%s ERROR: genDump() not implemented in wrapper class!", __FUNCTION__);
     //PyObject *exeption = PyErr_Occurred();
     //if (NULL != exeption) {
     if (nil != error) {
@@ -146,7 +146,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pCompressed);
     Py_XDECREF(methodName);
     if (NULL == binaryString) {
-        NSLog(@"ERROR: genObjCode(%@) returns NULL!", shouldCompress? @"true" : @"false");
+        NSLog(@"%s ERROR: genObjCode(%@) returns NULL!", __FUNCTION__, shouldCompress? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -176,7 +176,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
     if (NULL == binaryList) {
-        NSLog(@"ERROR: genBinaries(0x%lxd) returns NULL!", baseAddr);
+        NSLog(@"%s ERROR: genBinaries(0x%lxd) returns NULL!", __FUNCTION__, baseAddr);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -208,7 +208,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
     if (NULL == binaryList) {
-        NSLog(@"ERROR: genBinaries(0x%lxd) returns NULL!", baseAddr);
+        NSLog(@"%s ERROR: genBinaries(0x%lxd) returns NULL!", __FUNCTION__, baseAddr);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -246,7 +246,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
     if (NULL == imageList) {
-        NSLog(@"ERROR: genImage(0x%lxd, 0x%lxd) returns NULL!", baseAddr, chunkSize);
+        NSLog(@"%s ERROR: genImage(0x%lxd, 0x%lxd) returns NULL!", __FUNCTION__, baseAddr, chunkSize);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -274,7 +274,7 @@ NS_ASSUME_NONNULL_END
     PyObject *diskImageString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == diskImageString) {
-        NSLog(@"ERROR: genJumpstart() returns NULL!");
+        NSLog(@"%s ERROR: genJumpstart() returns NULL!", __FUNCTION__);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -302,7 +302,7 @@ NS_ASSUME_NONNULL_END
     PyObject *basicString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == basicString) {
-        NSLog(@"ERROR: genXbLoader() returns NULL!");
+        NSLog(@"%s ERROR: genXbLoader() returns NULL!", __FUNCTION__);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -341,7 +341,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartTuple) {
-        NSLog(@"ERROR: genCart(\"%@\") returns NULL!", cartridgeName);
+        NSLog(@"%s ERROR: genCart(\"%@\") returns NULL!", __FUNCTION__, cartridgeName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -401,7 +401,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pOutputSymbols);
     Py_XDECREF(methodName);
     if (NULL == listingString) {
-        NSLog(@"ERROR: genList(%@) returns NULL!", outputSymbols? @"true" : @"false");
+        NSLog(@"%s ERROR: genList(%@) returns NULL!", __FUNCTION__, outputSymbols? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -431,7 +431,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pUseEqu);
     Py_XDECREF(methodName);
     if (NULL == symbolsString) {
-        NSLog(@"ERROR: genSymbols(%@) returns NULL!", useEqu? @"true" : @"false");
+        NSLog(@"%s ERROR: genSymbols(%@) returns NULL!", __FUNCTION__, useEqu? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {

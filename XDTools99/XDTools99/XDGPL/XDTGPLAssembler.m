@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_END
     PyObject *pName = PyString_FromString(XDTModuleNameGPLAssembler);
     PyObject *pModule = PyImport_Import(pName);
     if (NULL == pModule) {
-        NSLog(@"ERROR: Importing module '%@' failed!", pName);
+        NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
         Py_XDECREF(pName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
@@ -97,7 +97,7 @@ NS_ASSUME_NONNULL_END
 
     PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
     if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"Cannot get version string of module %s", PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
         Py_XDECREF(pModule);
         if (PyErr_Occurred()) {
             PyErr_Print();
@@ -110,7 +110,7 @@ NS_ASSUME_NONNULL_END
     }
     Py_XDECREF(pModule);
     if (0 != strcmp(PyString_AsString(pVar), XDTGPLAssemblerVersionRequired)) {
-        NSLog(@"Wrong GPL Assembler version %s! Required is %s", PyString_AsString(pVar), XDTGPLAssemblerVersionRequired);
+        NSLog(@"%s ERROR: Wrong GPL Assembler version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTGPLAssemblerVersionRequired);
         Py_XDECREF(pVar);
 #if !__has_feature(objc_arc)
         [self release];
@@ -135,7 +135,7 @@ NS_ASSUME_NONNULL_END
         PyObject *pModule = PyImport_Import(pName);
         Py_XDECREF(pName);
         if (NULL == pModule) {
-            NSLog(@"ERROR: Importing module '%@' failed!", pName);
+            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
 //            if (nil != error) {
@@ -175,7 +175,7 @@ NS_ASSUME_NONNULL_END
 
     PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
     if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"Cannot get version string of module %s", PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: annot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -186,7 +186,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
     if (0 != strcmp(PyString_AsString(pVar), XDTGPLAssemblerVersionRequired)) {
-        NSLog(@"Wrong GPL Assembler version %s! Required is %s", PyString_AsString(pVar), XDTGPLAssemblerVersionRequired);
+        NSLog(@"%s ERROR: Wrong GPL Assembler version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTGPLAssemblerVersionRequired);
         Py_XDECREF(pVar);
 #if !__has_feature(objc_arc)
         [self release];
@@ -196,7 +196,7 @@ NS_ASSUME_NONNULL_END
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameGPLAssembler);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
-        NSLog(@"Cannot find function \"%s\" in module %s", XDTClassNameGPLAssembler, PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot find function \"%s\" in module %s", __FUNCTION__, XDTClassNameGPLAssembler, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -235,8 +235,8 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
     if (NULL == assembler) {
-        NSLog(@"ERROR: calling constructor %@(\"%s\", 0x%lx, 0x%lx, \"%s\", %@, None) failed!", pFunc,
-              [self syntaxTypeAsCString], _gromAddress, _aorgAddress, [self targetTypeAsCString], urls);
+        NSLog(@"%s ERROR: calling constructor %@(\"%s\", 0x%lx, 0x%lx, \"%s\", %@, None) failed!", __FUNCTION__,
+              pFunc, [self syntaxTypeAsCString], _gromAddress, _aorgAddress, [self targetTypeAsCString], urls);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
@@ -327,7 +327,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pbaseName);
     Py_XDECREF(methodName);
     if (NULL == pValueTupel) {
-        NSLog(@"ERROR: assemble(\"%s\") returns NULL!", [basename UTF8String]);
+        NSLog(@"%s ERROR: assemble(\"%@\") returns NULL!", __FUNCTION__, basename);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {

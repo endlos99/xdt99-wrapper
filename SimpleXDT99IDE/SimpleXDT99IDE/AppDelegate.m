@@ -564,7 +564,7 @@ NS_ASSUME_NONNULL_END
         [panel setAllowedFileTypes:@[extension, @"b99"]];
         [panel setTitle:@"Select TI Basic source file"];
     } else {
-        NSLog(@"Cannot open source file with extension of '%@'", extension);
+        NSLog(@"%s ERROR: Cannot open source file with extension of '%@'", __FUNCTION__, extension);
         return nil;
     }
 
