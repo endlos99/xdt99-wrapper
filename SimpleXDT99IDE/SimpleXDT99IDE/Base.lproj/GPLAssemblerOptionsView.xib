@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="15G17023" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="15G18013" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
@@ -146,7 +146,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField translatesAutoresizingMaskIntoConstraints="NO" id="q9y-Lf-3Nf" userLabel="GROM Text Field">
+                            <textField toolTip="set GROM base address" translatesAutoresizingMaskIntoConstraints="NO" id="q9y-Lf-3Nf" userLabel="GROM Text Field">
                                 <rect key="frame" x="475" y="29" width="53" height="19"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="0x6000" drawsBackground="YES" id="kMB-tJ-hAa">
                                     <customFormatter key="formatter" id="Gcw-vY-TYG" customClass="HWHexNumberFormatter"/>
@@ -166,7 +166,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField translatesAutoresizingMaskIntoConstraints="NO" id="BhR-Vw-VzZ" userLabel="AORG Text Field">
+                            <textField toolTip="set AORG origin in GROM for byte code" translatesAutoresizingMaskIntoConstraints="NO" id="BhR-Vw-VzZ" userLabel="AORG Text Field">
                                 <rect key="frame" x="475" y="7" width="53" height="19"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="0x0030" drawsBackground="YES" id="OHV-xG-nGy">
                                     <customFormatter key="formatter" id="W7K-NX-YVA" customClass="HWHexNumberFormatter"/>
@@ -302,6 +302,8 @@
                         <font key="font" metaFont="miniSystem"/>
                     </buttonCell>
                     <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.shouldShowListingInLog" id="GUi-dd-6d7"/>
+                        <binding destination="-2" name="value" keyPath="self.shouldShowSymbolsAsEqus" id="Ya5-qb-Scw"/>
                         <binding destination="-2" name="enabled2" keyPath="self.shouldShowSymbolsInListing" previousBinding="GUi-dd-6d7" id="u0W-lS-Yh7">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -310,8 +312,6 @@
                                 <integer key="NSNullPlaceholder" value="-1"/>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="enabled" keyPath="self.shouldShowListingInLog" id="GUi-dd-6d7"/>
-                        <binding destination="-2" name="value" keyPath="self.shouldShowSymbolsAsEqus" id="Ya5-qb-Scw"/>
                     </connections>
                 </button>
             </subviews>
