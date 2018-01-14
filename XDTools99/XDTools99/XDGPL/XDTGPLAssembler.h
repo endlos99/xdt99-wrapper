@@ -55,6 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly) NSUInteger gromAddress;
 @property (readonly) NSUInteger aorgAddress;
 @property (readonly) XDTGPLAssemblerTargetType targetType;
+@property (readonly) XDTGPLAssemblerSyntaxType syntaxType;
 
 + (nullable instancetype)gplAssemblerWithOptions:(NSDictionary<NSString *, NSObject *> *)options includeURL:(NSURL *)url;
 
