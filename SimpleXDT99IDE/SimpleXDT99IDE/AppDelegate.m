@@ -263,7 +263,7 @@ NS_ASSUME_NONNULL_END
                 break;
             }
             case XDTAssemblerTargetTypeMESSCartridge: {
-                NSString *cartName = [_assemblerCartridgeNameTextFiled stringValue];
+                NSString *cartName = [self->_assemblerCartridgeNameTextFiled stringValue];
                 if (nil == cartName || [cartName length] == 0) {
                     NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Missing Option" defaultButton:@"Abort" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please specify a name of the cartridge to create!"];
                     [errorAlert runModal];
@@ -405,7 +405,7 @@ NS_ASSUME_NONNULL_END
                 break;
 
             case XDTGPLAssemblerTargetTypeHeaderedByteCode: { /* image */
-                NSString *cartName = [_gplCartridgeNameTextFiled stringValue];
+                NSString *cartName = [self->_gplCartridgeNameTextFiled stringValue];
                 if (nil == cartName || [cartName length] == 0) {
                     NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Missing Option" defaultButton:@"Abort" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please specify a name of the cartridge to create!"];
                     [errorAlert runModal];
@@ -420,7 +420,7 @@ NS_ASSUME_NONNULL_END
             }
 
             case XDTGPLAssemblerTargetTypeMESSCartridge: {
-                NSString *cartName = [_gplCartridgeNameTextFiled stringValue];
+                NSString *cartName = [self->_gplCartridgeNameTextFiled stringValue];
                 if (nil == cartName || [cartName length] == 0) {
                     NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Missing Option" defaultButton:@"Abort" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please specify a name of the cartridge to create!"];
                     [errorAlert runModal];

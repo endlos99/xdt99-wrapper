@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="15G17023" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -724,11 +723,11 @@
                 <box title="Assembler Options" translatesAutoresizingMaskIntoConstraints="NO" id="wxC-ue-LoQ">
                     <rect key="frame" x="-3" y="12" width="401" height="155"/>
                     <view key="contentView" id="nVU-vP-D1T">
-                        <rect key="frame" x="2" y="2" width="397" height="138"/>
+                        <rect key="frame" x="3" y="3" width="395" height="137"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FC4-mw-aHT">
-                                <rect key="frame" x="18" y="100" width="73" height="17"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FC4-mw-aHT">
+                                <rect key="frame" x="18" y="98" width="73" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="Wly-jW-pVF">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -736,7 +735,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton toolTip="Select the output file type." horizontalHuggingPriority="25" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YWa-jA-we8">
-                                <rect key="frame" x="95" y="94" width="285" height="26"/>
+                                <rect key="frame" x="95" y="93" width="283" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="198" id="dhI-eA-S5L"/>
                                 </constraints>
@@ -773,10 +772,10 @@ It is useful for including the binary result of another program into some assemb
                                 </connections>
                             </popUpButton>
                             <box horizontalHuggingPriority="25" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="MUz-f6-QrD">
-                                <rect key="frame" x="20" y="89" width="357" height="5"/>
+                                <rect key="frame" x="20" y="87" width="355" height="5"/>
                             </box>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="kS8-ZL-d18">
-                                <rect key="frame" x="18" y="67" width="72" height="18"/>
+                                <rect key="frame" x="18" y="65" width="72" height="18"/>
                                 <string key="toolTip">If you prefer to use register notations whith an 'R' in your source code (i.e. write MOV R0,*R1+ etc. instead of MOV 0,*1+), you will need to check this option.
 This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 <buttonCell key="cell" type="check" title="Register" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vAy-6i-MD0">
@@ -788,7 +787,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </button>
                             <button toolTip="Generates an additionally file with a list output. This is the equivalent to the option 'L' of the TI Editor/Assembler module." translatesAutoresizingMaskIntoConstraints="NO" id="zKb-Xn-eiR">
-                                <rect key="frame" x="94" y="67" width="69" height="18"/>
+                                <rect key="frame" x="94" y="65" width="69" height="18"/>
                                 <buttonCell key="cell" type="check" title="List File" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Jeg-8b-cf6">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -798,7 +797,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </button>
                             <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources" translatesAutoresizingMaskIntoConstraints="NO" id="RTj-cq-oqc">
-                                <rect key="frame" x="167" y="67" width="55" height="18"/>
+                                <rect key="frame" x="167" y="65" width="55" height="18"/>
                                 <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="eli-HZ-TdX">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -808,7 +807,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </button>
                             <button toolTip="This is the equivalent to the option 'S' of the TI Editor/Assembler module." translatesAutoresizingMaskIntoConstraints="NO" id="yfG-tm-fKE">
-                                <rect key="frame" x="226" y="67" width="74" height="18"/>
+                                <rect key="frame" x="226" y="65" width="74" height="18"/>
                                 <buttonCell key="cell" type="check" title="Symbols" bezelStyle="regularSquare" imagePosition="left" enabled="NO" state="on" inset="2" id="ooe-kQ-yLw">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -819,7 +818,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </button>
                             <button toolTip="Outputs the symbols as an EQU notation." translatesAutoresizingMaskIntoConstraints="NO" id="waS-rq-yv1">
-                                <rect key="frame" x="304" y="67" width="75" height="18"/>
+                                <rect key="frame" x="304" y="65" width="75" height="18"/>
                                 <buttonCell key="cell" type="check" title="use EQU" bezelStyle="regularSquare" imagePosition="left" enabled="NO" state="on" inset="2" id="qx2-hM-Df7">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -840,23 +839,23 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="mgF-NG-uKE" name="value" keyPath="values.AssemblerOptionGenerateSymbolsAsEqus" id="dHG-yT-dGa"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1eN-dp-kX5">
-                                <rect key="frame" x="18" y="44" width="73" height="17"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1eN-dp-kX5">
+                                <rect key="frame" x="18" y="42" width="73" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Base Addr.:" id="N8X-mj-7Nl">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pmy-Fm-jfX">
-                                <rect key="frame" x="97" y="41" width="58" height="22"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pmy-Fm-jfX">
+                                <rect key="frame" x="97" y="39" width="58" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="58" id="wAQ-1r-dqI"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="0xA000" drawsBackground="YES" usesSingleLineMode="YES" id="HQh-QK-tRM">
                                     <customFormatter key="formatter" id="CfP-s6-pw3" customClass="HWHexNumberFormatter"/>
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
@@ -865,19 +864,19 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="mgF-NG-uKE" name="value" keyPath="values.AssemblerOptionBaseAddress" id="IT0-6I-PsP"/>
                                 </connections>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eAH-I8-zv5">
-                                <rect key="frame" x="18" y="19" width="73" height="17"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eAH-I8-zv5">
+                                <rect key="frame" x="18" y="17" width="73" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Cart Name:" id="slt-xe-9UM">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="25" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="shZ-1d-1VD">
-                                <rect key="frame" x="97" y="16" width="280" height="22"/>
+                            <textField horizontalHuggingPriority="25" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="shZ-1d-1VD">
+                                <rect key="frame" x="97" y="14" width="278" height="22"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="RHI-22-Z00">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
@@ -935,17 +934,17 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="mgF-NG-uKE"/>
         <customView id="KcT-Yy-ka8" userLabel="xbas99 Option View">
-            <rect key="frame" x="0.0" y="0.0" width="228" height="118"/>
+            <rect key="frame" x="0.0" y="0.0" width="230" height="118"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <box title="Basic Options" translatesAutoresizingMaskIntoConstraints="NO" id="0La-Pt-m59">
-                    <rect key="frame" x="-3" y="12" width="234" height="106"/>
+                    <rect key="frame" x="-3" y="12" width="236" height="106"/>
                     <view key="contentView" id="7BU-P7-Yf7">
-                        <rect key="frame" x="2" y="2" width="230" height="89"/>
+                        <rect key="frame" x="3" y="3" width="230" height="88"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField translatesAutoresizingMaskIntoConstraints="NO" id="VKj-rr-VkI">
-                                <rect key="frame" x="18" y="52" width="56" height="17"/>
+                            <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VKj-rr-VkI">
+                                <rect key="frame" x="18" y="51" width="56" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="C5J-zq-IPl">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -953,7 +952,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </textFieldCell>
                             </textField>
                             <popUpButton toolTip="Select the output file type." translatesAutoresizingMaskIntoConstraints="NO" id="Mn0-yU-E6A">
-                                <rect key="frame" x="78" y="46" width="135" height="26"/>
+                                <rect key="frame" x="78" y="46" width="135" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="Internal Format" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="nxo-as-15a" id="2n6-II-1YI">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -974,10 +973,10 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </popUpButton>
                             <box horizontalHuggingPriority="25" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="mFo-9j-GPa">
-                                <rect key="frame" x="20" y="41" width="190" height="5"/>
+                                <rect key="frame" x="20" y="40" width="190" height="5"/>
                             </box>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="8Ze-bI-5C2">
-                                <rect key="frame" x="78" y="17" width="82" height="18"/>
+                                <rect key="frame" x="78" y="16" width="82" height="18"/>
                                 <string key="toolTip">The protection option will add list protection to the generated program. Programs which are protected cannot be listed or edited by the BASIC interpreter.</string>
                                 <buttonCell key="cell" type="check" title="Protected" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="5k5-QX-UV7">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -988,7 +987,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </button>
                             <button toolTip="May be used to automatically join wrapped lines." translatesAutoresizingMaskIntoConstraints="NO" id="B7F-pD-VqJ">
-                                <rect key="frame" x="164" y="17" width="48" height="18"/>
+                                <rect key="frame" x="164" y="16" width="48" height="18"/>
                                 <buttonCell key="cell" type="check" title="Join" bezelStyle="regularSquare" imagePosition="left" inset="2" id="SFR-iZ-okB">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -997,8 +996,8 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="mgF-NG-uKE" name="value" keyPath="values.BasicOptionShouldJoinSourceLines" id="uab-nb-AzC"/>
                                 </connections>
                             </button>
-                            <textField translatesAutoresizingMaskIntoConstraints="NO" id="xUl-ap-v7U">
-                                <rect key="frame" x="18" y="18" width="56" height="17"/>
+                            <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xUl-ap-v7U">
+                                <rect key="frame" x="18" y="17" width="56" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="Cvf-X2-HBs">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1042,11 +1041,11 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                 <box title="GPL Assembler Options" translatesAutoresizingMaskIntoConstraints="NO" id="N7b-vu-2jc">
                     <rect key="frame" x="-3" y="12" width="348" height="183"/>
                     <view key="contentView" id="ATp-OE-26q">
-                        <rect key="frame" x="2" y="2" width="344" height="166"/>
+                        <rect key="frame" x="3" y="3" width="342" height="165"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c2L-Xn-SCH">
-                                <rect key="frame" x="18" y="128" width="78" height="17"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c2L-Xn-SCH">
+                                <rect key="frame" x="18" y="126" width="78" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="h1x-nt-dNg">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1054,7 +1053,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </textFieldCell>
                             </textField>
                             <popUpButton toolTip="Select the output file type." horizontalHuggingPriority="25" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Phc-mV-akD">
-                                <rect key="frame" x="100" y="122" width="227" height="26"/>
+                                <rect key="frame" x="100" y="121" width="225" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="Plain GPL Byte Code" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="mff-MI-tU8" id="5XS-Ct-QOW">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -1078,10 +1077,10 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </popUpButton>
                             <box horizontalHuggingPriority="25" verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="gc7-Ly-i0o">
-                                <rect key="frame" x="20" y="117" width="304" height="5"/>
+                                <rect key="frame" x="20" y="115" width="302" height="5"/>
                             </box>
-                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2go-Aa-2CR">
-                                <rect key="frame" x="18" y="70" width="78" height="17"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2go-Aa-2CR">
+                                <rect key="frame" x="18" y="68" width="78" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="GPL Syntax:" id="Kyx-WJ-wk3">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1089,7 +1088,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </textFieldCell>
                             </textField>
                             <popUpButton horizontalHuggingPriority="24" translatesAutoresizingMaskIntoConstraints="NO" id="0qg-OI-m6y">
-                                <rect key="frame" x="100" y="64" width="119" height="26"/>
+                                <rect key="frame" x="100" y="63" width="119" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="Native xga99" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ZZ0-xn-XWe" id="2E7-cd-NKB">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -1106,7 +1105,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </popUpButton>
                             <button toolTip="Generates an additionally file with a list output. This is the equivalent to the option 'L' of the TI Editor/Assembler module." translatesAutoresizingMaskIntoConstraints="NO" id="xZz-vw-Tqb">
-                                <rect key="frame" x="100" y="94" width="69" height="18"/>
+                                <rect key="frame" x="100" y="92" width="69" height="18"/>
                                 <buttonCell key="cell" type="check" title="List File" bezelStyle="regularSquare" imagePosition="left" inset="2" id="L8r-cM-ZBs">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1116,7 +1115,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </button>
                             <button toolTip="This is the equivalent to the option 'S' of the TI Editor/Assembler module." translatesAutoresizingMaskIntoConstraints="NO" id="Wac-w4-daU">
-                                <rect key="frame" x="173" y="94" width="74" height="18"/>
+                                <rect key="frame" x="173" y="92" width="74" height="18"/>
                                 <buttonCell key="cell" type="check" title="Symbols" bezelStyle="regularSquare" imagePosition="left" enabled="NO" state="on" inset="2" id="5TM-aO-4Oa">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1127,7 +1126,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                 </connections>
                             </button>
                             <button toolTip="Outputs the symbols as an EQU notation." translatesAutoresizingMaskIntoConstraints="NO" id="Ijm-yZ-hNQ">
-                                <rect key="frame" x="251" y="94" width="75" height="18"/>
+                                <rect key="frame" x="251" y="92" width="75" height="18"/>
                                 <buttonCell key="cell" type="check" title="use EQU" bezelStyle="regularSquare" imagePosition="left" enabled="NO" state="on" inset="2" id="x0P-FY-59U">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1148,23 +1147,23 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="mgF-NG-uKE" name="value" keyPath="values.GPLOptionGenerateSymbolsAsEqus" id="AtJ-Sn-xP6"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J63-CN-mbn">
-                                <rect key="frame" x="18" y="45" width="78" height="17"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J63-CN-mbn">
+                                <rect key="frame" x="18" y="43" width="78" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="GROM:" id="TJa-Qh-DJi">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yU2-za-HQs">
-                                <rect key="frame" x="102" y="42" width="56" height="22"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yU2-za-HQs">
+                                <rect key="frame" x="102" y="40" width="56" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="56" id="gRD-IQ-fyh"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="0xA000" drawsBackground="YES" usesSingleLineMode="YES" id="NAg-qk-OYh">
                                     <customFormatter key="formatter" id="uJO-yl-dy7" customClass="HWHexNumberFormatter"/>
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
@@ -1173,23 +1172,23 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="mgF-NG-uKE" name="value" keyPath="values.GPLOptionGROMAddress" id="IGD-rF-9kh"/>
                                 </connections>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OGw-SQ-QAL">
-                                <rect key="frame" x="164" y="45" width="45" height="17"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OGw-SQ-QAL">
+                                <rect key="frame" x="164" y="43" width="45" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="AORG:" id="qRx-AT-iD1">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="310-Kt-N4x">
-                                <rect key="frame" x="212" y="42" width="56" height="22"/>
+                            <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="310-Kt-N4x">
+                                <rect key="frame" x="212" y="40" width="56" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="56" id="HtG-Uo-i2e"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="0x0030" drawsBackground="YES" usesSingleLineMode="YES" id="mxe-Tm-gRs">
                                     <customFormatter key="formatter" id="L49-bG-MNR" customClass="HWHexNumberFormatter"/>
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
@@ -1198,19 +1197,19 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="mgF-NG-uKE" name="value" keyPath="values.GPLOptionAORGAddress" id="UXj-2b-qof"/>
                                 </connections>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wlY-ZH-xMo">
-                                <rect key="frame" x="18" y="20" width="78" height="17"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wlY-ZH-xMo">
+                                <rect key="frame" x="18" y="18" width="78" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Cart Name:" id="dgb-Md-GnE">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="25" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4SC-nS-7Ec">
-                                <rect key="frame" x="102" y="17" width="222" height="22"/>
+                            <textField horizontalHuggingPriority="25" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4SC-nS-7Ec">
+                                <rect key="frame" x="102" y="15" width="220" height="22"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="y9v-Gb-3qK">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
@@ -1218,8 +1217,8 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="Voe-Tx-rLC" name="enabled" keyPath="self.shouldCartridgeNameActivated" previousBinding="bJN-qD-H2V" id="zW7-OM-4jB"/>
                                 </connections>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1CE-fc-Z9H">
-                                <rect key="frame" x="18" y="95" width="78" height="17"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1CE-fc-Z9H">
+                                <rect key="frame" x="18" y="93" width="78" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Options:" id="NPE-vR-1xY">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
