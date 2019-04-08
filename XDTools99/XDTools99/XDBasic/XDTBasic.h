@@ -65,6 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)loadMergedData:(NSData *)data error:(NSError **)error;  // load tokenized BASIC program in merge format
 
 - (nullable NSString *)getSource:(NSError **)error;    // textual representation of token sequence
+- (nullable NSData *)getImageUsingLongFormat:(BOOL)useLongFormat error:(NSError **)error;
 
 /* Source code to program conversion */
 - (BOOL)parseSourceCode:(NSString *)sourceCode error:(NSError **)error;  // parse and tokenize BASIC source code

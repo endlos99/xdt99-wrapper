@@ -381,6 +381,38 @@ NS_ASSUME_NONNULL_END
 }
 
 
+- (NSData *)getImageUsingLongFormat:(BOOL)useLongFormat error:(NSError **)error
+{
+    /* calling:
+     data = getImage(long_=opts.long_, protected=opts.protect)
+     */
+    PyObject *methodName = PyString_FromString("getImage");
+    PyObject *pLongOpt = PyBool_FromLong(useLongFormat);
+    PyObject *pProtectOpt = PyBool_FromLong(_protect);
+    PyObject *pProgramData = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pLongOpt, pProtectOpt, NULL);
+    Py_XDECREF(pProtectOpt);
+    Py_XDECREF(pLongOpt);
+    Py_XDECREF(methodName);
+    if (NULL == pProgramData) {
+        NSLog(@"%s ERROR: getImage(%@, %@) returns NULL!", __FUNCTION__, useLongFormat? @"true" : @"false", _protect? @"true" : @"false");
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return nil;
+    }
+
+    NSData *imageData = [NSData dataWithPythonString:pProgramData];
+
+    Py_DECREF(pProgramData);
+
+    return imageData;
+}
+
+
 #pragma mark - Source code to program conversion Method Wrapper
 
 
@@ -468,34 +500,11 @@ NS_ASSUME_NONNULL_END
 
 - (BOOL)saveFile:(NSURL *)fileURL usingLongFormat:(BOOL)useLongFormat error:(NSError **)error
 {
-    /* calling:
-     data = getImage(long_=opts.long_, protected=opts.protect)
-     */
-    PyObject *methodName = PyString_FromString("getImage");
-    PyObject *pLongOpt = PyBool_FromLong(useLongFormat);
-    PyObject *pProtectOpt = PyBool_FromLong(_protect);
-    PyObject *pProgramData = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pLongOpt, pProtectOpt, NULL);
-    Py_XDECREF(pProtectOpt);
-    Py_XDECREF(pLongOpt);
-    Py_XDECREF(methodName);
-    if (NULL == pProgramData) {
-        NSLog(@"%s ERROR: getImage(%@, %@) returns NULL!", __FUNCTION__, useLongFormat? @"true" : @"false", _protect? @"true" : @"false");
-        PyObject *exeption = PyErr_Occurred();
-        if (NULL != exeption) {
-            if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
-            }
-            PyErr_Print();
-        }
+    NSData *fileData = [self getImageUsingLongFormat:useLongFormat error:error];
+    if (nil == fileData || (nil != error && nil != *error)) {
         return NO;
     }
-
-    NSData *fileData = [NSData dataWithPythonString:pProgramData];
-    BOOL retVal = [fileData writeToURL:fileURL atomically:YES];
-
-    Py_DECREF(pProgramData);
-
-    return retVal;
+    return [fileData writeToURL:fileURL atomically:YES];
 }
 
 
