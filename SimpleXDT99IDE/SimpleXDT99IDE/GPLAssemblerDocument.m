@@ -412,8 +412,8 @@
         case XDTGPLAssemblerTargetTypeHeaderedByteCode: { /* image */
             if (nil == _cartridgeName || [_cartridgeName length] == 0) {
                 NSDictionary *errorDict = @{
-                                            NSLocalizedDescriptionKey: @"Missing Option!",
-                                            NSLocalizedRecoverySuggestionErrorKey: @"Please specify a name of the cartridge to create!"
+                                            NSLocalizedDescriptionKey: NSLocalizedString(@"Missing Option!", @"Error description of a missing option."),
+                                            NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The cartridge name is missing! Please specify a name of the cartridge to create!", @"Explanation for an error of a missing cartridge name option.")
                                             };
                 NSError *missingOptionError = [NSError errorWithDomain:XDTErrorDomain code:-1 userInfo:errorDict];
                 [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [missingOptionError localizedDescription], [missingOptionError localizedFailureReason]]];
@@ -436,8 +436,8 @@
         case XDTGPLAssemblerTargetTypeMESSCartridge: {
             if (nil == _cartridgeName || [_cartridgeName length] == 0) {
                 NSDictionary *errorDict = @{
-                                            NSLocalizedDescriptionKey: @"Missing Option!",
-                                            NSLocalizedRecoverySuggestionErrorKey: @"Please specify a name of the cartridge to create!"
+                                            NSLocalizedDescriptionKey: NSLocalizedString(@"Missing Option!", @"Error description of a missing option."),
+                                            NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The cartridge name is missing! Please specify a name of the cartridge to create!", @"Explanation for an error of a missing cartridge name option.")
                                             };
                 NSError *missingOptionError = [NSError errorWithDomain:XDTErrorDomain code:-1 userInfo:errorDict];
                 [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [missingOptionError localizedDescription], [missingOptionError localizedFailureReason]]];

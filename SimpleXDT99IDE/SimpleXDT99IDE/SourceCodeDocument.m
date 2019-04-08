@@ -209,7 +209,7 @@
 {
     NSSavePanel *panel = [NSSavePanel savePanel];
     [panel setCanCreateDirectories:YES];
-    [panel setTitle:@"Select output file name"];
+    [panel setTitle:NSLocalizedString(@"Select output file name", @"Title for saving source files in Save Panel")];
     [panel setDirectoryURL:[self outputBasePathURL]];
     [panel setNameFieldStringValue:[self outputFileName]];
 

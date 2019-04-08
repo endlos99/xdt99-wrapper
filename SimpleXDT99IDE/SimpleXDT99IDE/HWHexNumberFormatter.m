@@ -49,7 +49,7 @@
         return YES;
     }
     if (nil != error) {
-        *error = NSLocalizedString(@"Couldn’t convert to hexadicimal", @"Error converting");
+        *error = NSLocalizedString(@"Couldn’t convert to a hexadecimal value.", @"Error converting a Hex number from a String.");
     }
     return NO;
 }

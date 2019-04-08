@@ -556,13 +556,13 @@ NS_ASSUME_NONNULL_END
     [panel setAllowsMultipleSelection:NO];
     if ([extension isEqualToString:@"a99"]) {
         [panel setAllowedFileTypes:@[extension, @"asm"]];
-        [panel setTitle:@"Select assembler source file"];
+        [panel setTitle:NSLocalizedString(@"Select assembler source file", @"Title for opening Assembler files in Open Panel")];
     } else if ([extension isEqualToString:@"gpl"]) {
         [panel setAllowedFileTypes:@[extension]];
-        [panel setTitle:@"Select GPL assembler source file"];
+        [panel setTitle:NSLocalizedString(@"Select GPL assembler source file", @"Title for opening GPL Assembler files in Open Panel")];
     } else if ([extension isEqualToString:@"bas"]) {
         [panel setAllowedFileTypes:@[extension, @"b99"]];
-        [panel setTitle:@"Select TI Basic source file"];
+        [panel setTitle:NSLocalizedString(@"Select TI Basic source file", @"Title for opening TI Basics files in Open Panel")];
     } else {
         NSLog(@"%s ERROR: Cannot open source file with extension of '%@'", __FUNCTION__, extension);
         return nil;
@@ -699,7 +699,7 @@ NS_ASSUME_NONNULL_END
     [_gplCartridgeNameTextFiled setPlaceholderString:[[sourceFile URLByDeletingPathExtension] lastPathComponent]];
     NSSavePanel *panel = [NSSavePanel savePanel];
     [panel setCanCreateDirectories:YES];
-    [panel setTitle:@"Select output file name"];
+    [panel setTitle:NSLocalizedString(@"Select output file name", @"Title for saving imported source code files in Save Panel")];
     [panel setDirectoryURL:[sourceFile URLByDeletingLastPathComponent]];
     [panel setAccessoryView:_actualOptionsView];
     [panel setNameFieldStringValue:[[_assemblerCartridgeNameTextFiled stringValue] stringByAppendingPathExtension:@"bin"]];
