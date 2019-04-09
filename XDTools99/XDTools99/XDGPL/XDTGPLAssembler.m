@@ -142,7 +142,7 @@ NS_ASSUME_NONNULL_END
 //                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
 //            }
                 PyErr_Print();
-                @throw [XDTException exceptionWithError:[NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil]];
+                //@throw [XDTException exceptionWithError:[NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil]];
             }
             return nil;
         }
