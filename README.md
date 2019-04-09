@@ -5,7 +5,8 @@ The **[xdt99 Wrapper Classes][2]** (xdt99-wrapper) contains actually a collectio
 In future there can be make additionally wrapper for Swift, C/C++ or other programming languages.
 
 These Objective-C classes will be released bundled together with the necessary xdt99 Python scripts (xas99, xbas99 and xga99) as a library for easy to use and easy integrating into native Cocoa applications for your Mac under macOS 10.8 and later. You just have to add the XDTools99.framework to your XCode project.   
-This wrapper collection additionally contains a XCode project for an simple sample application (named SimpleXDT99IDE) that will show you how to use the wrapper library.
+This wrapper collection additionally contains a XCode project for an simple sample application (named SimpleXDT99IDE) that will show you how to use the wrapper library.   
+The wrapper library is also used for the project [TI-Disk Manager][11], you can find at [hackmac][10]'s repository at Bitbucket.
 
 The complete source of the xdt99-wrapper and its sample App is available on [GitHub][2] and is released under the [GNU Lesser General Public License, Version 2.1][1] (GNU LGPLv2.1).
 
@@ -41,3 +42,5 @@ Please report feedback and all bugs to the [developer][7] by [creating][4] an is
 [7]: https://github.com/henrik-w
 [8]: https://github.com/henrik-w/NoodleKit
 [9]: https://github.com/MrNoodle/NoodleKit
+[10]:https://bitbucket.org/hackmac
+[11]:https://bitbucket.org/hackmac/tidisk-manager
