@@ -370,6 +370,9 @@
 
 - (BOOL)assembleCode:(XDTAssemblerTargetType)xdtTargetType error:(NSError **)error
 {
+    if (nil == [self fileURL]) {    // there must be a file wich can be assembled
+        return NO;
+    }
     NSDictionary *options = @{
                               XDTAssemblerOptionRegister: [NSNumber numberWithBool:[self shouldUseRegisterSymbols]],
                               XDTAssemblerOptionStrict: [NSNumber numberWithBool:[self shouldBeStrict]],

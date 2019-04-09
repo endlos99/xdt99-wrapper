@@ -356,6 +356,9 @@
 
 - (BOOL)assembleCode:(XDTGPLAssemblerTargetType)xdtTargetType error:(NSError **)error
 {
+    if (nil == [self fileURL]) {    // there must be a file wich can be assembled
+        return NO;
+    }
     NSDictionary *options = @{
                               XDTGPLAssemblerOptionAORG: [NSNumber numberWithUnsignedInteger:[self aorgAddress]],
                               XDTGPLAssemblerOptionGROM: [NSNumber numberWithUnsignedInteger:[self gromAddress]],
