@@ -35,14 +35,14 @@
 @property (retain) NSURL *outputBasePathURL;
 @property (retain) NSString *outputFileName;
 
-@property (assign) IBOutlet NSToolbarItem *xdt99OptionsToolbarItem;
-@property (assign) IBOutlet NSView *xdt99OptionsToolbarView;
+@property (retain) IBOutlet NSToolbarItem *xdt99OptionsToolbarItem;
+@property (retain) IBOutlet NSView *xdt99OptionsToolbarView;
 
-@property (assign) IBOutlet NSView *logOptionsPlaceholderView;
+@property (retain) IBOutlet NSView *logOptionsPlaceholderView;
 
-@property (assign) IBOutlet NSScrollView *sourceScrollView;
-@property (assign) IBOutlet NSTextView *sourceView;
-@property (assign) IBOutlet NSTextView *logView;
+@property (retain) IBOutlet NSScrollView *sourceScrollView;
+@property (retain) IBOutlet NSTextView *sourceView;
+@property (retain) IBOutlet NSTextView *logView;
 @property (readonly) BOOL hasLogContentToSave;
 
 @property (readonly) NSImage *statusImage;

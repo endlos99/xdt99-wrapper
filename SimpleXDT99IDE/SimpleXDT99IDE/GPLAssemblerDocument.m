@@ -31,7 +31,7 @@
 
 @interface GPLAssemblerDocument ()
 
-@property (assign) IBOutlet NSView *specialLogOptionView;
+@property (retain) IBOutlet NSView *specialLogOptionView;
 
 @property (assign) NSUInteger gromAddress;
 @property (assign) NSUInteger aorgAddress;

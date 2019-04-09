@@ -33,7 +33,7 @@
 
 @interface BasicCodeDocument ()
 
-@property (assign) IBOutlet NSView *specialLogOptionView;
+@property (retain) IBOutlet NSView *specialLogOptionView;
 
 @property (assign) BOOL shouldShowWarningsInLog;
 @property (assign) BOOL shouldDumpTokensInLog;

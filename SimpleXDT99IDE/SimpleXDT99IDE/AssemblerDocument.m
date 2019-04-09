@@ -33,7 +33,7 @@
 
 @interface AssemblerDocument ()
 
-@property (assign) IBOutlet NSView *specialLogOptionView;
+@property (retain) IBOutlet NSView *specialLogOptionView;
 
 @property (assign) NSUInteger baseAddress;
 @property (readonly) BOOL shouldUseBaseAddress;
