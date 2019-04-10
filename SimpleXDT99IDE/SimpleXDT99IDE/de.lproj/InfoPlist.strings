@@ -1,0 +1,9 @@
+/* CFBundleName = "${PRODUCT_NAME}"; */
+"CFBundleDisplayName" = "SimpleXDTIDE";
+
+/* (No Comment) */
+"CFBundleGetInfoString" = "0.4.1, build 190410";
+
+/* (No Comment) */
+"NSHumanReadableCopyright" = "Urherberrecht © 2016-2019 Henrik Wedekind (auch bekannt als Hackmac). Alle Rechte vorbehalten.";
+

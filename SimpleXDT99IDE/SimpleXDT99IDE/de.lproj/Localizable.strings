@@ -1,0 +1,34 @@
+/* Informative text for imported binary Basic files to store them into a new file. */
+"Binary file imported. You will have to save the source code within a new file." = "Binärdatei importiert. Sie müssen den Quellcode in einer neuen Datei speichern.";
+
+/* Error converting a Hex number from a String. */
+"Couldn’t convert to a hexadecimal value." = "Die Konvertierung in einen hexadezimalen Wert war nicht möglich.";
+
+/* Message text for alerting to create a new file. */
+"Creating new file" = "Neue Datei erstellen";
+
+/* Reason for the error if the recognized file format cannot be decoded. */
+"It seems that this Basic file is not in %@ format." = "Es scheint, dass diese Basic-Datei nicht im %@-Format vorliegt.";
+
+/* Error description of a missing option. */
+"Missing Option!" = "Fehlende Option!";
+
+/* Title for opening Assembler files in Open Panel */
+"Select assembler source file" = "Assembler-Quelldatei auswählen";
+
+/* Title for opening GPL Assembler files in Open Panel */
+"Select GPL assembler source file" = "GPL Assembler Quelldatei auswählen";
+
+/* Title for saving imported source code files in Save Panel
+   Title for saving source files in Save Panel */
+"Select output file name" = "Den Namen der Ausgabedatei auswählen";
+
+/* Title for opening TI Basics files in Open Panel */
+"Select TI Basic source file" = "TI Basic Quelldatei auswählen";
+
+/* Explanation for an error of a missing cartridge name option. */
+"The cartridge name is missing! Please specify a name of the cartridge to create!" = "Der Modulname fehlt! Bitte geben Sie einen Namen für das zu erstellende Modul an!";
+
+/* Reason for the error if the Basic file cannot be recognized. */
+"Unknown binary Basic file format." = "Unbekanntes Binärformat der Basic-Datei.";
+

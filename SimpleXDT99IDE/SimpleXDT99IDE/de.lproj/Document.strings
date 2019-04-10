@@ -1,0 +1,24 @@
+/* Class = "NSButtonCell"; title = "Show Errors"; ObjectID = "0t0-cI-DWI"; */
+"0t0-cI-DWI.title" = "Zeige Fehler";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Check this to print out any error messages into the console."; ObjectID = "8Qb-Jr-EEc"; */
+"8Qb-Jr-EEc.ibShadowedToolTip" = "Markieren, um Fehlermeldungen in der Konsole auszugeben.";
+
+/* Class = "NSImageView"; ibShadowedToolTip = "Status Lamp. It shows you if there are errors found (red) or if everything is okay (green)."; ObjectID = "MVj-UF-zr3"; */
+"MVj-UF-zr3.ibShadowedToolTip" = "Statusleuchte. Es zeigt an, ob Fehler gefunden wurden (rot) oder ob alles in Ordnung ist (grün).";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Click to save the content of the console as a text file."; ObjectID = "qsN-sQ-Bfi"; */
+"qsN-sQ-Bfi.ibShadowedToolTip" = "Klicke hier, um den Inhalt der Konsole als Textdatei zu speichern.";
+
+/* Class = "NSToolbarItem"; label = "XDT99 Options"; ObjectID = "x6c-tQ-6Xu"; */
+"x6c-tQ-6Xu.label" = "XDT99 Optionen";
+
+/* Class = "NSToolbarItem"; paletteLabel = "XDT99 Options"; ObjectID = "x6c-tQ-6Xu"; */
+"x6c-tQ-6Xu.paletteLabel" = "XDT99 Optionen";
+
+/* Class = "NSWindow"; title = "Window"; ObjectID = "xOd-HO-29H"; */
+"xOd-HO-29H.title" = "Window";
+
+/* Class = "NSButtonCell"; title = "Save Log…"; ObjectID = "YZR-J6-FoF"; */
+"YZR-J6-FoF.title" = "Log speichern…";
+

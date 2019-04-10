@@ -2,5 +2,5 @@
 
 /* CFBundleName = "${PRODUCT_NAME}"; */
 CFBundleDisplayName = "SimpleXDTIDE";
-CFBundleGetInfoString = "0.4.1, build 171118";
-NSHumanReadableCopyright = "Copyright © 2016-2017 Henrik Wedekind (aka hackmac). All rights reserved.";
+CFBundleGetInfoString = "0.4.1, build 190410";
+NSHumanReadableCopyright = "Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.";

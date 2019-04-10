@@ -29,6 +29,7 @@
 		AFDECF321DF176B1008870F7 /* Document.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF301DF176B1008870F7 /* Document.xib */; };
 		AFDECF341DF176B1008870F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF331DF176B1008870F7 /* Assets.xcassets */; };
 		AFDECF371DF176B1008870F7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF351DF176B1008870F7 /* MainMenu.xib */; };
+		AFF5D04A225E511700A69BEB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AFF5D048225E511700A69BEB /* Localizable.strings */; };
 		AFFDB6871DFC6A95006788CC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AFFDB6831DFC6A95006788CC /* InfoPlist.strings */; };
 		AFFDB6881DFC6A95006788CC /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = AFFDB6851DFC6A95006788CC /* Credits.html */; };
 		AFFF3A3A1E05640700909C6C /* HWHexNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = AFFF3A391E05640700909C6C /* HWHexNumberFormatter.m */; };
@@ -96,6 +97,14 @@
 		AFDECF331DF176B1008870F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFDECF361DF176B1008870F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		AFDECF381DF176B1008870F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AFF5D041225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/GPLAssemblerOptionsView.strings; sourceTree = "<group>"; };
+		AFF5D042225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/BasicOptionsView.strings; sourceTree = "<group>"; };
+		AFF5D043225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AssemblerOptionsView.strings; sourceTree = "<group>"; };
+		AFF5D044225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Document.strings; sourceTree = "<group>"; };
+		AFF5D046225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		AFF5D047225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/Credits.html; sourceTree = "<group>"; };
+		AFF5D049225E511700A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AFF5D04C225E650A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		AFF958511DF178EC00062DEB /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		AFFDB6841DFC6A95006788CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AFFDB6861DFC6A95006788CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = Base.lproj/Credits.html; sourceTree = "<group>"; };
@@ -190,6 +199,7 @@
 				AFDECF351DF176B1008870F7 /* MainMenu.xib */,
 				AFDECF331DF176B1008870F7 /* Assets.xcassets */,
 				AFDECF381DF176B1008870F7 /* Info.plist */,
+				AFF5D048225E511700A69BEB /* Localizable.strings */,
 				AFFDB6831DFC6A95006788CC /* InfoPlist.strings */,
 				AFFDB6851DFC6A95006788CC /* Credits.html */,
 				AFBF2B611FE95B1B008248B6 /* xas99.py */,
@@ -267,6 +277,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = AFDECF1B1DF176B1008870F7;
 			productRefGroup = AFDECF1B1DF176B1008870F7;
@@ -302,6 +313,7 @@
 				AFBF2B661FE95B1B008248B6 /* xbas99.py in Resources */,
 				AFDC40B31DFB254A006B2A27 /* README.md in Resources */,
 				AFFDB6881DFC6A95006788CC /* Credits.html in Resources */,
+				AFF5D04A225E511700A69BEB /* Localizable.strings in Resources */,
 				AFDECF341DF176B1008870F7 /* Assets.xcassets in Resources */,
 				AFBF2B651FE95B1B008248B6 /* xas99.py in Resources */,
 				AFDECF321DF176B1008870F7 /* Document.xib in Resources */,
@@ -350,6 +362,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				AF125EC01E0415E600F659AA /* Base */,
+				AFF5D041225E3C0A00A69BEB /* de */,
 			);
 			name = GPLAssemblerOptionsView.xib;
 			sourceTree = "<group>";
@@ -358,6 +371,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				AF5CF8B21DFF30F400C08E36 /* Base */,
+				AFF5D043225E3C0A00A69BEB /* de */,
 			);
 			name = AssemblerOptionsView.xib;
 			sourceTree = "<group>";
@@ -366,6 +380,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				AF5CF8B51DFF30F900C08E36 /* Base */,
+				AFF5D042225E3C0A00A69BEB /* de */,
 			);
 			name = BasicOptionsView.xib;
 			sourceTree = "<group>";
@@ -374,6 +389,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				AFDECF311DF176B1008870F7 /* Base */,
+				AFF5D044225E3C0A00A69BEB /* de */,
 			);
 			name = Document.xib;
 			sourceTree = "<group>";
@@ -382,14 +398,24 @@
 			isa = PBXVariantGroup;
 			children = (
 				AFDECF361DF176B1008870F7 /* Base */,
+				AFF5D04C225E650A00A69BEB /* de */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		AFF5D048225E511700A69BEB /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AFF5D049225E511700A69BEB /* de */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		AFFDB6831DFC6A95006788CC /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				AFFDB6841DFC6A95006788CC /* Base */,
+				AFF5D046225E3C0A00A69BEB /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -398,6 +424,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				AFFDB6861DFC6A95006788CC /* Base */,
+				AFF5D047225E3C0A00A69BEB /* de */,
 			);
 			name = Credits.html;
 			sourceTree = "<group>";
