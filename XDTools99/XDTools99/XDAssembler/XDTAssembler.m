@@ -130,11 +130,9 @@ NS_ASSUME_NONNULL_END
     assert(nil != url);
 
     @synchronized (self) {
-        PyObject *pName = PyString_FromString(XDTModuleNameAssembler);
-        PyObject *pModule = PyImport_Import(pName);
-        Py_XDECREF(pName);
+        PyObject *pModule = PyImport_ImportModuleNoBlock(XDTModuleNameAssembler);
         if (NULL == pModule) {
-            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
+            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, XDTModuleNameAssembler, Py_GetPath());
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
 //            if (nil != error) {
@@ -235,7 +233,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
     if (NULL == assembler) {
-        NSLog(@"%s ERROR: calling constructor %@(\"%s\", %@, %@, %@, []) failed!", __FUNCTION__, pFunc,
+        NSLog(@"%s ERROR: calling constructor %s(\"%s\", %@, %@, %@, []) failed!", __FUNCTION__, XDTClassNameAssembler,
               [self targetTypeAsCString], _useRegisterSymbols? @"true" : @"false", _beStrict? @"true" : @"false", urls);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {

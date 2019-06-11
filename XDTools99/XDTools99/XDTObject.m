@@ -35,7 +35,8 @@
     if (Py_IsInitialized()) {
         return;
     }
-    [self reinitializeWithXDTModulePath:[[NSBundle bundleForClass:[self class]] resourcePath]];
+    NSArray<NSString *>* modulPathes = @[[[NSBundle mainBundle] resourcePath], [[NSBundle bundleForClass:[self class]] resourcePath]];
+    [self reinitializeWithXDTModulePath:[modulPathes componentsJoinedByString:@":"]];
 }
 
 

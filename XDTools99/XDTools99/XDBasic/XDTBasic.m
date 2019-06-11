@@ -109,11 +109,9 @@ NS_ASSUME_NONNULL_END
     assert(NULL != options);
 
     @synchronized (self) {
-        PyObject *pName = PyString_FromString(XDTModuleNameBasic);
-        PyObject *pModule = PyImport_Import(pName);
-        Py_XDECREF(pName);
+        PyObject *pModule = PyImport_ImportModuleNoBlock(XDTModuleNameBasic);
         if (NULL == pModule) {
-            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
+            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, XDTModuleNameBasic, Py_GetPath());
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
 //            if (nil != error) {

@@ -131,11 +131,9 @@ NS_ASSUME_NONNULL_END
     assert(nil != url);
 
     @synchronized (self) {
-        PyObject *pName = PyString_FromString(XDTModuleNameGPLAssembler);
-        PyObject *pModule = PyImport_Import(pName);
-        Py_XDECREF(pName);
+        PyObject *pModule = PyImport_ImportModuleNoBlock(XDTModuleNameGPLAssembler);
         if (NULL == pModule) {
-            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
+            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, XDTModuleNameGPLAssembler, Py_GetPath());
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
 //            if (nil != error) {
