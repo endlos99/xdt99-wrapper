@@ -5,10 +5,10 @@
 "1fR-z9-5LB.ibShadowedToolTip" = "Aktivieren Sie diese Option, um Register mit einem 'R' im Quellcode zu versehen (d.h. Verwendung von MOV R0,*R1+ etc. anstelle von MOV 0,*1+).\nDies entspricht der Option 'R' des TI-Assemblers.";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Generates a textual version of the raw binary.\nIt is useful for including the binary result of another program into some assembly or GPL source source."; ObjectID = "2iS-Xw-DkO"; */
-"2iS-Xw-DkO.ibShadowedToolTip" = "Erzeugt eine Textversion der Binärdatei.\nEs ist nützlich, um das binäre Ergebnis eines anderen Programms in ein Assembler oder GPL-Quellcode einzubinden.";
+"2iS-Xw-DkO.ibShadowedToolTip" = "Erzeugt eine Textversion der Binärdaten.\nNützlich, um das binäre Ergebnis eines anderen Programms in ein Assembler- oder GPL-Quellcode einzubinden.";
 
-/* Class = "NSMenuItem"; title = "Textual Raw Binary"; ObjectID = "2iS-Xw-DkO"; */
-"2iS-Xw-DkO.title" = "Binärdaten als Text";
+/* Class = "NSMenuItem"; title = "Textual Raw Binary for (GPL)Assembler"; ObjectID = "2iS-Xw-DkO"; */
+"2iS-Xw-DkO.title" = "Binärdaten als Assembler-Text";
 
 /* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "3E8-vV-OJY"; */
 "3E8-vV-OJY.title" = "Name:";
@@ -63,6 +63,12 @@
 
 /* Class = "NSTextFieldCell"; title = "Base Addr.:"; ObjectID = "nwR-bH-N3H"; */
 "nwR-bH-N3H.title" = "Basis Adr.:";
+
+/* Class = "NSMenuItem"; title = "Textual Raw Binary for BASIC"; ObjectID = "oZF-D2-xjw"; */
+"oZF-D2-xjw.title" = "Binärdaten als Basic-Text";
+
+/* Class = "NSMenuItem"; title = "Textual Raw Binary for C/C++"; ObjectID = "pul-8B-aBf"; */
+"pul-8B-aBf.title" = "Binärdaten als Text für C/C++";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Create an RPK cartridge file that can be used with the MESS emulator."; ObjectID = "qPn-hk-3yJ"; */
 "qPn-hk-3yJ.ibShadowedToolTip" = "Erstellung einer RPK-Modul-Datei, die mit dem MESS-Emulator verwendet werden kann.";

@@ -40,7 +40,7 @@
                                     <menu key="menu" id="lK2-tC-15u">
                                         <items>
                                             <menuItem title="Program Image" state="on" toolTip="Compiled code will be stored using PROGRAM format, which is used in Editor/Assembler Option 5" id="EvA-9i-baN"/>
-                                            <menuItem title="Compressed Object Code" toolTip="Compiled code will be stored in an compressed format using DIS/FIX 80 format, which is used in Editor/Assembler Option 3" id="sFv-Rw-HR6"/>
+                                            <menuItem title="Object Code (Compressed)" toolTip="Compiled code will be stored in an compressed format using DIS/FIX 80 format, which is used in Editor/Assembler Option 3" id="sFv-Rw-HR6"/>
                                             <menuItem title="Object Code" toolTip="Compiled code will be stored using DIS/FIX 80 format, which is used in Editor/Assembler Option 3" id="rVH-Jy-gER"/>
                                             <menuItem title="Embeded Extended Basic" toolTip="This format wraps a XBasic program around the generated code." id="wYo-tA-Ebc">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -48,10 +48,16 @@
                                             <menuItem title="Raw Binary" toolTip="Create program binaries without any metadata, i.e. suitable for burning EPROMs." id="ZIS-tz-YOr">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
-                                            <menuItem title="Textual Raw Binary" id="2iS-Xw-DkO">
+                                            <menuItem title="Textual Raw Binary for (GPL)Assembler" id="2iS-Xw-DkO">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                                 <string key="toolTip">Generates a textual version of the raw binary.
 It is useful for including the binary result of another program into some assembly or GPL source source.</string>
+                                            </menuItem>
+                                            <menuItem title="Textual Raw Binary for BASIC" id="oZF-D2-xjw">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="Textual Raw Binary for C/C++" id="pul-8B-aBf">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                             <menuItem title="MESS Cartridge" toolTip="Create an RPK cartridge file that can be used with the MESS emulator." id="qPn-hk-3yJ">
                                                 <modifierMask key="keyEquivalentModifierMask"/>

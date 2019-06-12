@@ -46,6 +46,12 @@
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "5QF-Oa-p0T"; */
 "5QF-Oa-p0T.title" = "Edit";
 
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Generates a textual version of the raw binary.\nIt is useful for including the binary result of another program into some C/C++ source code.   Format example:   0x4861, 0x636b, 0x4d61, 0x6320,   0x7761, 0x7320, 0x6865, 0x7265"; ObjectID = "5sN-ug-geY"; */
+"5sN-ug-geY.ibShadowedToolTip" = "Erzeugt eine Textversion der Roh-Daten. Es ist nützlich, um das binäre Ergebnis eines anderen Programms in ein C/C++ Quellcode aufzunehmen.   Formatbeispiel:   0x4861, 0x636b, 0x4d61, 0x6320,   0x7761, 0x7320, 0x6865, 0x7265";
+
+/* Class = "NSMenuItem"; title = "Textual Raw Binary for C/C++"; ObjectID = "5sN-ug-geY"; */
+"5sN-ug-geY.title" = "Binärdaten als Text für C/C++";
+
 /* Class = "NSButtonCell"; title = "Symbols"; ObjectID = "5TM-aO-4Oa"; */
 "5TM-aO-4Oa.title" = "Symbols";
 
@@ -379,11 +385,11 @@
 /* Class = "NSButtonCell"; title = "Symbols"; ObjectID = "ooe-kQ-yLw"; */
 "ooe-kQ-yLw.title" = "Symbols";
 
-/* Class = "NSMenuItem"; ibShadowedToolTip = "Generates a textual version of the raw binary.\nIt is useful for including the binary result of another program into some assembly or GPL source source."; ObjectID = "OW9-tD-KBp"; */
-"OW9-tD-KBp.ibShadowedToolTip" = "Generates a textual version of the raw binary.\nIt is useful for including the binary result of another program into some assembly or GPL source source.";
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Generates a textual version of the raw binary.\nIt is useful for including the binary result of another program into some Basic source code.   Format example: DATA 18529, 25451, 19809, 25376 DATA 30561, 29472, 26725, 29285"; ObjectID = "Otx-WD-4NR"; */
+"Otx-WD-4NR.ibShadowedToolTip" = "Erzeugt eine Textversion der Roh-Daten. Es ist nützlich, um das binäre Ergebnis eines anderen Programms in ein Basic Quellcode aufzunehmen.   Formatbeispiel: DATA 18529, 25451, 19809, 25376 DATA 30561, 29472, 26725, 29285";
 
-/* Class = "NSMenuItem"; title = "Textual Raw Binary"; ObjectID = "OW9-tD-KBp"; */
-"OW9-tD-KBp.title" = "Binärdaten als Text";
+/* Class = "NSMenuItem"; title = "Textual Raw Binary for BASIC"; ObjectID = "Otx-WD-4NR"; */
+"Otx-WD-4NR.title" = "Binärdaten als Basic-Text";
 
 /* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "OwM-mh-QMV"; */
 "OwM-mh-QMV.title" = "Find Previous";
@@ -519,6 +525,12 @@
 
 /* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "vNY-rz-j42"; */
 "vNY-rz-j42.title" = "Clear Menu";
+
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Generates a textual version of the raw binary.\nIt is useful for including the binary result of another program into some assembly or GPL source code.   Format example:        data >4861, >636b, >4d61, >6320        data >7761, >7320, >6865, >7265"; ObjectID = "VRh-AH-e0c"; */
+"VRh-AH-e0c.ibShadowedToolTip" = "Erzeugt eine Textversion der Roh-Daten.\nEs ist nützlich, um das binäre Ergebnis eines anderen Programms in ein Assembler- oder GPL-Quellcode einzubinden.   Formatbeispiel:        data >4861, >636b, >4d61, >6320        data >7761, >7320, >6865, >7265";
+
+/* Class = "NSMenuItem"; title = "Textual Raw Binary for (GPL)Assembler"; ObjectID = "VRh-AH-e0c"; */
+"VRh-AH-e0c.title" = "Binärdaten als Assembler-Text";
 
 /* Class = "NSMenu"; title = "Ligatures"; ObjectID = "w0m-vy-SC9"; */
 "w0m-vy-SC9.title" = "Ligatures";

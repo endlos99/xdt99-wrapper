@@ -1,6 +1,9 @@
 /* Informative text for imported binary Basic files to store them into a new file. */
 "Binary file imported. You will have to save the source code within a new file." = "Binärdatei importiert. Sie müssen den Quellcode in einer neuen Datei speichern.";
 
+/* Description for the error if the Basic file cannot be opened. */
+"Can not open Basic file!" = "Basic-Datei kann nicht geöffnet werden!";
+
 /* Error converting a Hex number from a String. */
 "Couldn’t convert to a hexadecimal value." = "Die Konvertierung in einen hexadezimalen Wert war nicht möglich.";
 

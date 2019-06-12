@@ -184,7 +184,7 @@
 
 - (BOOL)shouldUseCartName
 {
-    return (6 == _outputFormatPopupButtonIndex);
+    return (8 == _outputFormatPopupButtonIndex);
 }
 
 
@@ -276,9 +276,11 @@
             [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"]];
             break;
         case 5:
+        case 6:
+        case 7:
             [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"dat"]];
             break;
-        case 6:
+        case 8:
             [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"card"]];
             [self setBaseAddress:0x6000];
             break;
@@ -356,9 +358,15 @@
             xdtTargetType = XDTAs99TargetTypeRawBinary;
             break;
         case 5:
-            xdtTargetType = XDTAs99TargetTypeTextBinary;
+            xdtTargetType = XDTAs99TargetTypeTextBinaryAsm;
             break;
         case 6:
+            xdtTargetType = XDTAs99TargetTypeTextBinaryBas;
+            break;
+        case 7:
+            xdtTargetType = XDTAs99TargetTypeTextBinaryC;
+            break;
+        case 8:
             xdtTargetType = XDTAs99TargetTypeMESSCartridge;
             break;
         /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
@@ -405,6 +413,8 @@
 - (BOOL)exportBinaries:(XDTAs99TargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error
 {
     BOOL retVal = YES;
+
+    XDTGenerateTextMode mode = 0;
 
     switch (xdtTargetType) {
         case XDTAs99TargetTypeProgramImage: {
@@ -453,11 +463,23 @@
             }
             break;
         }
-        case XDTAs99TargetTypeTextBinary: {
+        case XDTAs99TargetTypeTextBinaryC:
+            if (0 == mode) {
+                mode = XDTGenerateTextModeOutputC;
+            }
+        case XDTAs99TargetTypeTextBinaryBas:
+            if (0 == mode) {
+                mode = XDTGenerateTextModeOutputBasic;
+            }
+        case XDTAs99TargetTypeTextBinaryAsm: {
+            if (0 == mode) {
+                mode = XDTGenerateTextModeOutputAssembler;
+            }
+
             NSError *tempError = nil;
             // TODO: extend GUI for new configuration options
             NSString *fileContent = [_assemblingResult generateTextAt:_baseAddress
-                                                             withMode:XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord
+                                                             withMode:mode + XDTGenerateTextModeOptionWord
                                                                 error:&tempError];
             if (nil == tempError && nil != fileContent && [fileContent length] > 0) {
                 NSURL *newOutpuFileURL = [NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]];
