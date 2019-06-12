@@ -3,7 +3,7 @@
 //  SimpleXDT99IDE
 //
 //  Created by Henrik Wedekind on 16.12.16.
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -44,14 +44,14 @@
 @property (assign, nonatomic) BOOL shouldShowSymbolsInListing;
 @property (assign, nonatomic) BOOL shouldShowSymbolsAsEqus;
 
-@property (retain) XDTGPLObjcode *assemblingResult;
+@property (retain) XDTGa99Objcode *assemblingResult;
 @property (readonly) NSString *listOutput;
 
-@property (readonly) XDTGPLAssemblerTargetType targetType;
-@property (readonly) XDTGPLAssemblerSyntaxType syntaxType;
+@property (readonly) XDTGa99TargetType targetType;
+@property (readonly) XDTGa99SyntaxType syntaxType;
 
-- (BOOL)assembleCode:(XDTGPLAssemblerTargetType)xdtTargetType error:(NSError **)error;
-- (BOOL)exportBinaries:(XDTGPLAssemblerTargetType)xdtTargetType error:(NSError **)error;
+- (BOOL)assembleCode:(XDTGa99TargetType)xdtTargetType error:(NSError **)error;
+- (BOOL)exportBinaries:(XDTGa99TargetType)xdtTargetType error:(NSError **)error;
 
 @end
 
@@ -275,7 +275,7 @@
 {
     NSError *error = nil;
 
-    XDTGPLAssemblerTargetType xdtTargetType = [self targetType];
+    XDTGa99TargetType xdtTargetType = [self targetType];
     if (![self assembleCode:xdtTargetType error:&error]) {
         if (nil != error) {
             if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
@@ -291,7 +291,7 @@
 {
     NSError *error = nil;
 
-    XDTGPLAssemblerTargetType xdtTargetType = [self targetType];
+    XDTGa99TargetType xdtTargetType = [self targetType];
     if (![self assembleCode:xdtTargetType error:&error] || nil != error ||
         ![self exportBinaries:xdtTargetType error:&error] || nil != error) {
         if (nil != error) {
@@ -313,18 +313,18 @@
 }
 
 
-- (XDTGPLAssemblerTargetType)targetType
+- (XDTGa99TargetType)targetType
 {
-    XDTGPLAssemblerTargetType xdtTargetType = XDTGPLAssemblerTargetTypePlainByteCode;
+    XDTGa99TargetType xdtTargetType = XDTGa99TargetTypePlainByteCode;
     switch (_outputFormatPopupButtonIndex) {
         case 0:
-            xdtTargetType = XDTGPLAssemblerTargetTypePlainByteCode;
+            xdtTargetType = XDTGa99TargetTypePlainByteCode;
             break;
         case 1:
-            xdtTargetType = XDTGPLAssemblerTargetTypeHeaderedByteCode;
+            xdtTargetType = XDTGa99TargetTypeHeaderedByteCode;
             break;
         case 2:
-            xdtTargetType = XDTGPLAssemblerTargetTypeMESSCartridge;
+            xdtTargetType = XDTGa99TargetTypeMESSCartridge;
             break;
 
         default:
@@ -340,18 +340,18 @@
 }
 
 
-- (XDTGPLAssemblerTargetType)syntaxType
+- (XDTGa99SyntaxType)syntaxType
 {
-    XDTGPLAssemblerTargetType xdtSyntaxType = XDTGPLAssemblerSyntaxTypeNativeXDT99;
+    XDTGa99SyntaxType xdtSyntaxType = XDTGa99SyntaxTypeNativeXDT99;
     switch (_syntaxFormatPopupButtonIndex) {
         case 0:
-            xdtSyntaxType = XDTGPLAssemblerSyntaxTypeNativeXDT99;
+            xdtSyntaxType = XDTGa99SyntaxTypeNativeXDT99;
             break;
         case 1:
-            xdtSyntaxType = XDTGPLAssemblerSyntaxTypeRAGGPL;
+            xdtSyntaxType = XDTGa99SyntaxTypeRAGGPL;
             break;
         case 2:
-            xdtSyntaxType = XDTGPLAssemblerSyntaxTypeTIImageTool;
+            xdtSyntaxType = XDTGa99SyntaxTypeTIImageTool;
             break;
 
         default:
@@ -361,20 +361,20 @@
 }
 
 
-- (BOOL)assembleCode:(XDTGPLAssemblerTargetType)xdtTargetType error:(NSError **)error
+- (BOOL)assembleCode:(XDTGa99TargetType)xdtTargetType error:(NSError **)error
 {
     if (nil == [self fileURL]) {    // there must be a file which can be assembled
         return NO;
     }
     NSDictionary *options = @{
-                              XDTGPLAssemblerOptionAORG: [NSNumber numberWithUnsignedInteger:[self aorgAddress]],
-                              XDTGPLAssemblerOptionGROM: [NSNumber numberWithUnsignedInteger:[self gromAddress]],
-                              XDTGPLAssemblerOptionStyle: [NSNumber numberWithUnsignedInteger:[self syntaxType]],
-                              XDTGPLAssemblerOptionTarget: [NSNumber numberWithUnsignedInteger:[self targetType]]
+                              XDTGa99OptionAORG: [NSNumber numberWithUnsignedInteger:[self aorgAddress]],
+                              XDTGa99OptionGROM: [NSNumber numberWithUnsignedInteger:[self gromAddress]],
+                              XDTGa99OptionStyle: [NSNumber numberWithUnsignedInteger:[self syntaxType]],
+                              XDTGa99OptionTarget: [NSNumber numberWithUnsignedInteger:[self targetType]]
                               };
     XDTGPLAssembler *assembler = [XDTGPLAssembler gplAssemblerWithOptions:options includeURL:[self fileURL]];
 
-    XDTGPLObjcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
+    XDTGa99Objcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
     if (nil != error && nil != *error) {
         if (nil == [*error localizedFailureReason]) {
             [self setErrorMessage:[NSString stringWithFormat:@"%@:\n", [*error localizedDescription]]];
@@ -392,12 +392,12 @@
 }
 
 
-- (BOOL)exportBinaries:(XDTGPLAssemblerTargetType)xdtTargetType error:(NSError **)error
+- (BOOL)exportBinaries:(XDTGa99TargetType)xdtTargetType error:(NSError **)error
 {
     BOOL retVal = YES;
 
     switch (xdtTargetType) {
-        case XDTGPLAssemblerTargetTypePlainByteCode:    /* byte code */
+        case XDTGa99TargetTypePlainByteCode:    /* byte code */
             for (NSArray<id> *element in [_assemblingResult generateByteCode:error]) {
                 if ((nil != error && nil != *error) || nil == element) {
                     retVal = NO;
@@ -423,7 +423,7 @@
             }
             break;
 
-        case XDTGPLAssemblerTargetTypeHeaderedByteCode: { /* image */
+        case XDTGa99TargetTypeHeaderedByteCode: { /* image */
             if (nil == _cartridgeName || [_cartridgeName length] == 0) {
                 NSDictionary *errorDict = @{
                                             NSLocalizedDescriptionKey: NSLocalizedString(@"Missing Option!", @"Error description of a missing option."),
@@ -447,7 +447,7 @@
             break;
         }
 
-        case XDTGPLAssemblerTargetTypeMESSCartridge: {
+        case XDTGa99TargetTypeMESSCartridge: {
             if (nil == _cartridgeName || [_cartridgeName length] == 0) {
                 NSDictionary *errorDict = @{
                                             NSLocalizedDescriptionKey: NSLocalizedString(@"Missing Option!", @"Error description of a missing option."),

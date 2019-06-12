@@ -53,9 +53,6 @@
                                                 <string key="toolTip">Generates a textual version of the raw binary.
 It is useful for including the binary result of another program into some assembly or GPL source source.</string>
                                             </menuItem>
-                                            <menuItem title="Jump Start Disk Image" toolTip="Create disk image for xdt99 Jumpstart cartridge." id="bvw-iC-5Rb">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
                                             <menuItem title="MESS Cartridge" toolTip="Create an RPK cartridge file that can be used with the MESS emulator." id="qPn-hk-3yJ">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>

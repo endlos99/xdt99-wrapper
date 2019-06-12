@@ -25,12 +25,6 @@
 /* Class = "NSButtonCell"; title = "use EQU"; ObjectID = "Bpa-JE-c5v"; */
 "Bpa-JE-c5v.title" = "Nutze EQU";
 
-/* Class = "NSMenuItem"; ibShadowedToolTip = "Create disk image for xdt99 Jumpstart cartridge."; ObjectID = "bvw-iC-5Rb"; */
-"bvw-iC-5Rb.ibShadowedToolTip" = "Disk-Image für xdt99 Jumpstart-Modul erstellen.";
-
-/* Class = "NSMenuItem"; title = "Jump Start Disk Image"; ObjectID = "bvw-iC-5Rb"; */
-"bvw-iC-5Rb.title" = "Jump Start Disk Image";
-
 /* Class = "NSTextFieldCell"; placeholderString = "0xA000"; ObjectID = "byJ-Md-JrR"; */
 "byJ-Md-JrR.placeholderString" = "0xA000";
 
@@ -88,7 +82,7 @@
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Compiled code will be stored in an compressed format using DIS/FIX 80 format, which is used in Editor/Assembler Option 3"; ObjectID = "sFv-Rw-HR6"; */
 "sFv-Rw-HR6.ibShadowedToolTip" = "Der kompilierte Code wird in einem komprimierten Format im DIS/FIX 80-Format gespeichert, das in Editor/Assembler Option 3 verwendet wird.";
 
-/* Class = "NSMenuItem"; title = "Compressed Object Code"; ObjectID = "sFv-Rw-HR6"; */
+/* Class = "NSMenuItem"; title = "Object Code (Compressed)"; ObjectID = "sFv-Rw-HR6"; */
 "sFv-Rw-HR6.title" = "Komprimierter Objektcode";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "tMO-q8-0wI"; */

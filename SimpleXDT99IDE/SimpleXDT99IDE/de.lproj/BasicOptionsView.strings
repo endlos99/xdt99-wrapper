@@ -4,8 +4,8 @@
 /* Class = "NSButtonCell"; title = "Tokenize"; ObjectID = "8EB-Qw-hak"; */
 "8EB-Qw-hak.title" = "Tokenisieren";
 
-/* Class = "NSButtonCell"; title = "Join"; ObjectID = "9Vr-li-5ia"; */
-"9Vr-li-5ia.title" = "Verbinden";
+/* Class = "NSButtonCell"; title = "Join Lines"; ObjectID = "9Vr-li-5ia"; */
+"9Vr-li-5ia.title" = "Zeilen Verbinden";
 
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "BXd-TN-h1e"; */
 "BXd-TN-h1e.title" = "Prüfen";

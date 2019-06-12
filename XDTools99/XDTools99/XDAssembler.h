@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 09.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -27,8 +27,8 @@
 
 #import <XDTools99/XDTObject.h>
 
-#import <XDTools99/XDAssembler/XDTSymbols.h>
-#import <XDTools99/XDAssembler/XDTObjcode.h>
+#import <XDTools99/XDAssembler/XDTAs99Symbols.h>
+#import <XDTools99/XDAssembler/XDTAs99Objcode.h>
 #import <XDTools99/XDAssembler/XDTAssembler.h>
 
 #import <XDTools99/XDTZipFile.h>

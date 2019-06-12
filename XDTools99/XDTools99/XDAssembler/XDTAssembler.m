@@ -1,11 +1,11 @@
 //
 //  XDTAssembler.m
-//  TIDisk-Manager
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 01.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,8 @@
 #include <Python/Python.h>
 
 #import "NSErrorPythonAdditions.h"
-#include "XDTObjcode.h"
+#import "NSArrayPythonAdditions.h"
+#import "XDTAs99Objcode.h"
 
 
 #define XDTModuleNameAssembler "xas99"
@@ -35,7 +36,8 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
-@interface XDTObjcode () {
+
+@interface XDTAs99Objcode () {
     PyObject *objectcodePythonClass;
 }
 
@@ -51,11 +53,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithPythonInstance:(PyObject *)object;
 
+- (XDTAs99Objcode *)assembleSourceFile:(NSString *)basename pathName:(NSString *)dirname error:(NSError **)error;
+
 @end
+
 NS_ASSUME_NONNULL_END
 
 
 NS_ASSUME_NONNULL_BEGIN
+
+XDTAs99OptionKey const XDTAs99OptionRegister = @"XDTAs99OptionRegister";
+XDTAs99OptionKey const XDTAs99OptionStrict = @"XDTAs99OptionStrict";
+XDTAs99OptionKey const XDTAs99OptionTarget = @"XDTAs99OptionTarget";
+XDTAs99OptionKey const XDTAs99OptionWarnings = @"XDTAs99OptionWarnings";
+
+
 @interface XDTAssembler () {
     const PyObject *assemblerPythonModule;
     PyObject *assemblerPythonClass;
@@ -64,12 +76,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property NSString *version;
 @property BOOL beStrict;
 @property BOOL useRegisterSymbols;
-@property XDTAssemblerTargetType targetType;
+@property BOOL outputWarnings;
+@property XDTAs99TargetType targetType;
 @property (readonly, nullable) const char *targetTypeAsCString;
 
-- (nullable instancetype)initWithOptions:(NSDictionary *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)url;
+- (nullable instancetype)initWithOptions:(NSDictionary<XDTAs99OptionKey, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)url;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 
@@ -124,7 +138,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark Initializers
 
 /* This class method initialize this singleton. It takes care of all python module related things. */
-+ (instancetype)assemblerWithOptions:(NSDictionary<NSString *, NSObject *> *)options includeURL:(NSURL *)url
++ (instancetype)assemblerWithOptions:(NSDictionary<XDTAs99OptionKey, id> *)options includeURL:(NSURL *)url
 {
     assert(NULL != options);
     assert(nil != url);
@@ -159,7 +173,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (instancetype)initWithOptions:(NSDictionary<NSString *, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls
+- (instancetype)initWithOptions:(NSDictionary<XDTAs99OptionKey, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls
 {
     assert(NULL != pModule);
     assert(nil != urls);
@@ -192,7 +206,7 @@ NS_ASSUME_NONNULL_END
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameAssembler);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
-        NSLog(@"%s ERROR: Cannot find function \"%s\" in module %s", __FUNCTION__, XDTClassNameAssembler, PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot find class \"%s\" in module %s", __FUNCTION__, XDTClassNameAssembler, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -205,9 +219,10 @@ NS_ASSUME_NONNULL_END
     }
 
     /* reading option from dictionary */
-    _targetType = [[options valueForKey:XDTAssemblerOptionTarget] unsignedIntegerValue];
-    _beStrict = [[options valueForKey:XDTAssemblerOptionStrict] boolValue];
-    _useRegisterSymbols = [[options valueForKey:XDTAssemblerOptionRegister] boolValue];
+    _targetType = [[options valueForKey:XDTAs99OptionTarget] unsignedIntegerValue];
+    _beStrict = [[options valueForKey:XDTAs99OptionStrict] boolValue];
+    _useRegisterSymbols = [[options valueForKey:XDTAs99OptionRegister] boolValue];
+    _outputWarnings = [[options valueForKey:XDTAs99OptionWarnings] boolValue];
     _version = [NSString stringWithCString:PyString_AsString(pVar) encoding:NSUTF8StringEncoding];
     Py_XDECREF(pVar);
 
@@ -215,6 +230,7 @@ NS_ASSUME_NONNULL_END
     PyObject *target = PyString_FromString([self targetTypeAsCString]);
     PyObject *addRegisters = PyBool_FromLong(_useRegisterSymbols);
     PyObject *strictMode = PyBool_FromLong(_beStrict);
+    PyObject *outputWarnings = PyBool_FromLong(_outputWarnings);
     PyObject *includePath = PyList_New(0);
     for (NSURL *url in urls) {
         PyList_Append(includePath, PyString_FromString([[url path] UTF8String]));
@@ -224,17 +240,18 @@ NS_ASSUME_NONNULL_END
     /* creating assembler object:
         asm = Assembler(target=target,
                         addRegisters=opts.optr,
-                        strictMode=opts.strict,
+                        defs=opts.defs or [],
                         includePath=inclpath,
-                        defs=opts.defs or [])
+                        strictMode=opts.strict,
+                        warnings=outputWarnings)
      */
-    PyObject *pArgs = PyTuple_Pack(5, target, addRegisters, strictMode, includePath, defs);
+    PyObject *pArgs = PyTuple_Pack(6, target, addRegisters, defs, includePath, strictMode, outputWarnings);
     PyObject *assembler = PyObject_CallObject(pFunc, pArgs);
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
     if (NULL == assembler) {
-        NSLog(@"%s ERROR: calling constructor %s(\"%s\", %@, %@, %@, []) failed!", __FUNCTION__, XDTClassNameAssembler,
-              [self targetTypeAsCString], _useRegisterSymbols? @"true" : @"false", _beStrict? @"true" : @"false", urls);
+        NSLog(@"%s ERROR: calling constructor %s(\"%s\", %@, [], %@, %@, %@) failed!", __FUNCTION__, XDTClassNameAssembler,
+              [self targetTypeAsCString], _useRegisterSymbols? @"true" : @"false", urls, _beStrict? @"true" : @"false", _outputWarnings? @"true" : @"false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
@@ -274,20 +291,20 @@ NS_ASSUME_NONNULL_END
 - (const char *)targetTypeAsCString
 {
     switch (_targetType) {
-        case XDTAssemblerTargetTypeRawBinary:
+        case XDTAs99TargetTypeRawBinary:
             return "bin";
-        case XDTAssemblerTargetTypeTextBinary:
+        case XDTAs99TargetTypeTextBinaryC:
+        case XDTAs99TargetTypeTextBinaryBas:
+        case XDTAs99TargetTypeTextBinaryAsm:
             return "text";
-        case XDTAssemblerTargetTypeObjectCode:
+        case XDTAs99TargetTypeObjectCode:
             return "obj";
-        case XDTAssemblerTargetTypeProgramImage:
+        case XDTAs99TargetTypeProgramImage:
             return "image";
-        case XDTAssemblerTargetTypeEmbededXBasic:
+        case XDTAs99TargetTypeEmbededXBasic:
             return "xb";
-        case XDTAssemblerTargetTypeMESSCartridge:
+        case XDTAs99TargetTypeMESSCartridge:
             return "cart";
-        case XDTAssemblerTargetTypeJumpstart:
-            return "js";
 
         default:
             return NULL;
@@ -298,29 +315,26 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Parsing Methods
 
 
-- (XDTObjcode *)assembleSourceFile:(NSURL *)srcname error:(NSError **)error
+- (XDTAs99Objcode *)assembleSourceFile:(NSURL *)srcFile error:(NSError **)error
 {
-    return [self assembleSourceFile:srcname pathName:[NSURL fileURLWithPath:@"." isDirectory:YES] error:error];
+    return [self assembleSourceFile:[srcFile lastPathComponent] pathName:[[srcFile URLByDeletingLastPathComponent] path] error:error];
 }
 
 
-- (XDTObjcode *)assembleSourceFile:(NSURL *)srcname pathName:(NSURL *)pathName error:(NSError **)error
+- (XDTAs99Objcode *)assembleSourceFile:(NSString *)baseName pathName:(NSString *)dirName error:(NSError **)error
 {
-    NSString *dirname = [[srcname URLByDeletingLastPathComponent] path];
-    NSString *basename = [srcname lastPathComponent];
-
     /* calling assembler:
-        code, errors = asm.assemble(dirname, basename)
+        code, errors, warnings = asm.assemble(dirname, basename)
      */
     PyObject *methodName = PyString_FromString("assemble");
-    PyObject *pDirName = PyString_FromString([dirname UTF8String]);
-    PyObject *pbaseName = PyString_FromString([basename UTF8String]);
+    PyObject *pDirName = PyString_FromString([dirName UTF8String]);
+    PyObject *pbaseName = PyString_FromString([baseName UTF8String]);
     PyObject *pValueTupel = PyObject_CallMethodObjArgs(assemblerPythonClass, methodName, pDirName, pbaseName, NULL);
     Py_XDECREF(pbaseName);
     Py_XDECREF(pDirName);
     Py_XDECREF(methodName);
     if (NULL == pValueTupel) {
-        NSLog(@"%s ERROR: assemble(\"%@\", \"%@\") returns NULL!", __FUNCTION__, dirname, basename);
+        NSLog(@"%s ERROR: assemble(\"%@\", \"%@\") returns NULL!", __FUNCTION__, dirName, baseName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -333,7 +347,6 @@ NS_ASSUME_NONNULL_END
 
     PyObject *errorList = PyTuple_GetItem(pValueTupel, 1);
     if (NULL != errorList) {
-        /* TODO: Errors should be shown to the user! */
         const Py_ssize_t errCount = PyList_Size(errorList);
         if (0 < errCount) {
             PyObject *unicodeErrorString = PyUnicode_Join(PyString_FromString("\n"), errorList);
@@ -343,20 +356,31 @@ NS_ASSUME_NONNULL_END
             Py_XDECREF(completeErrorString);
             if (nil != error) {
                 NSDictionary *errorDict = @{
-                                            NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Error occured while assembling '%@'", basename],
+                                            NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Error occured while assembling '%@'", baseName],
                                             NSLocalizedFailureReasonErrorKey: errorString,
                                             NSLocalizedRecoverySuggestionErrorKey: @"Please check all assembler options and try again."
                                             };
                 *error = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolLoggedError userInfo:errorDict];
             }
-            NSLog(@"Error occured while assembling '%@':\n%@", basename, errorString);
+            NSLog(@"Error occured while assembling '%@':\n%@", baseName, errorString);
         }
     }
 
-    XDTObjcode *retVal = nil;
+    [self willChangeValueForKey:@"warnings"];
+    _warnings = [NSArray array];
+    PyObject *warningList = PyTuple_GetItem(pValueTupel, 2);
+    if (NULL != warningList) {
+        const Py_ssize_t warnCount = PyList_Size(warningList);
+        if (0 < warnCount) {
+            _warnings = [NSArray arrayWithPyListOfString:warningList];
+        }
+    }
+    [self didChangeValueForKey:@"warnings"];
+
+    XDTAs99Objcode *retVal = nil;
     PyObject *objectCodeObject = PyTuple_GetItem(pValueTupel, 0);
     if (NULL != objectCodeObject) {
-        retVal = [XDTObjcode objectcodeWithPythonInstance:objectCodeObject];
+        retVal = [XDTAs99Objcode objectcodeWithPythonInstance:objectCodeObject];
     }
 
     Py_DECREF(pValueTupel);

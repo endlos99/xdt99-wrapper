@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 12.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -25,11 +25,7 @@
 #import "XDTObject.h"
 
 
-#define XDTBasicOptionJoinLines @"XDTBasicOptionJoinLines"
-#define XDTBasicOptionProtectFile @"XDTBasicOptionProtectFile"
-#define XDTBasicOptionTarget @"XDTBasicOptionTarget"
-
-#define XDTBasicVersionRequired "1.5.0"
+#define XDTBasicVersionRequired "2.0.1"
 
 
 typedef NSUInteger XDTBasicTargetType;
@@ -41,6 +37,13 @@ NS_ENUM(XDTBasicTargetType) {
 
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef NSString * XDTBasicOptionKey NS_EXTENSIBLE_STRING_ENUM; /* Keys for use in the NSDictionry */
+
+FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionJoinLines;
+FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionProtectFile;
+FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionTarget;
+
 @interface XDTBasic : XDTObject
 
 @property (readonly) NSString *version;
@@ -57,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)checkRequiredModuleVersion;
 
-+ (nullable instancetype)basicWithOptions:(NSDictionary<NSString *, NSObject *> *)options;
++ (nullable instancetype)basicWithOptions:(NSDictionary<XDTBasicOptionKey, id> *)options;
 
 /* Program to source code conversion */
 - (BOOL)loadProgramData:(NSData *)data error:(NSError **)error; // load tokenized BASIC program in internal format
@@ -77,4 +80,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSString *)dumpTokenList:(NSError **)error;
 
 @end
+
 NS_ASSUME_NONNULL_END

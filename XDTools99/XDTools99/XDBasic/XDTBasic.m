@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 12.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -36,6 +36,12 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
+
+XDTBasicOptionKey const XDTBasicOptionJoinLines = @"XDTBasicOptionJoinLines";
+XDTBasicOptionKey const XDTBasicOptionProtectFile = @"XDTBasicOptionProtectFile";
+XDTBasicOptionKey const XDTBasicOptionTarget = @"XDTBasicOptionTarget";
+
+
 @interface XDTBasic () {
     const PyObject *basicPythonModule;
     PyObject *basicProgramPythonClass;
@@ -45,11 +51,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property NSString *version;
 
-- (nullable instancetype)initWithOptions:(NSDictionary<NSString *, id> *)options forModule:(PyObject *)pModule;
+- (nullable instancetype)initWithOptions:(NSDictionary<XDTBasicOptionKey, id> *)options forModule:(PyObject *)pModule;
 
 - (BOOL)loadData:(NSData *)data usingLongFormat:(BOOL)useLongFormat error:(NSError **)error;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 
@@ -104,7 +111,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark Initializers
 
 /* This class method initialize this singleton. It takes care of all python module related things. */
-+ (instancetype)basicWithOptions:(NSDictionary<NSString *, NSObject *> *)options
++ (instancetype)basicWithOptions:(NSDictionary<XDTBasicOptionKey, id> *)options
 {
     assert(NULL != options);
 
@@ -131,7 +138,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (instancetype)initWithOptions:(NSDictionary<NSString *, id> *)options forModule:(PyObject *)pModule
+- (instancetype)initWithOptions:(NSDictionary<XDTBasicOptionKey, id> *)options forModule:(PyObject *)pModule
 {
     assert(NULL != pModule);
 
@@ -163,7 +170,7 @@ NS_ASSUME_NONNULL_END
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameBasic);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
-        NSLog(@"%s ERROR: Cannot find function \"%s\" in module %s", __FUNCTION__, XDTClassNameBasic, PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot find class \"%s\" in module %s", __FUNCTION__, XDTClassNameBasic, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -245,7 +252,7 @@ NS_ASSUME_NONNULL_END
     PyObject *value = nil;
     while (PyDict_Next(linesObject, &i, &key, &value)) {
         long lineNumber = PyInt_AsLong(key);
-        [retVal setObject:[NSArray arrayWithPyListOfString:value] forKey:[NSNumber numberWithInteger:lineNumber]];
+        [retVal setObject:[NSArray arrayWithPyListOfData:value] forKey:[NSNumber numberWithInteger:lineNumber]];
     }
 
     Py_DECREF(linesObject);
@@ -357,13 +364,13 @@ NS_ASSUME_NONNULL_END
 - (NSString *)getSource:(NSError **)error
 {
     /* calling:
-     text = getSource()
+     text = get_source()
      */
-    PyObject *methodName = PyString_FromString("getSource");
+    PyObject *methodName = PyString_FromString("get_source");
     PyObject *pSourceCode = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == pSourceCode) {
-        NSLog(@"%s ERROR: getSource() returns NULL!", __FUNCTION__);
+        NSLog(@"%s ERROR: get_source() returns NULL!", __FUNCTION__);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -382,9 +389,9 @@ NS_ASSUME_NONNULL_END
 - (NSData *)getImageUsingLongFormat:(BOOL)useLongFormat error:(NSError **)error
 {
     /* calling:
-     data = getImage(long_=opts.long_, protected=opts.protect)
+     data = get_image(long_=opts.long_, protected=opts.protect)
      */
-    PyObject *methodName = PyString_FromString("getImage");
+    PyObject *methodName = PyString_FromString("get_image");
     PyObject *pLongOpt = PyBool_FromLong(useLongFormat);
     PyObject *pProtectOpt = PyBool_FromLong(_protect);
     PyObject *pProgramData = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pLongOpt, pProtectOpt, NULL);
@@ -392,7 +399,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pLongOpt);
     Py_XDECREF(methodName);
     if (NULL == pProgramData) {
-        NSLog(@"%s ERROR: getImage(%s, %s) returns NULL!", __FUNCTION__, useLongFormat? "true" : "false", _protect? "true" : "false");
+        NSLog(@"%s ERROR: get_image(%s, %s) returns NULL!", __FUNCTION__, useLongFormat? "true" : "false", _protect? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -437,13 +444,15 @@ NS_ASSUME_NONNULL_END
 
     if (_join) {
         /* calling static method join:
-         lines = BasicProgram.join(lines, maxLinoDelta=delta)
+         lines = BasicProgram.join(lines, min_lino_delta=1, max_lino_delta=delta)
          */
-        /* TODO: Make the line delta (here fixed to 10) configurable by UI */
+        /* TODO: Make the line delta (here fixed to the default value of 3) configurable by UI */
         PyObject *methodName = PyString_FromString("join");
-        PyObject *pLineDelta = PyInt_FromLong(10);
-        PyObject *joinedLines = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pLinesList, pLineDelta, NULL);
-        Py_XDECREF(pLineDelta);
+        PyObject *pMinLineDelta = PyInt_FromLong(1);
+        PyObject *pMaxLineDelta = PyInt_FromLong(3);
+        PyObject *joinedLines = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pLinesList, pMinLineDelta, pMaxLineDelta, NULL);
+        Py_XDECREF(pMaxLineDelta);
+        Py_XDECREF(pMinLineDelta);
         Py_XDECREF(methodName);
         if (NULL == joinedLines) {  /* if result is null, the line delta could be wrong configured. */
             NSLog(@"%s ERROR: join(%@, 10) returns NULL!", __FUNCTION__, lines);
@@ -520,13 +529,13 @@ NS_ASSUME_NONNULL_END
 - (NSString *)dumpTokenList:(NSError **)error
 {
     /* calling:
-     result = dumpTokens()
+     result = dump_tokens()
      */
-    PyObject *methodName = PyString_FromString("dumpTokens");
+    PyObject *methodName = PyString_FromString("dump_tokens");
     PyObject *pDumpString = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == pDumpString) {
-        NSLog(@"%s ERROR: dumpTokens() returns NULL!", __FUNCTION__);
+        NSLog(@"%s ERROR: dump_tokens() returns NULL!", __FUNCTION__);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {

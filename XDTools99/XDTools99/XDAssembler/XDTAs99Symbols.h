@@ -1,11 +1,11 @@
 //
-//  XDTSymbols.h
-//  SimpleXDT99
+//  XDTAs99Symbols.h
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 04.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,8 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
-@interface XDTSymbols : XDTObject
+
+@interface XDTAs99Symbols : XDTObject
 
 + (nullable instancetype)symbolsWithPythonInstance:(void *)object;
 
@@ -53,4 +54,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSUInteger)getLocal:(NSString *)name position:(NSUInteger)lpos distance:(NSUInteger)distance;
 
 @end
+
 NS_ASSUME_NONNULL_END

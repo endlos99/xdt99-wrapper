@@ -15,13 +15,13 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="gaf-rV-gFV" userLabel="xas99 Option View">
-            <rect key="frame" x="0.0" y="0.0" width="333" height="56"/>
+            <rect key="frame" x="0.0" y="0.0" width="346" height="56"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
             <subviews>
                 <box title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="pkM-eh-HmJ">
-                    <rect key="frame" x="-3" y="-4" width="339" height="62"/>
+                    <rect key="frame" x="-3" y="-4" width="352" height="62"/>
                     <view key="contentView" id="QhC-TQ-1UD">
-                        <rect key="frame" x="3" y="3" width="333" height="56"/>
+                        <rect key="frame" x="3" y="3" width="346" height="56"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fNe-C0-6QO">
@@ -33,7 +33,7 @@
                                 </textFieldCell>
                             </textField>
                             <popUpButton toolTip="Select the output file type." horizontalHuggingPriority="25" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="tTq-zh-1be">
-                                <rect key="frame" x="56" y="27" width="117" height="22"/>
+                                <rect key="frame" x="56" y="27" width="116" height="22"/>
                                 <popUpButtonCell key="cell" type="push" title="Internal Format" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="GZZ-OM-S5w" id="AO5-bA-mlm">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
@@ -62,7 +62,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField toolTip="Type in the file name of the file that will be generated." horizontalHuggingPriority="25" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="751" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qyd-VM-MZr">
-                                <rect key="frame" x="59" y="8" width="75" height="19"/>
+                                <rect key="frame" x="59" y="8" width="74" height="19"/>
                                 <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="Gah-f2-utP">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -73,7 +73,7 @@
                                 </connections>
                             </textField>
                             <button toolTip="Press here for selecting the output path." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WhB-nC-1BJ">
-                                <rect key="frame" x="137" y="3" width="38" height="27"/>
+                                <rect key="frame" x="136" y="3" width="38" height="27"/>
                                 <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSPathTemplate" imagePosition="overlaps" alignment="center" controlSize="small" scrollable="YES" lineBreakMode="clipping" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EPR-XZ-ecb">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
@@ -83,13 +83,13 @@
                                 </connections>
                             </button>
                             <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Hyy-we-pwB">
-                                <rect key="frame" x="176" y="0.0" width="5" height="56"/>
+                                <rect key="frame" x="175" y="0.0" width="5" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="1" id="rk3-MP-pxU"/>
                                 </constraints>
                             </box>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="txT-rm-ZgA">
-                                <rect key="frame" x="184" y="30" width="61" height="18"/>
+                                <rect key="frame" x="183" y="30" width="75" height="18"/>
                                 <string key="toolTip">The protection option will add list protection to the generated program. Programs which are protected cannot be listed or edited by the BASIC interpreter.</string>
                                 <buttonCell key="cell" type="check" title="Protect" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="1zC-1e-BdY">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -100,13 +100,13 @@
                                 </connections>
                             </button>
                             <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="JRd-YC-rNZ">
-                                <rect key="frame" x="249" y="0.0" width="5" height="56"/>
+                                <rect key="frame" x="262" y="0.0" width="5" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="1" id="bNM-G4-xba"/>
                                 </constraints>
                             </box>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KH8-xN-oA8">
-                                <rect key="frame" x="255" y="2" width="73" height="27"/>
+                                <rect key="frame" x="268" y="2" width="73" height="27"/>
                                 <buttonCell key="cell" type="push" title="Tokenize" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8EB-Qw-hak">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
@@ -116,8 +116,8 @@
                                 </connections>
                             </button>
                             <button toolTip="May be used to automatically join wrapped lines." translatesAutoresizingMaskIntoConstraints="NO" id="IJj-RL-gha">
-                                <rect key="frame" x="184" y="8" width="61" height="18"/>
-                                <buttonCell key="cell" type="check" title="Join" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="9Vr-li-5ia">
+                                <rect key="frame" x="183" y="8" width="75" height="18"/>
+                                <buttonCell key="cell" type="check" title="Join Lines" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="9Vr-li-5ia">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
@@ -126,7 +126,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NpQ-W3-eCy">
-                                <rect key="frame" x="255" y="24" width="73" height="27"/>
+                                <rect key="frame" x="268" y="24" width="73" height="27"/>
                                 <buttonCell key="cell" type="push" title="Check" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BXd-TN-h1e">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>

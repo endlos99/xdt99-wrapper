@@ -10,6 +10,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>a99</string>
+				<string>asm</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>

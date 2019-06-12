@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 07.12.16.
 //
 //  SimpleXDT99IDE a simple IDE based on xdt99 that shows how to use the XDTools99.framework
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -48,12 +48,12 @@
 @property (assign, nonatomic) BOOL shouldShowSymbolsInListing;
 @property (assign, nonatomic) BOOL shouldShowSymbolsAsEqus;
 
-@property (retain) XDTObjcode *assemblingResult;
+@property (retain) XDTAs99Objcode *assemblingResult;
 @property (readonly) NSString *listOutput;
 
-@property (readonly) XDTAssemblerTargetType targetType;
-- (BOOL)assembleCode:(XDTAssemblerTargetType)xdtTargetType error:(NSError **)error;
-- (BOOL)exportBinaries:(XDTAssemblerTargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error;
+@property (readonly) XDTAs99TargetType targetType;
+- (BOOL)assembleCode:(XDTAs99TargetType)xdtTargetType error:(NSError **)error;
+- (BOOL)exportBinaries:(XDTAs99TargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error;
 
 @end
 
@@ -276,7 +276,7 @@
             [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"]];
             break;
         case 5:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"js"]];
+            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"dat"]];
             break;
         case 6:
             [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"card"]];
@@ -299,7 +299,7 @@
 {
     NSError *error = nil;
 
-    XDTAssemblerTargetType xdtTargetType = [self targetType];
+    XDTAs99TargetType xdtTargetType = [self targetType];
     if (![self assembleCode:xdtTargetType error:&error]) {
         if (nil != error) {
             if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
@@ -316,7 +316,7 @@
     NSError *error = nil;
 
     BOOL shouldCompressObjectCode = 1 == _outputFormatPopupButtonIndex;
-    XDTAssemblerTargetType xdtTargetType = [self targetType];
+    XDTAs99TargetType xdtTargetType = [self targetType];
     if (![self assembleCode:xdtTargetType error:&error] || nil != error ||
         ![self exportBinaries:xdtTargetType compressObjectCode:shouldCompressObjectCode error:&error] || nil != error) {
         if (nil != error) {
@@ -338,31 +338,28 @@
 }
 
 
-- (XDTAssemblerTargetType)targetType
+- (XDTAs99TargetType)targetType
 {
-    XDTAssemblerTargetType xdtTargetType = XDTAssemblerTargetTypeObjectCode;
+    XDTAs99TargetType xdtTargetType = XDTAs99TargetTypeObjectCode;
     switch (_outputFormatPopupButtonIndex) {
         case 0:
-            xdtTargetType = XDTAssemblerTargetTypeProgramImage;
+            xdtTargetType = XDTAs99TargetTypeProgramImage;
             break;
         case 1:
         case 2:
-            xdtTargetType = XDTAssemblerTargetTypeObjectCode;
+            xdtTargetType = XDTAs99TargetTypeObjectCode;
             break;
         case 3:
-            xdtTargetType = XDTAssemblerTargetTypeEmbededXBasic;
+            xdtTargetType = XDTAs99TargetTypeEmbededXBasic;
             break;
         case 4:
-            xdtTargetType = XDTAssemblerTargetTypeRawBinary;
+            xdtTargetType = XDTAs99TargetTypeRawBinary;
             break;
         case 5:
-            xdtTargetType = XDTAssemblerTargetTypeTextBinary;
+            xdtTargetType = XDTAs99TargetTypeTextBinary;
             break;
         case 6:
-            xdtTargetType = XDTAssemblerTargetTypeJumpstart;
-            break;
-        case 7:
-            xdtTargetType = XDTAssemblerTargetTypeMESSCartridge;
+            xdtTargetType = XDTAs99TargetTypeMESSCartridge;
             break;
         /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
          This feature is open to implement.
@@ -375,19 +372,19 @@
 }
 
 
-- (BOOL)assembleCode:(XDTAssemblerTargetType)xdtTargetType error:(NSError **)error
+- (BOOL)assembleCode:(XDTAs99TargetType)xdtTargetType error:(NSError **)error
 {
     if (nil == [self fileURL]) {    // there must be a file which can be assembled
         return NO;
     }
     NSDictionary *options = @{
-                              XDTAssemblerOptionRegister: [NSNumber numberWithBool:[self shouldUseRegisterSymbols]],
-                              XDTAssemblerOptionStrict: [NSNumber numberWithBool:[self shouldBeStrict]],
-                              XDTAssemblerOptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType]
+                              XDTAs99OptionRegister: [NSNumber numberWithBool:[self shouldUseRegisterSymbols]],
+                              XDTAs99OptionStrict: [NSNumber numberWithBool:[self shouldBeStrict]],
+                              XDTAs99OptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType]
                               };
     XDTAssembler *assembler = [XDTAssembler assemblerWithOptions:options includeURL:[self fileURL]];
 
-    XDTObjcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
+    XDTAs99Objcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
     if (nil != error && nil != *error) {
         if (nil == [*error localizedFailureReason]) {
             [self setErrorMessage:[NSString stringWithFormat:@"%@:\n", [*error localizedDescription]]];
@@ -405,12 +402,12 @@
 }
 
 
-- (BOOL)exportBinaries:(XDTAssemblerTargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error
+- (BOOL)exportBinaries:(XDTAs99TargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error
 {
     BOOL retVal = YES;
 
     switch (xdtTargetType) {
-        case XDTAssemblerTargetTypeProgramImage: {
+        case XDTAs99TargetTypeProgramImage: {
             NSString *newOutpuFileName = [self outputFileName];
             for (NSData *data in [_assemblingResult generateImageAt:_baseAddress error:error]) {
                 if ((nil != error && nil != *error) || nil == data) {
@@ -430,7 +427,7 @@
             }
             break;
         }
-        case XDTAssemblerTargetTypeRawBinary: {
+        case XDTAs99TargetTypeRawBinary: {
             for (NSArray<id> *element in [_assemblingResult generateRawBinaryAt:_baseAddress error:error]) {
                 if ((nil != error && nil != *error) || nil == element) {
                     retVal = NO;
@@ -456,32 +453,12 @@
             }
             break;
         }
-        case XDTAssemblerTargetTypeTextBinary: {
+        case XDTAs99TargetTypeTextBinary: {
             NSError *tempError = nil;
-            NSMutableString *fileContent = [NSMutableString string];
-            for (NSArray<id> *element in [_assemblingResult generateRawBinaryAt:_baseAddress error:&tempError]) {
-                if (nil != tempError || nil == element) {
-                    break;
-                }
-                NSNumber *address = [element objectAtIndex:0];
-                //NSNumber *bank = [element objectAtIndex:1];
-                NSData *data = [element objectAtIndex:2];
-
-                [fileContent appendFormat:@"\n;      aorg >%04x", (unsigned int)[address longValue]];
-                NSUInteger i = 0;
-                while (i < [data length]) {
-                    uint8 row[8];
-                    NSRange byteRange = NSMakeRange(i, MIN([data length] - i, 8));
-                    [data getBytes:row range:byteRange];
-                    i += byteRange.length;
-                    
-                    NSMutableArray<NSString *> *bytes = [NSMutableArray arrayWithCapacity:8];
-                    for (int b = 0; b < byteRange.length; b++) {
-                        [bytes addObject:[NSString stringWithFormat:@">%02x", row[b]]];
-                    }
-                    [fileContent appendFormat:@"\n       byte %@", [bytes componentsJoinedByString:@", "]];
-                }
-            }
+            // TODO: extend GUI for new configuration options
+            NSString *fileContent = [_assemblingResult generateTextAt:_baseAddress
+                                                             withMode:XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord
+                                                                error:&tempError];
             if (nil == tempError && nil != fileContent && [fileContent length] > 0) {
                 NSURL *newOutpuFileURL = [NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]];
                 [fileContent writeToURL:newOutpuFileURL atomically:YES encoding:NSUTF8StringEncoding error:&tempError];
@@ -493,7 +470,7 @@
             }
             break;
         }
-        case XDTAssemblerTargetTypeObjectCode: {
+        case XDTAs99TargetTypeObjectCode: {
             NSData *data = [_assemblingResult generateObjCode:shouldCompressObjectCode error:error];
             if ((nil != error && nil != *error) || nil == data) {
                 retVal = NO;
@@ -504,7 +481,7 @@
             retVal = nil != error && nil == *error;
             break;
         }
-        case XDTAssemblerTargetTypeEmbededXBasic: {
+        case XDTAs99TargetTypeEmbededXBasic: {
             NSData *data = [_assemblingResult generateBasicLoader:error];
             if ((nil != error && nil != *error) || nil == data) {
                 retVal = NO;
@@ -515,18 +492,7 @@
             retVal = nil != error && nil == *error;
             break;
         }
-        case XDTAssemblerTargetTypeJumpstart: {
-            NSData *data = [_assemblingResult generateJumpstart:error];
-            if ((nil != error && nil != *error) || nil == data) {
-                retVal = NO;
-                break;
-            }
-            NSURL *newOutputFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
-            [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
-            retVal = nil != error && nil == *error;
-            break;
-        }
-        case XDTAssemblerTargetTypeMESSCartridge: {
+        case XDTAs99TargetTypeMESSCartridge: {
             if (nil == _cartridgeName || [_cartridgeName length] == 0) {
                 NSDictionary *errorDict = @{
                                             NSLocalizedDescriptionKey: NSLocalizedString(@"Missing Option!", @"Error description of a missing option."),

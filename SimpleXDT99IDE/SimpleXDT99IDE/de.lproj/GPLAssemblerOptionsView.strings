@@ -61,12 +61,6 @@
 /* Class = "NSTextFieldCell"; title = "Cart. Name:"; ObjectID = "o7o-HC-3sK"; */
 "o7o-HC-3sK.title" = "Modul-Name:";
 
-/* Class = "NSMenuItem"; ibShadowedToolTip = "For the Ryte Data and R.A.G. GPL Assemblers."; ObjectID = "ohK-Yy-UXN"; */
-"ohK-Yy-UXN.ibShadowedToolTip" = "Für die Ryte Data und R.A.G. GPL Assembler.";
-
-/* Class = "NSMenuItem"; title = "R.A.G. GPL"; ObjectID = "ohK-Yy-UXN"; */
-"ohK-Yy-UXN.title" = "R.A.G. GPL";
-
 /* Class = "NSTextFieldCell"; placeholderString = "0x0030"; ObjectID = "OHV-xG-nGy"; */
 "OHV-xG-nGy.placeholderString" = "0x0030";
 
@@ -91,8 +85,8 @@
 /* Class = "NSButtonCell"; title = "Check"; ObjectID = "wSA-zG-Pem"; */
 "wSA-zG-Pem.title" = "Prüfen";
 
-/* Class = "NSMenuItem"; ibShadowedToolTip = "The native xdt99 syntax style is more \"modern\" in that it supports lower case sources and relaxes the use of whitespace."; ObjectID = "YWI-l6-DCN"; */
-"YWI-l6-DCN.ibShadowedToolTip" = "Der native Syntax-Stil von xdt99 ist \"moderner\", da er Kleinbuchstaben unterstützt und die Verwendung von Leerzeichen erleichtert.";
+/* Class = "NSMenuItem"; ibShadowedToolTip = "The native xdt99 syntax style is more \"modern\" in that it supports lower case sources and relaxes the use of whitespace. This style also handles Ryte and R.A.G syntax variants."; ObjectID = "YWI-l6-DCN"; */
+"YWI-l6-DCN.ibShadowedToolTip" = "Der native Syntax-Stil von xdt99 ist \"moderner\", da er Kleinbuchstaben unterstützt und die Verwendung von Leerzeichen erleichtert. Er berücksichtigt auch die Ryte und R.A.G. Syntaxvarianten.";
 
 /* Class = "NSMenuItem"; title = "Native xga99"; ObjectID = "YWI-l6-DCN"; */
 "YWI-l6-DCN.title" = "Nativer xga99";

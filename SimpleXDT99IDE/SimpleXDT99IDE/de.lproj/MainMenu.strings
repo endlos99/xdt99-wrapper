@@ -76,12 +76,6 @@
 /* Class = "NSMenuItem"; title = "Tighten"; ObjectID = "46P-cB-AYj"; */
 "46P-cB-AYj.title" = "Tighten";
 
-/* Class = "NSMenuItem"; ibShadowedToolTip = "Create disk image for xdt99 Jumpstart cartridge."; ObjectID = "52I-Q9-pUk"; */
-"52I-Q9-pUk.ibShadowedToolTip" = "Disk-Image für xdt99 Jumpstart-Modul erstellen.";
-
-/* Class = "NSMenuItem"; title = "Jump Start Disk Image"; ObjectID = "52I-Q9-pUk"; */
-"52I-Q9-pUk.title" = "Jump Start Disk Image";
-
 /* Class = "NSMenuItem"; title = "Correct Spelling Automatically"; ObjectID = "78Y-hA-62v"; */
 "78Y-hA-62v.title" = "Correct Spelling Automatically";
 
@@ -458,7 +452,7 @@
 "S0p-oC-mLd.title" = "Jump to Selection";
 
 /* Class = "NSButtonCell"; title = "Join Lines"; ObjectID = "SFR-iZ-okB"; */
-"SFR-iZ-okB.title" = "Verbinden";
+"SFR-iZ-okB.title" = "Zeilen Verbinden";
 
 /* Class = "NSTextFieldCell"; title = "Cart Name:"; ObjectID = "slt-xe-9UM"; */
 "slt-xe-9UM.title" = "Cart Name:";
@@ -526,12 +520,6 @@
 /* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "vNY-rz-j42"; */
 "vNY-rz-j42.title" = "Clear Menu";
 
-/* Class = "NSMenuItem"; ibShadowedToolTip = "For the Ryte Data and R.A.G. GPL Assemblers."; ObjectID = "VU0-4j-plH"; */
-"VU0-4j-plH.ibShadowedToolTip" = "Für die Ryte Data und R.A.G. GPL Assembler.";
-
-/* Class = "NSMenuItem"; title = "R.A.G. GPL"; ObjectID = "VU0-4j-plH"; */
-"VU0-4j-plH.title" = "R.A.G. GPL";
-
 /* Class = "NSMenu"; title = "Ligatures"; ObjectID = "w0m-vy-SC9"; */
 "w0m-vy-SC9.title" = "Ligatures";
 
@@ -586,7 +574,7 @@
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Compiled code will be stored in an compressed format using DIS/FIX 80 format, which is used in Editor/Assembler Option 3"; ObjectID = "XxF-mh-KWp"; */
 "XxF-mh-KWp.ibShadowedToolTip" = "Der kompilierte Code wird in einem komprimierten Format im DIS/FIX 80-Format gespeichert, das in Editor/Assembler Option 3 verwendet wird.";
 
-/* Class = "NSMenuItem"; title = "Compressed Object Code"; ObjectID = "XxF-mh-KWp"; */
+/* Class = "NSMenuItem"; title = "Object Code (Compressed)"; ObjectID = "XxF-mh-KWp"; */
 "XxF-mh-KWp.title" = "Komprimierter Objektcode";
 
 /* Class = "NSMenuItem"; title = "Find…"; ObjectID = "Xz5-n4-O0W"; */
@@ -622,8 +610,8 @@
 /* Class = "NSMenuItem"; title = "Paragraph"; ObjectID = "ZvO-Gk-QUH"; */
 "ZvO-Gk-QUH.title" = "Paragraph";
 
-/* Class = "NSMenuItem"; ibShadowedToolTip = "The native xdt99 syntax style is more \"modern\" in that it supports lower case sources and relaxes the use of whitespace."; ObjectID = "ZZ0-xn-XWe"; */
-"ZZ0-xn-XWe.ibShadowedToolTip" = "Der native Syntax-Stil von xdt99 ist \"moderner\", da er Kleinbuchstaben unterstützt und die Verwendung von Leerzeichen erleichtert.";
+/* Class = "NSMenuItem"; ibShadowedToolTip = "The native xdt99 syntax style is more \"modern\" in that it supports lower case sources and relaxes the use of whitespace. This style also handles Ryte and R.A.G syntax variants."; ObjectID = "ZZ0-xn-XWe"; */
+"ZZ0-xn-XWe.ibShadowedToolTip" = "Der native Syntax-Stil von xdt99 ist \"moderner\", da er Kleinbuchstaben unterstützt und die Verwendung von Leerzeichen erleichtert. Er berücksichtigt auch die Ryte und R.A.G. Syntaxvarianten.";
 
 /* Class = "NSMenuItem"; title = "Native xga99"; ObjectID = "ZZ0-xn-XWe"; */
 "ZZ0-xn-XWe.title" = "Nativer xga99";

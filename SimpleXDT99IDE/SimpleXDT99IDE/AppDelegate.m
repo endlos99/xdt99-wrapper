@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 02.12.16.
 //
 //  SimpleXDT99IDE a simple IDE based on xdt99 that shows how to use the XDTools99.framework
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #import "AppDelegate.h"
 
 #import "XDTAssembler.h"
-#import "XDTObjcode.h"
+#import "XDTAs99Objcode.h"
 #import "XDTZipFile.h"
 #import <XDTools99/XDBasic.h>
 #import <XDTools99/XDGPL.h>
@@ -120,31 +120,28 @@ NS_ASSUME_NONNULL_END
     [self processSourceFileURL:assemblerFileURL withXDTprocess:^BOOL(NSURL *outputFileURL) {
         NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
         NSInteger selectedTypeIndenx = [defaults integerForKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex];
-        XDTAssemblerTargetType xdtTargetType = XDTAssemblerTargetTypeObjectCode;
+        XDTAs99TargetType xdtTargetType = XDTAs99TargetTypeObjectCode;
         BOOL compressedObjectCode = NO;
         switch (selectedTypeIndenx) {
             case 0:
-                xdtTargetType = XDTAssemblerTargetTypeProgramImage;
+                xdtTargetType = XDTAs99TargetTypeProgramImage;
                 break;
             case 1:
             case 2:
-                xdtTargetType = XDTAssemblerTargetTypeObjectCode;
+                xdtTargetType = XDTAs99TargetTypeObjectCode;
                 compressedObjectCode = selectedTypeIndenx == 1;
                 break;
             case 3:
-                xdtTargetType = XDTAssemblerTargetTypeEmbededXBasic;
+                xdtTargetType = XDTAs99TargetTypeEmbededXBasic;
                 break;
             case 4:
-                xdtTargetType = XDTAssemblerTargetTypeRawBinary;
+                xdtTargetType = XDTAs99TargetTypeRawBinary;
                 break;
             case 5:
-                xdtTargetType = XDTAssemblerTargetTypeTextBinary;
+                xdtTargetType = XDTAs99TargetTypeTextBinary;
                 break;
             case 6:
-                xdtTargetType = XDTAssemblerTargetTypeJumpstart;
-                break;
-            case 7:
-                xdtTargetType = XDTAssemblerTargetTypeMESSCartridge;
+                xdtTargetType = XDTAs99TargetTypeMESSCartridge;
                 break;
             /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
              This feature is open to implement.
@@ -154,14 +151,14 @@ NS_ASSUME_NONNULL_END
                 break;
         }
         NSDictionary *options = @{
-                                  XDTAssemblerOptionRegister: [defaults objectForKey:UserDefaultKeyAssemblerOptionUseRegisterSymbols],
-                                  XDTAssemblerOptionStrict: [defaults objectForKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions],
-                                  XDTAssemblerOptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType]
+                                  XDTAs99OptionRegister: [defaults objectForKey:UserDefaultKeyAssemblerOptionUseRegisterSymbols],
+                                  XDTAs99OptionStrict: [defaults objectForKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions],
+                                  XDTAs99OptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType]
                                   };
         XDTAssembler *assembler = [XDTAssembler assemblerWithOptions:options includeURL:assemblerFileURL];
 
         NSError *error = nil;
-        XDTObjcode *assemblingResult = [assembler assembleSourceFile:assemblerFileURL error:&error];
+        XDTAs99Objcode *assemblingResult = [assembler assembleSourceFile:assemblerFileURL error:&error];
         if (nil != error) {
             NSAlert *errorAlert = [NSAlert alertWithError:error];
             [errorAlert runModal];
@@ -170,7 +167,7 @@ NS_ASSUME_NONNULL_END
         }
 
         switch (xdtTargetType) {
-            case XDTAssemblerTargetTypeProgramImage: {
+            case XDTAs99TargetTypeProgramImage: {
                 NSUInteger baseAddress = [defaults integerForKey:UserDefaultKeyAssemblerOptionBaseAddress];
                 NSString *countingFileName = [NSMutableString stringWithString:[[outputFileURL lastPathComponent] stringByDeletingPathExtension]];
                 for (NSData *data in [assemblingResult generateImageAt:baseAddress error:&error]) {
@@ -188,7 +185,7 @@ NS_ASSUME_NONNULL_END
                 }
                 break;
             }
-            case XDTAssemblerTargetTypeRawBinary: {
+            case XDTAs99TargetTypeRawBinary: {
                 NSUInteger baseAddress = [defaults integerForKey:UserDefaultKeyAssemblerOptionBaseAddress];
                 for (NSArray<id> *element in [assemblingResult generateRawBinaryAt:baseAddress error:&error]) {
                     if (nil != error || nil == element) {
@@ -213,59 +210,32 @@ NS_ASSUME_NONNULL_END
                 }
                 break;
             }
-            case XDTAssemblerTargetTypeTextBinary: {
-                NSMutableString *fileContent = [NSMutableString string];
+            case XDTAs99TargetTypeTextBinary: {
                 NSUInteger baseAddress = [defaults integerForKey:UserDefaultKeyAssemblerOptionBaseAddress];
-                for (NSArray<id> *element in [assemblingResult generateRawBinaryAt:baseAddress error:&error]) {
-                    if (nil != error || nil == element) {
-                        break;
-                    }
-                    NSNumber *address = [element objectAtIndex:0];
-                    //NSNumber *bank = [element objectAtIndex:1];
-                    NSData *data = [element objectAtIndex:2];
-
-                    [fileContent appendFormat:@"\n;      aorg >%04x", (unsigned int)[address longValue]];
-                    NSUInteger i = 0;
-                    while (i < [data length]) {
-                        uint8 row[8];
-                        NSRange byteRange = NSMakeRange(i, MIN([data length] - i, 8));
-                        [data getBytes:row range:byteRange];
-                        i += byteRange.length;
-
-                        NSMutableArray<NSString *> *bytes = [NSMutableArray arrayWithCapacity:8];
-                        for (int b = 0; b < byteRange.length; b++) {
-                            [bytes addObject:[NSString stringWithFormat:@">%02x", row[b]]];
-                        }
-                        [fileContent appendFormat:@"\n       byte %@", [bytes componentsJoinedByString:@", "]];
-                    }
-                }
+                // TODO: extend GUI for new configuration options
+                NSString *fileContent = [assemblingResult generateTextAt:baseAddress
+                                                                withMode:XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord
+                                                                   error:&error];
                 if (nil == error && nil != fileContent && [fileContent length] > 0) {
                     [fileContent writeToURL:outputFileURL atomically:YES encoding:NSUTF8StringEncoding error:&error];
                 }
                 break;
             }
-            case XDTAssemblerTargetTypeObjectCode: {
+            case XDTAs99TargetTypeObjectCode: {
                 NSData *data = [assemblingResult generateObjCode:compressedObjectCode error:&error];
                 if (nil == error && nil != data) {
                     [data writeToURL:outputFileURL options:NSDataWritingAtomic error:&error];
                 }
                 break;
             }
-            case XDTAssemblerTargetTypeEmbededXBasic: {
+            case XDTAs99TargetTypeEmbededXBasic: {
                 NSData *data = [assemblingResult generateBasicLoader:&error];
                 if (nil == error && nil != data) {
                     [data writeToURL:outputFileURL options:NSDataWritingAtomic error:&error];
                 }
                 break;
             }
-            case XDTAssemblerTargetTypeJumpstart: {
-                NSData *data = [assemblingResult generateJumpstart:&error];
-                if (nil == error && nil != data) {
-                    [data writeToURL:outputFileURL options:NSDataWritingAtomic error:&error];
-                }
-                break;
-            }
-            case XDTAssemblerTargetTypeMESSCartridge: {
+            case XDTAs99TargetTypeMESSCartridge: {
                 NSString *cartName = [self->_assemblerCartridgeNameTextFiled stringValue];
                 if (nil == cartName || [cartName length] == 0) {
                     NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Missing Option" defaultButton:@"Abort" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please specify a name of the cartridge to create!"];
@@ -334,47 +304,44 @@ NS_ASSUME_NONNULL_END
     [self processSourceFileURL:gplFileURL withXDTprocess:^BOOL(NSURL * _Nonnull outputFileURL) {
         NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
         NSInteger selectedTypeIndex = [defaults integerForKey:UserDefaultKeyGPLOptionOutputTypePopupIndex];
-        XDTGPLAssemblerTargetType xdtTargetType = XDTAssemblerTargetTypeObjectCode;
+        XDTGa99TargetType xdtTargetType = XDTGa99TargetTypePlainByteCode;
         switch (selectedTypeIndex) {
             case 0:
-                xdtTargetType = XDTGPLAssemblerTargetTypePlainByteCode;
+                xdtTargetType = XDTGa99TargetTypePlainByteCode;
                 break;
             case 1:
-                xdtTargetType = XDTGPLAssemblerTargetTypeHeaderedByteCode;
+                xdtTargetType = XDTGa99TargetTypeHeaderedByteCode;
                 break;
             case 2:
-                xdtTargetType = XDTGPLAssemblerTargetTypeMESSCartridge;
+                xdtTargetType = XDTGa99TargetTypeMESSCartridge;
                 break;
 
             default:
                 break;
         }
         NSInteger selectedStyleIndex = [defaults integerForKey:UserDefaultKeyGPLOptionSyntaxTypePopupIndex];
-        XDTGPLAssemblerTargetType xdtSyntaxType = XDTGPLAssemblerSyntaxTypeNativeXDT99;
+        XDTGa99SyntaxType xdtSyntaxType = XDTGa99SyntaxTypeNativeXDT99;
         switch (selectedStyleIndex) {
             case 0:
-                xdtSyntaxType = XDTGPLAssemblerSyntaxTypeNativeXDT99;
+                xdtSyntaxType = XDTGa99SyntaxTypeNativeXDT99;
                 break;
             case 1:
-                xdtSyntaxType = XDTGPLAssemblerSyntaxTypeRAGGPL;
-                break;
-            case 2:
-                xdtSyntaxType = XDTGPLAssemblerSyntaxTypeTIImageTool;
+                xdtSyntaxType = XDTGa99SyntaxTypeTIImageTool;
                 break;
                 
             default:
                 break;
         }
         NSDictionary *options = @{
-                                  XDTGPLAssemblerOptionAORG: [defaults objectForKey:UserDefaultKeyGPLOptionAORGAddress],
-                                  XDTGPLAssemblerOptionGROM: [defaults objectForKey:UserDefaultKeyGPLOptionGROMAddress],
-                                  XDTGPLAssemblerOptionStyle: [NSNumber numberWithUnsignedInteger:xdtSyntaxType],
-                                  XDTGPLAssemblerOptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType]
+                                  XDTGa99OptionAORG: [defaults objectForKey:UserDefaultKeyGPLOptionAORGAddress],
+                                  XDTGa99OptionGROM: [defaults objectForKey:UserDefaultKeyGPLOptionGROMAddress],
+                                  XDTGa99OptionStyle: [NSNumber numberWithUnsignedInteger:xdtSyntaxType],
+                                  XDTGa99OptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType]
                                   };
         XDTGPLAssembler *assembler = [XDTGPLAssembler gplAssemblerWithOptions:options includeURL:gplFileURL];
 
         NSError *error = nil;
-        XDTGPLObjcode *assemblingResult = [assembler assembleSourceFile:gplFileURL error:&error];
+        XDTGa99Objcode *assemblingResult = [assembler assembleSourceFile:gplFileURL error:&error];
         if (nil != error) {
             NSAlert *errorAlert = [NSAlert alertWithError:error];
             [errorAlert runModal];
@@ -383,7 +350,7 @@ NS_ASSUME_NONNULL_END
         }
 
         switch (xdtTargetType) {
-            case XDTGPLAssemblerTargetTypePlainByteCode:    /* byte code */
+            case XDTGa99TargetTypePlainByteCode:    /* byte code */
                 for (NSArray<id> *element in [assemblingResult generateByteCode:&error]) {
                     if (nil != error || nil == element) {
                         break;
@@ -394,9 +361,9 @@ NS_ASSUME_NONNULL_END
 
                     NSString *fileNameAddition = nil;
                     if ([base isMemberOfClass:[NSNull class]]) {
-                        fileNameAddition = [NSString stringWithFormat:@"_%04x", (unsigned int)[address longValue]];
+                        fileNameAddition = [NSString stringWithFormat:@"_%04x", [address unsignedIntValue]];
                     } else {
-                        fileNameAddition = [NSString stringWithFormat:@"_%04x_b%d", (unsigned int)[address longValue], (int)[base longValue]];
+                        fileNameAddition = [NSString stringWithFormat:@"_%04x_b%d", [address unsignedIntValue], [base intValue]];
                     }
                     NSURL *newOutputFileURL = [NSURL fileURLWithPath:[[[[outputFileURL lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[outputFileURL pathExtension]]
                                                      relativeToURL:[outputFileURL URLByDeletingLastPathComponent]];
@@ -407,7 +374,7 @@ NS_ASSUME_NONNULL_END
                 }
                 break;
 
-            case XDTGPLAssemblerTargetTypeHeaderedByteCode: { /* image */
+            case XDTGa99TargetTypeHeaderedByteCode: { /* image */
                 NSString *cartName = [self->_gplCartridgeNameTextFiled stringValue];
                 if (nil == cartName || [cartName length] == 0) {
                     NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Missing Option" defaultButton:@"Abort" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please specify a name of the cartridge to create!"];
@@ -422,7 +389,7 @@ NS_ASSUME_NONNULL_END
                 break;
             }
 
-            case XDTGPLAssemblerTargetTypeMESSCartridge: {
+            case XDTGa99TargetTypeMESSCartridge: {
                 NSString *cartName = [self->_gplCartridgeNameTextFiled stringValue];
                 if (nil == cartName || [cartName length] == 0) {
                     NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Missing Option" defaultButton:@"Abort" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Please specify a name of the cartridge to create!"];
@@ -618,9 +585,6 @@ NS_ASSUME_NONNULL_END
             extension = @"dat";
             break;
         case 6:
-            extension = @"dsk";
-            break;
-        case 7:
             extension = @"rpk";
             break;
         /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.

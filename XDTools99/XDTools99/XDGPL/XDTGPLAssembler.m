@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 18.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -27,8 +27,10 @@
 #include <Python/Python.h>
 
 #import "NSErrorPythonAdditions.h"
+#import "NSArrayPythonAdditions.h"
+
 #import "XDTException.h"
-#include "XDTGPLObjcode.h"
+#import "XDTGa99Objcode.h"
 
 
 #define XDTModuleNameGPLAssembler "xga99"
@@ -36,7 +38,8 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
-@interface XDTGPLObjcode () {
+
+@interface XDTGa99Objcode () {
     PyObject *objectcodePythonClass;
 }
 
@@ -53,25 +56,35 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable instancetype)initWithPythonInstance:(PyObject *)object;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 
 NS_ASSUME_NONNULL_BEGIN
+
+XDTGa99OptionKey const XDTGa99OptionGROM = @"XDTGa99OptionGROM";
+XDTGa99OptionKey const XDTGa99OptionAORG = @"XDTGa99OptionAORG";
+XDTGa99OptionKey const XDTGa99OptionStyle = @"XDTGa99OptionStyle";
+XDTGa99OptionKey const XDTGa99OptionTarget = @"XDTGa99OptionTarget";
+XDTGa99OptionKey const XDTGa99OptionWarnings = @"XDTGa99OptionWarnings";
+
+
 @interface XDTGPLAssembler () {
     const PyObject *assemblerPythonModule;
     PyObject *assemblerPythonClass;
 }
 
 @property NSString *version;
-@property XDTGPLAssemblerTargetType targetType;
-@property XDTGPLAssemblerSyntaxType syntaxType;
+@property XDTGa99TargetType targetType;
+@property XDTGa99SyntaxType syntaxType;
 
-- (nullable instancetype)initWithOptions:(NSDictionary<NSString *, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls;
+- (nullable instancetype)initWithOptions:(NSDictionary<XDTGa99OptionKey, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls;
 
 - (nullable const char *)syntaxTypeAsCString;
 - (nullable const char *)targetTypeAsCString;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 
@@ -125,7 +138,7 @@ NS_ASSUME_NONNULL_END
 
 #pragma mark Initializers
 
-+ (instancetype)gplAssemblerWithOptions:(NSDictionary<NSString *,NSObject *> *)options includeURL:(NSURL *)url
++ (instancetype)gplAssemblerWithOptions:(NSDictionary<XDTGa99OptionKey, id> *)options includeURL:(NSURL *)url
 {
     assert(NULL != options);
     assert(nil != url);
@@ -161,7 +174,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (instancetype)initWithOptions:(NSDictionary<NSString *, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls
+- (instancetype)initWithOptions:(NSDictionary<XDTGa99OptionKey, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls
 {
     assert(NULL != pModule);
     assert(nil != urls);
@@ -194,7 +207,7 @@ NS_ASSUME_NONNULL_END
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameGPLAssembler);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
-        NSLog(@"%s ERROR: Cannot find function \"%s\" in module %s", __FUNCTION__, XDTClassNameGPLAssembler, PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot find class \"%s\" in module %s", __FUNCTION__, XDTClassNameGPLAssembler, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -207,10 +220,11 @@ NS_ASSUME_NONNULL_END
     }
 
     /* reading option from dictionary */
-    _targetType = [[options valueForKey:XDTGPLAssemblerOptionTarget] unsignedIntegerValue];
-    _syntaxType = [[options valueForKey:XDTGPLAssemblerOptionStyle] unsignedIntegerValue];
-    _aorgAddress = [[options valueForKey:XDTGPLAssemblerOptionAORG] unsignedIntegerValue];
-    _gromAddress = [[options valueForKey:XDTGPLAssemblerOptionGROM] unsignedIntegerValue];
+    _targetType = [[options valueForKey:XDTGa99OptionTarget] unsignedIntegerValue];
+    _syntaxType = [[options valueForKey:XDTGa99OptionStyle] unsignedIntegerValue];
+    _aorgAddress = [[options valueForKey:XDTGa99OptionAORG] unsignedIntegerValue];
+    _gromAddress = [[options valueForKey:XDTGa99OptionGROM] unsignedIntegerValue];
+    _outputWarnings = [[options valueForKey:XDTGa99OptionWarnings] boolValue];
     _version = [NSString stringWithCString:PyString_AsString(pVar) encoding:NSUTF8StringEncoding];
     Py_XDECREF(pVar);
 
@@ -224,11 +238,12 @@ NS_ASSUME_NONNULL_END
         PyList_Append(includePath, PyString_FromString([[url path] UTF8String]));
     }
     PyObject *defs = PyList_New(0);
+    PyObject *outputWarnings = PyBool_FromLong(_outputWarnings);
 
     /* creating assembler object:
-        asm = Assembler(syntax, grom, aorg, target="", includePath=None, defs=None)
+        asm = Assembler(syntax, grom, aorg, target="", include_path=None, defs=(), warnings=True):
      */
-    PyObject *pArgs = PyTuple_Pack(6, syntax, grom, aorg, target, includePath, defs);
+    PyObject *pArgs = PyTuple_Pack(7, syntax, grom, aorg, target, includePath, defs, outputWarnings);
     PyObject *assembler = PyObject_CallObject(pFunc, pArgs);
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
@@ -274,11 +289,11 @@ NS_ASSUME_NONNULL_END
 - (const char *)syntaxTypeAsCString
 {
     switch (_syntaxType) {
-        case XDTGPLAssemblerSyntaxTypeNativeXDT99:
+        case XDTGa99SyntaxTypeRAGGPL:
+            //return "rag";     // removed in xga99 v1.8.5 - RAG is combined with Ryte
+        case XDTGa99SyntaxTypeNativeXDT99:
             return "xdt99";
-        case XDTGPLAssemblerSyntaxTypeRAGGPL:
-            return "rag";
-        case XDTGPLAssemblerSyntaxTypeTIImageTool:
+        case XDTGa99SyntaxTypeTIImageTool:
             return "mizapf";
 
         default:
@@ -290,11 +305,11 @@ NS_ASSUME_NONNULL_END
 - (const char *)targetTypeAsCString
 {
     switch (_targetType) {
-        case XDTGPLAssemblerTargetTypePlainByteCode:
+        case XDTGa99TargetTypePlainByteCode:
             return "gbc";
-        case XDTGPLAssemblerTargetTypeHeaderedByteCode:
+        case XDTGa99TargetTypeHeaderedByteCode:
             return "image";
-        case XDTGPLAssemblerTargetTypeMESSCartridge:
+        case XDTGa99TargetTypeMESSCartridge:
             return "cart";
 
         default:
@@ -306,18 +321,18 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Parsing Methods
 
 
-- (XDTGPLObjcode *)assembleSourceFile:(NSURL *)srcname error:(NSError **)error
+- (XDTGa99Objcode *)assembleSourceFile:(NSURL *)srcname error:(NSError **)error
 {
     return [self assembleSourceFile:srcname pathName:[NSURL fileURLWithPath:@"." isDirectory:YES] error:error];
 }
 
 
-- (XDTGPLObjcode *)assembleSourceFile:(NSURL *)srcname pathName:(NSURL *)pathName error:(NSError **)error
+- (XDTGa99Objcode *)assembleSourceFile:(NSURL *)srcname pathName:(NSURL *)pathName error:(NSError **)error
 {
     NSString *basename = [srcname lastPathComponent];
 
     /* calling assembler:
-     code, errors = asm.assemble(basename)
+     code, errors, warnings = asm.assemble(basename)
      */
     PyObject *methodName = PyString_FromString("assemble");
     PyObject *pbaseName = PyString_FromString([basename UTF8String]);
@@ -357,10 +372,21 @@ NS_ASSUME_NONNULL_END
         }
     }
 
-    XDTGPLObjcode *retVal = nil;
+    [self willChangeValueForKey:@"warnings"];
+    _warnings = [NSArray array];
+    PyObject *warningList = PyTuple_GetItem(pValueTupel, 2);
+    if (NULL != warningList) {
+        const Py_ssize_t warnCount = PyList_Size(warningList);
+        if (0 < warnCount) {
+            _warnings = [NSArray arrayWithPyListOfString:warningList];
+        }
+    }
+    [self didChangeValueForKey:@"warnings"];
+
+    XDTGa99Objcode *retVal = nil;
     PyObject *objectCodeObject = PyTuple_GetItem(pValueTupel, 0);
     if (NULL != objectCodeObject) {
-        retVal = [XDTGPLObjcode gplObjectcodeWithPythonInstance:objectCodeObject];
+        retVal = [XDTGa99Objcode gplObjectcodeWithPythonInstance:objectCodeObject];
     }
 
     Py_DECREF(pValueTupel);

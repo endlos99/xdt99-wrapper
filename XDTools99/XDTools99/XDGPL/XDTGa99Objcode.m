@@ -1,11 +1,11 @@
 //
-//  XDTGPLObjcode.m
+//  XDTGa99Objcode.m
 //  XDTools99
 //
 //  Created by Henrik Wedekind on 18.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#import "XDTGPLObjcode.h"
+#import "XDTGa99Objcode.h"
 
 #import "NSArrayPythonAdditions.h"
 #import "NSDataPythonAdditions.h"
@@ -33,7 +33,7 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
-@interface XDTGPLObjcode () {
+@interface XDTGa99Objcode () {
     PyObject *objectcodePythonClass;
 }
 
@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 NS_ASSUME_NONNULL_END
 
 
-@implementation XDTGPLObjcode
+@implementation XDTGa99Objcode
 
 #pragma mark Initializers
 
@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_END
 
 + (instancetype)gplObjectcodeWithPythonInstance:(void *)object
 {
-    XDTGPLObjcode *retVal = [[XDTGPLObjcode alloc] initWithPythonInstance:(PyObject *)object];
+    XDTGa99Objcode *retVal = [[XDTGa99Objcode alloc] initWithPythonInstance:(PyObject *)object];
 #if !__has_feature(objc_arc)
     [retVal autorelease];
 #endif
@@ -118,13 +118,13 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     groms = self.genByteCode()
+     groms = self.generate_byte_code()
      */
-    PyObject *methodName = PyString_FromString("genByteCode");
+    PyObject *methodName = PyString_FromString("generate_byte_code");
     PyObject *gromList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == gromList) {
-        NSLog(@"%s ERROR: genByteCode() returns NULL!", __FUNCTION__);
+        NSLog(@"%s ERROR: generate_byte_code() returns NULL!", __FUNCTION__);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -149,15 +149,15 @@ NS_ASSUME_NONNULL_END
     }
     /*
      Function call in Python:
-     image = self.genImage(name)
+     image = self.generate_image(name)
      */
-    PyObject *methodName = PyString_FromString("genImage");
+    PyObject *methodName = PyString_FromString("generate_image");
     PyObject *pCartName = PyString_FromString([cartridgeName UTF8String]);
     PyObject *cartImage = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pCartName, NULL);
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartImage) {
-        NSLog(@"%s ERROR: genImage(\"%@\") returns NULL!", __FUNCTION__, cartridgeName);
+        NSLog(@"%s ERROR: generate_image(\"%@\") returns NULL!", __FUNCTION__, cartridgeName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -189,15 +189,15 @@ NS_ASSUME_NONNULL_END
     }
     /*
      Function call in Python:
-     data, layout, metainf = code.genCart(name)
+     data, layout, metainf = code.generate_cart(name)
      */
-    PyObject *methodName = PyString_FromString("genCart");
+    PyObject *methodName = PyString_FromString("generate_cart");
     PyObject *pCartName = PyString_FromString([cartridgeName UTF8String]);
     PyObject *cartTuple = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pCartName, NULL);
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartTuple) {
-        NSLog(@"%s ERROR: genCart(\"%@\") returns NULL!", __FUNCTION__, cartridgeName);
+        NSLog(@"%s ERROR: generate_cart(\"%@\") returns NULL!", __FUNCTION__, cartridgeName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -234,15 +234,15 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     genList(gensymbols)
+     generate_list(gensymbols)
      */
-    PyObject *methodName = PyString_FromString("genList");
+    PyObject *methodName = PyString_FromString("generate_list");
     PyObject *pOutputSymbols = PyBool_FromLong(outputSymbols);
     PyObject *listingString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pOutputSymbols, NULL);
     Py_XDECREF(pOutputSymbols);
     Py_XDECREF(methodName);
     if (NULL == listingString) {
-        NSLog(@"%s ERROR: genList(\"%@\") returns NULL!", __FUNCTION__, outputSymbols? @"true" : @"false");
+        NSLog(@"%s ERROR: generate_list(\"%s\") returns NULL!", __FUNCTION__, outputSymbols? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -264,15 +264,15 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     genSymbols(useEqu)
+     generate_symbols(useEqu)
      */
-    PyObject *methodName = PyString_FromString("genSymbols");
+    PyObject *methodName = PyString_FromString("generate_symbols");
     PyObject *pUseEqu = PyBool_FromLong(useEqu);
     PyObject *symbolsString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pUseEqu, NULL);
     Py_XDECREF(pUseEqu);
     Py_XDECREF(methodName);
     if (NULL == symbolsString) {
-        NSLog(@"%s ERROR: genSymbols(\"%@\") returns NULL!", __FUNCTION__, useEqu? @"true" : @"false");
+        NSLog(@"%s ERROR: generate_symbols(\"%s\") returns NULL!", __FUNCTION__, useEqu? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {

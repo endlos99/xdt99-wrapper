@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 04.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2019 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -25,11 +25,12 @@
 #import "NSArrayPythonAdditions.h"
 
 #import "NSDataPythonAdditions.h"
+#import "NSStringPythonAdditions.h"
 
 
 @implementation NSArray (NSArrayPythonAdditions)
 
-+ (nullable NSArray<id> *)arrayWithPyTuple:(PyObject *)dataTuple
++ (nullable instancetype)arrayWithPyTuple:(PyObject *)dataTuple
 {
     assert(NULL != dataTuple);
 
@@ -70,7 +71,7 @@
 }
 
 
-+ (nullable NSArray<id> *)arrayWithPyList:(PyObject *)dataList
++ (nullable instancetype)arrayWithPyList:(PyObject *)dataList
 {
     assert(NULL != dataList);
 
@@ -111,7 +112,7 @@
 }
 
 
-+ (nullable NSArray<NSArray<id> *> *)arrayWithPyListOfTuple:(PyObject *)dataList
++ (nullable instancetype)arrayWithPyListOfTuple:(PyObject *)dataList
 {
     assert(NULL != dataList);
 
@@ -139,7 +140,7 @@
 }
 
 
-+ (nullable NSMutableArray<NSData *> *)arrayWithPyListOfString:(PyObject *)dataList
++ (nullable instancetype)arrayWithPyListOfData:(PyObject *)dataList
 {
     assert(NULL != dataList);
 
@@ -158,10 +159,33 @@
     for (Py_ssize_t i = 0; i < dataCount; i++) {
         PyObject *dataItem = PyList_GetItem(dataList, i);
         if (NULL != dataItem) {
-            Py_ssize_t codeSize = PyString_Size(dataItem);
-            char *codeStr = PyString_AsString(dataItem);
-            NSData *imageData = [NSData dataWithBytes:codeStr length:codeSize];
-            [retVal addObject:imageData];
+            NSData *imageData = [NSData dataWithPythonString:dataItem];
+            if (nil != imageData) {
+                [retVal addObject:imageData];
+            }
+        }
+    }
+    
+    return retVal;
+}
+
+
++ (nullable instancetype)arrayWithPyListOfString:(PyObject *)dataList
+{
+    assert(NULL != dataList);
+
+    const Py_ssize_t dataCount = PyList_Size(dataList);
+    if (0 > dataCount) {
+        return nil;
+    }
+    NSMutableArray<NSString *> *retVal = [NSMutableArray arrayWithCapacity:dataCount];
+    if (nil == retVal) {
+        return nil;
+    }
+    for (Py_ssize_t i = 0; i < dataCount; i++) {
+        PyObject *dataItem = PyList_GetItem(dataList, i);
+        if (NULL != dataItem) {
+            [retVal addObject:[NSString stringWithPythonString:dataItem encoding:NSUTF8StringEncoding]];
         }
     }
 

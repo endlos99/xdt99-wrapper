@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 18.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -25,47 +25,52 @@
 #import "XDTObject.h"
 
 
-#define XDTGPLAssemblerOptionGROM @"XDTGPLAssemblerOptionGROM"
-#define XDTGPLAssemblerOptionAORG @"XDTGPLAssemblerOptionAORG"
-#define XDTGPLAssemblerOptionStyle @"XDTGPLAssemblerOptionStyle"
-#define XDTGPLAssemblerOptionTarget @"XDTGPLAssemblerOptionTarget"
+#define XDTGPLAssemblerVersionRequired "2.0.2"
 
-#define XDTGPLAssemblerVersionRequired "1.7.0"
-
-
-typedef NSUInteger XDTGPLAssemblerSyntaxType;
-NS_ENUM(XDTGPLAssemblerSyntaxType) {
-    XDTGPLAssemblerSyntaxTypeNativeXDT99,
-    XDTGPLAssemblerSyntaxTypeRAGGPL,
-    XDTGPLAssemblerSyntaxTypeTIImageTool,
+typedef NS_ENUM(NSUInteger, XDTGa99SyntaxType) {
+    XDTGa99SyntaxTypeNativeXDT99,   /* Ryte/RAG syntax variant */
+    XDTGa99SyntaxTypeRAGGPL,        /* RAG syntax variant. Obsolete with xga99 v1.8.5 - conbined with the Ryte syntax */
+    XDTGa99SyntaxTypeTIImageTool,   /* Syntax variant for the GPL disassembler of TIImageTool */
 };
 
-typedef NSUInteger XDTGPLAssemblerTargetType;
-NS_ENUM(XDTGPLAssemblerTargetType) {
-    XDTGPLAssemblerTargetTypePlainByteCode,
-    XDTGPLAssemblerTargetTypeHeaderedByteCode,
-    XDTGPLAssemblerTargetTypeMESSCartridge,
+typedef NS_ENUM(NSUInteger, XDTGa99TargetType) {
+    XDTGa99TargetTypePlainByteCode,
+    XDTGa99TargetTypeHeaderedByteCode,
+    XDTGa99TargetTypeMESSCartridge,
 };
 
 
-@class XDTGPLObjcode;
+@class XDTGa99Objcode;
 
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef NSString * XDTGa99OptionKey NS_EXTENSIBLE_STRING_ENUM; /* Keys for use in the NSDictionry */
+
+FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionGROM;
+FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionAORG;
+FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionStyle;
+FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionTarget;
+FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionWarnings;
+
+
 @interface XDTGPLAssembler : XDTObject
 
 @property (readonly) NSString *version;
 @property (readonly) NSUInteger gromAddress;
 @property (readonly) NSUInteger aorgAddress;
-@property (readonly) XDTGPLAssemblerTargetType targetType;
-@property (readonly) XDTGPLAssemblerSyntaxType syntaxType;
+@property (readonly) XDTGa99TargetType targetType;
+@property (readonly) XDTGa99SyntaxType syntaxType;
+@property (readonly) BOOL outputWarnings;
+@property (readonly) NSArray<NSString *> *warnings;
 
 + (BOOL)checkRequiredModuleVersion;
 
-+ (nullable instancetype)gplAssemblerWithOptions:(NSDictionary<NSString *, NSObject *> *)options includeURL:(NSURL *)url;
++ (nullable instancetype)gplAssemblerWithOptions:(NSDictionary<XDTGa99OptionKey, id> *)options includeURL:(NSURL *)url;
 
-- (nullable XDTGPLObjcode *)assembleSourceFile:(NSURL *)srcname error:(NSError **)error;
-- (nullable XDTGPLObjcode *)assembleSourceFile:(NSURL *)srcname pathName:(NSURL *)pathName error:(NSError **)error;
+- (nullable XDTGa99Objcode *)assembleSourceFile:(NSURL *)srcname error:(NSError **)error;
+- (nullable XDTGa99Objcode *)assembleSourceFile:(NSURL *)srcname pathName:(NSURL *)pathName error:(NSError **)error;
 
 @end
+
 NS_ASSUME_NONNULL_END

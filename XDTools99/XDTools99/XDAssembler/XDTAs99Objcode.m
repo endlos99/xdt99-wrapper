@@ -1,11 +1,11 @@
 //
-//  XDTObjcode.m
-//  SimpleXDT99
+//  XDTAs99Objcode.m
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 03.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,19 +22,21 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#import "XDTObjcode.h"
+#import "XDTAs99Objcode.h"
 
+#import "NSStringPythonAdditions.h"
 #import "NSArrayPythonAdditions.h"
 #import "NSDataPythonAdditions.h"
 #import "NSErrorPythonAdditions.h"
-#import "XDTSymbols.h"
+#import "XDTAs99Symbols.h"
 
 
 #define XDTClassNameObjcode "Objcode"
 
 
 NS_ASSUME_NONNULL_BEGIN
-@interface XDTObjcode () {
+
+@interface XDTAs99Objcode () {
     PyObject *objectcodePythonClass;
 }
 
@@ -42,11 +44,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable instancetype)initWithPythonInstance:(PyObject *)object;
 
+- (nullable PyObject *)generateBinariesAt:(NSUInteger)baseAddr error:(NSError **)error;
+
 @end
+
 NS_ASSUME_NONNULL_END
 
 
-@implementation XDTObjcode
+@implementation XDTAs99Objcode
 
 #pragma mark Initializers
 
@@ -61,7 +66,7 @@ NS_ASSUME_NONNULL_END
 
 + (nullable instancetype)objectcodeWithPythonInstance:(void *)object
 {
-    XDTObjcode *retVal = [[XDTObjcode alloc] initWithPythonInstance:(PyObject *)object];
+    XDTAs99Objcode *retVal = [[XDTAs99Objcode alloc] initWithPythonInstance:(PyObject *)object];
 #if !__has_feature(objc_arc)
     [retVal autorelease];
 #endif
@@ -95,17 +100,17 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Property Wrapper
 
 
-- (XDTSymbols *)symbols
+- (XDTAs99Symbols *)symbols
 {
     PyObject *symbolObject = PyObject_GetAttrString(objectcodePythonClass, "symbols");
-    XDTSymbols *codeSymbols = [XDTSymbols symbolsWithPythonInstance:symbolObject];
+    XDTAs99Symbols *codeSymbols = [XDTAs99Symbols symbolsWithPythonInstance:symbolObject];
     Py_XDECREF(symbolObject);
 
     return codeSymbols;
 }
 
 
-- (void)setSymbols:(XDTSymbols *)symbols
+- (void)setSymbols:(XDTAs99Symbols *)symbols
 {
     // TODO: Implement function
 }
@@ -138,15 +143,15 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     genObjCode(compressed=False)
+     generate_object_code(compressed=False)
      */
-    PyObject *methodName = PyString_FromString("genObjCode");
+    PyObject *methodName = PyString_FromString("generate_object_code");
     PyObject *pCompressed = PyBool_FromLong(shouldCompress);
     PyObject *binaryString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pCompressed, NULL);
     Py_XDECREF(pCompressed);
     Py_XDECREF(methodName);
     if (NULL == binaryString) {
-        NSLog(@"%s ERROR: genObjCode(%@) returns NULL!", __FUNCTION__, shouldCompress? @"true" : @"false");
+        NSLog(@"%s ERROR: generate_object_code(%s) returns NULL!", __FUNCTION__, shouldCompress? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -164,19 +169,60 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr error:(NSError **)error
+- (PyObject *)generateBinariesAt:(NSUInteger)baseAddr error:(NSError **)error
 {
     /*
      Function call in Python:
-     (addr, bank, blob) = genBinaries(baseAddr, saves=None)
+     (addr, bank, blob) = generate_binaries(baseAddr, saves=None)
      */
-    PyObject *methodName = PyString_FromString("genBinaries");
+    PyObject *methodName = PyString_FromString("generate_binaries");
     PyObject *pBaseAddr = PyInt_FromLong(baseAddr);
     PyObject *binaryList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pBaseAddr, NULL);
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
     if (NULL == binaryList) {
-        NSLog(@"%s ERROR: genBinaries(0x%lxd) returns NULL!", __FUNCTION__, baseAddr);
+        NSLog(@"%s ERROR: generate_binaries(0x%lxd) returns NULL!", __FUNCTION__, baseAddr);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+    }
+
+    return binaryList;
+}
+
+
+- (NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr error:(NSError **)error
+{
+    NSArray<NSArray<id> *> *retVal = nil;
+    PyObject *binaryList = [self generateBinariesAt:baseAddr error:error];
+    if (NULL != binaryList) {
+        retVal = [NSArray arrayWithPyListOfTuple:binaryList];
+        Py_DECREF(binaryList);
+    }
+
+    return retVal;
+}
+
+
+- (NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr withRanges:(NSArray<NSValue *> *)ranges error:(NSError **)error
+{
+    /*
+     Function call in Python:
+     (addr, bank, blob) = generate_binaries(baseAddr, saves)
+     */
+    PyObject *methodName = PyString_FromString("generate_binaries");
+    PyObject *pBaseAddr = PyInt_FromLong(baseAddr);
+    PyObject *pSaves = NULL;    // TODO: PyInt_FromLong(saves);
+    PyObject *binaryList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pBaseAddr, pSaves, NULL);
+    Py_XDECREF(pSaves);
+    Py_XDECREF(pBaseAddr);
+    Py_XDECREF(methodName);
+    if (NULL == binaryList) {
+        NSLog(@"%s ERROR: generate_binaries(0x%lxd) returns NULL!", __FUNCTION__, baseAddr);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -194,21 +240,74 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr withRanges:(NSArray<NSValue *> *)ranges error:(NSError **)error
+- (NSString *)generateTextAt:(NSUInteger)baseAddr withMode:(XDTGenerateTextMode)mode error:(NSError **)error
 {
+    PyObject *binaryList = [self generateBinariesAt:baseAddr error:error];
+    if (NULL == binaryList || (nil != error && nil != *error)) {
+        Py_XDECREF(binaryList);
+        return nil;
+    }
+
+    const Py_ssize_t dataCount = PyTuple_Size(binaryList);
+    if (2 > dataCount) {
+        Py_DECREF(binaryList);
+        return nil;
+    }
+    PyObject *binaryData = PyTuple_GetItem(binaryList, 0);   // second item (bank_count) is not used
+    if (NULL == binaryData) {
+        Py_DECREF(binaryList);
+        return nil;
+    }
+
+    char *textConfig = "";
+    switch (mode) {
+        case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
+            textConfig = "a4r";
+            break;
+        case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord:
+            textConfig = "a4";
+            break;
+        case XDTGenerateTextModeOutputAssembler:
+            textConfig = "a";
+            break;
+
+        case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
+            textConfig = "b4r";
+            break;
+        case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionWord:
+            textConfig = "b4";
+            break;
+        case XDTGenerateTextModeOutputBasic:
+            textConfig = "b";
+            break;
+
+        case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
+            textConfig = "c4r";
+            break;
+        case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionWord:
+            textConfig = "c4";
+            break;
+        case XDTGenerateTextModeOutputC:
+            textConfig = "c";
+            break;
+
+        default:
+            break;
+    }
+
     /*
      Function call in Python:
-     (addr, bank, blob) = genBinaries(baseAddr, saves)
+     text = generate_text(data, mode)
      */
-    PyObject *methodName = PyString_FromString("genBinaries");
-    PyObject *pBaseAddr = PyInt_FromLong(baseAddr);
-    PyObject *pSaves = NULL;    // TODO: PyInt_FromLong(saves);
-    PyObject *binaryList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pBaseAddr, pSaves, NULL);
-    Py_XDECREF(pSaves);
-    Py_XDECREF(pBaseAddr);
+    PyObject *methodName = PyString_FromString("generate_text");
+    PyObject *pMode = PyString_FromString(textConfig);
+    PyObject *dataText = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, binaryData, pMode, NULL);
+    Py_DECREF(binaryData);
+    Py_XDECREF(pMode);
     Py_XDECREF(methodName);
-    if (NULL == binaryList) {
-        NSLog(@"%s ERROR: genBinaries(0x%lxd) returns NULL!", __FUNCTION__, baseAddr);
+
+    if (NULL == dataText) {
+        NSLog(@"%s ERROR: generate_text(%p, \"%s\") returns NULL!", __FUNCTION__, binaryList, textConfig);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -219,9 +318,8 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    NSArray<NSArray<id> *> *retVal = [NSArray arrayWithPyListOfTuple:binaryList];
-    Py_DECREF(binaryList);
-
+    NSString *retVal = [NSString stringWithPythonString:dataText encoding:NSUTF8StringEncoding];
+    Py_DECREF(dataText);
     return retVal;
 }
 
@@ -236,9 +334,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     genImage(baseAddr, chunkSize=0x2000)
+     generate_image(baseAddr, chunkSize=0x2000)
      */
-    PyObject *methodName = PyString_FromString("genImage");
+    PyObject *methodName = PyString_FromString("generate_image");
     PyObject *pBaseAddr = PyInt_FromLong(baseAddr);
     PyObject *pChunkSize = PyInt_FromLong(chunkSize);
     PyObject *imageList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pBaseAddr, pChunkSize, NULL);
@@ -246,7 +344,7 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
     if (NULL == imageList) {
-        NSLog(@"%s ERROR: genImage(0x%lxd, 0x%lxd) returns NULL!", __FUNCTION__, baseAddr, chunkSize);
+        NSLog(@"%s ERROR: generate_image(0x%lxd, 0x%lxd) returns NULL!", __FUNCTION__, baseAddr, chunkSize);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -257,36 +355,8 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    NSArray<NSData *> *retVal = [NSArray arrayWithPyListOfString:imageList];
+    NSArray<NSData *> *retVal = [NSArray arrayWithPyListOfData:imageList];
     Py_DECREF(imageList);
-
-    return retVal;
-}
-
-
-- (NSData *)generateJumpstart:(NSError **)error
-{
-    /*
-     Function call in Python:
-     genJumpstart()
-     */
-    PyObject *methodName = PyString_FromString("genJumpstart");
-    PyObject *diskImageString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
-    Py_XDECREF(methodName);
-    if (NULL == diskImageString) {
-        NSLog(@"%s ERROR: genJumpstart() returns NULL!", __FUNCTION__);
-        PyObject *exeption = PyErr_Occurred();
-        if (NULL != exeption) {
-            if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
-            }
-            PyErr_Print();
-        }
-        return nil;
-    }
-
-    NSData *retVal = [NSData dataWithPythonString:diskImageString];
-    Py_XDECREF(diskImageString);
 
     return retVal;
 }
@@ -296,13 +366,13 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     genXbLoader()
+     generate_XB_loader()
      */
-    PyObject *methodName = PyString_FromString("genXbLoader");
+    PyObject *methodName = PyString_FromString("generate_XB_loader");
     PyObject *basicString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == basicString) {
-        NSLog(@"%s ERROR: genXbLoader() returns NULL!", __FUNCTION__);
+        NSLog(@"%s ERROR: generate_XB_loader() returns NULL!", __FUNCTION__);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -333,15 +403,15 @@ NS_ASSUME_NONNULL_END
     }
     /*
      Function call in Python:
-     data, layout, metainf = code.genCart(name)
+     data, layout, metainf = code.generate_cartridge(name)
      */
-    PyObject *methodName = PyString_FromString("genCart");
+    PyObject *methodName = PyString_FromString("generate_cartridge");
     PyObject *pCartName = PyString_FromString([cartridgeName UTF8String]);
     PyObject *cartTuple = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pCartName, NULL);
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartTuple) {
-        NSLog(@"%s ERROR: genCart(\"%@\") returns NULL!", __FUNCTION__, cartridgeName);
+        NSLog(@"%s ERROR: generate_cartridge(\"%@\") returns NULL!", __FUNCTION__, cartridgeName);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -393,15 +463,15 @@ NS_ASSUME_NONNULL_END
 
     /*
      Function call in Python:
-     genList(gensymbols)
+     generate_list(gensymbols)
      */
-    methodName = PyString_FromString("genList");
+    methodName = PyString_FromString("generate_list");
     PyObject *pOutputSymbols = PyBool_FromLong(outputSymbols);
     PyObject *listingString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pOutputSymbols, NULL);
     Py_XDECREF(pOutputSymbols);
     Py_XDECREF(methodName);
     if (NULL == listingString) {
-        NSLog(@"%s ERROR: genList(%@) returns NULL!", __FUNCTION__, outputSymbols? @"true" : @"false");
+        NSLog(@"%s ERROR: generate_list(%s) returns NULL!", __FUNCTION__, outputSymbols? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
@@ -423,15 +493,15 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     genSymbols(useEqu)
+     generate_symbols(useEqu)
      */
-    PyObject *methodName = PyString_FromString("genSymbols");
+    PyObject *methodName = PyString_FromString("generate_symbols");
     PyObject *pUseEqu = PyBool_FromLong(useEqu);
     PyObject *symbolsString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pUseEqu, NULL);
     Py_XDECREF(pUseEqu);
     Py_XDECREF(methodName);
     if (NULL == symbolsString) {
-        NSLog(@"%s ERROR: genSymbols(%@) returns NULL!", __FUNCTION__, useEqu? @"true" : @"false");
+        NSLog(@"%s ERROR: generate_symbols(%s) returns NULL!", __FUNCTION__, useEqu? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {

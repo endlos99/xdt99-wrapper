@@ -1,11 +1,11 @@
 //
-//  XDTObjcode.h
-//  SimpleXDT99
+//  XDTGa99Objcode.h
+//  XDTools99
 //
-//  Created by Henrik Wedekind on 03.12.16.
+//  Created by Henrik Wedekind on 18.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,18 +22,11 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#import <Foundation/Foundation.h>
-
 #import "XDTObject.h"
 
 
-@class XDTSymbols;
-
-
 NS_ASSUME_NONNULL_BEGIN
-@interface XDTObjcode : XDTObject
-
-@property (retain) XDTSymbols *symbols;
+@interface XDTGa99Objcode : XDTObject
 
 /**
  *
@@ -42,13 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
  **/
 
 - (nullable NSData *)generateDump:(NSError **)error;
-- (nullable NSData *)generateObjCode:(BOOL)shouldCompress error:(NSError **)error;
-- (nullable NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr error:(NSError **)error;
-- (nullable NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr withRanges:(NSArray<NSValue *> *)ranges error:(NSError **)error;
-- (nullable NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr error:(NSError **)error;
-- (nullable NSArray<NSData *> *)generateImageAt:(NSUInteger)baseAddr withChunkSize:(NSUInteger)chunkSize error:(NSError **)error;
-- (nullable NSData *)generateBasicLoader:(NSError **)error;
-- (nullable NSData *)generateJumpstart:(NSError **)error;
+- (nullable NSArray<NSArray<id> *> *)generateByteCode:(NSError **)error;
+- (nullable NSData *)generateImageWithName:(NSString *)cartridgeName error:(NSError **)error;
 - (nullable NSDictionary<NSString *, NSData *> *)generateMESSCartridgeWithName:(NSString *)cartridgeName error:(NSError **)error;
 
 - (nullable NSData *)generateListing:(BOOL)outputSymbols error:(NSError **)error;

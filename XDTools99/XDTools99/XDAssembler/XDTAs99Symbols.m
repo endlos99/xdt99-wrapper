@@ -1,11 +1,11 @@
 //
-//  XDTSymbols.m
-//  SimpleXDT99
+//  XDTAs99Symbols.m
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 04.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,30 +22,32 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#import "XDTSymbols.h"
+#import "XDTAs99Symbols.h"
 
 #include <Python/Python.h>
 
 
-#define XDTClassNameObjcode "Objcode"
+#define XDTClassNameSymbols "Symbols"
 
 
 NS_ASSUME_NONNULL_BEGIN
-@interface XDTSymbols () {
+
+@interface XDTAs99Symbols () {
     PyObject *symbolsPythonClass;
 }
 
 - (nullable instancetype)initWithPythonInstance:(void *)object;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 
-@implementation XDTSymbols
+@implementation XDTAs99Symbols
 
 + (instancetype)symbolsWithPythonInstance:(void *)object
 {
-    XDTSymbols *retVal = [[XDTSymbols alloc] initWithPythonInstance:object];
+    XDTAs99Symbols *retVal = [[XDTAs99Symbols alloc] initWithPythonInstance:object];
 #if !__has_feature(objc_arc)
     [retVal autorelease];
 #endif
@@ -187,9 +189,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     resetLC()
+     reset_LC()
      */
-    PyObject *methodName = PyString_FromString("resetLC");
+    PyObject *methodName = PyString_FromString("reset_LC");
     PyObject *dummy = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     Py_XDECREF(dummy);
@@ -200,9 +202,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     effectiveLC()
+     effective_LC()
      */
-    PyObject *methodName = PyString_FromString("effectiveLC");
+    PyObject *methodName = PyString_FromString("effective_LC");
     PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == lineCountInteger) {
@@ -220,9 +222,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     addSymbol(name, value)
+     add_symbol(name, value)
      */
-    PyObject *methodName = PyString_FromString("addSymbol");
+    PyObject *methodName = PyString_FromString("add_symbol");
     PyObject *pSymbolName = PyString_FromString([name UTF8String]);
     PyObject *pSymbolValue = PyInt_FromLong(value);
     PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pSymbolName, pSymbolValue, NULL);
@@ -245,9 +247,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     addLabel(lidx, label, realLC=False)
+     add_label(lidx, label, realLC=False)
      */
-    PyObject *methodName = PyString_FromString("addLabel");
+    PyObject *methodName = PyString_FromString("add_label");
     PyObject *pLIdx = PyInt_FromLong(lineIdx);
     PyObject *pLabel = PyString_FromString([label UTF8String]);
     PyObject *pRealLC = PyBool_FromLong(realLineCount);
@@ -266,9 +268,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     addLocalLabel(lidx, label)
+     add_local_label(lidx, label)
      */
-    PyObject *methodName = PyString_FromString("addLocalLabel");
+    PyObject *methodName = PyString_FromString("add_local_label");
     PyObject *pLIdx = PyInt_FromLong(lineIdx);
     PyObject *pLabel = PyString_FromString([label UTF8String]);
     PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pLIdx, pLabel, NULL);
@@ -285,9 +287,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     addDef(name)
+     add_def(name)
      */
-    PyObject *methodName = PyString_FromString("addDef");
+    PyObject *methodName = PyString_FromString("add_def");
     PyObject *pName = PyString_FromString([name UTF8String]);
     PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pName, NULL);
     Py_XDECREF(pName);
@@ -302,9 +304,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     addRef(name)
+     add_ref(name)
      */
-    PyObject *methodName = PyString_FromString("addRef");
+    PyObject *methodName = PyString_FromString("add_ref");
     PyObject *pName = PyString_FromString([name UTF8String]);
     PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pName, NULL);
     Py_XDECREF(pName);
@@ -319,9 +321,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     addXop(name, mode)
+     add_XOP(name, mode)
      */
-    PyObject *methodName = PyString_FromString("addXop");
+    PyObject *methodName = PyString_FromString("add_XOP");
     PyObject *pName = PyString_FromString([name UTF8String]);
     PyObject *pMode = PyInt_FromLong(mode);
     PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pName, pMode, NULL);
@@ -338,9 +340,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     getSymbol(name)
+     get_symbol(name)
      */
-    PyObject *methodName = PyString_FromString("getSymbol");
+    PyObject *methodName = PyString_FromString("get_symbol");
     PyObject *pName = PyString_FromString([name UTF8String]);
     PyObject *symbolValueInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pName, NULL);
     Py_XDECREF(pName);
@@ -360,9 +362,9 @@ NS_ASSUME_NONNULL_END
 {
     /*
      Function call in Python:
-     getLocal(name, lpos, distance)
+     get_local(name, lpos, distance)
      */
-    PyObject *methodName = PyString_FromString("getLocal");
+    PyObject *methodName = PyString_FromString("get_local");
     PyObject *pName = PyString_FromString([name UTF8String]);
     PyObject *pLpos = PyInt_FromLong(lpos);
     PyObject *pDistance = PyInt_FromLong(distance);

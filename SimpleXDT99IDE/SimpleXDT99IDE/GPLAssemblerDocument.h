@@ -3,7 +3,9 @@
 //  SimpleXDT99IDE
 //
 //  Created by Henrik Wedekind on 16.12.16.
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//
+//  SimpleXDT99IDE a simple IDE based on xdt99 that shows how to use the XDTools99.framework
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
