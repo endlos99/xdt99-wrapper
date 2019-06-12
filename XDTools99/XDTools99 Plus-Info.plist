@@ -15,11 +15,11 @@
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.5 (rc3)</string>
+	<string>0.5 (rc4)</string>
 	<key>CFBundleVersion</key>
-	<string>191004</string>
+	<string>201021</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2016-2019 hackmac. All rights reserved.</string>
+	<string>Copyright © 2016-2020 hackmac. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 </dict>

@@ -51,6 +51,13 @@
 			remoteGlobalIDString = AFE630521DF9BB67005FFD01;
 			remoteInfo = XDTools99;
 		};
+		AFBB3AA02540644300A1D169 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AF16C97923475DE900774F61;
+			remoteInfo = XDTools99Plus;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -157,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */,
+				AFBB3AA12540644300A1D169 /* XDTools99Plus.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -306,6 +314,13 @@
 			fileType = wrapper.framework;
 			path = XDTools99.framework;
 			remoteRef = AFADBC331DF9D28A000AD2F2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AFBB3AA12540644300A1D169 /* XDTools99Plus.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = XDTools99Plus.framework;
+			remoteRef = AFBB3AA02540644300A1D169 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -544,6 +559,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 201021;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../XDTools99/\"/**";
 				INFOPLIST_FILE = SimpleXDT99IDE/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -551,6 +567,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MARKETING_VERSION = "0.5 (rc4)";
 				PRODUCT_BUNDLE_IDENTIFIER = de.hackmac.SimpleXDT99IDE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -562,6 +579,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 201021;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../XDTools99/\"/**";
 				INFOPLIST_FILE = SimpleXDT99IDE/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -569,6 +587,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MARKETING_VERSION = "0.5 (rc4)";
 				PRODUCT_BUNDLE_IDENTIFIER = de.hackmac.SimpleXDT99IDE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
