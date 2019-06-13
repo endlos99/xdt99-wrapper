@@ -199,7 +199,7 @@
     NSMutableString *retVal = nil;
     NSError *error = nil;
     if (nil == _assemblingResult) {
-        return @"";
+        return nil;
     }
 
     NSData *data = [_assemblingResult generateListing:_shouldShowSymbolsInListing && !_shouldShowSymbolsAsEqus error:&error];
@@ -217,7 +217,7 @@
     }
     if (nil != error) {
         [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
-        return @"";
+        return nil;
     }
     return retVal;
 }
@@ -237,19 +237,20 @@
 }
 
 
-- (NSString *)generatedLogMessage
+- (NSMutableString *)generatedLogMessage
 {
-    if (![self shouldShowLog]) {
-        return @"";
+    NSMutableString *retVal = [super generatedLogMessage];
+    if (nil == retVal || ![self shouldShowLog]) {
+        return retVal;
     }
 
-    NSMutableString *retVal = [NSMutableString string];
-    if ([self shouldShowErrorsInLog]) {
-        [retVal appendFormat:@"%@\n", [self errorMessage]];
-    }
     if (_shouldShowListingInLog) {
-        [retVal appendFormat:@"%@\n", [self listOutput]];
+        NSString *listOut = [self listOutput];
+        if (nil != listOut && 0 < [listOut length]) {
+            [retVal appendFormat:@"%@\n", listOut];
+        }
     }
+    
     return retVal;
 }
 
@@ -388,7 +389,8 @@
     NSDictionary *options = @{
                               XDTAs99OptionRegister: [NSNumber numberWithBool:[self shouldUseRegisterSymbols]],
                               XDTAs99OptionStrict: [NSNumber numberWithBool:[self shouldBeStrict]],
-                              XDTAs99OptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType]
+                              XDTAs99OptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType],
+                              XDTAs99OptionWarnings: [NSNumber numberWithBool:[self shouldShowWarningsInLog]]
                               };
     XDTAssembler *assembler = [XDTAssembler assemblerWithOptions:options includeURL:[self fileURL]];
 
@@ -404,6 +406,11 @@
         return NO;
     }
     [self setErrorMessage:@""];
+    if (0 < assembler.warnings.count) {
+        [self setWarningMessage:[assembler.warnings componentsJoinedByString:@"\n"]];
+    } else {
+        [self setWarningMessage:@""];
+    }
     [self setAssemblingResult:result];
 
     return YES;

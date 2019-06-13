@@ -34,6 +34,8 @@
 
 @interface SourceCodeDocument () {
     NoodleLineNumberView *_lineNumberRulerView;
+    NSString *_errorMessage;
+    NSString *_warningMessage;
 }
 
 - (IBAction)generateCode:(nullable id)sender;
@@ -50,6 +52,12 @@
 + (NSSet *)keyPathsForValuesAffectingErrorMessage
 {
     return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), nil];
+}
+
+
++ (NSSet *)keyPathsForValuesAffectingWarningMessage
+{
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(shouldShowLog)), nil];
 }
 
 
@@ -97,6 +105,7 @@
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [self setShouldShowLog:[defaults boolForKey:UserDefaultKeyDocumentOptionShowLog]];
     [self setShouldShowErrorsInLog:[defaults boolForKey:UserDefaultKeyDocumentOptionShowErrorsInLog]];
+    [self setShouldShowWarningsInLog:[defaults boolForKey:UserDefaultKeyDocumentOptionShowWarningsInLog]];
 
 
     _lineNumberRulerView = [[NoodleLineNumberView alloc] initWithScrollView:_sourceScrollView];
@@ -113,6 +122,7 @@
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [defaults setBool:_shouldShowLog forKey:UserDefaultKeyDocumentOptionShowLog];
     [defaults setBool:_shouldShowErrorsInLog forKey:UserDefaultKeyDocumentOptionShowErrorsInLog];
+    [defaults setBool:_shouldShowWarningsInLog forKey:UserDefaultKeyDocumentOptionShowWarningsInLog];
 
     [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
 }
@@ -182,16 +192,63 @@
 #pragma mark - Accessor Methods
 
 
-+ (NSSet *)keyPathsForValuesAffectingGeneratedLogMessage
+- (NSString *)errorMessage
 {
-    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), NSStringFromSelector(@selector(errorMessage)), nil];
+    return _errorMessage;
 }
 
 
-- (NSString *)generatedLogMessage
+- (void)setErrorMessage:(NSString *)errorMessage
 {
+    _errorMessage = errorMessage;
+}
+
+
+- (NSString *)warningMessage
+{
+    return _warningMessage;
+}
+
+
+- (void)setWarningMessage:(NSString *)msg
+{
+    _warningMessage = msg;
+}
+
+
++ (NSSet *)keyPathsForValuesAffectingGeneratedLogMessage
+{
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), NSStringFromSelector(@selector(errorMessage)), nil];
+}
+
+
+- (NSMutableString *)generatedLogMessage
+{
+    NSMutableString *retVal = [NSMutableString string];
+    if (![self shouldShowLog]) {
+        return retVal;
+    }
+
     /* This method should be overridden to implement the document typical log output */
-    return @"";
+    if ([self shouldShowErrorsInLog]) {
+        NSString *message = [self errorMessage];
+        if (nil != message && 0 < [message length]) {
+            [retVal appendFormat:@"%@\n", message];
+        }
+    }
+    if ([self shouldShowWarningsInLog]) {
+        NSString *message = [self warningMessage];
+        if (nil != message && 0 < [message length]) {
+            [retVal appendFormat:@"%@\n", message];
+            // TODO: an Ralf: Für xas99 und xga99 fehlen noch angaben über Datei, Durchlauf und Zeilennummer vor der Warnung, so wie es in stderr ausgegeben wird.
+            /*
+             Treating as register, did you intend an @address?
+             asmacs-ti.asm <2> 0034 - Warning: Treating as register, did you intend an @address?
+             */
+        }
+    }
+    
+    return retVal;
 }
 
 

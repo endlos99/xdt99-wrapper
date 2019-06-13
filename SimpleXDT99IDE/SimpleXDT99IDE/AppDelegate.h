@@ -26,6 +26,7 @@
 
 #define UserDefaultKeyDocumentOptionShowLog @"DocumentOptionShowLog"
 #define UserDefaultKeyDocumentOptionShowErrorsInLog @"DocumentOptionShowErrorsInLog"
+#define UserDefaultKeyDocumentOptionShowWarningsInLog @"DocumentOptionShowWarningsInLog"
 
 #define UserDefaultKeyAssemblerOptionOutputTypePopupIndex @"AssemblerOptionOutputFileTypePopupButtonIndex"
 #define UserDefaultKeyAssemblerOptionDisableXDTExtensions @"AssemblerOptionDisableXDTExtensions"

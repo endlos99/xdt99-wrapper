@@ -35,7 +35,6 @@
 
 @property (retain) IBOutlet NSView *specialLogOptionView;
 
-@property (assign) BOOL shouldShowWarningsInLog;
 @property (assign) BOOL shouldDumpTokensInLog;
 
 @property (assign) BOOL shouldJoinSourceLines;
@@ -235,34 +234,54 @@
 #pragma mark - Accessor Methods
 
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingWarningMessage
+{
+    return [NSSet setWithObjects:@"compilingMessages", nil];
+}
+
+
+/* overwrite the getter, so the super class can generate the log message correctly */
+- (NSString *)warningMessage
+{
+    if (nil != _compilingMessages && 0 < [_compilingMessages count]) {
+        return [_compilingMessages componentsJoinedByString:@"\n"];
+    }
+
+    return nil;
+}
+
+
+- (void)setWarningMessage:(NSString *)warningMessage
+{
+    // doing nothing here, cause the warning content is stored in _compilingMessages
+}
+
+
 + (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
     NSSet *retVal = [super keyPathsForValuesAffectingValueForKey:key];
     if ([NSStringFromSelector(@selector(generatedLogMessage)) isEqualToString:key]) {
         NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
-        [newSet addObjectsFromArray:@[NSStringFromSelector(@selector(shouldDumpTokensInLog)), NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(compilingMessages)), NSStringFromSelector(@selector(tokenDump))]];
+        [newSet addObjectsFromArray:@[NSStringFromSelector(@selector(shouldDumpTokensInLog)), NSStringFromSelector(@selector(tokenDump)),
+                                      NSStringFromSelector(@selector(compilingMessages))  // this is the property name of an array where warning messages are stored into
+                                      ]];
         retVal = newSet;
     }
     return retVal;
 }
 
 
-- (NSString *)generatedLogMessage
+- (NSMutableString *)generatedLogMessage
 {
-    if (![self shouldShowLog]) {
-        return @"";
+    NSMutableString *retVal = [super generatedLogMessage];
+    if (nil == retVal || ![self shouldShowLog]) {
+        return retVal;
     }
 
-    NSMutableString *retVal = [NSMutableString string];
-    if ([self shouldShowErrorsInLog] && nil != [self errorMessage]) {
-        [retVal appendFormat:@"%@\n", [self errorMessage]];
-    }
-    if (_shouldShowWarningsInLog && nil != _compilingMessages) {
-        [retVal appendFormat:@"%@\n", [_compilingMessages componentsJoinedByString:@"\n"]];
-    }
-    if (_shouldDumpTokensInLog && nil != _tokenDump) {
+    if (_shouldDumpTokensInLog && nil != _tokenDump && 0 < [_tokenDump length]) {
         [retVal appendFormat:@"%@\n", _tokenDump];
     }
+    
     return retVal;
 }
 

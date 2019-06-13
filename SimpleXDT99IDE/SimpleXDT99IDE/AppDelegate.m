@@ -76,6 +76,7 @@ NS_ASSUME_NONNULL_END
     NSDictionary *defaultsDict = @{
                                    UserDefaultKeyDocumentOptionShowLog: @YES,
                                    UserDefaultKeyDocumentOptionShowErrorsInLog: @YES,
+                                   UserDefaultKeyDocumentOptionShowWarningsInLog: @YES,
 
                                    UserDefaultKeyAssemblerOptionOutputTypePopupIndex: @1,
                                    UserDefaultKeyAssemblerOptionDisableXDTExtensions: @NO,

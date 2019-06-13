@@ -31,6 +31,7 @@
 
 @property (assign) BOOL shouldShowLog;
 @property (assign) BOOL shouldShowErrorsInLog;
+@property (assign) BOOL shouldShowWarningsInLog;
 
 @property (retain) NSURL *outputBasePathURL;
 @property (retain) NSString *outputFileName;
@@ -47,7 +48,8 @@
 
 @property (readonly) NSImage *statusImage;
 @property (retain) NSString *errorMessage;
-@property (readonly) NSString *generatedLogMessage;
+@property (retain) NSString *warningMessage;
+@property (readonly) NSMutableString *generatedLogMessage;
 
 - (IBAction)checkCode:(id)sender;
 - (IBAction)generateCode:(id)sender;

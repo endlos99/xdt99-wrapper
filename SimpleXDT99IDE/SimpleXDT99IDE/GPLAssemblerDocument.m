@@ -227,19 +227,20 @@
 }
 
 
-- (NSString *)generatedLogMessage
+- (NSMutableString *)generatedLogMessage
 {
-    if (![self shouldShowLog]) {
-        return @"";
+    NSMutableString *retVal = [super generatedLogMessage];
+    if (nil == retVal || ![self shouldShowLog]) {
+        return retVal;
     }
 
-    NSMutableString *retVal = [NSMutableString string];
-    if ([self shouldShowErrorsInLog]) {
-        [retVal appendFormat:@"%@\n", [self errorMessage]];
-    }
     if (_shouldShowListingInLog) {
-        [retVal appendFormat:@"%@\n", [self listOutput]];
+        NSString *listOut = [self listOutput];
+        if (nil != listOut && 0 < [listOut length]) {
+            [retVal appendFormat:@"%@\n", listOut];
+        }
     }
+
     return retVal;
 }
 
@@ -370,7 +371,8 @@
                               XDTGa99OptionAORG: [NSNumber numberWithUnsignedInteger:[self aorgAddress]],
                               XDTGa99OptionGROM: [NSNumber numberWithUnsignedInteger:[self gromAddress]],
                               XDTGa99OptionStyle: [NSNumber numberWithUnsignedInteger:[self syntaxType]],
-                              XDTGa99OptionTarget: [NSNumber numberWithUnsignedInteger:[self targetType]]
+                              XDTGa99OptionTarget: [NSNumber numberWithUnsignedInteger:[self targetType]],
+                              XDTGa99OptionWarnings: [NSNumber numberWithBool:[self shouldShowWarningsInLog]]
                               };
     XDTGPLAssembler *assembler = [XDTGPLAssembler gplAssemblerWithOptions:options includeURL:[self fileURL]];
 
@@ -386,6 +388,11 @@
         return NO;
     }
     [self setErrorMessage:@""];
+    if (0 < assembler.warnings.count) {
+        [self setWarningMessage:[assembler.warnings componentsJoinedByString:@"\n"]];
+    } else {
+        [self setWarningMessage:@""];
+    }
     [self setAssemblingResult:result];
 
     return YES;

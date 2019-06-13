@@ -100,7 +100,7 @@
                                             <binding destination="-2" name="value" keyPath="self.shouldShowLog" id="4cx-49-9mD"/>
                                         </connections>
                                     </button>
-                                    <imageView toolTip="Status Lamp. It shows you if there are errors found (red) or if everything is okay (green)." horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="MVj-UF-zr3">
+                                    <imageView toolTip="Status Lamp. It shows you if there are errors found (red) or if everything is okay (green)." horizontalHuggingPriority="750" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="MVj-UF-zr3">
                                         <rect key="frame" x="26" y="3" width="16" height="16"/>
                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSStatusAvailable" id="mjW-0C-Ccx"/>
                                         <connections>
@@ -118,7 +118,7 @@
                                         </connections>
                                     </box>
                                     <customView horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gcM-9i-Ow0">
-                                        <rect key="frame" x="50" y="0.0" width="379" height="21"/>
+                                        <rect key="frame" x="50" y="0.0" width="323" height="21"/>
                                         <connections>
                                             <binding destination="-2" name="hidden" keyPath="self.shouldShowLog" id="w7H-uB-szy">
                                                 <dictionary key="options">
@@ -128,7 +128,7 @@
                                         </connections>
                                     </customView>
                                     <box horizontalHuggingPriority="750" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="mNA-xe-dcR">
-                                        <rect key="frame" x="426" y="0.0" width="5" height="21"/>
+                                        <rect key="frame" x="370" y="0.0" width="5" height="21"/>
                                         <connections>
                                             <binding destination="-2" name="hidden" keyPath="self.shouldShowLog" id="lnc-MG-6u9">
                                                 <dictionary key="options">
@@ -138,14 +138,14 @@
                                         </connections>
                                     </box>
                                     <customView horizontalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="UAb-9P-Jrh" userLabel="Spacer">
-                                        <rect key="frame" x="437" y="0.0" width="0.0" height="21"/>
+                                        <rect key="frame" x="381" y="0.0" width="0.0" height="21"/>
                                         <constraints>
                                             <constraint firstAttribute="width" priority="250" id="WtZ-7r-72w"/>
                                         </constraints>
                                     </customView>
-                                    <button toolTip="Check this to print out any error messages into the console." translatesAutoresizingMaskIntoConstraints="NO" id="8Qb-Jr-EEc">
-                                        <rect key="frame" x="433" y="3" width="76" height="18"/>
-                                        <buttonCell key="cell" type="check" title="Show Errors" bezelStyle="regularSquare" imagePosition="left" controlSize="mini" state="on" inset="2" id="0t0-cI-DWI">
+                                    <button toolTip="Check this to print out any error messages into the console." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8Qb-Jr-EEc">
+                                        <rect key="frame" x="413" y="2" width="49" height="18"/>
+                                        <buttonCell key="cell" type="check" title="Errors" bezelStyle="regularSquare" imagePosition="left" controlSize="mini" state="on" inset="2" id="0t0-cI-DWI">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="miniSystem"/>
                                         </buttonCell>
@@ -159,9 +159,25 @@
                                             </binding>
                                         </connections>
                                     </button>
+                                    <button toolTip="Check this to print out any warning messages into the console." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bZo-s1-xFm">
+                                        <rect key="frame" x="464" y="2" width="64" height="18"/>
+                                        <buttonCell key="cell" type="check" title="Warnings" bezelStyle="regularSquare" imagePosition="left" controlSize="mini" state="on" inset="2" id="x3S-Ib-VRg">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="miniSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <binding destination="-2" name="enabled" keyPath="self.shouldShowLog" id="fhe-Fw-TB0"/>
+                                            <binding destination="-2" name="hidden" keyPath="self.shouldShowLog" previousBinding="fhe-Fw-TB0" id="rqT-a3-k6Y">
+                                                <dictionary key="options">
+                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                </dictionary>
+                                            </binding>
+                                            <binding destination="-2" name="value" keyPath="self.shouldShowWarningsInLog" id="6R4-Y3-TZe"/>
+                                        </connections>
+                                    </button>
                                     <button toolTip="Click to save the content of the console as a text file." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qsN-sQ-Bfi">
-                                        <rect key="frame" x="514" y="2" width="72" height="16"/>
-                                        <buttonCell key="cell" type="push" title="Save Log…" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YZR-J6-FoF">
+                                        <rect key="frame" x="533" y="2" width="53" height="16"/>
+                                        <buttonCell key="cell" type="push" title="Save…" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YZR-J6-FoF">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="miniSystem"/>
                                         </buttonCell>
@@ -190,27 +206,46 @@
                                             </binding>
                                         </connections>
                                     </button>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="seW-Lw-vd1">
+                                        <rect key="frame" x="387" y="5" width="24" height="11"/>
+                                        <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="Log:" id="CXw-Wv-FHz">
+                                            <font key="font" metaFont="miniSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <connections>
+                                            <binding destination="-2" name="hidden" keyPath="self.shouldShowLog" id="CYs-u3-Ong">
+                                                <dictionary key="options">
+                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                </dictionary>
+                                            </binding>
+                                        </connections>
+                                    </textField>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="qsN-sQ-Bfi" firstAttribute="centerY" secondItem="mOp-tK-DjE" secondAttribute="centerY" id="0vY-rM-Ujj"/>
                                     <constraint firstAttribute="bottom" secondItem="UAb-9P-Jrh" secondAttribute="bottom" id="1rd-AB-j5v"/>
                                     <constraint firstAttribute="bottom" secondItem="gcM-9i-Ow0" secondAttribute="bottom" id="4be-Me-prE"/>
                                     <constraint firstItem="wDb-Rt-474" firstAttribute="centerY" secondItem="mOp-tK-DjE" secondAttribute="centerY" id="4o1-th-NvR"/>
-                                    <constraint firstItem="qsN-sQ-Bfi" firstAttribute="leading" secondItem="8Qb-Jr-EEc" secondAttribute="trailing" constant="8" symbolic="YES" id="4sV-Hs-ccl"/>
                                     <constraint firstItem="MVj-UF-zr3" firstAttribute="leading" secondItem="wDb-Rt-474" secondAttribute="trailing" constant="8" symbolic="YES" id="6vj-ls-0oJ"/>
                                     <constraint firstItem="gcM-9i-Ow0" firstAttribute="top" secondItem="mOp-tK-DjE" secondAttribute="top" id="8W2-Wh-075"/>
+                                    <constraint firstItem="bZo-s1-xFm" firstAttribute="leading" secondItem="8Qb-Jr-EEc" secondAttribute="trailing" constant="8" symbolic="YES" id="99P-xR-Sip"/>
                                     <constraint firstItem="gcM-9i-Ow0" firstAttribute="height" secondItem="AWg-42-Z2K" secondAttribute="height" id="9e6-Hz-7aU"/>
                                     <constraint firstItem="UAb-9P-Jrh" firstAttribute="leading" secondItem="gcM-9i-Ow0" secondAttribute="trailing" constant="8" symbolic="YES" id="D0A-TQ-Tly"/>
-                                    <constraint firstItem="8Qb-Jr-EEc" firstAttribute="centerY" secondItem="mOp-tK-DjE" secondAttribute="centerY" id="N01-7a-14x"/>
+                                    <constraint firstItem="qsN-sQ-Bfi" firstAttribute="leading" secondItem="bZo-s1-xFm" secondAttribute="trailing" constant="8" symbolic="YES" id="OLd-W4-eE1"/>
                                     <constraint firstItem="gcM-9i-Ow0" firstAttribute="centerY" secondItem="AWg-42-Z2K" secondAttribute="centerY" id="OT1-r3-PuF"/>
                                     <constraint firstItem="UAb-9P-Jrh" firstAttribute="top" secondItem="mOp-tK-DjE" secondAttribute="top" id="Ora-dV-Kls"/>
                                     <constraint firstItem="AWg-42-Z2K" firstAttribute="leading" secondItem="gcM-9i-Ow0" secondAttribute="leading" id="SOc-VK-1QB"/>
+                                    <constraint firstItem="seW-Lw-vd1" firstAttribute="centerY" secondItem="mOp-tK-DjE" secondAttribute="centerY" id="Smi-BL-dyf"/>
                                     <constraint firstItem="mNA-xe-dcR" firstAttribute="trailing" secondItem="gcM-9i-Ow0" secondAttribute="trailing" id="Ue0-QZ-XrQ"/>
-                                    <constraint firstItem="8Qb-Jr-EEc" firstAttribute="leading" secondItem="UAb-9P-Jrh" secondAttribute="trailing" id="Yju-cU-lm4"/>
                                     <constraint firstItem="mNA-xe-dcR" firstAttribute="centerY" secondItem="gcM-9i-Ow0" secondAttribute="centerY" id="fRU-XO-H4V"/>
                                     <constraint firstItem="wDb-Rt-474" firstAttribute="leading" secondItem="mOp-tK-DjE" secondAttribute="leading" constant="5" id="gR6-Px-gd6"/>
+                                    <constraint firstItem="8Qb-Jr-EEc" firstAttribute="leading" secondItem="seW-Lw-vd1" secondAttribute="trailing" constant="8" symbolic="YES" id="gXe-wU-aX3"/>
+                                    <constraint firstItem="seW-Lw-vd1" firstAttribute="leading" secondItem="UAb-9P-Jrh" secondAttribute="trailing" constant="8" symbolic="YES" id="hvk-6Y-ciN"/>
                                     <constraint firstItem="mNA-xe-dcR" firstAttribute="height" secondItem="gcM-9i-Ow0" secondAttribute="height" id="jUF-l2-4Nf"/>
+                                    <constraint firstItem="8Qb-Jr-EEc" firstAttribute="firstBaseline" secondItem="seW-Lw-vd1" secondAttribute="firstBaseline" id="lIv-FZ-Efo"/>
                                     <constraint firstItem="MVj-UF-zr3" firstAttribute="centerY" secondItem="mOp-tK-DjE" secondAttribute="centerY" id="tyF-en-zq3"/>
+                                    <constraint firstItem="bZo-s1-xFm" firstAttribute="firstBaseline" secondItem="8Qb-Jr-EEc" secondAttribute="firstBaseline" id="uh5-QE-VNC"/>
                                     <constraint firstItem="gcM-9i-Ow0" firstAttribute="leading" secondItem="MVj-UF-zr3" secondAttribute="trailing" constant="8" symbolic="YES" id="xET-Wr-YQ6"/>
                                     <constraint firstAttribute="trailing" secondItem="qsN-sQ-Bfi" secondAttribute="trailing" constant="20" symbolic="YES" id="zq6-jk-oW6"/>
                                 </constraints>
