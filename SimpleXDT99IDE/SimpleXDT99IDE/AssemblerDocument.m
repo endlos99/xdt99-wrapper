@@ -387,7 +387,7 @@
 
         return NO;
     }
-    [self setErrorMessage:@"No errors found!\n"];
+    [self setErrorMessage:@""];
     [self setAssemblingResult:result];
 
     return YES;
