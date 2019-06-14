@@ -276,7 +276,9 @@
     XDTGPLAssemblerTargetType xdtTargetType = [self targetType];
     if (![self assembleCode:xdtTargetType error:&error]) {
         if (nil != error) {
-            [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+            if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
+                [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+            }
             return;
         }
     }
@@ -288,9 +290,12 @@
     NSError *error = nil;
 
     XDTGPLAssemblerTargetType xdtTargetType = [self targetType];
-    if (![self assembleCode:xdtTargetType error:&error] || nil != error || ![self exportBinaries:xdtTargetType error:&error]) {
+    if (![self assembleCode:xdtTargetType error:&error] || nil != error ||
+        ![self exportBinaries:xdtTargetType error:&error] || nil != error) {
         if (nil != error) {
-            [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+            if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
+                [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+            }
             return;
         }
     }
@@ -356,7 +361,7 @@
 
 - (BOOL)assembleCode:(XDTGPLAssemblerTargetType)xdtTargetType error:(NSError **)error
 {
-    if (nil == [self fileURL]) {    // there must be a file wich can be assembled
+    if (nil == [self fileURL]) {    // there must be a file which can be assembled
         return NO;
     }
     NSDictionary *options = @{
@@ -369,7 +374,11 @@
 
     XDTGPLObjcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
     if (nil != error && nil != *error) {
-        [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@\n", [*error localizedDescription], [*error localizedFailureReason]]];
+        if (nil == [*error localizedFailureReason]) {
+            [self setErrorMessage:[NSString stringWithFormat:@"%@:\n", [*error localizedDescription]]];
+        } else {
+            [self setErrorMessage:[NSString stringWithFormat:@"%@:\n%@\n", [*error localizedDescription], [*error localizedFailureReason]]];
+        }
         [self setAssemblingResult:result];
 
         return NO;
@@ -418,7 +427,7 @@
                                             NSLocalizedDescriptionKey: NSLocalizedString(@"Missing Option!", @"Error description of a missing option."),
                                             NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The cartridge name is missing! Please specify a name of the cartridge to create!", @"Explanation for an error of a missing cartridge name option.")
                                             };
-                NSError *missingOptionError = [NSError errorWithDomain:XDTErrorDomain code:-1 userInfo:errorDict];
+                NSError *missingOptionError = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolException userInfo:errorDict];
                 [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [missingOptionError localizedDescription], [missingOptionError localizedFailureReason]]];
                 retVal = NO;
                 if (nil != error) {
@@ -442,7 +451,7 @@
                                             NSLocalizedDescriptionKey: NSLocalizedString(@"Missing Option!", @"Error description of a missing option."),
                                             NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The cartridge name is missing! Please specify a name of the cartridge to create!", @"Explanation for an error of a missing cartridge name option.")
                                             };
-                NSError *missingOptionError = [NSError errorWithDomain:XDTErrorDomain code:-1 userInfo:errorDict];
+                NSError *missingOptionError = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolException userInfo:errorDict];
                 [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [missingOptionError localizedDescription], [missingOptionError localizedFailureReason]]];
                 retVal = NO;
                 if (nil != error) {

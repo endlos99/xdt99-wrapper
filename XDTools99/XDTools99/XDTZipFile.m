@@ -79,7 +79,7 @@
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2
+                *error = [NSError errorWithPythonError:exeption
                                     RecoverySuggestion:[NSString stringWithFormat:@"Expecting to find the function \"%s\" in module %s", XDTClassNameZipFile, XDTModuleNameZipFile]];
             }
             PyErr_Print();
@@ -107,7 +107,7 @@
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -154,7 +154,7 @@
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }

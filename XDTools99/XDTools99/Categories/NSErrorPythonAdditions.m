@@ -1,11 +1,11 @@
 //
 //  NSErrorPythonAdditions.m
-//  SimpleXDT99
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 05.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016-2017 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -30,23 +30,26 @@
 
 @implementation NSError (NSErrorPythonAdditions)
 
-+ (instancetype)errorWithPythonError:(PyObject *)error code:(NSInteger)code RecoverySuggestion:(NSString *)recoverySuggestion
++ (instancetype)errorWithPythonError:(PyObject *)error RecoverySuggestion:(NSString *)recoverySuggestion
 {
-    return [self errorWithPythonError:error code:code RecoverySuggestion:recoverySuggestion clearErrorIndicator:NO];
+    return [self errorWithPythonError:error RecoverySuggestion:recoverySuggestion clearErrorIndicator:NO];
 }
 
 
-+ (instancetype)errorWithPythonError:(PyObject *)error code:(NSInteger)code RecoverySuggestion:(NSString *)recoverySuggestion clearErrorIndicator:(BOOL)clearIndicator
++ (instancetype)errorWithPythonError:(PyObject *)error RecoverySuggestion:(NSString *)recoverySuggestion clearErrorIndicator:(BOOL)clearIndicator
 {
+    XDTErrorCode errorCode = XDTErrorCodePythonException;
     NSString *errorString = nil;
     NSString *errorDescription = nil;
 
     if (PyString_Check(error)) {
         /* The error is just a simple error message */
+        errorCode = XDTErrorCodePythonError;
         errorString = [NSString stringWithUTF8String:PyString_AsString(error)];
         errorDescription = @"Python error occured!";
     } else if (PyExceptionClass_Check(error)) {
         /* Or the error can be an exception, so fetch more information here. */
+        errorCode = XDTErrorCodePythonException;
         PyTypeObject *eType = NULL;
         PyObject *eObject = NULL;
         PyTracebackObject *eTraceBack = NULL;
@@ -73,15 +76,16 @@
     if (nil == recoverySuggestion) {
         errorDict = @{
                       NSLocalizedDescriptionKey: errorDescription,
-                      NSLocalizedRecoverySuggestionErrorKey: errorString
+                      NSLocalizedFailureReasonErrorKey: errorString
                       };
     } else {
         errorDict = @{
                       NSLocalizedDescriptionKey: errorDescription,
-                      NSLocalizedRecoverySuggestionErrorKey: [NSString stringWithFormat:@"%@\n%@", errorString, recoverySuggestion]
+                      NSLocalizedFailureReasonErrorKey: errorString,
+                      NSLocalizedRecoverySuggestionErrorKey: recoverySuggestion
                       };
     }
-    return [NSError errorWithDomain:XDTErrorDomain code:code userInfo:errorDict];
+    return [NSError errorWithDomain:XDTErrorDomain code:errorCode userInfo:errorDict];
 }
 
 @end

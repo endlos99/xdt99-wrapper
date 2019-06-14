@@ -48,6 +48,14 @@
 #define UserDefaultKeyGPLOptionGROMAddress @"GPLOptionGROMAddress"
 
 
+FOUNDATION_EXPORT NSErrorDomain const IDEErrorDomain;
+
+typedef NS_ENUM(NSUInteger, IDEErrorCode) {
+    IDEErrorCodeCantDisplayErrorInLogView = 1,
+    IDEErrorCodeDocumentNotSaved = 2,
+};
+
+
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
 

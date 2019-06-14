@@ -28,6 +28,8 @@
 
 #import "NoodleLineNumberView.h"
 
+#import "XDTObject.h"
+
 
 
 @interface SourceCodeDocument () {
@@ -142,6 +144,39 @@
  - http://stackoverflow.com/questions/40672218/nsrulerview-how-to-correctly-align-line-numbers-with-main-text
  - http://stackoverflow.com/questions/15545857/nstextview-keydown-event#15546489
  */
+
+
+/* This method returns a new error witch will displayed in an alert when no Log View is visible or the option showing errors is deactivated. */
+- (NSError *)willPresentError:(NSError *)error
+{
+    if (![error.domain isEqualToString:XDTErrorDomain] || XDTErrorCodeToolLoggedError != error.code) {
+        return error;
+    }
+
+    NSString *localizedRecoverySuggestionError = nil;
+    if (!_shouldShowLog) {
+        if (!_shouldShowErrorsInLog) {
+            localizedRecoverySuggestionError = NSLocalizedString(@"Please open the log view and enable error logging to get detailed error information.", @"Recovery suggestion showing in an alert window when log view is invisible or error logging is disabled");
+        } else {
+            localizedRecoverySuggestionError = NSLocalizedString(@"Please open the log view to get detailed error information.", @"Recovery suggestion showing in an alert window when log view is invisible");
+        }
+    } else {
+        if (!_shouldShowErrorsInLog) {
+            localizedRecoverySuggestionError = NSLocalizedString(@"Please enable error logging to get detailed error information.", @"Recovery suggestion showing in an alert window when error logging is disabled");
+        }
+    }
+
+    if (nil != localizedRecoverySuggestionError) {
+        NSDictionary<NSErrorUserInfoKey, id> *d = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+        //NSString *s = [d valueForKey:NSLocalizedRecoverySuggestionErrorKey];
+        [d setValue:localizedRecoverySuggestionError forKey:NSLocalizedRecoverySuggestionErrorKey];
+        [d setValue:error forKey:NSUnderlyingErrorKey];
+
+        error = [NSError errorWithDomain:IDEErrorDomain code:IDEErrorCodeCantDisplayErrorInLogView userInfo:d];
+    }
+
+    return error;
+}
 
 
 #pragma mark - Accessor Methods

@@ -27,6 +27,13 @@
 
 #define XDTErrorDomain @"XDTErrorDomain"
 
+typedef NS_ENUM(NSInteger, XDTErrorCode) {
+    XDTErrorCodeToolLoggedError = 0,
+    XDTErrorCodeToolException = 1,
+    XDTErrorCodePythonError = 2,
+    XDTErrorCodePythonException = 3,
+};
+
 
 @interface XDTObject : NSObject
 

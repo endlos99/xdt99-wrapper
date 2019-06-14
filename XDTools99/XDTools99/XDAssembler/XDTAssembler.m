@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
 //            }
             PyErr_Print();
         }
@@ -136,7 +136,7 @@ NS_ASSUME_NONNULL_END
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
 //            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
 //            }
                 PyErr_Print();
             }
@@ -238,7 +238,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
 //            }
             PyErr_Print();
         }
@@ -324,7 +324,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -347,7 +347,7 @@ NS_ASSUME_NONNULL_END
                                             NSLocalizedFailureReasonErrorKey: errorString,
                                             NSLocalizedRecoverySuggestionErrorKey: @"Please check all assembler options and try again."
                                             };
-                *error = [NSError errorWithDomain:XDTErrorDomain code:-1 userInfo:errorDict];
+                *error = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolLoggedError userInfo:errorDict];
             }
             NSLog(@"Error occured while assembling '%@':\n%@", basename, errorString);
         }

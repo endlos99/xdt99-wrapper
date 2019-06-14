@@ -280,7 +280,9 @@
     XDTBasic *basic = [self parseCode:&error];
     if (nil == basic) {
         if (nil != error) {
-            /* TODO: Present errors through an error sheet, or display it just in the log view. */
+            if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
+                [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+            }
         }
         return;
     }
@@ -295,7 +297,9 @@
     XDTBasic *basic = [self parseCode:&error];
     if (nil == basic) {
         if (nil != error) {
-            /* TODO: Present errors through an error sheet, or display it just in the log view. */
+            if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
+                [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+            }
         }
         return;
     }
@@ -315,8 +319,20 @@
         default:
             break;
     }
-    if (!successfullySaved) {
-        [self setErrorMessage:[NSString stringWithFormat:@"ERROR: %@\n%@", [error localizedDescription], [error localizedFailureReason]]];
+    if (!successfullySaved && nil != error) {
+        if (nil == [error localizedFailureReason]) {
+            [self setErrorMessage:[NSString stringWithFormat:@"%@\n", [error localizedDescription]]];
+        } else {
+            [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@\n", [error localizedDescription], [error localizedFailureReason]]];
+        }
+    } else {
+        [self setErrorMessage:@""];
+    }
+
+    if (nil != error) {
+        if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
+            [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+        }
     }
 }
 
@@ -326,16 +342,31 @@
 
 - (XDTBasic *)parseCode:(NSError **)error
 {
+    [self setErrorMessage:@""];
+
     XDTBasic *basic = [XDTBasic basicWithOptions:@{XDTBasicOptionJoinLines: [NSNumber numberWithBool:_shouldJoinSourceLines],
                                                    XDTBasicOptionProtectFile: [NSNumber numberWithBool:_shouldProtectFile]
                                                    }];
     if (![basic parseSourceCode:[self sourceCode] error:error]) {
-        [self setErrorMessage:[NSString stringWithFormat:@"ERROR: %@\n%@", [*error localizedDescription], [*error localizedFailureReason]]];
+        if (nil != *error) {
+            if (nil == [*error localizedFailureReason]) {
+                [self setErrorMessage:[NSString stringWithFormat:@"%@:\n", [*error localizedDescription]]];
+            } else {
+                [self setErrorMessage:[NSString stringWithFormat:@"%@:\n%@\n", [*error localizedDescription], [*error localizedFailureReason]]];
+            }
+        }
         return nil;
     }
 
     [self setCompilingMessages:[basic warnings]];
     [self setTokenDump:[basic dumpTokenList:error]];
+    if (nil != *error) {
+        if (nil == [*error localizedFailureReason]) {
+            [self setErrorMessage:[NSString stringWithFormat:@"%@:\n", [*error localizedDescription]]];
+        } else {
+            [self setErrorMessage:[NSString stringWithFormat:@"%@:\n%@\n", [*error localizedDescription], [*error localizedFailureReason]]];
+        }
+    }
     
     return basic;
 }

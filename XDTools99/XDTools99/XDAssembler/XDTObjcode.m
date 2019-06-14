@@ -123,10 +123,10 @@ NS_ASSUME_NONNULL_END
     if (nil != error) {
         NSDictionary *errorDict = @{
                                     NSLocalizedDescriptionKey: @"Unimplemented method",
-                                    NSLocalizedRecoverySuggestionErrorKey: @"generateCump: is not implemented for now."
+                                    NSLocalizedRecoverySuggestionErrorKey: @"generateDump: is not implemented for now."
                                     };
-        *error = [NSError errorWithDomain:XDTErrorDomain code:-2 userInfo:errorDict];
-        //*error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+        *error = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolException userInfo:errorDict];
+        //*error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
     }
     //    PyErr_Print();
     //}
@@ -150,7 +150,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -180,7 +180,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -212,7 +212,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -250,7 +250,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -278,7 +278,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -306,7 +306,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -345,7 +345,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -405,7 +405,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -435,7 +435,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }

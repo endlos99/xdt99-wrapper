@@ -31,6 +31,9 @@
 #import <XDTools99/XDGPL.h>
 
 
+NSErrorDomain const IDEErrorDomain = @"IDEErrorDomain";
+
+
 NS_ASSUME_NONNULL_BEGIN
 @interface AppDelegate ()
 

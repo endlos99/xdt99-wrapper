@@ -13,6 +13,15 @@
 /* Error description of a missing option. */
 "Missing Option!" = "Fehlende Option!";
 
+/* Recovery suggestion showing in an alert window when error logging is disabled */
+"Please enable error logging to get detailed error information." = "Bitte die Fehlerprotokollierung aktivieren, um detaillierte Fehlerinformationen zu erhalten.";
+
+/* Recovery suggestion showing in an alert window when log view is invisible or error logging is disabled */
+"Please open the log view and enable error logging to get detailed error information." = "Bitte die Protokollansicht öffnen und die Fehlerprotokollierung aktivieren, um detaillierte Fehlerinformationen zu erhalten.";
+
+/* Recovery suggestion showing in an alert window when log view is invisible */
+"Please open the log view to get detailed error information." = "Bitte die Protokollansicht öffnen, um detaillierte Fehlerinformationen zu erhalten.";
+
 /* Title for opening Assembler files in Open Panel */
 "Select assembler source file" = "Assembler-Quelldatei auswählen";
 

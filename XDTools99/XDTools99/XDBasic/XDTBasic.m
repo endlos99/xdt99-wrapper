@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
 //            }
             PyErr_Print();
         }
@@ -115,7 +115,7 @@ NS_ASSUME_NONNULL_END
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
 //            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
 //            }
             }
             return nil;
@@ -197,7 +197,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
 //            }
             PyErr_Print();
         }
@@ -309,11 +309,11 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pData);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
-        NSLog(@"%s ERROR: load(%@, %@) returns NULL!", __FUNCTION__, data, useLongFormat? @"true" : @"false");
+        NSLog(@"%s ERROR: load(%@, %s) returns NULL!", __FUNCTION__, data, useLongFormat? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -341,7 +341,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -367,7 +367,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -392,11 +392,11 @@ NS_ASSUME_NONNULL_END
     Py_XDECREF(pLongOpt);
     Py_XDECREF(methodName);
     if (NULL == pProgramData) {
-        NSLog(@"%s ERROR: getImage(%@, %@) returns NULL!", __FUNCTION__, useLongFormat? @"true" : @"false", _protect? @"true" : @"false");
+        NSLog(@"%s ERROR: getImage(%s, %s) returns NULL!", __FUNCTION__, useLongFormat? "true" : "false", _protect? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -450,7 +450,7 @@ NS_ASSUME_NONNULL_END
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
                 if (nil != error) {
-                    *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:@"Choose another value for the Line Delta, unwrap lines by hand in the integrated source code editor or fix the source file with an external text editor application and reload the file."];
+                    *error = [NSError errorWithPythonError:exeption RecoverySuggestion:@"Choose another value for the Line Delta, unwrap lines by hand in the integrated source code editor or fix the source file with an external text editor application and reload the file."];
                 }
                 PyErr_Print();
             }
@@ -472,7 +472,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -509,9 +509,9 @@ NS_ASSUME_NONNULL_END
 - (BOOL)saveMergedFormatFile:(NSURL *)fileURL error:(NSError **)error
 {
     if (nil != error) {
-        *error = [NSError errorWithDomain:XDTErrorDomain code:-1
+        *error = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolException
                                  userInfo:@{NSLocalizedDescriptionKey: @"Operation not supported",
-                                            NSLocalizedFailureReasonErrorKey: @"Program creation in MERGE format is not supported by xbas99."}];
+                                            NSLocalizedFailureReasonErrorKey: @"Program creation in MERGE format is not supported by the current version of xbas99."}];
     }
     return NO;
 }
@@ -530,7 +530,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
             }
             PyErr_Print();
         }
