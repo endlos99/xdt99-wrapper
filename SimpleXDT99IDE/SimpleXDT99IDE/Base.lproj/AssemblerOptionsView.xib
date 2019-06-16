@@ -15,245 +15,273 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="orG-d7-3rG" userLabel="xas99 Option View">
-            <rect key="frame" x="0.0" y="0.0" width="578" height="56"/>
+            <rect key="frame" x="0.0" y="0.0" width="689" height="56"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
             <subviews>
                 <box title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="wWK-kF-12p">
-                    <rect key="frame" x="-3" y="-4" width="584" height="62"/>
+                    <rect key="frame" x="-3" y="-4" width="695" height="62"/>
                     <view key="contentView" id="JFX-41-1Y2">
-                        <rect key="frame" x="3" y="3" width="578" height="56"/>
+                        <rect key="frame" x="3" y="3" width="689" height="56"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mLb-xT-y5N">
-                                <rect key="frame" x="8" y="32" width="45" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="Dpf-6K-88q">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <popUpButton toolTip="Select the output file type." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="aPk-pN-aN9">
-                                <rect key="frame" x="56" y="27" width="171" height="22"/>
-                                <popUpButtonCell key="cell" type="push" title="Program Image" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="EvA-9i-baN" id="o2f-m1-VBB">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <menu key="menu" id="lK2-tC-15u">
-                                        <items>
-                                            <menuItem title="Program Image" state="on" toolTip="Compiled code will be stored using PROGRAM format, which is used in Editor/Assembler Option 5" id="EvA-9i-baN"/>
-                                            <menuItem title="Object Code (Compressed)" toolTip="Compiled code will be stored in an compressed format using DIS/FIX 80 format, which is used in Editor/Assembler Option 3" id="sFv-Rw-HR6"/>
-                                            <menuItem title="Object Code" toolTip="Compiled code will be stored using DIS/FIX 80 format, which is used in Editor/Assembler Option 3" id="rVH-Jy-gER"/>
-                                            <menuItem title="Embeded Extended Basic" toolTip="This format wraps a XBasic program around the generated code." id="wYo-tA-Ebc">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="Raw Binary" toolTip="Create program binaries without any metadata, i.e. suitable for burning EPROMs." id="ZIS-tz-YOr">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="Textual Raw Binary for (GPL)Assembler" id="2iS-Xw-DkO">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                                <string key="toolTip">Generates a textual version of the raw binary.
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="2fn-eD-Qem" userLabel="Options View">
+                                <rect key="frame" x="0.0" y="0.0" width="604" height="56"/>
+                                <subviews>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mLb-xT-y5N">
+                                        <rect key="frame" x="8" y="32" width="45" height="14"/>
+                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="Dpf-6K-88q">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton toolTip="Select the output file type." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="aPk-pN-aN9">
+                                        <rect key="frame" x="56" y="27" width="241" height="22"/>
+                                        <popUpButtonCell key="cell" type="push" title="Program Image" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="EvA-9i-baN" id="o2f-m1-VBB">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" id="lK2-tC-15u">
+                                                <items>
+                                                    <menuItem title="Program Image" state="on" toolTip="Compiled code will be stored using PROGRAM format, which is used in Editor/Assembler Option 5" id="EvA-9i-baN"/>
+                                                    <menuItem title="Object Code (Compressed)" toolTip="Compiled code will be stored in an compressed format using DIS/FIX 80 format, which is used in Editor/Assembler Option 3" id="sFv-Rw-HR6"/>
+                                                    <menuItem title="Object Code" toolTip="Compiled code will be stored using DIS/FIX 80 format, which is used in Editor/Assembler Option 3" id="rVH-Jy-gER"/>
+                                                    <menuItem title="Embeded Extended Basic" toolTip="This format wraps a XBasic program around the generated code." id="wYo-tA-Ebc">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem title="Raw Binary" toolTip="Create program binaries without any metadata, i.e. suitable for burning EPROMs." id="ZIS-tz-YOr">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem title="Textual Raw Binary for (GPL)Assembler" id="2iS-Xw-DkO">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <string key="toolTip">Generates a textual version of the raw binary.
 It is useful for including the binary result of another program into some assembly or GPL source source.</string>
-                                            </menuItem>
-                                            <menuItem title="Textual Raw Binary for BASIC" id="oZF-D2-xjw">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="Textual Raw Binary for C/C++" id="pul-8B-aBf">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="MESS Cartridge" toolTip="Create an RPK cartridge file that can be used with the MESS emulator." id="qPn-hk-3yJ">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <binding destination="-2" name="selectedIndex" keyPath="self.outputFormatPopupButtonIndex" id="9cm-ji-BEb"/>
-                                </connections>
-                            </popUpButton>
-                            <textField verticalHuggingPriority="251" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Ho-y2-XHw">
-                                <rect key="frame" x="15" y="10" width="38" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Name:" id="3E8-vV-OJY">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField toolTip="Type in the file name of the file that will be generated." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Sw-CH-7fQ" userLabel="File Name Text Field">
-                                <rect key="frame" x="59" y="7" width="129" height="19"/>
-                                <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="tyK-Qi-HkY">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <allowedInputSourceLocales>
-                                        <string>NSAllRomanInputSourcesLocaleIdentifier</string>
-                                    </allowedInputSourceLocales>
-                                </textFieldCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="self.outputFileName" id="cYS-19-frt"/>
-                                </connections>
-                            </textField>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yo7-OK-UYD">
-                                <rect key="frame" x="191" y="2" width="38" height="27"/>
-                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSPathTemplate" imagePosition="overlaps" alignment="center" controlSize="small" scrollable="YES" lineBreakMode="clipping" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qDd-p6-yzi">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="selectOutputFile:" target="-2" id="fam-4y-1my"/>
-                                </connections>
-                            </button>
-                            <box horizontalHuggingPriority="249" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="wZY-uH-oh6">
-                                <rect key="frame" x="230" y="0.0" width="5" height="56"/>
-                            </box>
-                            <textField verticalHuggingPriority="751" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1me-lC-GlF">
-                                <rect key="frame" x="242" y="32" width="64" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Base Addr.:" id="nwR-bH-N3H">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m6F-4w-WmG" userLabel="Base Address Text Field">
-                                <rect key="frame" x="312" y="29" width="50" height="19"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="C5D-27-2Es"/>
-                                </constraints>
-                                <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="0xA000" drawsBackground="YES" usesSingleLineMode="YES" id="byJ-Md-JrR">
-                                    <customFormatter key="formatter" id="xCc-K6-Q2P" customClass="HWHexNumberFormatter"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <allowedInputSourceLocales>
-                                        <string>NSAllRomanInputSourcesLocaleIdentifier</string>
-                                    </allowedInputSourceLocales>
-                                </textFieldCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="self.baseAddress" id="Ftf-Q0-dte"/>
-                                    <binding destination="-2" name="editable" keyPath="self.shouldUseBaseAddress" id="W57-lF-nik"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.shouldUseBaseAddress" previousBinding="W57-lF-nik" id="q4L-DG-9AC"/>
-                                </connections>
-                            </textField>
-                            <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h7a-DR-pyB">
-                                <rect key="frame" x="239" y="10" width="67" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Cart. Name:" id="qUC-s2-mvF">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eaU-Zk-rTa" userLabel="Crtridge Name Text Fiels">
-                                <rect key="frame" x="312" y="7" width="173" height="19"/>
-                                <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="5a2-Hh-8Jj">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <allowedInputSourceLocales>
-                                        <string>NSAllRomanInputSourcesLocaleIdentifier</string>
-                                    </allowedInputSourceLocales>
-                                </textFieldCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="self.cartridgeName" id="Yd6-jc-beh"/>
-                                    <binding destination="-2" name="editable" keyPath="self.shouldUseCartName" id="NDg-ZG-Gqr"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.shouldUseCartName" previousBinding="NDg-ZG-Gqr" id="aXX-Hb-tb4"/>
-                                </connections>
-                            </textField>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="1fR-z9-5LB">
-                                <rect key="frame" x="367" y="30" width="66" height="18"/>
-                                <string key="toolTip">If you prefer to use register notations whith an 'R' in your source code (i.e. write MOV R0,*R1+ etc. instead of MOV 0,*1+), you will need to check this option.
+                                                    </menuItem>
+                                                    <menuItem title="Textual Raw Binary for BASIC" id="oZF-D2-xjw">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem title="Textual Raw Binary for C/C++" id="pul-8B-aBf">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem title="MESS Cartridge" toolTip="Create an RPK cartridge file that can be used with the MESS emulator." id="qPn-hk-3yJ">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <binding destination="-2" name="selectedIndex" keyPath="self.outputFormatPopupButtonIndex" id="9cm-ji-BEb"/>
+                                        </connections>
+                                    </popUpButton>
+                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Ho-y2-XHw">
+                                        <rect key="frame" x="15" y="10" width="38" height="14"/>
+                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Name:" id="3E8-vV-OJY">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField toolTip="Type in the file name of the file that will be generated." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Sw-CH-7fQ" userLabel="File Name Text Field">
+                                        <rect key="frame" x="59" y="7" width="199" height="19"/>
+                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="tyK-Qi-HkY">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <allowedInputSourceLocales>
+                                                <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                                            </allowedInputSourceLocales>
+                                        </textFieldCell>
+                                        <connections>
+                                            <binding destination="-2" name="value" keyPath="self.outputFileName" id="cYS-19-frt"/>
+                                        </connections>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yo7-OK-UYD">
+                                        <rect key="frame" x="261" y="2" width="38" height="27"/>
+                                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSPathTemplate" imagePosition="overlaps" alignment="center" controlSize="small" scrollable="YES" lineBreakMode="clipping" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qDd-p6-yzi">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="selectOutputFile:" target="-2" id="fam-4y-1my"/>
+                                        </connections>
+                                    </button>
+                                    <box boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="wZY-uH-oh6" userLabel="Left Generator Option Line">
+                                        <rect key="frame" x="300" y="0.0" width="5" height="56"/>
+                                    </box>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Bok-td-YBo" userLabel="Generator Option View">
+                                        <rect key="frame" x="302" y="0.0" width="302" height="56"/>
+                                        <subviews>
+                                            <textField verticalHuggingPriority="751" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1me-lC-GlF">
+                                                <rect key="frame" x="11" y="32" width="64" height="14"/>
+                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Base Addr.:" id="nwR-bH-N3H">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m6F-4w-WmG" userLabel="Base Address Text Field">
+                                                <rect key="frame" x="81" y="29" width="88" height="19"/>
+                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" placeholderString="0xA000" drawsBackground="YES" usesSingleLineMode="YES" id="byJ-Md-JrR">
+                                                    <customFormatter key="formatter" id="xCc-K6-Q2P" customClass="HWHexNumberFormatter"/>
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <allowedInputSourceLocales>
+                                                        <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                                                    </allowedInputSourceLocales>
+                                                </textFieldCell>
+                                                <connections>
+                                                    <binding destination="-2" name="value" keyPath="self.baseAddress" id="Ftf-Q0-dte"/>
+                                                    <binding destination="-2" name="editable" keyPath="self.shouldUseBaseAddress" id="W57-lF-nik"/>
+                                                    <binding destination="-2" name="enabled" keyPath="self.shouldUseBaseAddress" previousBinding="W57-lF-nik" id="q4L-DG-9AC"/>
+                                                </connections>
+                                            </textField>
+                                            <button translatesAutoresizingMaskIntoConstraints="NO" id="1fR-z9-5LB">
+                                                <rect key="frame" x="174" y="30" width="66" height="18"/>
+                                                <string key="toolTip">If you prefer to use register notations whith an 'R' in your source code (i.e. write MOV R0,*R1+ etc. instead of MOV 0,*1+), you will need to check this option.
 This is the equivalent to the option 'R' of the TI Assembler.</string>
-                                <buttonCell key="cell" type="check" title="Register" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="ERd-Iz-0ua">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="self.shouldUseRegisterSymbols" id="oih-Gj-NQG"/>
-                                </connections>
-                            </button>
-                            <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources" translatesAutoresizingMaskIntoConstraints="NO" id="E59-2i-alZ">
-                                <rect key="frame" x="436" y="30" width="51" height="18"/>
-                                <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="hgQ-BO-K7U">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <binding destination="-2" name="value" keyPath="self.shouldBeStrict" id="vbG-zX-JOD"/>
-                                </connections>
-                            </button>
-                            <box horizontalHuggingPriority="249" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="yW3-jy-MZf">
-                                <rect key="frame" x="491" y="0.0" width="5" height="56"/>
-                            </box>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m1G-sh-Vby">
-                                <rect key="frame" x="497" y="24" width="75" height="27"/>
-                                <buttonCell key="cell" type="push" title="Check" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tMO-q8-0wI">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="checkCode:" target="-2" id="dtv-7F-4TW"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rKg-UF-IWo">
-                                <rect key="frame" x="497" y="2" width="75" height="27"/>
-                                <buttonCell key="cell" type="push" title="Generate" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IRW-ba-mjk">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="generateCode:" target="-2" id="PXa-nO-626"/>
-                                </connections>
-                            </button>
+                                                <buttonCell key="cell" type="check" title="Register" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="ERd-Iz-0ua">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <binding destination="-2" name="value" keyPath="self.shouldUseRegisterSymbols" id="oih-Gj-NQG"/>
+                                                </connections>
+                                            </button>
+                                            <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources" translatesAutoresizingMaskIntoConstraints="NO" id="E59-2i-alZ">
+                                                <rect key="frame" x="243" y="30" width="51" height="18"/>
+                                                <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="hgQ-BO-K7U">
+                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <binding destination="-2" name="value" keyPath="self.shouldBeStrict" id="vbG-zX-JOD"/>
+                                                </connections>
+                                            </button>
+                                            <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h7a-DR-pyB">
+                                                <rect key="frame" x="8" y="10" width="67" height="14"/>
+                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Cart. Name:" id="qUC-s2-mvF">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <textField allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eaU-Zk-rTa" userLabel="Crtridge Name Text Field">
+                                                <rect key="frame" x="81" y="7" width="211" height="19"/>
+                                                <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="5a2-Hh-8Jj">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    <allowedInputSourceLocales>
+                                                        <string>NSAllRomanInputSourcesLocaleIdentifier</string>
+                                                    </allowedInputSourceLocales>
+                                                </textFieldCell>
+                                                <connections>
+                                                    <binding destination="-2" name="value" keyPath="self.cartridgeName" id="Yd6-jc-beh"/>
+                                                    <binding destination="-2" name="editable" keyPath="self.shouldUseCartName" id="NDg-ZG-Gqr"/>
+                                                    <binding destination="-2" name="enabled" keyPath="self.shouldUseCartName" previousBinding="NDg-ZG-Gqr" id="aXX-Hb-tb4"/>
+                                                </connections>
+                                            </textField>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="m6F-4w-WmG" firstAttribute="leading" secondItem="eaU-Zk-rTa" secondAttribute="leading" id="02q-gm-NZW"/>
+                                            <constraint firstItem="h7a-DR-pyB" firstAttribute="leading" secondItem="Bok-td-YBo" secondAttribute="leading" constant="10" id="4Gg-1w-noY"/>
+                                            <constraint firstItem="E59-2i-alZ" firstAttribute="trailing" secondItem="eaU-Zk-rTa" secondAttribute="trailing" id="5V1-Yb-anv"/>
+                                            <constraint firstItem="m6F-4w-WmG" firstAttribute="baseline" secondItem="1fR-z9-5LB" secondAttribute="baseline" id="CYg-gH-jHG"/>
+                                            <constraint firstItem="m6F-4w-WmG" firstAttribute="baseline" secondItem="1me-lC-GlF" secondAttribute="baseline" id="HAt-nA-vfm"/>
+                                            <constraint firstItem="1fR-z9-5LB" firstAttribute="leading" secondItem="m6F-4w-WmG" secondAttribute="trailing" constant="8" symbolic="YES" id="PIz-j0-8vZ"/>
+                                            <constraint firstItem="1me-lC-GlF" firstAttribute="top" secondItem="Bok-td-YBo" secondAttribute="top" constant="10" id="Uih-SD-eoS"/>
+                                            <constraint firstItem="eaU-Zk-rTa" firstAttribute="baseline" secondItem="h7a-DR-pyB" secondAttribute="baseline" id="WKv-l9-ILo"/>
+                                            <constraint firstItem="E59-2i-alZ" firstAttribute="baseline" secondItem="1fR-z9-5LB" secondAttribute="baseline" id="WOT-90-g0K"/>
+                                            <constraint firstItem="1me-lC-GlF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Bok-td-YBo" secondAttribute="leading" constant="13" id="YMC-yM-aSC"/>
+                                            <constraint firstItem="E59-2i-alZ" firstAttribute="leading" secondItem="1fR-z9-5LB" secondAttribute="trailing" constant="8" symbolic="YES" id="cAN-VU-Ywg"/>
+                                            <constraint firstAttribute="bottom" secondItem="h7a-DR-pyB" secondAttribute="bottom" constant="10" id="chi-86-xdQ"/>
+                                            <constraint firstAttribute="trailing" secondItem="E59-2i-alZ" secondAttribute="trailing" constant="10" id="iLU-TK-dS5"/>
+                                            <constraint firstItem="m6F-4w-WmG" firstAttribute="leading" secondItem="1me-lC-GlF" secondAttribute="trailing" constant="8" symbolic="YES" id="s0E-5C-daJ"/>
+                                            <constraint firstItem="h7a-DR-pyB" firstAttribute="trailing" secondItem="1me-lC-GlF" secondAttribute="trailing" id="tqm-Mm-3r0"/>
+                                        </constraints>
+                                    </customView>
+                                    <box boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="yW3-jy-MZf" userLabel="Right Generator Option Line">
+                                        <rect key="frame" x="601" y="0.0" width="5" height="56"/>
+                                    </box>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="wZY-uH-oh6" firstAttribute="height" secondItem="Bok-td-YBo" secondAttribute="height" id="1b3-k2-Rd0"/>
+                                    <constraint firstItem="mLb-xT-y5N" firstAttribute="top" secondItem="2fn-eD-Qem" secondAttribute="top" constant="10" id="6kb-FZ-bde"/>
+                                    <constraint firstAttribute="trailing" secondItem="Bok-td-YBo" secondAttribute="trailing" id="9Sc-kr-SPm"/>
+                                    <constraint firstItem="yW3-jy-MZf" firstAttribute="centerY" secondItem="Bok-td-YBo" secondAttribute="centerY" id="DT9-Rv-8hg"/>
+                                    <constraint firstItem="8Ho-y2-XHw" firstAttribute="trailing" secondItem="mLb-xT-y5N" secondAttribute="trailing" id="HWv-fX-20U"/>
+                                    <constraint firstAttribute="bottom" secondItem="Bok-td-YBo" secondAttribute="bottom" id="Jep-zQ-XZy"/>
+                                    <constraint firstItem="yW3-jy-MZf" firstAttribute="trailing" secondItem="Bok-td-YBo" secondAttribute="trailing" id="OHC-ns-ZCI"/>
+                                    <constraint firstItem="wZY-uH-oh6" firstAttribute="leading" secondItem="Bok-td-YBo" secondAttribute="leading" id="OTi-5m-bGK"/>
+                                    <constraint firstItem="mLb-xT-y5N" firstAttribute="leading" secondItem="2fn-eD-Qem" secondAttribute="leading" constant="10" id="P0s-J2-29d"/>
+                                    <constraint firstItem="Bok-td-YBo" firstAttribute="top" secondItem="2fn-eD-Qem" secondAttribute="top" id="QAo-bW-nEo"/>
+                                    <constraint firstItem="Bok-td-YBo" firstAttribute="leading" secondItem="aPk-pN-aN9" secondAttribute="trailing" constant="8" symbolic="YES" id="Sry-oY-52d"/>
+                                    <constraint firstItem="yW3-jy-MZf" firstAttribute="height" secondItem="Bok-td-YBo" secondAttribute="height" id="TFA-Rj-0f8"/>
+                                    <constraint firstItem="wZY-uH-oh6" firstAttribute="centerY" secondItem="Bok-td-YBo" secondAttribute="centerY" id="bAm-TT-Vg3"/>
+                                    <constraint firstItem="8Ho-y2-XHw" firstAttribute="baseline" secondItem="0Sw-CH-7fQ" secondAttribute="baseline" id="bmr-Wd-nya"/>
+                                    <constraint firstItem="aPk-pN-aN9" firstAttribute="leading" secondItem="mLb-xT-y5N" secondAttribute="trailing" constant="8" symbolic="YES" id="g63-XW-KFe"/>
+                                    <constraint firstAttribute="bottom" secondItem="8Ho-y2-XHw" secondAttribute="bottom" constant="10" id="iBU-4m-9PY"/>
+                                    <constraint firstItem="yo7-OK-UYD" firstAttribute="leading" secondItem="0Sw-CH-7fQ" secondAttribute="trailing" constant="8" symbolic="YES" id="l9h-De-DFj"/>
+                                    <constraint firstItem="0Sw-CH-7fQ" firstAttribute="leading" secondItem="8Ho-y2-XHw" secondAttribute="trailing" constant="8" symbolic="YES" id="mKg-qh-R64"/>
+                                    <constraint firstItem="aPk-pN-aN9" firstAttribute="baseline" secondItem="mLb-xT-y5N" secondAttribute="baseline" id="nCx-3p-aCg"/>
+                                    <constraint firstItem="yo7-OK-UYD" firstAttribute="centerY" secondItem="0Sw-CH-7fQ" secondAttribute="centerY" id="oJT-jY-ciA"/>
+                                    <constraint firstItem="8Ho-y2-XHw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2fn-eD-Qem" secondAttribute="leading" constant="17" id="wUM-oE-7gv"/>
+                                    <constraint firstItem="yo7-OK-UYD" firstAttribute="trailing" secondItem="aPk-pN-aN9" secondAttribute="trailing" id="xTp-1j-s2g"/>
+                                </constraints>
+                            </customView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="4wN-KR-s6a" userLabel="Action View">
+                                <rect key="frame" x="604" y="0.0" width="85" height="56"/>
+                                <subviews>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m1G-sh-Vby">
+                                        <rect key="frame" x="5" y="24" width="75" height="27"/>
+                                        <buttonCell key="cell" type="push" title="Check" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tMO-q8-0wI">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="checkCode:" target="-2" id="dtv-7F-4TW"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rKg-UF-IWo">
+                                        <rect key="frame" x="5" y="2" width="75" height="27"/>
+                                        <buttonCell key="cell" type="push" title="Generate" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IRW-ba-mjk">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="generateCode:" target="-2" id="PXa-nO-626"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="rKg-UF-IWo" firstAttribute="width" secondItem="m1G-sh-Vby" secondAttribute="width" id="He2-rx-wny"/>
+                                    <constraint firstAttribute="trailing" secondItem="rKg-UF-IWo" secondAttribute="trailing" constant="10" id="M55-Op-C0l"/>
+                                    <constraint firstItem="rKg-UF-IWo" firstAttribute="centerX" secondItem="m1G-sh-Vby" secondAttribute="centerX" id="QGw-Yh-IeO"/>
+                                    <constraint firstAttribute="bottom" secondItem="rKg-UF-IWo" secondAttribute="bottom" constant="8" id="QzE-jE-dEI"/>
+                                    <constraint firstItem="m1G-sh-Vby" firstAttribute="top" secondItem="4wN-KR-s6a" secondAttribute="top" constant="8" id="aYb-jH-3Nn"/>
+                                    <constraint firstAttribute="width" priority="750" constant="85" id="x9f-L9-vBr"/>
+                                </constraints>
+                            </customView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="wZY-uH-oh6" secondAttribute="bottom" id="4Lc-gB-oNv"/>
-                            <constraint firstItem="m1G-sh-Vby" firstAttribute="leading" secondItem="yW3-jy-MZf" secondAttribute="trailing" constant="8" symbolic="YES" id="5Sb-K5-Wwl"/>
-                            <constraint firstItem="1me-lC-GlF" firstAttribute="leading" secondItem="wZY-uH-oh6" secondAttribute="trailing" priority="750" constant="11" id="8jS-aM-Rf1"/>
-                            <constraint firstItem="8Ho-y2-XHw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="JFX-41-1Y2" secondAttribute="leading" priority="750" constant="10" id="8px-da-h1u"/>
-                            <constraint firstItem="mLb-xT-y5N" firstAttribute="top" secondItem="JFX-41-1Y2" secondAttribute="top" constant="10" id="9Jo-IM-Mmt"/>
-                            <constraint firstItem="yo7-OK-UYD" firstAttribute="leading" secondItem="0Sw-CH-7fQ" secondAttribute="trailing" constant="8" symbolic="YES" id="B6c-N7-2vW"/>
-                            <constraint firstItem="yW3-jy-MZf" firstAttribute="leading" secondItem="eaU-Zk-rTa" secondAttribute="trailing" constant="8" symbolic="YES" id="BDY-1C-LHE"/>
-                            <constraint firstItem="m6F-4w-WmG" firstAttribute="leading" secondItem="eaU-Zk-rTa" secondAttribute="leading" id="Bv9-W8-xA8"/>
-                            <constraint firstAttribute="trailing" secondItem="m1G-sh-Vby" secondAttribute="trailing" constant="11" id="C0R-kt-LI2"/>
-                            <constraint firstAttribute="bottom" secondItem="8Ho-y2-XHw" secondAttribute="bottom" priority="750" constant="10" id="FLa-Yu-UWq"/>
-                            <constraint firstItem="yW3-jy-MZf" firstAttribute="top" secondItem="JFX-41-1Y2" secondAttribute="top" id="G3l-BL-7Mt"/>
-                            <constraint firstItem="8Ho-y2-XHw" firstAttribute="baseline" secondItem="0Sw-CH-7fQ" secondAttribute="baseline" id="IY2-g7-8g1"/>
-                            <constraint firstItem="1me-lC-GlF" firstAttribute="firstBaseline" secondItem="aPk-pN-aN9" secondAttribute="firstBaseline" id="MQd-gh-WwC"/>
-                            <constraint firstItem="h7a-DR-pyB" firstAttribute="leading" secondItem="wZY-uH-oh6" secondAttribute="trailing" priority="750" constant="8" symbolic="YES" id="Ory-BX-vrS"/>
-                            <constraint firstItem="wZY-uH-oh6" firstAttribute="leading" secondItem="yo7-OK-UYD" secondAttribute="trailing" constant="8" symbolic="YES" id="QY3-Bw-egn"/>
-                            <constraint firstItem="h7a-DR-pyB" firstAttribute="firstBaseline" secondItem="0Sw-CH-7fQ" secondAttribute="firstBaseline" id="RMa-MF-aea"/>
-                            <constraint firstItem="eaU-Zk-rTa" firstAttribute="baseline" secondItem="h7a-DR-pyB" secondAttribute="baseline" id="VEg-rU-XzW"/>
-                            <constraint firstItem="rKg-UF-IWo" firstAttribute="firstBaseline" secondItem="eaU-Zk-rTa" secondAttribute="firstBaseline" id="WJA-4N-oow"/>
-                            <constraint firstItem="1fR-z9-5LB" firstAttribute="leading" secondItem="m6F-4w-WmG" secondAttribute="trailing" constant="8" symbolic="YES" id="Wwj-0U-3eB"/>
-                            <constraint firstItem="wZY-uH-oh6" firstAttribute="top" secondItem="JFX-41-1Y2" secondAttribute="top" id="ZeF-Pw-hQX"/>
-                            <constraint firstItem="eaU-Zk-rTa" firstAttribute="leading" secondItem="h7a-DR-pyB" secondAttribute="trailing" constant="8" symbolic="YES" id="ZmP-vD-JrC"/>
-                            <constraint firstItem="wZY-uH-oh6" firstAttribute="leading" secondItem="aPk-pN-aN9" secondAttribute="trailing" constant="8" symbolic="YES" id="aXK-5F-uJ0"/>
-                            <constraint firstItem="0Sw-CH-7fQ" firstAttribute="leading" secondItem="8Ho-y2-XHw" secondAttribute="trailing" constant="8" symbolic="YES" id="abO-vl-o8y"/>
-                            <constraint firstItem="yo7-OK-UYD" firstAttribute="centerY" secondItem="0Sw-CH-7fQ" secondAttribute="centerY" id="f2n-ll-J9C"/>
-                            <constraint firstItem="1me-lC-GlF" firstAttribute="top" secondItem="JFX-41-1Y2" secondAttribute="top" constant="10" id="fvw-pe-bLq"/>
-                            <constraint firstItem="E59-2i-alZ" firstAttribute="baseline" secondItem="1fR-z9-5LB" secondAttribute="baseline" id="gRg-rj-Yj3"/>
-                            <constraint firstItem="E59-2i-alZ" firstAttribute="leading" secondItem="1fR-z9-5LB" secondAttribute="trailing" constant="8" symbolic="YES" id="jKz-9e-UCT"/>
-                            <constraint firstItem="rKg-UF-IWo" firstAttribute="leading" secondItem="yW3-jy-MZf" secondAttribute="trailing" constant="8" symbolic="YES" id="kl8-ai-MH3"/>
-                            <constraint firstAttribute="bottom" secondItem="yW3-jy-MZf" secondAttribute="bottom" id="lCa-T4-l5J"/>
-                            <constraint firstItem="h7a-DR-pyB" firstAttribute="trailing" secondItem="1me-lC-GlF" secondAttribute="trailing" id="mPi-AR-bLd"/>
-                            <constraint firstItem="yW3-jy-MZf" firstAttribute="leading" secondItem="E59-2i-alZ" secondAttribute="trailing" constant="8" symbolic="YES" id="nU1-zs-AAB"/>
-                            <constraint firstItem="m6F-4w-WmG" firstAttribute="baseline" secondItem="1me-lC-GlF" secondAttribute="baseline" id="q6m-z9-iLc"/>
-                            <constraint firstItem="mLb-xT-y5N" firstAttribute="leading" secondItem="JFX-41-1Y2" secondAttribute="leading" priority="750" constant="10" id="qRE-ca-I5T"/>
-                            <constraint firstItem="aPk-pN-aN9" firstAttribute="baseline" secondItem="mLb-xT-y5N" secondAttribute="baseline" id="qgH-GP-PAA"/>
-                            <constraint firstItem="m6F-4w-WmG" firstAttribute="leading" secondItem="1me-lC-GlF" secondAttribute="trailing" constant="8" symbolic="YES" id="tpI-aW-YcO"/>
-                            <constraint firstItem="m6F-4w-WmG" firstAttribute="baseline" secondItem="1fR-z9-5LB" secondAttribute="baseline" id="wJS-mf-h57"/>
-                            <constraint firstItem="8Ho-y2-XHw" firstAttribute="trailing" secondItem="mLb-xT-y5N" secondAttribute="trailing" id="wep-ij-c3U"/>
-                            <constraint firstAttribute="trailing" secondItem="rKg-UF-IWo" secondAttribute="trailing" constant="11" id="xmg-Ug-hzv"/>
-                            <constraint firstItem="m1G-sh-Vby" firstAttribute="firstBaseline" secondItem="E59-2i-alZ" secondAttribute="firstBaseline" id="zwv-iI-23b"/>
-                            <constraint firstItem="aPk-pN-aN9" firstAttribute="leading" secondItem="mLb-xT-y5N" secondAttribute="trailing" constant="8" symbolic="YES" id="zzj-MM-kLk"/>
+                            <constraint firstItem="2fn-eD-Qem" firstAttribute="leading" secondItem="JFX-41-1Y2" secondAttribute="leading" id="BtV-bQ-lXc"/>
+                            <constraint firstItem="2fn-eD-Qem" firstAttribute="top" secondItem="JFX-41-1Y2" secondAttribute="top" id="Cza-WY-KsS"/>
+                            <constraint firstAttribute="bottom" secondItem="4wN-KR-s6a" secondAttribute="bottom" id="DKb-R2-Koe"/>
+                            <constraint firstItem="4wN-KR-s6a" firstAttribute="leading" secondItem="2fn-eD-Qem" secondAttribute="trailing" id="I81-0n-cvO"/>
+                            <constraint firstAttribute="trailing" secondItem="4wN-KR-s6a" secondAttribute="trailing" id="J4W-7f-BSj"/>
+                            <constraint firstAttribute="bottom" secondItem="2fn-eD-Qem" secondAttribute="bottom" id="MNQ-oR-mkd"/>
+                            <constraint firstItem="4wN-KR-s6a" firstAttribute="top" secondItem="JFX-41-1Y2" secondAttribute="top" id="VUy-Np-ksf"/>
                         </constraints>
                     </view>
                 </box>
             </subviews>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="wWK-kF-12p" secondAttribute="bottom" id="0yV-Vm-Qgf"/>
-                <constraint firstAttribute="trailing" secondItem="wWK-kF-12p" secondAttribute="trailing" priority="750" id="SfK-AB-Nh1"/>
+                <constraint firstAttribute="trailing" secondItem="wWK-kF-12p" secondAttribute="trailing" id="SfK-AB-Nh1"/>
                 <constraint firstItem="wWK-kF-12p" firstAttribute="leading" secondItem="orG-d7-3rG" secondAttribute="leading" id="YEL-LX-4DX"/>
                 <constraint firstItem="wWK-kF-12p" firstAttribute="top" secondItem="orG-d7-3rG" secondAttribute="top" id="o5l-jL-S3T"/>
             </constraints>
-            <point key="canvasLocation" x="233" y="92"/>
+            <point key="canvasLocation" x="288.5" y="87"/>
         </customView>
         <customView identifier="Assembler Log Options View" id="NQH-of-XGF" userLabel="Console Option View">
             <rect key="frame" x="0.0" y="0.0" width="264" height="21"/>
@@ -319,9 +347,6 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
             </connections>
             <point key="canvasLocation" x="162.5" y="256.5"/>
         </customView>
-        <menuItem title="Raw Binary" id="MmM-ne-xtz">
-            <modifierMask key="keyEquivalentModifierMask"/>
-        </menuItem>
     </objects>
     <resources>
         <image name="NSPathTemplate" width="16" height="10"/>
