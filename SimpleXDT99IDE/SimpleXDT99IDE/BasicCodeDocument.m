@@ -37,13 +37,17 @@
 
 @property (assign) BOOL shouldJoinSourceLines;
 @property (assign) BOOL shouldProtectFile;
-@property (nonatomic, assign) NSUInteger outputFormatPopupButtonIndex;
+@property (assign) NSUInteger outputFormatPopupButtonIndex;
 
 @property (retain) NSArray<NSString *> *compilingMessages;
 @property (retain) XDTObject *compilingResult;
 @property (retain) NSString *tokenDump;
 
+@property (readonly) XDTBasicTargetType targetType;
+
 - (XDTBasic *)parseCode:(NSError **)error;
+
+- (void)valueDidChangeForOutputFormatPopupButtonIndex:(XDTBasicTargetType)newTarget;
 
 @end
 
@@ -92,6 +96,8 @@
 
     [self setLogOptionsPlaceholderView:_specialLogOptionView];
 
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(outputFormatPopupButtonIndex)) options:NSKeyValueObservingOptionNew context:nil];
+
     NSToolbarItem *optionsItem = [self xdt99OptionsToolbarItem];
     if (nil != optionsItem) {
         [optionsItem setView:[self xdt99OptionsToolbarView]];
@@ -101,6 +107,8 @@
 
 - (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo
 {
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(outputFormatPopupButtonIndex))];
+
     /* Save the latest assembler options to user defaults before closing. */
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [defaults setBool:_shouldJoinSourceLines forKey:UserDefaultKeyBasicOptionShouldJoinSourceLines];
@@ -108,6 +116,36 @@
     [defaults setInteger:_outputFormatPopupButtonIndex forKey:UserDefaultKeyBasicOptionOutputTypePopupIndex];
 
     [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self && [NSStringFromSelector(@selector(outputFormatPopupButtonIndex)) isEqualToString:keyPath]) {
+        XDTBasicTargetType target = self.targetType;
+        [self valueDidChangeForOutputFormatPopupButtonIndex:target];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+
+- (void)valueDidChangeForOutputFormatPopupButtonIndex:(XDTBasicTargetType)newTarget
+{
+    switch (newTarget) {
+        case 0:
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"bin"];
+            break;
+        case 1:
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"iv254"];
+            break;
+        case 2:
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"dv163"];
+            break;
+
+        default:
+            break;
+    }
 }
 
 
@@ -283,30 +321,6 @@
 }
 
 
-- (void)setOutputFormatPopupButtonIndex:(NSUInteger)outputFormatPopupButtonIndex
-{
-    if (outputFormatPopupButtonIndex == _outputFormatPopupButtonIndex) {
-        return;
-    }
-
-    _outputFormatPopupButtonIndex = outputFormatPopupButtonIndex;
-    switch (_outputFormatPopupButtonIndex) {
-        case 0:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"]];
-            break;
-        case 1:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"iv254"]];
-            break;
-        case 2:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"dv163"]];
-            break;
-
-        default:
-            break;
-    }
-}
-
-
 #pragma mark - Action Methods
 
 
@@ -375,6 +389,33 @@
 
 
 #pragma mark - Private Methods
+
+
++ (NSSet *)keyPathsForValuesAffectingTargetType
+{
+    return [NSSet setWithObject:NSStringFromSelector(@selector(outputFormatPopupButtonIndex))];
+}
+
+
+- (XDTBasicTargetType)targetType
+{
+    XDTBasicTargetType xdtTargetType = XDTBasicTargetTypeLongFormat;
+    switch (_outputFormatPopupButtonIndex) {
+        case 0:
+            xdtTargetType = XDTBasicTargetTypeInternalFormat;
+            break;
+        case 1:
+            xdtTargetType = XDTBasicTargetTypeLongFormat;
+            break;
+        case 2:
+            xdtTargetType = XDTBasicTargetTypeMergeFormat;
+            break;
+
+        default:
+            break;
+    }
+    return xdtTargetType;
+}
 
 
 - (XDTBasic *)parseCode:(NSError **)error

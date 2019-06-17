@@ -38,7 +38,7 @@
 @property (retain) NSString *cartridgeName;
 @property (readonly) BOOL shouldUseCartName;
 
-@property (nonatomic, assign) NSUInteger outputFormatPopupButtonIndex;
+@property (assign) NSUInteger outputFormatPopupButtonIndex;
 
 @property (assign) BOOL shouldUseRegisterSymbols;
 @property (assign) BOOL shouldBeStrict;
@@ -52,6 +52,8 @@
 @property (readonly) XDTAs99TargetType targetType;
 - (BOOL)assembleCode:(XDTAs99TargetType)xdtTargetType error:(NSError **)error;
 - (BOOL)exportBinaries:(XDTAs99TargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error;
+
+- (void)valueDidChangeForOutputFormatPopupButtonIndex:(XDTAs99TargetType)newTarget;
 
 @end
 
@@ -103,6 +105,8 @@
     [super windowControllerDidLoadNib:aController];
 
     [self setLogOptionsPlaceholderView:_specialLogOptionView];
+    
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(outputFormatPopupButtonIndex)) options:NSKeyValueObservingOptionNew context:nil];
 
     NSToolbarItem *optionsItem = [self xdt99OptionsToolbarItem];
     if (nil != optionsItem) {
@@ -113,6 +117,8 @@
 
 - (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo
 {
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(outputFormatPopupButtonIndex))];
+
     /* Save the latest assembler options to user defaults before closing. */
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [defaults setBool:[self shouldUseRegisterSymbols] forKey:UserDefaultKeyAssemblerOptionUseRegisterSymbols];
@@ -124,6 +130,51 @@
     [defaults setInteger:_baseAddress forKey:UserDefaultKeyAssemblerOptionBaseAddress];
 
     [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self && [NSStringFromSelector(@selector(outputFormatPopupButtonIndex)) isEqualToString:keyPath]) {
+        XDTAs99TargetType target = self.targetType;
+        [self valueDidChangeForOutputFormatPopupButtonIndex:target];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+
+- (void)valueDidChangeForOutputFormatPopupButtonIndex:(XDTAs99TargetType)newTarget
+{
+    switch (newTarget) {
+        case XDTAs99TargetTypeProgramImage:
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"image"];
+            break;
+        case XDTAs99TargetTypeObjectCode:
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"obj"];
+            break;
+        case XDTAs99TargetTypeEmbededXBasic:
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"xb"];
+            break;
+        case XDTAs99TargetTypeRawBinary:
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"bin"];
+            break;
+        case XDTAs99TargetTypeTextBinaryAsm:
+        case XDTAs99TargetTypeTextBinaryBas:
+        case XDTAs99TargetTypeTextBinaryC:
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"dat"];
+            break;
+        case XDTAs99TargetTypeMESSCartridge:
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"card"];
+            self.baseAddress = 0x6000;
+            break;
+            /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
+             This feature is open to implement.
+             */
+
+        default:
+            break;
+    }
 }
 
 
@@ -249,46 +300,6 @@
     }
     
     return retVal;
-}
-
-
-- (void)setOutputFormatPopupButtonIndex:(NSUInteger)outputFormatPopupButtonIndex
-{
-    if (outputFormatPopupButtonIndex == _outputFormatPopupButtonIndex) {
-        return;
-    }
-
-    _outputFormatPopupButtonIndex = outputFormatPopupButtonIndex;
-    switch (_outputFormatPopupButtonIndex) {
-        case 0:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"image"]];
-            break;
-        case 1:
-        case 2:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"obj"]];
-            break;
-        case 3:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"xb"]];
-            break;
-        case 4:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"]];
-            break;
-        case 5:
-        case 6:
-        case 7:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"dat"]];
-            break;
-        case 8:
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"card"]];
-            [self setBaseAddress:0x6000];
-            break;
-        /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
-         This feature is open to implement.
-         */
-
-        default:
-            break;
-    }
 }
 
 

@@ -36,7 +36,7 @@
 @property (retain) NSString *cartridgeName;
 @property (readonly) BOOL shouldUseCartName;
 
-@property (nonatomic, assign) NSUInteger outputFormatPopupButtonIndex;
+@property (assign) NSUInteger outputFormatPopupButtonIndex;
 @property (nonatomic, assign) NSUInteger syntaxFormatPopupButtonIndex;
 @property (assign, nonatomic) BOOL shouldShowListingInLog;
 @property (assign, nonatomic) BOOL shouldShowSymbolsInListing;
@@ -50,6 +50,8 @@
 
 - (BOOL)assembleCode:(XDTGa99TargetType)xdtTargetType error:(NSError **)error;
 - (BOOL)exportBinaries:(XDTGa99TargetType)xdtTargetType error:(NSError **)error;
+
+- (void)valueDidChangeForOutputFormatPopupButtonIndex:(XDTGa99TargetType)newTarget;
 
 @end
 
@@ -101,6 +103,8 @@
 
     [self setLogOptionsPlaceholderView:_specialLogOptionView];
 
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(outputFormatPopupButtonIndex)) options:NSKeyValueObservingOptionNew context:nil];
+
     NSToolbarItem *optionsItem = [self xdt99OptionsToolbarItem];
     if (nil != optionsItem) {
         [optionsItem setView:[self xdt99OptionsToolbarView]];
@@ -110,6 +114,8 @@
 
 - (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo
 {
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(outputFormatPopupButtonIndex))];
+
     /* Save the latest GPL Assembler options to user defaults before closing. */
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [defaults setInteger:_outputFormatPopupButtonIndex forKey:UserDefaultKeyGPLOptionOutputTypePopupIndex];
@@ -121,6 +127,36 @@
     [defaults setInteger:_gromAddress forKey:UserDefaultKeyGPLOptionGROMAddress];
 
     [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
+}
+
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self && [NSStringFromSelector(@selector(outputFormatPopupButtonIndex)) isEqualToString:keyPath]) {
+        XDTGa99TargetType target = self.targetType;
+        [self valueDidChangeForOutputFormatPopupButtonIndex:target];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+
+- (void)valueDidChangeForOutputFormatPopupButtonIndex:(XDTGa99TargetType)newTarget
+{
+    switch (newTarget) {
+        case 0: /* Plain GPL byte code */
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"gbc"];
+            break;
+        case 1: /* Image: GPL with header */
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"bin"];
+            break;
+        case 2: /* MESS cartridge */
+            self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"rpk"];
+            break;
+
+        default:
+            break;
+    }
 }
 
 
@@ -239,30 +275,6 @@
     }
 
     return retVal;
-}
-
-
-- (void)setOutputFormatPopupButtonIndex:(NSUInteger)outputFormatPopupButtonIndex
-{
-    if (outputFormatPopupButtonIndex == _outputFormatPopupButtonIndex) {
-        return;
-    }
-
-    _outputFormatPopupButtonIndex = outputFormatPopupButtonIndex;
-    switch (_outputFormatPopupButtonIndex) {
-        case 0: /* Plain GPL byte code */
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"gbc"]];
-            break;
-        case 1: /* Image: GPL with header */
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"bin"]];
-            break;
-        case 2: /* MESS cartridge */
-            [self setOutputFileName:[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingPathExtension:@"rpk"]];
-            break;
-
-        default:
-            break;
-    }
 }
 
 
