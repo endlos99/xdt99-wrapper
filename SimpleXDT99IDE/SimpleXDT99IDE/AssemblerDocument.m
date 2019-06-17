@@ -271,16 +271,16 @@
 }
 
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
++ (NSSet<NSString *> *)keyPathsForValuesAffectingGeneratedLogMessage
 {
-    NSSet *retVal = [super keyPathsForValuesAffectingValueForKey:key];
-    if ([NSStringFromSelector(@selector(generatedLogMessage)) isEqualToString:key]) {
-        NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
-        [newSet addObject:NSStringFromSelector(@selector(shouldShowListingInLog))];
-        [newSet unionSet:[self keyPathsForValuesAffectingListOutput]];
-        [newSet removeObject:NSStringFromSelector(@selector(errorMessage))];  /* 'errorMessage' from the super class is overlayed by 'assemblingResult', so remove it */
-        retVal = newSet;
-    }
+    NSSet *retVal = [[super superclass] keyPathsForValuesAffectingGeneratedLogMessage];
+
+    NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
+    [newSet addObject:NSStringFromSelector(@selector(shouldShowListingInLog))];
+    [newSet unionSet:[self keyPathsForValuesAffectingListOutput]];
+    [newSet removeObject:NSStringFromSelector(@selector(errorMessage))];  /* 'errorMessage' from the super class is overlayed by 'assemblingResult', so remove it */
+    retVal = newSet;
+
     return retVal;
 }
 

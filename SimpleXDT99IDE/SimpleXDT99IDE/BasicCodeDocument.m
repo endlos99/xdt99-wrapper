@@ -292,16 +292,15 @@
 }
 
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
++ (NSSet<NSString *> *)keyPathsForValuesAffectingGeneratedLogMessage
 {
-    NSSet *retVal = [super keyPathsForValuesAffectingValueForKey:key];
-    if ([NSStringFromSelector(@selector(generatedLogMessage)) isEqualToString:key]) {
-        NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
-        [newSet addObjectsFromArray:@[NSStringFromSelector(@selector(shouldDumpTokensInLog)), NSStringFromSelector(@selector(tokenDump)),
-                                      NSStringFromSelector(@selector(compilingMessages))  // this is the property name of an array where warning messages are stored into
-                                      ]];
-        retVal = newSet;
-    }
+    NSSet *retVal = [[super superclass] keyPathsForValuesAffectingGeneratedLogMessage];
+    NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
+    [newSet addObjectsFromArray:@[NSStringFromSelector(@selector(shouldDumpTokensInLog)), NSStringFromSelector(@selector(tokenDump)),
+                                  NSStringFromSelector(@selector(compilingMessages))  // this is the property name of an array where warning messages are stored into
+                                  ]];
+    retVal = newSet;
+    
     return retVal;
 }
 

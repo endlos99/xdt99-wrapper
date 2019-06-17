@@ -218,7 +218,7 @@
 }
 
 
-+ (NSSet *)keyPathsForValuesAffectingGeneratedLogMessage
++ (NSSet<NSString *> *)keyPathsForValuesAffectingGeneratedLogMessage
 {
     return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), NSStringFromSelector(@selector(errorMessage)), nil];
 }
