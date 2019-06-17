@@ -291,6 +291,23 @@
 }
 
 
+- (void)setGeneratorOptionsPlaceholderView:(NSView *)newOptionsView
+{
+    if (newOptionsView == _generatorOptionsPlaceholderView) {
+        return;
+    }
+
+    if (nil == newOptionsView) {
+        newOptionsView = [[NSView alloc] initWithFrame:[_generatorOptionsPlaceholderView frame]];
+    }
+    [[_generatorOptionsPlaceholderView superview] replaceKeepingLayoutSubview:_generatorOptionsPlaceholderView with:newOptionsView];
+
+    [self willChangeValueForKey:NSStringFromSelector(@selector(generatorOptionsPlaceholderView))];
+    _generatorOptionsPlaceholderView = newOptionsView;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(generatorOptionsPlaceholderView))];
+}
+
+
 #pragma mark - Action Methods
 
 

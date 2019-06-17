@@ -35,6 +35,7 @@
 #define UserDefaultKeyAssemblerOptionGenerateSymbolTable @"AssemblerOptionGenerateSymbolTable"
 #define UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus @"AssemblerOptionGenerateSymbolsAsEqus"
 #define UserDefaultKeyAssemblerOptionBaseAddress @"AssemblerOptionBaseAddress"
+#define UserDefaultKeyAssemblerOptionTextMode @"AssemblerOptionTextMode"
 
 #define UserDefaultKeyBasicOptionOutputTypePopupIndex @"BasicOptionOutputTypePopupIndex"
 #define UserDefaultKeyBasicOptionShouldProtectFile @"BasicOptionShouldProtectFile"

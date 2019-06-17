@@ -43,9 +43,6 @@
 /* Class = "NSMenuItem"; title = "Long Format"; ObjectID = "Rfh-tK-InQ"; */
 "Rfh-tK-InQ.title" = "Long Format";
 
-/* Class = "NSButtonCell"; title = "Show Warnings"; ObjectID = "sNN-2O-wNv"; */
-"sNN-2O-wNv.title" = "Zeige Warnungen";
-
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Select the output file type."; ObjectID = "tTq-zh-1be"; */
 "tTq-zh-1be.ibShadowedToolTip" = "Den Ausgabedatei-Typ auswählen.";
 

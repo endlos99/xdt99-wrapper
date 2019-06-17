@@ -32,16 +32,29 @@
 @interface AssemblerDocument ()
 
 @property (retain) IBOutlet NSView *specialLogOptionView;
+@property (retain) IBOutlet NSView *programImageGeneratorOptionsView;
+@property (retain) IBOutlet NSView *objectCodeGeneratorOptionsView;
+@property (retain) IBOutlet NSView *basicGeneratorOptionsView;
+@property (retain) IBOutlet NSView *rawBinGeneratorOptionsView;
+@property (retain) IBOutlet NSView *rawTextGeneratorOptionsView;
+@property (retain) IBOutlet NSView *messCartGeneratorOptionsView;
 
-@property (assign) NSUInteger baseAddress;
-@property (readonly) BOOL shouldUseBaseAddress;
-@property (retain) NSString *cartridgeName;
-@property (readonly) BOOL shouldUseCartName;
+@property (retain) IBOutlet NSButton *assemblerTextModeRadioButton;
+@property (retain) IBOutlet NSButton *basicTextModeRadioButton;
+@property (retain) IBOutlet NSButton *cTextModeRadioButton;
 
 @property (assign) NSUInteger outputFormatPopupButtonIndex;
 
+/* Special generator options */
+@property (assign) BOOL shouldCompressObjectCode;
 @property (assign) BOOL shouldUseRegisterSymbols;
 @property (assign) BOOL shouldBeStrict;
+@property (assign) NSUInteger baseAddress;
+@property (retain) NSString *cartridgeName;
+
+@property (assign) XDTGenerateTextMode binaryTextMode;
+
+/* Log options */
 @property (assign, nonatomic) BOOL shouldShowListingInLog;
 @property (assign, nonatomic) BOOL shouldShowSymbolsInListing;
 @property (assign, nonatomic) BOOL shouldShowSymbolsAsEqus;
@@ -55,6 +68,8 @@
 
 - (void)valueDidChangeForOutputFormatPopupButtonIndex:(XDTAs99TargetType)newTarget;
 
+- (IBAction)switchTextMode:(id)sender;
+
 @end
 
 
@@ -66,16 +81,6 @@
     if (nil == self) {
         return nil;
     }
-
-    /* Setup documents options, before any data can read and processed */
-    NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
-    [self setShouldUseRegisterSymbols:[defaults boolForKey:UserDefaultKeyAssemblerOptionUseRegisterSymbols]];
-    [self setShouldBeStrict:[defaults boolForKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions]];
-    [self setShouldShowListingInLog:[defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateListOutput]];
-    [self setShouldShowSymbolsInListing:[defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateSymbolTable]];
-    [self setShouldShowSymbolsAsEqus:[defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus]];
-    [self setBaseAddress:[defaults integerForKey:UserDefaultKeyAssemblerOptionBaseAddress]];
-    [self setOutputFormatPopupButtonIndex:[defaults integerForKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex]];
 
     if (![[NSBundle mainBundle] loadNibNamed:@"AssemblerOptionsView" owner:self topLevelObjects:nil]) {
 #if !__has_feature(objc_arc)
@@ -105,12 +110,39 @@
     [super windowControllerDidLoadNib:aController];
 
     [self setLogOptionsPlaceholderView:_specialLogOptionView];
-    
-    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(outputFormatPopupButtonIndex)) options:NSKeyValueObservingOptionNew context:nil];
 
     NSToolbarItem *optionsItem = [self xdt99OptionsToolbarItem];
     if (nil != optionsItem) {
         [optionsItem setView:[self xdt99OptionsToolbarView]];
+    }
+
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(outputFormatPopupButtonIndex)) options:NSKeyValueObservingOptionNew context:nil];
+
+    /* Setup documents options, before any data can read and processed */
+    NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
+    [self setShouldUseRegisterSymbols:[defaults boolForKey:UserDefaultKeyAssemblerOptionUseRegisterSymbols]];
+    [self setShouldBeStrict:[defaults boolForKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions]];
+    [self setShouldShowListingInLog:[defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateListOutput]];
+    [self setShouldShowSymbolsInListing:[defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateSymbolTable]];
+    [self setShouldShowSymbolsAsEqus:[defaults boolForKey:UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus]];
+    [self setBaseAddress:[defaults integerForKey:UserDefaultKeyAssemblerOptionBaseAddress]];
+    [self setOutputFormatPopupButtonIndex:[defaults integerForKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex]];
+    [self setBinaryTextMode:(XDTGenerateTextMode)[defaults integerForKey:UserDefaultKeyAssemblerOptionTextMode]];
+
+    switch (_binaryTextMode) {
+        case XDTGenerateTextModeOutputAssembler:
+            _assemblerTextModeRadioButton.state = NSOnState;
+            break;
+        case XDTGenerateTextModeOutputBasic:
+            _basicTextModeRadioButton.state = NSOnState;
+            break;
+        case XDTGenerateTextModeOutputC:
+            _cTextModeRadioButton.state = NSOnState;
+            break;
+
+        default:
+            _assemblerTextModeRadioButton.state = NSOnState;
+            break;
     }
 }
 
@@ -121,13 +153,14 @@
 
     /* Save the latest assembler options to user defaults before closing. */
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
-    [defaults setBool:[self shouldUseRegisterSymbols] forKey:UserDefaultKeyAssemblerOptionUseRegisterSymbols];
-    [defaults setBool:[self shouldBeStrict] forKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions];
+    [defaults setBool:_shouldUseRegisterSymbols forKey:UserDefaultKeyAssemblerOptionUseRegisterSymbols];
+    [defaults setBool:_shouldBeStrict forKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions];
     [defaults setBool:_shouldShowListingInLog forKey:UserDefaultKeyAssemblerOptionGenerateListOutput];
     [defaults setBool:_shouldShowSymbolsInListing forKey:UserDefaultKeyAssemblerOptionGenerateSymbolTable];
     [defaults setBool:_shouldShowSymbolsAsEqus forKey:UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus];
     [defaults setInteger:_outputFormatPopupButtonIndex forKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex];
     [defaults setInteger:_baseAddress forKey:UserDefaultKeyAssemblerOptionBaseAddress];
+    [defaults setInteger:_binaryTextMode forKey:UserDefaultKeyAssemblerOptionTextMode];
 
     [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
 }
@@ -149,24 +182,30 @@
     switch (newTarget) {
         case XDTAs99TargetTypeProgramImage:
             self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"image"];
+            [self setGeneratorOptionsPlaceholderView:_programImageGeneratorOptionsView];
             break;
         case XDTAs99TargetTypeObjectCode:
             self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"obj"];
+            [self setGeneratorOptionsPlaceholderView:_objectCodeGeneratorOptionsView];
             break;
         case XDTAs99TargetTypeEmbededXBasic:
             self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"xb"];
+            [self setGeneratorOptionsPlaceholderView:_basicGeneratorOptionsView];
             break;
         case XDTAs99TargetTypeRawBinary:
             self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"bin"];
+            [self setGeneratorOptionsPlaceholderView:_rawBinGeneratorOptionsView];
             break;
         case XDTAs99TargetTypeTextBinaryAsm:
         case XDTAs99TargetTypeTextBinaryBas:
         case XDTAs99TargetTypeTextBinaryC:
             self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"dat"];
+            [self setGeneratorOptionsPlaceholderView:_rawTextGeneratorOptionsView];
             break;
         case XDTAs99TargetTypeMESSCartridge:
             self.outputFileName = [self.outputFileName.stringByDeletingPathExtension stringByAppendingPathExtension:@"card"];
             self.baseAddress = 0x6000;
+            [self setGeneratorOptionsPlaceholderView:_messCartGeneratorOptionsView];
             break;
             /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
              This feature is open to implement.
@@ -209,30 +248,6 @@
 
 
 #pragma mark - Accessor Methods
-
-
-+ (NSSet *)keyPathsForValuesAffectingShouldUseBaseAddress
-{
-    return [NSSet setWithObject:NSStringFromSelector(@selector(outputFormatPopupButtonIndex))];
-}
-
-
-- (BOOL)shouldUseBaseAddress
-{
-    return (0 == _outputFormatPopupButtonIndex) || (4 == _outputFormatPopupButtonIndex);
-}
-
-
-+ (NSSet *)keyPathsForValuesAffectingShouldUseCartName
-{
-    return [NSSet setWithObject:NSStringFromSelector(@selector(outputFormatPopupButtonIndex))];
-}
-
-
-- (BOOL)shouldUseCartName
-{
-    return (8 == _outputFormatPopupButtonIndex);
-}
 
 
 + (NSSet *)keyPathsForValuesAffectingListOutput
@@ -324,10 +339,9 @@
 {
     NSError *error = nil;
 
-    BOOL shouldCompressObjectCode = 1 == _outputFormatPopupButtonIndex;
     XDTAs99TargetType xdtTargetType = [self targetType];
     if (![self assembleCode:xdtTargetType error:&error] || nil != error ||
-        ![self exportBinaries:xdtTargetType compressObjectCode:shouldCompressObjectCode error:&error] || nil != error) {
+        ![self exportBinaries:xdtTargetType compressObjectCode:_shouldCompressObjectCode error:&error] || nil != error) {
         if (nil != error) {
             if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
                 [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
@@ -335,6 +349,16 @@
             return;
         }
     }
+}
+
+
+- (void)switchTextMode:(id)sender
+{
+    if (![sender isKindOfClass:[NSButton class]]) {
+        return;
+    }
+    NSButton *button = (NSButton *)sender;
+    _binaryTextMode = button.tag;
 }
 
 
@@ -355,25 +379,32 @@
             xdtTargetType = XDTAs99TargetTypeProgramImage;
             break;
         case 1:
-        case 2:
             xdtTargetType = XDTAs99TargetTypeObjectCode;
             break;
-        case 3:
+        case 2:
             xdtTargetType = XDTAs99TargetTypeEmbededXBasic;
             break;
-        case 4:
+        case 3:
             xdtTargetType = XDTAs99TargetTypeRawBinary;
             break;
+        case 4:
+            switch (_binaryTextMode) {
+                case XDTGenerateTextModeOutputAssembler:
+                    xdtTargetType = XDTAs99TargetTypeTextBinaryAsm;
+                    break;
+                case XDTGenerateTextModeOutputBasic:
+                    xdtTargetType = XDTAs99TargetTypeTextBinaryBas;
+                    break;
+                case XDTGenerateTextModeOutputC:
+                    xdtTargetType = XDTAs99TargetTypeTextBinaryC;
+                    break;
+
+                default:
+                    xdtTargetType = XDTAs99TargetTypeTextBinaryAsm;
+                    break;
+            }
+            break;
         case 5:
-            xdtTargetType = XDTAs99TargetTypeTextBinaryAsm;
-            break;
-        case 6:
-            xdtTargetType = XDTAs99TargetTypeTextBinaryBas;
-            break;
-        case 7:
-            xdtTargetType = XDTAs99TargetTypeTextBinaryC;
-            break;
-        case 8:
             xdtTargetType = XDTAs99TargetTypeMESSCartridge;
             break;
         /* TODO: Since version 1.7.0 of xas99, there is a new option to export an EQU listing to a text file.
@@ -418,8 +449,6 @@
 - (BOOL)exportBinaries:(XDTAs99TargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error
 {
     BOOL retVal = YES;
-
-    XDTGenerateTextMode mode = 0;
 
     switch (xdtTargetType) {
         case XDTAs99TargetTypeProgramImage: {
@@ -468,23 +497,13 @@
             }
             break;
         }
-        case XDTAs99TargetTypeTextBinaryC:
-            if (0 == mode) {
-                mode = XDTGenerateTextModeOutputC;
-            }
+        case XDTAs99TargetTypeTextBinaryAsm:
         case XDTAs99TargetTypeTextBinaryBas:
-            if (0 == mode) {
-                mode = XDTGenerateTextModeOutputBasic;
-            }
-        case XDTAs99TargetTypeTextBinaryAsm: {
-            if (0 == mode) {
-                mode = XDTGenerateTextModeOutputAssembler;
-            }
-
+        case XDTAs99TargetTypeTextBinaryC: {
             NSError *tempError = nil;
             // TODO: extend GUI for new configuration options
             NSString *fileContent = [_assemblingResult generateTextAt:_baseAddress
-                                                             withMode:mode + XDTGenerateTextModeOptionWord
+                                                             withMode:_binaryTextMode + XDTGenerateTextModeOptionWord
                                                                 error:&tempError];
             if (nil == tempError && nil != fileContent && [fileContent length] > 0) {
                 NSURL *newOutpuFileURL = [NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]];
