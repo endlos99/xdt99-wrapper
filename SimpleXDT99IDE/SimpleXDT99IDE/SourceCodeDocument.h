@@ -39,7 +39,7 @@
 @property (retain) IBOutlet NSToolbarItem *xdt99OptionsToolbarItem;
 @property (retain) IBOutlet NSView *xdt99OptionsToolbarView;
 
-@property (retain) IBOutlet NSView *logOptionsPlaceholderView;
+@property (nonatomic, retain) IBOutlet NSView *logOptionsPlaceholderView;
 
 @property (retain) IBOutlet NSScrollView *sourceScrollView;
 @property (retain) IBOutlet NSTextView *sourceView;

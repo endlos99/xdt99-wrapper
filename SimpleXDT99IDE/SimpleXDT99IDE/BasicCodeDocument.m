@@ -24,8 +24,6 @@
 
 #import "BasicCodeDocument.h"
 
-#import "NSViewAutolayoutAdditions.h"
-
 #import "AppDelegate.h"
 
 #import <XDTools99/XDBasic.h>
@@ -92,7 +90,6 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *)aController {
     [super windowControllerDidLoadNib:aController];
 
-    [[[self logOptionsPlaceholderView] superview] replaceKeepingLayoutSubview:[self logOptionsPlaceholderView] with:_specialLogOptionView];
     [self setLogOptionsPlaceholderView:_specialLogOptionView];
 
     NSToolbarItem *optionsItem = [self xdt99OptionsToolbarItem];

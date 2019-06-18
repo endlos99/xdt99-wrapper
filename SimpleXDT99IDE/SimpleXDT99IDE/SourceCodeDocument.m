@@ -24,6 +24,8 @@
 
 #import "SourceCodeDocument.h"
 
+#import "NSViewAutolayoutAdditions.h"
+
 #import "AppDelegate.h"
 
 #import "NoodleLineNumberView.h"
@@ -273,6 +275,23 @@
 - (NSImage *)statusImage
 {
     return [NSImage imageNamed:(nil == _errorMessage || [_errorMessage length] <= 0)? NSImageNameStatusAvailable : NSImageNameStatusUnavailable];
+}
+
+
+- (void)setLogOptionsPlaceholderView:(NSView *)newLogOptionView
+{
+    if (newLogOptionView == _logOptionsPlaceholderView) {
+        return;
+    }
+
+    if (nil == newLogOptionView) {
+        newLogOptionView = [[NSView alloc] initWithFrame:[_logOptionsPlaceholderView frame]];
+    }
+    [[_logOptionsPlaceholderView superview] replaceKeepingLayoutSubview:_logOptionsPlaceholderView with:newLogOptionView];
+
+    [self willChangeValueForKey:NSStringFromSelector(@selector(logOptionsPlaceholderView))];
+    _logOptionsPlaceholderView = newLogOptionView;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(logOptionsPlaceholderView))];
 }
 
 
