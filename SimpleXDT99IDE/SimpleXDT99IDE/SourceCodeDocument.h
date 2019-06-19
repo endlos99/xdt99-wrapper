@@ -25,6 +25,8 @@
 #import <Cocoa/Cocoa.h>
 
 
+@class XDTMessage;
+
 @interface SourceCodeDocument : NSDocument
 
 @property (retain) NSString *sourceCode;
@@ -47,8 +49,7 @@
 @property (readonly) BOOL hasLogContentToSave;
 
 @property (readonly) NSImage *statusImage;
-@property (retain) NSString *errorMessage;
-@property (retain) NSString *warningMessage;
+@property (retain) XDTMessage *generatorMessages;
 @property (readonly) NSMutableString *generatedLogMessage;
 
 - (IBAction)checkCode:(id)sender;

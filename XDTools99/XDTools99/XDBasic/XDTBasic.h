@@ -36,6 +36,9 @@ NS_ENUM(XDTBasicTargetType) {
 };
 
 
+@class XDTMessage;
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NSString * XDTBasicOptionKey NS_EXTENSIBLE_STRING_ENUM; /* Keys for use in the NSDictionry */
@@ -56,7 +59,7 @@ FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionTarget;
  and the Basic tokens (value of the dictionary) that belongs to that line.
  */
 @property (nullable,readonly) NSDictionary<NSNumber *, NSArray *> *lines;
-@property (nullable,readonly) NSArray<NSString *> *warnings;
+@property (nullable,readonly) XDTMessage *messages;
 
 + (BOOL)checkRequiredModuleVersion;
 

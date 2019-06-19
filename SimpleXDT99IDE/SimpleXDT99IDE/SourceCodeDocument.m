@@ -31,13 +31,12 @@
 #import "NoodleLineNumberView.h"
 
 #import "XDTObject.h"
+#import "XDTMessage.h"
 
 
 
 @interface SourceCodeDocument () {
     NoodleLineNumberView *_lineNumberRulerView;
-    NSString *_errorMessage;
-    NSString *_warningMessage;
 }
 
 - (IBAction)generateCode:(nullable id)sender;
@@ -51,18 +50,6 @@
 
 @implementation SourceCodeDocument
 
-+ (NSSet *)keyPathsForValuesAffectingErrorMessage
-{
-    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), nil];
-}
-
-
-+ (NSSet *)keyPathsForValuesAffectingWarningMessage
-{
-    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(shouldShowLog)), nil];
-}
-
-
 - (instancetype)init {
     self = [super init];
     if (nil == self) {
@@ -71,7 +58,7 @@
 
     _outputBasePathURL = nil;
     _outputFileName = nil;
-    _errorMessage = nil;
+    _generatorMessages = nil;
     _lineNumberRulerView = nil;
 
     return self;
@@ -83,7 +70,7 @@
 #if !__has_feature(objc_arc)
     [_outputBasePathURL release];
     [_outputFileName release];
-    [_errorMessage release];
+    [_generatorMessages release];
     [_lineNumberRulerView release];
     
     [super dealloc];
@@ -194,33 +181,9 @@
 #pragma mark - Accessor Methods
 
 
-- (NSString *)errorMessage
-{
-    return _errorMessage;
-}
-
-
-- (void)setErrorMessage:(NSString *)errorMessage
-{
-    _errorMessage = errorMessage;
-}
-
-
-- (NSString *)warningMessage
-{
-    return _warningMessage;
-}
-
-
-- (void)setWarningMessage:(NSString *)msg
-{
-    _warningMessage = msg;
-}
-
-
 + (NSSet<NSString *> *)keyPathsForValuesAffectingGeneratedLogMessage
 {
-    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), NSStringFromSelector(@selector(errorMessage)), nil];
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), NSStringFromSelector(@selector(generatorMessages)), nil];
 }
 
 
@@ -233,21 +196,39 @@
 
     /* This method should be overridden to implement the document typical log output */
     if ([self shouldShowErrorsInLog]) {
-        NSString *message = [self errorMessage];
-        if (nil != message && 0 < [message length]) {
-            [retVal appendFormat:@"%@\n", message];
-        }
+        [_generatorMessages enumerateMessagesOfType:XDTMessageTypeError usingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, BOOL *stop) {
+            NSString *fileName = [(NSURL *)[obj valueForKey:XDTMessageFileURL] lastPathComponent];
+            NSNumber *passNumber = (NSNumber *)[obj valueForKey:XDTMessagePassNumber];
+            NSNumber *lineNumber = (NSNumber *)[obj valueForKey:XDTMessageLineNumber];
+            NSString *codeLine = (NSString *)[obj valueForKey:XDTMessageCodeLine];
+            NSString *messageText = (NSString *)[obj valueForKey:XDTMessageText];
+            /*
+             > gaops.gpl <1> 0028 -         STx   @>8391,@>8302
+             ***** Syntax error
+             */
+            [retVal appendFormat:@"%@ <%@> %@ - %@\n%@\n", fileName, passNumber, lineNumber, codeLine, messageText];
+        }];
     }
     if ([self shouldShowWarningsInLog]) {
-        NSString *message = [self warningMessage];
-        if (nil != message && 0 < [message length]) {
-            [retVal appendFormat:@"%@\n", message];
-            // TODO: an Ralf: Für xas99 und xga99 fehlen noch angaben über Datei, Durchlauf und Zeilennummer vor der Warnung, so wie es in stderr ausgegeben wird.
-            /*
-             Treating as register, did you intend an @address?
-             asmacs-ti.asm <2> 0034 - Warning: Treating as register, did you intend an @address?
-             */
-        }
+        [_generatorMessages enumerateMessagesOfType:XDTMessageTypeWarning usingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, BOOL *stop) {
+            NSString *fileName = [(NSURL *)[obj valueForKey:XDTMessageFileURL] lastPathComponent];
+            if (nil == fileName) {
+                fileName = [[self fileURL] lastPathComponent];
+            }
+            NSNumber *passNumber = (NSNumber *)[obj valueForKey:XDTMessagePassNumber];
+            NSNumber *lineNumber = (NSNumber *)[obj valueForKey:XDTMessageLineNumber];
+            NSString *codeLine = (NSString *)[obj valueForKey:XDTMessageCodeLine];
+            if (nil == codeLine) {
+                codeLine = @"";
+            }
+            NSString *messageText = (NSString *)[obj valueForKey:XDTMessageText];
+            [retVal appendFormat:@"%@ <%@> %@ - %@\nWarning: %@\n", fileName, passNumber, lineNumber, codeLine, messageText];
+        }];
+        // TODO: an Ralf: Für xas99 und xga99 fehlen noch Angaben über Datei, Durchlauf und Zeilennummer vor der Warnung, so wie es in stderr ausgegeben wird.
+        /*
+         Treating as register, did you intend an @address?
+         asmacs-ti.asm <2> 0034 - Warning: Treating as register, did you intend an @address?
+         */
     }
     
     return retVal;
@@ -268,13 +249,21 @@
 
 + (NSSet *)keyPathsForValuesAffectingStatusImage
 {
-    return [NSSet setWithObjects:NSStringFromSelector(@selector(errorMessage)), nil];
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(generatorMessages)), nil];
 }
 
 
 - (NSImage *)statusImage
 {
-    return [NSImage imageNamed:(nil == _errorMessage || [_errorMessage length] <= 0)? NSImageNameStatusAvailable : NSImageNameStatusUnavailable];
+    NSImageName imageName = NSImageNameStatusAvailable;
+    if (nil != _generatorMessages) {
+        if (0 < [_generatorMessages countOfType:XDTMessageTypeError]) {
+            imageName = NSImageNameStatusUnavailable;
+        } else if (0 < [_generatorMessages countOfType:XDTMessageTypeWarning]) {
+            imageName = NSImageNameStatusPartiallyAvailable;
+        }
+    }
+    return [NSImage imageNamed:imageName];
 }
 
 

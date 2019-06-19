@@ -185,7 +185,6 @@
     [self setCartridgeName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]];
     [self setOutputFileName:[_cartridgeName stringByAppendingString:@"-obj"]];
     [self setOutputBasePathURL:[[self fileURL] URLByDeletingLastPathComponent]];
-    [self setErrorMessage:@""];
 
     return YES;
 }
@@ -253,7 +252,6 @@
         NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
         [newSet addObject:NSStringFromSelector(@selector(shouldShowListingInLog))];
         [newSet unionSet:[self keyPathsForValuesAffectingListOutput]];
-        [newSet removeObject:NSStringFromSelector(@selector(errorMessage))];  /* 'errorMessage' from the super class is overlayed by 'assemblingResult', so remove it */
         retVal = newSet;
     }
     return retVal;
@@ -385,26 +383,15 @@
                               };
     XDTGPLAssembler *assembler = [XDTGPLAssembler gplAssemblerWithOptions:options includeURL:[self fileURL]];
 
-    XDTGa99Objcode *result = [assembler assembleSourceFile:[self fileURL] error:error];
-    if (nil != error && nil != *error) {
-        if (nil == [*error localizedFailureReason]) {
-            [self setErrorMessage:[NSString stringWithFormat:@"%@:\n", [*error localizedDescription]]];
-        } else {
-            [self setErrorMessage:[NSString stringWithFormat:@"%@:\n%@\n", [*error localizedDescription], [*error localizedFailureReason]]];
-        }
-        [self setAssemblingResult:result];
-
-        return NO;
-    }
-    [self setErrorMessage:@""];
-    if (0 < assembler.warnings.count) {
-        [self setWarningMessage:[assembler.warnings componentsJoinedByString:@"\n"]];
-    } else {
-        [self setWarningMessage:@""];
-    }
+    NSError *tempErr = nil;
+    XDTGa99Objcode *result = [assembler assembleSourceFile:[self fileURL] error:&tempErr];
     [self setAssemblingResult:result];
+    [self setGeneratorMessages:assembler.messages];
 
-    return YES;
+    if (nil != error) {
+        *error = tempErr;
+    }
+    return nil == tempErr;
 }
 
 
@@ -446,7 +433,6 @@
                                             NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The cartridge name is missing! Please specify a name of the cartridge to create!", @"Explanation for an error of a missing cartridge name option.")
                                             };
                 NSError *missingOptionError = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolException userInfo:errorDict];
-                [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [missingOptionError localizedDescription], [missingOptionError localizedFailureReason]]];
                 retVal = NO;
                 if (nil != error) {
                     *error = missingOptionError;
@@ -470,7 +456,6 @@
                                             NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The cartridge name is missing! Please specify a name of the cartridge to create!", @"Explanation for an error of a missing cartridge name option.")
                                             };
                 NSError *missingOptionError = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolException userInfo:errorDict];
-                [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@", [missingOptionError localizedDescription], [missingOptionError localizedFailureReason]]];
                 retVal = NO;
                 if (nil != error) {
                     *error = missingOptionError;

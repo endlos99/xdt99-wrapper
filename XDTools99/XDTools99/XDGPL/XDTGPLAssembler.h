@@ -40,7 +40,7 @@ typedef NS_ENUM(NSUInteger, XDTGa99TargetType) {
 };
 
 
-@class XDTGa99Objcode;
+@class XDTGa99Objcode, XDTMessage;
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -62,7 +62,7 @@ FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionWarnings;
 @property (readonly) XDTGa99TargetType targetType;
 @property (readonly) XDTGa99SyntaxType syntaxType;
 @property (readonly) BOOL outputWarnings;
-@property (readonly) NSArray<NSString *> *warnings;
+@property (readonly, nullable) XDTMessage *messages;    /* Object that contains all messages (Error, Warning, etc) after the assembler run */
 
 + (BOOL)checkRequiredModuleVersion;
 

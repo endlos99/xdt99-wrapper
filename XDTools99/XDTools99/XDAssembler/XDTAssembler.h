@@ -42,7 +42,7 @@ typedef NS_ENUM(NSUInteger, XDTAs99TargetType) {
 };
 
 
-@class XDTAs99Objcode;
+@class XDTAs99Objcode, XDTMessage;
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -61,7 +61,7 @@ FOUNDATION_EXPORT XDTAs99OptionKey const XDTAs99OptionWarnings;   /* (NSNumber) 
 @property (readonly) BOOL beStrict;
 @property (readonly) BOOL useRegisterSymbols;
 @property (readonly) BOOL outputWarnings;
-@property (readonly) NSArray<NSString *> *warnings;
+@property (readonly, nullable) XDTMessage *messages;
 @property (readonly) XDTAs99TargetType targetType;
 
 + (BOOL)checkRequiredModuleVersion;

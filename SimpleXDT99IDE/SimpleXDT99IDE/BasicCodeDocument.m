@@ -39,7 +39,6 @@
 @property (assign) BOOL shouldProtectFile;
 @property (assign) NSUInteger outputFormatPopupButtonIndex;
 
-@property (retain) NSArray<NSString *> *compilingMessages;
 @property (retain) XDTObject *compilingResult;
 @property (retain) NSString *tokenDump;
 
@@ -83,7 +82,6 @@
 {
 #if !__has_feature(objc_arc)
     [_tokenDump release];
-    [_compilingMessages release];
     [_compilingResult release];
 
     [super dealloc];
@@ -234,7 +232,7 @@
             return NO;
         }
 
-        [self setCompilingMessages:[basic warnings]];
+        [self setGeneratorMessages:basic.messages];
         [self setSourceCode:[basic getSource:&error]];
 
         if (nil == error) {
@@ -269,36 +267,11 @@
 #pragma mark - Accessor Methods
 
 
-+ (NSSet<NSString *> *)keyPathsForValuesAffectingWarningMessage
-{
-    return [NSSet setWithObjects:@"compilingMessages", nil];
-}
-
-
-/* overwrite the getter, so the super class can generate the log message correctly */
-- (NSString *)warningMessage
-{
-    if (nil != _compilingMessages && 0 < [_compilingMessages count]) {
-        return [_compilingMessages componentsJoinedByString:@"\n"];
-    }
-
-    return nil;
-}
-
-
-- (void)setWarningMessage:(NSString *)warningMessage
-{
-    // doing nothing here, cause the warning content is stored in _compilingMessages
-}
-
-
 + (NSSet<NSString *> *)keyPathsForValuesAffectingGeneratedLogMessage
 {
     NSSet *retVal = [[super superclass] keyPathsForValuesAffectingGeneratedLogMessage];
     NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
-    [newSet addObjectsFromArray:@[NSStringFromSelector(@selector(shouldDumpTokensInLog)), NSStringFromSelector(@selector(tokenDump)),
-                                  NSStringFromSelector(@selector(compilingMessages))  // this is the property name of an array where warning messages are stored into
-                                  ]];
+    [newSet addObjectsFromArray:@[NSStringFromSelector(@selector(shouldDumpTokensInLog)), NSStringFromSelector(@selector(tokenDump))]];
     retVal = newSet;
     
     return retVal;
@@ -369,19 +342,11 @@
         default:
             break;
     }
-    if (!successfullySaved && nil != error) {
-        if (nil == [error localizedFailureReason]) {
-            [self setErrorMessage:[NSString stringWithFormat:@"%@\n", [error localizedDescription]]];
-        } else {
-            [self setErrorMessage:[NSString stringWithFormat:@"%@\n%@\n", [error localizedDescription], [error localizedFailureReason]]];
-        }
-    } else {
-        [self setErrorMessage:@""];
-    }
-
-    if (nil != error) {
-        if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
-            [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+    if (!successfullySaved) {
+        if (nil != error) {
+            if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
+                [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+            }
         }
     }
 }
@@ -419,31 +384,15 @@
 
 - (XDTBasic *)parseCode:(NSError **)error
 {
-    [self setErrorMessage:@""];
-
     XDTBasic *basic = [XDTBasic basicWithOptions:@{XDTBasicOptionJoinLines: [NSNumber numberWithBool:_shouldJoinSourceLines],
                                                    XDTBasicOptionProtectFile: [NSNumber numberWithBool:_shouldProtectFile]
                                                    }];
     if (![basic parseSourceCode:[self sourceCode] error:error]) {
-        if (nil != *error) {
-            if (nil == [*error localizedFailureReason]) {
-                [self setErrorMessage:[NSString stringWithFormat:@"%@:\n", [*error localizedDescription]]];
-            } else {
-                [self setErrorMessage:[NSString stringWithFormat:@"%@:\n%@\n", [*error localizedDescription], [*error localizedFailureReason]]];
-            }
-        }
         return nil;
     }
 
-    [self setCompilingMessages:[basic warnings]];
+    [self setGeneratorMessages:basic.messages];
     [self setTokenDump:[basic dumpTokenList:error]];
-    if (nil != *error) {
-        if (nil == [*error localizedFailureReason]) {
-            [self setErrorMessage:[NSString stringWithFormat:@"%@:\n", [*error localizedDescription]]];
-        } else {
-            [self setErrorMessage:[NSString stringWithFormat:@"%@:\n%@\n", [*error localizedDescription], [*error localizedFailureReason]]];
-        }
-    }
     
     return basic;
 }

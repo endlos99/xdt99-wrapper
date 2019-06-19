@@ -30,6 +30,7 @@
 #import "NSArrayPythonAdditions.h"
 
 #import "XDTException.h"
+#import "XDTMessage.h"
 #import "XDTGa99Objcode.h"
 
 
@@ -351,37 +352,36 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    PyObject *errorList = PyTuple_GetItem(pValueTupel, 1);
-    if (NULL != errorList) {
-        const Py_ssize_t errCount = PyList_Size(errorList);
-        if (0 < errCount) {
-            PyObject *unicodeErrorString = PyUnicode_Join(PyString_FromString("\n"), errorList);
-            PyObject *completeErrorString = PyUnicode_AsUTF8String(unicodeErrorString);
-            Py_XDECREF(unicodeErrorString);
-            NSString *errorString = [NSString stringWithUTF8String:PyString_AsString(completeErrorString)];
-            Py_XDECREF(completeErrorString);
-            if (nil != error) {
-                NSDictionary *errorDict = @{
-                                            NSLocalizedDescriptionKey: [NSString stringWithFormat:@"Error occured while assembling '%@'", basename],
-                                            NSLocalizedFailureReasonErrorKey: errorString,
-                                            NSLocalizedRecoverySuggestionErrorKey: @"Please check all assembler options and try again."
-                                            };
-                *error = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolLoggedError userInfo:errorDict];
+    /*
+     Don't need to process the dedicated error return value. So skip the item 1 of the value tupel.
+     Modern version of xas99 has a console return value which contains all messages (errors and warnings).
+     
+     Fetch the console return value which contains all messages the assembler generates.
+     */
+    XDTMutableMessage *newMessages = nil;
+    PyObject *messageList = PyTuple_GetItem(pValueTupel, 2);
+    if (NULL != messageList) {
+        const Py_ssize_t messageCount = PyList_Size(messageList);
+        if (0 < messageCount) {
+            newMessages = [XDTMutableMessage messageWithPythonList:messageList];
+            const NSUInteger errCount = [newMessages countOfType:XDTMessageTypeError];
+            if (0 < errCount) {
+                if (nil != error) {
+                    NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
+                    NSDictionary *errorDict = @{
+                                                NSLocalizedDescriptionKey: [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Error occured while assembling '%@'", nil, myBundle, @"Description for an error object, discribing that the Assembler faild assembling a given file name."), basename],
+                                                NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Assembler ends with %ld found error(s).", nil, myBundle, @"Reason for an error object, why the Assembler stopped abnormally."), errCount],
+                                                NSLocalizedRecoverySuggestionErrorKey: NSLocalizedStringFromTableInBundle(@"For more information see messages in the log view. Please check your code and all assembler options and try again.", nil, myBundle, @"Recovery suggestion for an error object, when the Assembler terminates abnormally.")
+                                                };
+                    *error = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolLoggedError userInfo:errorDict];
+                }
+                NSLog(@"Assembler found %ld error(s) while assembling '%@'", errCount, basename);
             }
-            NSLog(@"Error occured while assembling '%@':\n%@", basename, errorString);
         }
     }
-
-    [self willChangeValueForKey:@"warnings"];
-    _warnings = [NSArray array];
-    PyObject *warningList = PyTuple_GetItem(pValueTupel, 2);
-    if (NULL != warningList) {
-        const Py_ssize_t warnCount = PyList_Size(warningList);
-        if (0 < warnCount) {
-            _warnings = [NSArray arrayWithPyListOfString:warningList];
-        }
-    }
-    [self didChangeValueForKey:@"warnings"];
+    [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
+    _messages = newMessages;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(messages))];
 
     XDTGa99Objcode *retVal = nil;
     PyObject *objectCodeObject = PyTuple_GetItem(pValueTupel, 0);

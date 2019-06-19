@@ -33,4 +33,6 @@
 
 #import <XDTools99/XDTZipFile.h>
 
+#import <XDTools99/XDTMessage.h>
+
 #endif /* XDAssembler_h */

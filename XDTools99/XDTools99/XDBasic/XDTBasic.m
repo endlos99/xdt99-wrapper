@@ -30,6 +30,8 @@
 #import "NSArrayPythonAdditions.h"
 #import "NSDataPythonAdditions.h"
 
+#import "XDTMessage.h"
+
 
 #define XDTModuleNameBasic "xbas99"
 #define XDTClassNameBasic "BasicProgram"
@@ -261,23 +263,17 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSArray<NSString *> *)warnings
+- (XDTMessage *)messages
 {
     PyObject *warningsObject = PyObject_GetAttrString(basicProgramPythonClass, "warnings");
     if (NULL == warningsObject) {
         return nil;
     }
 
+    XDTMessage *retVal = nil;
     const Py_ssize_t warningCount = PyList_Size(warningsObject);
-    NSMutableArray *retVal = [NSMutableArray arrayWithCapacity:warningCount];
-    for (int i = 0; i < warningCount; i++) {
-        PyObject *warningObject = PyList_GetItem(warningsObject, i);
-        NSString *warningStr = [[NSString alloc] initWithBytes:PyString_AsString(warningObject) length:PyString_Size(warningObject)
-                                                      encoding:NSUTF8StringEncoding];
-        [retVal addObject:warningStr];
-#if !__has_feature(objc_arc)
-        [warningStr autorelease];
-#endif
+    if (0 < warningCount) {
+        retVal = [XDTMessage messageWithPythonList:warningsObject treatingAs:XDTMessageTypeWarning];    /* there is no automatic type detection possible, so treat all messages as warnings */
     }
 
     Py_DECREF(warningsObject);

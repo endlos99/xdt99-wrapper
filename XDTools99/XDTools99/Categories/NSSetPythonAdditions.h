@@ -1,11 +1,11 @@
 //
-//  XDGPL.h
+//  NSSetPythonAdditions.h
 //  XDTools99
 //
-//  Created by Henrik Wedekind on 16.12.16.
+//  Created by henrik on 22.06.19.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,16 +22,21 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#ifndef XDGPL_h
-#define XDGPL_h
+#import <Foundation/Foundation.h>
 
-#import <XDTools99/XDTObject.h>
+#import <Python/Python.h>
 
-#import <XDTools99/XDGPL/XDTGa99Objcode.h>
-#import <XDTools99/XDGPL/XDTGPLAssembler.h>
 
-#import <XDTools99/XDTZipFile.h>
+NS_ASSUME_NONNULL_BEGIN
 
-#import <XDTools99/XDTMessage.h>
+@interface NSSet (NSSetPythonAdditions)
 
-#endif /* XDGPL_h */
++ (nullable NSSet<id> *)setWithPyTuple:(PyObject *)dataTuple;
++ (nullable NSSet<id> *)setWithPyList:(PyObject *)dataTuple;
++ (nullable NSSet<NSArray<id> *> *)setWithPyListOfTuple:(PyObject *)dataList;
++ (nullable NSSet<NSData *> *)setWithPyListOfData:(PyObject *)dataList;
++ (nullable NSSet<NSString *> *)setWithPyListOfString:(PyObject *)dataList;
+
+@end
+
+NS_ASSUME_NONNULL_END
