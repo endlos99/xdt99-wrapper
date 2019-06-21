@@ -152,8 +152,8 @@
     [self setCartridgeName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]];
     [self setOutputFileName:[_cartridgeName stringByAppendingString:@"-obj"]];
     [self setOutputBasePathURL:[[self fileURL] URLByDeletingLastPathComponent]];
+    [self setErrorMessage:@""];
 
-    [self checkCode:nil];
     return YES;
 }
 

@@ -222,7 +222,6 @@
             [self setOutputBasePathURL:[[self fileURL] URLByDeletingLastPathComponent]];
         }
         
-        [self checkCode:nil];
         return YES;
     }
     
