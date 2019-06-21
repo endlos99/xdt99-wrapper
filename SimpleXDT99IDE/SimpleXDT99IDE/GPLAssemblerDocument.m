@@ -132,6 +132,7 @@
         if (outError) {
             *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
         }
+        return nil;
     }
     NSData *retVal = [[self sourceCode] dataUsingEncoding:NSUTF8StringEncoding];
     return retVal;
@@ -141,8 +142,9 @@
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
     if (![@"Xga99DocumentType" isEqualToString:typeName]) {
         if (outError) {
-            *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
+            *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:kPOSIXErrorEFTYPE userInfo:nil];
         }
+        return NO;
     }
 
     [self setSourceCode:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];

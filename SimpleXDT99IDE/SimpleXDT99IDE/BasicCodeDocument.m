@@ -128,6 +128,7 @@
         if (outError) {
             *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
         }
+        return nil;
     }
 
     /* Saves only the source code variant. Generating any tagged/binary output only via the generateCode method. */
@@ -136,7 +137,9 @@
 }
 
 
-- (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
+- (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
+{
+    NSError *error = nil;
     // Insert code here to read your document from the given data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning NO.
     // You can also choose to override -readFromFileWrapper:ofType:error: or -readFromURL:ofType:error: instead.
     // If you override either of these, you should also override -isEntireFileLoaded to return NO if the contents are lazily loaded.
@@ -151,27 +154,37 @@
 
         NSString *fileFormat = nil;
         if ([@"bin" isEqualToString:fileExtension]) {
-            [basic loadProgramData:data error:outError];
-            if (nil != *outError) {
+            [basic loadProgramData:data error:&error];
+            if (nil != error) {
+                if (nil != *outError) {
+                    *outError = error;
+                }
                 return NO;
             }
             fileFormat = @"internal";
         } else if ([@"iv254" isEqualToString:fileExtension]) {
-            [basic loadLongData:data error:outError];
-            if (nil != *outError) {
+            [basic loadLongData:data error:&error];
+            if (nil != error) {
+                if (nil != *outError) {
+                    *outError = error;
+                }
                 return NO;
             }
             fileFormat = @"long";
         } else if ([@"dv163" isEqualToString:fileExtension]) {
-            [basic loadMergedData:data error:outError];
-            if (nil != *outError) {
+            [basic loadMergedData:data error:&error];
+            if (nil != error) {
+                if (nil != *outError) {
+                    *outError = error;
+                }
                 return NO;
             }
             fileFormat = @"merge";
         } else {
             if (nil != outError) {
-                *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr
-                                            userInfo:@{NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Unknown binary Basic file format.", @"Reason for the error if the Basic file cannot be recognized.")}];
+                *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:kPOSIXErrorEFTYPE
+                                            userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Can not open Basic file!", @"Description for the error if the Basic file cannot be opened."),
+                                                       NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"Unknown binary Basic file format.", @"Reason for the error if the Basic file cannot be recognized.")}];
             }
             return NO;
         }
@@ -180,34 +193,43 @@
         NSDictionary<NSNumber *, NSArray *> *lines = [basic lines];
         if (0 >= [lines count]) {
             if (nil != outError) {
-                *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr
-                                            userInfo:@{NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"It seems that this Basic file is not in %@ format.", @"Reason for the error if the recognized file format cannot be decoded."), fileFormat]}];
+                *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:kPOSIXErrorEFTYPE
+                                            userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Can not open Basic file!", @"Description for the error if the Basic file cannot be opened."),
+                                                       NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"It seems that this Basic file is not in %@ format.", @"Reason for the error if the recognized file format cannot be decoded."), fileFormat]}];
             }
             return NO;
         }
 
         [self setCompilingMessages:[basic warnings]];
-        [self setSourceCode:[basic getSource:outError]];
+        [self setSourceCode:[basic getSource:&error]];
 
-        /* binary Basic files cannot be handled as source code files, so force to save as a new file. */
-        [self setFileURL:nil];
-        NSAlert *info = [NSAlert alertWithMessageText:NSLocalizedString(@"Creating new file", @"Message text for alerting to create a new file.")
-                                        defaultButton:nil alternateButton:nil otherButton:nil
-                            informativeTextWithFormat:NSLocalizedString(@"Binary file imported. You will have to save the source code within a new file.", @"Informative text for imported binary Basic files to store them into a new file.")];
-        [info runModal];
-        //[info beginSheetModalForWindow:[self windowForSheet] modalDelegate:nil didEndSelector:nil contextInfo:nil];
-    } else {
-        if (nil != outError) {
-            *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
+        if (nil == error) {
+            /* binary Basic files cannot be handled as source code files, so force to save as a new file. */
+            [self setFileURL:nil];
+            NSAlert *info = [NSAlert alertWithMessageText:NSLocalizedString(@"Creating new file", @"Message text for alerting to create a new file.")
+                                            defaultButton:nil alternateButton:nil otherButton:nil
+                                informativeTextWithFormat:NSLocalizedString(@"Binary file imported. You will have to save the source code within a new file.", @"Informative text for imported binary Basic files to store them into a new file.")];
+            [info runModal];
+            //[info beginSheetModalForWindow:[self windowForSheet] modalDelegate:nil didEndSelector:nil contextInfo:nil];
         }
+    } else {
+        error = [NSError errorWithDomain:NSOSStatusErrorDomain code:kPOSIXErrorEFTYPE userInfo:nil];
     }
 
-    if (nil != [self fileURL]) {
-        [self setOutputFileName:[[[[self fileURL] lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"-prg"]];
-        [self setOutputBasePathURL:[[self fileURL] URLByDeletingLastPathComponent]];
+    if (nil == error) {
+        if (nil != [self fileURL]) {
+            [self setOutputFileName:[[[[self fileURL] lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:@"-prg"]];
+            [self setOutputBasePathURL:[[self fileURL] URLByDeletingLastPathComponent]];
+        }
+        
+        [self checkCode:nil];
+        return YES;
     }
-    [self checkCode:nil];
-    return YES;
+    
+    if (nil != outError) {
+        *outError = error;
+    }
+    return NO;
 }
 
 

@@ -127,7 +127,7 @@
 
 /* This method should be overridden from specialized class */
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
-    if (outError) {
+    if (nil != outError) {
         *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
     }
     return NO;
