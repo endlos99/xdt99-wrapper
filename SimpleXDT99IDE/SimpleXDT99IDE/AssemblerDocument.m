@@ -405,6 +405,9 @@
     [self setAssemblingResult:result];
     [self setGeneratorMessages:assembler.messages];
 
+    /* set the number of digits of line numbers in the superclass to configure the log format */
+    [super setValue:@4 forKey:@"lineNumberDigits"];
+
     if (nil != error) {
         *error = tempErr;
     }

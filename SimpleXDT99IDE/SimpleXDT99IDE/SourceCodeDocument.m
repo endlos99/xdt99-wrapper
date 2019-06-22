@@ -39,6 +39,8 @@
     NoodleLineNumberView *_lineNumberRulerView;
 }
 
+@property (retain) NSNumber *lineNumberDigits;
+
 - (IBAction)generateCode:(nullable id)sender;
 - (IBAction)selectOutputFile:(nullable id)sender;
 - (IBAction)hideShowLog:(nullable id)sender;
@@ -61,6 +63,8 @@
     _generatorMessages = nil;
     _lineNumberRulerView = nil;
 
+    _lineNumberDigits = nil;
+
     return self;
 }
 
@@ -72,6 +76,7 @@
     [_outputFileName release];
     [_generatorMessages release];
     [_lineNumberRulerView release];
+    [_lineNumberDigits release];
     
     [super dealloc];
 #endif
@@ -183,7 +188,7 @@
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingGeneratedLogMessage
 {
-    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), NSStringFromSelector(@selector(generatorMessages)), nil];
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), NSStringFromSelector(@selector(generatorMessages)), NSStringFromSelector(@selector(lineNumberDigits)), nil];
 }
 
 
@@ -206,7 +211,8 @@
              > gaops.gpl <1> 0028 -         STx   @>8391,@>8302
              ***** Syntax error
              */
-            [retVal appendFormat:@"%@ <%@> %@ - %@\n%@\n", fileName, passNumber, lineNumber, codeLine, messageText];
+            NSString *logFormat = [NSString stringWithFormat:@"%%@ <%%u> %%.%@lu - %%@\n%%@\n", (nil != self->_lineNumberDigits)? [self->_lineNumberDigits stringValue] : @""];
+            [retVal appendFormat:logFormat, fileName, [passNumber unsignedShortValue], [lineNumber unsignedIntegerValue], codeLine, messageText];
         }];
     }
     if ([self shouldShowWarningsInLog]) {
@@ -222,7 +228,8 @@
                 codeLine = @"";
             }
             NSString *messageText = (NSString *)[obj valueForKey:XDTMessageText];
-            [retVal appendFormat:@"%@ <%@> %@ - %@\nWarning: %@\n", fileName, passNumber, lineNumber, codeLine, messageText];
+            NSString *logFormat = [NSString stringWithFormat:@"%%@ <%%u> %%.%@lu - %%@\nWarning: %%@\n", (nil != self->_lineNumberDigits)? [self->_lineNumberDigits stringValue] : @""];
+            [retVal appendFormat:logFormat, fileName, [passNumber unsignedShortValue], [lineNumber unsignedIntegerValue], codeLine, messageText];
         }];
         // TODO: an Ralf: Für xas99 und xga99 fehlen noch Angaben über Datei, Durchlauf und Zeilennummer vor der Warnung, so wie es in stderr ausgegeben wird.
         /*

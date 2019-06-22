@@ -391,6 +391,10 @@
         return nil;
     }
 
+    NSNumber *maxLineNumber = [basic.lines.allKeys valueForKeyPath:@"@max.self"];
+    /* set the number of digits of line numbers in the superclass to configure the log format */
+    [super setValue:[NSNumber numberWithShort:floor(log10([maxLineNumber doubleValue])) + 1] forKey:@"lineNumberDigits"];
+
     [self setGeneratorMessages:basic.messages];
     [self setTokenDump:[basic dumpTokenList:error]];
     
