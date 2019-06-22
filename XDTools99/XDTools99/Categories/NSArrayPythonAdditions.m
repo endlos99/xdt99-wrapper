@@ -1,11 +1,11 @@
 //
 //  NSArrayPythonAdditions.m
-//  SimpleXDT99
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 04.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -51,7 +51,48 @@
                 NSData *object = [NSData dataWithPythonString:dataItem];
                 [retVal addObject:object];
             } else if (PyList_Check(dataItem)) {
+                NSArray *object = [NSArray arrayWithPyList:dataItem];
+                [retVal addObject:object];
+            } else if (PyTuple_Check(dataItem)) {
                 NSArray *object = [NSArray arrayWithPyTuple:dataItem];
+                [retVal addObject:object];
+            } else if (Py_None == dataItem) {
+                NSNull *object = [NSNull null];
+                [retVal addObject:object];
+            } else {
+                PyTypeObject *dataType = dataItem->ob_type;
+                NSLog(@"%s ERROR: Cannot convert Python type '%s' to an Objective-C type", __FUNCTION__, dataType->tp_name);
+            }
+        }
+    }
+
+    return retVal;
+}
+
+
++ (nullable NSArray<id> *)arrayWithPyList:(PyObject *)dataList
+{
+    assert(NULL != dataList);
+
+    const Py_ssize_t dataCount = PyList_Size(dataList);
+    if (0 > dataCount) {
+        return nil;
+    }
+    NSMutableArray<id> *retVal = [NSMutableArray arrayWithCapacity:dataCount];
+    if (nil == retVal) {
+        return nil;
+    }
+    for (Py_ssize_t i = 0; i < dataCount; i++) {
+        PyObject *dataItem = PyList_GetItem(dataList, i);
+        if (NULL != dataItem) {
+            if (PyInt_Check(dataItem)) {
+                NSNumber *object = [NSNumber numberWithLong:PyInt_AsLong(dataItem)];
+                [retVal addObject:object];
+            } else if (PyString_Check(dataItem)) {
+                NSData *object = [NSData dataWithPythonString:dataItem];
+                [retVal addObject:object];
+            } else if (PyList_Check(dataItem)) {
+                NSArray *object = [NSArray arrayWithPyList:dataItem];
                 [retVal addObject:object];
             } else if (PyTuple_Check(dataItem)) {
                 NSArray *object = [NSArray arrayWithPyTuple:dataItem];
@@ -78,6 +119,10 @@
     if (0 > dataCount) {
         return nil;
     }
+    PyObject *dataItem = PyList_GetItem(dataList, 0);
+    if (!PyTuple_Check(dataItem)) {
+        return nil;
+    }
     NSMutableArray<NSArray<id> *> *retVal = [NSMutableArray arrayWithCapacity:dataCount];
     if (nil == retVal) {
         return nil;
@@ -100,6 +145,10 @@
 
     const Py_ssize_t dataCount = PyList_Size(dataList);
     if (0 > dataCount) {
+        return nil;
+    }
+    PyObject *dataItem = PyList_GetItem(dataList, 0);
+    if (!PyString_Check(dataItem)) {
         return nil;
     }
     NSMutableArray<NSData *> *retVal = [NSMutableArray arrayWithCapacity:dataCount];

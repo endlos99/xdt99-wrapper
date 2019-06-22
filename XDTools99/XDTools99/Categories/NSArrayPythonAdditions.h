@@ -1,11 +1,11 @@
 //
 //  NSArrayPythonAdditions.h
-//  SimpleXDT99
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 04.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSArray (NSArrayPythonAdditions)
 
 + (nullable NSArray<id> *)arrayWithPyTuple:(PyObject *)dataTuple;
++ (nullable NSArray<id> *)arrayWithPyList:(PyObject *)dataTuple;
 + (nullable NSArray<NSArray<id> *> *)arrayWithPyListOfTuple:(PyObject *)dataList;
 + (nullable NSArray<NSData *> *)arrayWithPyListOfString:(PyObject *)dataList;
 
