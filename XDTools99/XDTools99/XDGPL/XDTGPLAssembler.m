@@ -257,7 +257,7 @@ NS_ASSUME_NONNULL_END
 //                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
 //            }
             PyErr_Print();
-            @throw [XDTException exceptionWithError:[NSError errorWithPythonError:exeption RecoverySuggestion:nil]];
+            @throw [XDTException exceptionWithError:[NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil]];
         }
 #if !__has_feature(objc_arc)
         [self release];
@@ -345,7 +345,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }

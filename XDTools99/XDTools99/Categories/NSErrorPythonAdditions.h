@@ -30,8 +30,8 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface NSError (NSErrorPythonAdditions)
 
-+ (nullable instancetype)errorWithPythonError:(PyObject *)error RecoverySuggestion:(nullable NSString *)recoverySuggestion;
-+ (nullable instancetype)errorWithPythonError:(PyObject *)error RecoverySuggestion:(nullable NSString *)recoverySuggestion clearErrorIndicator:(BOOL)clearIndicator;
++ (nullable instancetype)errorWithPythonError:(PyObject *)error localizedRecoverySuggestion:(nullable NSString *)recoverySuggestion;
++ (nullable instancetype)errorWithPythonError:(PyObject *)error localizedRecoverySuggestion:(nullable NSString *)recoverySuggestion clearErrorIndicator:(BOOL)clearIndicator;
 
 @end
 NS_ASSUME_NONNULL_END

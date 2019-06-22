@@ -339,7 +339,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }

@@ -30,23 +30,24 @@
 
 @implementation NSError (NSErrorPythonAdditions)
 
-+ (instancetype)errorWithPythonError:(PyObject *)error RecoverySuggestion:(NSString *)recoverySuggestion
++ (instancetype)errorWithPythonError:(PyObject *)error localizedRecoverySuggestion:(NSString *)recoverySuggestion
 {
-    return [self errorWithPythonError:error RecoverySuggestion:recoverySuggestion clearErrorIndicator:NO];
+    return [self errorWithPythonError:error localizedRecoverySuggestion:recoverySuggestion clearErrorIndicator:NO];
 }
 
 
-+ (instancetype)errorWithPythonError:(PyObject *)error RecoverySuggestion:(NSString *)recoverySuggestion clearErrorIndicator:(BOOL)clearIndicator
++ (instancetype)errorWithPythonError:(PyObject *)error localizedRecoverySuggestion:(NSString *)recoverySuggestion clearErrorIndicator:(BOOL)clearIndicator
 {
     XDTErrorCode errorCode = XDTErrorCodePythonException;
     NSString *errorString = nil;
     NSString *errorDescription = nil;
 
+    NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
     if (PyString_Check(error)) {
         /* The error is just a simple error message */
         errorCode = XDTErrorCodePythonError;
         errorString = [NSString stringWithUTF8String:PyString_AsString(error)];
-        errorDescription = @"Python error occured!";
+        errorDescription = NSLocalizedStringFromTableInBundle(@"Python error occured!", nil, myBundle, @"Description for an error object, discribing that there is an error occured.");
     } else if (PyExceptionClass_Check(error)) {
         /* Or the error can be an exception, so fetch more information here. */
         errorCode = XDTErrorCodePythonException;
@@ -66,7 +67,7 @@
             // When using PyErr_Restore() there is no need to use Py_XDECREF for these 3 pointers
             PyErr_Restore((PyObject *)eType, eObject, (PyObject *)eTraceBack);
         }
-        errorDescription = @"Python exception occured!";
+        errorDescription = NSLocalizedStringFromTableInBundle(@"Python exception occured!", nil, myBundle, @"Description for an error object, discribing that there is an exception occured.");
     } else {
         /* unknow Python class, don't know how to generate strings */
         return nil;
@@ -76,13 +77,13 @@
     if (nil == recoverySuggestion) {
         errorDict = @{
                       NSLocalizedDescriptionKey: errorDescription,
-                      NSLocalizedFailureReasonErrorKey: errorString
+                      NSLocalizedFailureReasonErrorKey: errorString /* can not localize all possible error messages which came from Python */
                       };
     } else {
         errorDict = @{
                       NSLocalizedDescriptionKey: errorDescription,
-                      NSLocalizedFailureReasonErrorKey: errorString,
-                      NSLocalizedRecoverySuggestionErrorKey: recoverySuggestion
+                      NSLocalizedFailureReasonErrorKey: errorString,/* can not localize all possible error messages which came from Python */
+                      NSLocalizedRecoverySuggestionErrorKey: recoverySuggestion /* the recovery suggestion should be already translated */
                       };
     }
     return [NSError errorWithDomain:XDTErrorDomain code:errorCode userInfo:errorDict];

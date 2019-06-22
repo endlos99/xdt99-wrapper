@@ -79,8 +79,9 @@
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
+                NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
                 *error = [NSError errorWithPythonError:exeption
-                                    RecoverySuggestion:[NSString stringWithFormat:@"Expecting to find the function \"%s\" in module %s", XDTClassNameZipFile, XDTModuleNameZipFile]];
+                           localizedRecoverySuggestion:[NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Expecting to find the function \"%s\" in module %s", nil, myBundle, @"Recovery suggestion for an error object, which tells that there where a given function expected in a given python module."), XDTClassNameZipFile, XDTModuleNameZipFile]];
             }
             PyErr_Print();
         }
@@ -107,7 +108,7 @@
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -154,7 +155,7 @@
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }

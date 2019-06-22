@@ -316,7 +316,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -344,7 +344,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -370,7 +370,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -399,7 +399,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -455,7 +455,8 @@ NS_ASSUME_NONNULL_END
             PyObject *exeption = PyErr_Occurred();
             if (NULL != exeption) {
                 if (nil != error) {
-                    *error = [NSError errorWithPythonError:exeption RecoverySuggestion:@"Choose another value for the Line Delta, unwrap lines by hand in the integrated source code editor or fix the source file with an external text editor application and reload the file."];
+                    NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
+                    *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:NSLocalizedStringFromTableInBundle(@"Choose another value for the Line Delta, unwrap lines by hand in the integrated source code editor or fix the source file with an external text editor application and reload the file.", nil, myBundle, @"Recovery suggestion for an error object, to choose an other Line Delta for the JOIN operation of the xbas99.")];
                 }
                 PyErr_Print();
             }
@@ -477,7 +478,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }
@@ -514,9 +515,12 @@ NS_ASSUME_NONNULL_END
 - (BOOL)saveMergedFormatFile:(NSURL *)fileURL error:(NSError **)error
 {
     if (nil != error) {
+        NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
         *error = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolException
-                                 userInfo:@{NSLocalizedDescriptionKey: @"Operation not supported",
-                                            NSLocalizedFailureReasonErrorKey: @"Program creation in MERGE format is not supported by the current version of xbas99."}];
+                                 userInfo:@{
+                                            NSLocalizedDescriptionKey: NSLocalizedStringFromTableInBundle(@"Operation not supported", nil, myBundle, @"Description for an error object, discribing that there is an unsupported operation."),
+                                            NSLocalizedFailureReasonErrorKey: NSLocalizedStringFromTableInBundle(@"Program creation in MERGE format is not supported by the current version of xbas99.", nil, myBundle, @"Reason for an error object, which explains that the MERGE operation is not available in the current version of xdt99.")
+                                            }];
     }
     return NO;
 }
@@ -535,7 +539,7 @@ NS_ASSUME_NONNULL_END
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
             if (nil != error) {
-                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
             }
             PyErr_Print();
         }

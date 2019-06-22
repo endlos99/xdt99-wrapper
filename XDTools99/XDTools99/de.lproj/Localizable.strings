@@ -1,0 +1,33 @@
+/* Recovery suggestion for an error object, which explains which given function needs to be implemented. */
+"%@: is not implemented for now. Please implement it." = "%@: ist bis jetzt nicht implementiert. Bitte implementieren.";
+
+/* Reason for an error object, why the Assembler stopped abnormally. */
+"Assembler ends with %ld found error(s)." = "Assembler mit %ld Fehler beendet.";
+
+/* Recovery suggestion for an error object, to choose an other Line Delta for the JOIN operation of the xbas99. */
+"Choose another value for the Line Delta, unwrap lines by hand in the integrated source code editor or fix the source file with an external text editor application and reload the file." = "Einen anderen Wert für das Linien-Delta wählen, Zeilen im integrierten Quellcode-Editor von Hand trennen oder die Quelldatei mit einem externen Texteditor bearbeiten und die Datei neu laden.";
+
+/* Description for an error object, discribing that the Assembler faild assembling a given file name. */
+"Error occured while assembling '%@'" = "Fehler bem Assemblieren von '%@' aufgetreten.";
+
+/* Recovery suggestion for an error object, which tells that there where a given function expected in a given python module. */
+"Expecting to find the function \"%s\" in module %s" = "Es wird erwartet, dass die Funktion \"%1$s\" im Modul %2$s existiert.";
+
+/* Recovery suggestion for an error object, when the Assembler terminates abnormally. */
+"For more information see messages in the log view. Please check your code and all assembler options and try again." = "Weitere Informationen sind in den Meldungen in der Protokollansicht zu finden. Bitte überprüfen Sie Ihren Code und alle Assembler-Optionen und versuchen Sie es erneut.";
+
+/* Description for an error object, discribing that there is an unsupported operation. */
+"Operation not supported" = "Operation nicht unterstützt";
+
+/* Reason for an error object, which explains that the MERGE operation is not available in the current version of xdt99. */
+"Program creation in MERGE format is not supported by the current version of xbas99." = "Die Programmerstellung im MERGE-Format wird von der aktuellen Version von xbas99 nicht unterstützt.";
+
+/* Description for an error object, discribing that there is an error occured. */
+"Python error occured!" = "Python-Fehler aufgetreten!";
+
+/* Description for an error object, discribing that there is an exception occured. */
+"Python exception occured!" = "Python-Exception aufgetreten!";
+
+/* Description for an error object, discribing that there is a missing implementation fo a function. */
+"Unimplemented method" = "Nicht implementierte Methode";
+
