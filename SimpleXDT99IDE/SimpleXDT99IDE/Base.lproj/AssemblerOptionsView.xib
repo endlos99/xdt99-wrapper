@@ -23,24 +23,24 @@
             </connections>
         </customObject>
         <customView id="orG-d7-3rG" userLabel="xas99 Option View">
-            <rect key="frame" x="0.0" y="0.0" width="694" height="56"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+            <rect key="frame" x="0.0" y="0.0" width="694" height="62"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <box horizontalHuggingPriority="750" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="wWK-kF-12p">
-                    <rect key="frame" x="-3" y="-4" width="700" height="62"/>
+                    <rect key="frame" x="-3" y="-4" width="700" height="68"/>
                     <view key="contentView" id="JFX-41-1Y2">
-                        <rect key="frame" x="3" y="3" width="694" height="56"/>
+                        <rect key="frame" x="3" y="3" width="694" height="62"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CqN-5t-ckS">
-                                <rect key="frame" x="0.0" y="0.0" width="694" height="56"/>
+                                <rect key="frame" x="0.0" y="0.0" width="694" height="62"/>
                                 <subviews>
                                     <customView id="2fn-eD-Qem" userLabel="Options View">
-                                        <rect key="frame" x="0.0" y="0.0" width="304" height="56"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="304" height="62"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <subviews>
                                             <textField horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mLb-xT-y5N">
-                                                <rect key="frame" x="8" y="32" width="45" height="14"/>
+                                                <rect key="frame" x="8" y="38" width="45" height="14"/>
                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="Dpf-6K-88q">
                                                     <font key="font" metaFont="smallSystem"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -48,7 +48,7 @@
                                                 </textFieldCell>
                                             </textField>
                                             <popUpButton toolTip="Select the output file type." horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="aPk-pN-aN9">
-                                                <rect key="frame" x="56" y="27" width="241" height="22"/>
+                                                <rect key="frame" x="56" y="33" width="241" height="22"/>
                                                 <popUpButtonCell key="cell" type="push" title="Program Image" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="EvA-9i-baN" id="o2f-m1-VBB">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="smallSystem"/>
@@ -126,18 +126,18 @@
                                         </constraints>
                                     </customView>
                                     <customView horizontalHuggingPriority="750" id="tod-mC-sbm" userLabel="Generator Options  Placeholder View">
-                                        <rect key="frame" x="305" y="0.0" width="303" height="56"/>
+                                        <rect key="frame" x="305" y="0.0" width="303" height="62"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="303" id="Um8-8G-h4a"/>
                                         </constraints>
                                     </customView>
                                     <customView id="4wN-KR-s6a" userLabel="Action View">
-                                        <rect key="frame" x="609" y="0.0" width="85" height="56"/>
+                                        <rect key="frame" x="609" y="0.0" width="85" height="62"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="m1G-sh-Vby">
-                                                <rect key="frame" x="5" y="24" width="75" height="27"/>
+                                                <rect key="frame" x="5" y="30" width="75" height="27"/>
                                                 <buttonCell key="cell" type="push" title="Check" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tMO-q8-0wI">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="smallSystem"/>
@@ -158,6 +158,7 @@
                                             </button>
                                         </subviews>
                                         <constraints>
+                                            <constraint firstItem="rKg-UF-IWo" firstAttribute="top" secondItem="m1G-sh-Vby" secondAttribute="bottom" constant="10" symbolic="YES" id="3hf-nG-WuQ"/>
                                             <constraint firstItem="rKg-UF-IWo" firstAttribute="width" secondItem="m1G-sh-Vby" secondAttribute="width" id="He2-rx-wny"/>
                                             <constraint firstAttribute="trailing" secondItem="rKg-UF-IWo" secondAttribute="trailing" constant="10" id="M55-Op-C0l"/>
                                             <constraint firstItem="m1G-sh-Vby" firstAttribute="centerX" secondItem="4wN-KR-s6a" secondAttribute="centerX" id="OT8-OG-Olt"/>
@@ -410,10 +411,10 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
         </customView>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView wantsLayer="YES" id="7fa-GN-Eoe" userLabel="Raw Text Options View">
-            <rect key="frame" x="0.0" y="0.0" width="376" height="52"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
-                <segmentedControl toolTip="Generates bytes or words, respectively. Default is byte." horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="wXe-S0-9Iq">
+                <segmentedControl toolTip="Generates bytes or words, respectively. Default is byte." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wXe-S0-9Iq">
                     <rect key="frame" x="10" y="25" width="79" height="21"/>
                     <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="smallSquare" trackingMode="selectOne" id="t3q-Tr-VLS">
                         <font key="font" metaFont="smallSystem"/>
@@ -426,7 +427,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <binding destination="-2" name="selectedIndex" keyPath="self.shouldUseWord" id="oQ9-wC-hJB"/>
                     </connections>
                 </segmentedControl>
-                <segmentedControl horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="4W1-fa-fia">
+                <segmentedControl horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4W1-fa-fia">
                     <rect key="frame" x="89" y="25" width="153" height="21"/>
                     <string key="toolTip">For target platforms with different endianness, to swap the bytes in words. Default is Big-Endian.   Select Big-Endian for example:
     Atmel AVR32
@@ -453,11 +454,11 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         </segments>
                     </segmentedCell>
                     <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.shouldUseWord" id="ODz-hL-oSW"/>
                         <binding destination="-2" name="selectedIndex" keyPath="self.shouldUseLittleEndian" id="Ikx-Be-eSJ"/>
+                        <binding destination="-2" name="enabled" keyPath="self.shouldUseWord" id="ODz-hL-oSW"/>
                     </connections>
                 </segmentedControl>
-                <button horizontalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="twi-lS-qb7">
+                <button horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="twi-lS-qb7">
                     <rect key="frame" x="247" y="27" width="66" height="18"/>
                     <string key="toolTip">If you prefer to use register notations whith an 'R' in your source code (i.e. write MOV R0,*R1+ etc. instead of MOV 0,*1+), you will need to check this option.
 This is the equivalent to the option 'R' of the TI Assembler.</string>
@@ -469,7 +470,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <binding destination="-2" name="value" keyPath="self.shouldUseRegisterSymbols" id="ClU-q7-Viy"/>
                     </connections>
                 </button>
-                <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="Wcc-Ql-aql">
+                <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wcc-Ql-aql">
                     <rect key="frame" x="316" y="27" width="51" height="18"/>
                     <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="fUo-lC-Yz7">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -479,7 +480,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <binding destination="-2" name="value" keyPath="self.shouldBeStrict" id="buZ-W5-bPL"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="iej-7x-dK5">
+                <textField horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iej-7x-dK5">
                     <rect key="frame" x="8" y="10" width="62" height="14"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Text Mode:" id="JFI-8V-txu">
                         <font key="font" metaFont="smallSystem"/>
@@ -487,7 +488,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button horizontalHuggingPriority="1000" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="a11-mD-s7e">
+                <button horizontalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="a11-mD-s7e">
                     <rect key="frame" x="74" y="8" width="78" height="18"/>
                     <string key="toolTip">Format the output for using in another assembly or GPL source code.   Format example:        data &gt;4861, &gt;636b, &gt;4d61, &gt;6320        data &gt;7761, &gt;7320, &gt;6865, &gt;7265</string>
                     <buttonCell key="cell" type="radio" title="Assembler" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="mGB-0m-0fP">
@@ -498,7 +499,7 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <action selector="switchTextMode:" target="-2" id="Uvh-5I-veC"/>
                     </connections>
                 </button>
-                <button horizontalHuggingPriority="1000" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="NbR-hP-U56">
+                <button horizontalHuggingPriority="750" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="NbR-hP-U56">
                     <rect key="frame" x="157" y="8" width="51" height="18"/>
                     <string key="toolTip">Format the output for using in another Basic source code.   Format example: DATA 18529, 25451, 19809, 25376 DATA 30561, 29472, 26725, 29285</string>
                     <buttonCell key="cell" type="radio" title="Basic" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="x7D-jj-ZeZ">
@@ -509,8 +510,8 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <action selector="switchTextMode:" target="-2" id="0hz-8M-n1l"/>
                     </connections>
                 </button>
-                <button horizontalHuggingPriority="750" horizontalCompressionResistancePriority="1000" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="ZmG-dm-HwT">
-                    <rect key="frame" x="213" y="8" width="89" height="18"/>
+                <button horizontalHuggingPriority="750" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="ZmG-dm-HwT">
+                    <rect key="frame" x="213" y="8" width="56" height="18"/>
                     <string key="toolTip">Format the output for using in another C/C++ source code.   Format example:   0x4861, 0x636b, 0x4d61, 0x6320,   0x7761, 0x7320, 0x6865, 0x7265</string>
                     <buttonCell key="cell" type="radio" title="C/C++" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="XWl-Jt-SIj">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -529,15 +530,15 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                 <constraint firstAttribute="bottom" secondItem="iej-7x-dK5" secondAttribute="bottom" constant="10" id="JK5-Xl-1Ko"/>
                 <constraint firstItem="a11-mD-s7e" firstAttribute="firstBaseline" secondItem="iej-7x-dK5" secondAttribute="firstBaseline" id="Ju6-8B-kei"/>
                 <constraint firstItem="Wcc-Ql-aql" firstAttribute="leading" secondItem="twi-lS-qb7" secondAttribute="trailing" constant="8" symbolic="YES" id="Lcc-OZ-YjY"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ZmG-dm-HwT" secondAttribute="trailing" constant="20" symbolic="YES" id="OsJ-OY-k2N"/>
                 <constraint firstItem="ZmG-dm-HwT" firstAttribute="firstBaseline" secondItem="NbR-hP-U56" secondAttribute="firstBaseline" id="SdR-fp-z7T"/>
                 <constraint firstItem="ZmG-dm-HwT" firstAttribute="leading" secondItem="NbR-hP-U56" secondAttribute="trailing" constant="8" symbolic="YES" id="TU9-wS-iE1"/>
-                <constraint firstAttribute="trailing" secondItem="ZmG-dm-HwT" secondAttribute="trailing" constant="75" id="XEd-i6-L7k"/>
                 <constraint firstItem="NbR-hP-U56" firstAttribute="leading" secondItem="a11-mD-s7e" secondAttribute="trailing" constant="8" symbolic="YES" id="YO4-l2-uCr"/>
                 <constraint firstAttribute="leading" secondItem="iej-7x-dK5" secondAttribute="leading" constant="-10" id="iYd-ni-xWy"/>
                 <constraint firstItem="twi-lS-qb7" firstAttribute="leading" secondItem="4W1-fa-fia" secondAttribute="trailing" constant="8" symbolic="YES" id="k0E-kc-lwP"/>
                 <constraint firstItem="wXe-S0-9Iq" firstAttribute="leading" secondItem="7fa-GN-Eoe" secondAttribute="leading" constant="10" id="p2d-cb-Nk6"/>
                 <constraint firstItem="Wcc-Ql-aql" firstAttribute="baseline" secondItem="twi-lS-qb7" secondAttribute="baseline" id="pWe-yy-mcW"/>
-                <constraint firstAttribute="trailing" secondItem="Wcc-Ql-aql" secondAttribute="trailing" constant="11" id="tse-ky-Trs"/>
+                <constraint firstAttribute="trailing" secondItem="Wcc-Ql-aql" secondAttribute="trailing" constant="10" id="tse-ky-Trs"/>
                 <constraint firstItem="twi-lS-qb7" firstAttribute="top" secondItem="7fa-GN-Eoe" secondAttribute="top" constant="10" id="vop-Lb-61v"/>
                 <constraint firstItem="NbR-hP-U56" firstAttribute="firstBaseline" secondItem="a11-mD-s7e" secondAttribute="firstBaseline" id="wvN-4q-Rjb"/>
             </constraints>
