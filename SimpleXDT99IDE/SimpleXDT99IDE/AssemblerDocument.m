@@ -49,6 +49,8 @@
 @property (assign) BOOL shouldCompressObjectCode;
 @property (assign) BOOL shouldUseRegisterSymbols;
 @property (assign) BOOL shouldBeStrict;
+@property (assign) BOOL shouldUseWord;
+@property (assign) BOOL shouldUseLittleEndian;
 @property (assign) NSUInteger baseAddress;
 @property (retain) NSString *cartridgeName;
 
@@ -129,7 +131,10 @@
     [self setOutputFormatPopupButtonIndex:[defaults integerForKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex]];
     [self setBinaryTextMode:(XDTGenerateTextMode)[defaults integerForKey:UserDefaultKeyAssemblerOptionTextMode]];
 
-    switch (_binaryTextMode) {
+    [self setShouldUseWord:0 != (_binaryTextMode & XDTGenerateTextModeOptionWord)];
+    [self setShouldUseLittleEndian:0 != (_binaryTextMode & XDTGenerateTextModeOptionReverse)];
+    
+    switch (_binaryTextMode & XDTGenerateTextModeOutputMask) {
         case XDTGenerateTextModeOutputAssembler:
             _assemblerTextModeRadioButton.state = NSOnState;
             break;
@@ -141,6 +146,8 @@
             break;
 
         default:
+            /* invalid configurations of the text mode export option will be corrected to a default value */
+            self.binaryTextMode = XDTGenerateTextModeOutputAssembler | (_binaryTextMode & !XDTGenerateTextModeOutputMask);
             _assemblerTextModeRadioButton.state = NSOnState;
             break;
     }
@@ -160,6 +167,9 @@
     [defaults setBool:_shouldShowSymbolsAsEqus forKey:UserDefaultKeyAssemblerOptionGenerateSymbolsAsEqus];
     [defaults setInteger:_outputFormatPopupButtonIndex forKey:UserDefaultKeyAssemblerOptionOutputTypePopupIndex];
     [defaults setInteger:_baseAddress forKey:UserDefaultKeyAssemblerOptionBaseAddress];
+    _binaryTextMode = (_binaryTextMode & XDTGenerateTextModeOutputMask) +
+                        (_shouldUseWord? XDTGenerateTextModeOptionWord : 0) +
+                        (_shouldUseLittleEndian? XDTGenerateTextModeOptionReverse : 0);
     [defaults setInteger:_binaryTextMode forKey:UserDefaultKeyAssemblerOptionTextMode];
 
     [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
@@ -358,7 +368,9 @@
         return;
     }
     NSButton *button = (NSButton *)sender;
-    _binaryTextMode = button.tag;
+    _binaryTextMode = button.tag +
+                        (_shouldUseWord? XDTGenerateTextModeOptionWord : 0) +
+                        (_shouldUseLittleEndian? XDTGenerateTextModeOptionReverse : 0);
 }
 
 
@@ -388,7 +400,7 @@
             xdtTargetType = XDTAs99TargetTypeRawBinary;
             break;
         case 4:
-            switch (_binaryTextMode) {
+            switch (_binaryTextMode & XDTGenerateTextModeOutputMask) {
                 case XDTGenerateTextModeOutputAssembler:
                     xdtTargetType = XDTAs99TargetTypeTextBinaryAsm;
                     break;
@@ -502,9 +514,10 @@
         case XDTAs99TargetTypeTextBinaryC: {
             NSError *tempError = nil;
             // TODO: extend GUI for new configuration options
-            NSString *fileContent = [_assemblingResult generateTextAt:_baseAddress
-                                                             withMode:_binaryTextMode + XDTGenerateTextModeOptionWord
-                                                                error:&tempError];
+            _binaryTextMode = (_binaryTextMode & XDTGenerateTextModeOutputMask) +
+                                (_shouldUseWord? XDTGenerateTextModeOptionWord : 0) +
+                                (_shouldUseLittleEndian? XDTGenerateTextModeOptionReverse : 0);
+            NSString *fileContent = [_assemblingResult generateTextAt:_baseAddress withMode:_binaryTextMode error:&tempError];
             if (nil == tempError && nil != fileContent && [fileContent length] > 0) {
                 NSURL *newOutpuFileURL = [NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]];
                 [fileContent writeToURL:newOutpuFileURL atomically:YES encoding:NSUTF8StringEncoding error:&tempError];

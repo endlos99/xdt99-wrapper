@@ -268,8 +268,11 @@ NS_ASSUME_NONNULL_END
         case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord:
             textConfig = "a4";
             break;
+        case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionReverse:
+            textConfig = "a2r";
+            break;
         case XDTGenerateTextModeOutputAssembler:
-            textConfig = "a";
+            textConfig = "a2";
             break;
 
         case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
@@ -278,8 +281,11 @@ NS_ASSUME_NONNULL_END
         case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionWord:
             textConfig = "b4";
             break;
+        case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionReverse:
+            textConfig = "b2r";
+            break;
         case XDTGenerateTextModeOutputBasic:
-            textConfig = "b";
+            textConfig = "b2";
             break;
 
         case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
@@ -288,8 +294,11 @@ NS_ASSUME_NONNULL_END
         case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionWord:
             textConfig = "c4";
             break;
+        case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionReverse:
+            textConfig = "c2r";
+            break;
         case XDTGenerateTextModeOutputC:
-            textConfig = "c";
+            textConfig = "c2";
             break;
 
         default:
