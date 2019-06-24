@@ -1,8 +1,17 @@
+/* Alternate button name for choosing 'Abort' in an Alert. */
+"Abort" = "Abbruch";
+
 /* Informative text for imported binary Basic files to store them into a new file. */
 "Binary file imported. You will have to save the source code within a new file." = "Binärdatei importiert. Sie müssen den Quellcode in einer neuen Datei speichern.";
 
 /* Description for the error if the Basic file cannot be opened. */
 "Can not open Basic file!" = "Basic-Datei kann nicht geöffnet werden!";
+
+/* Alert message for unsaved documents which will be processed by a generator. */
+"Can't process file!" = "Datei kann nicht verarbeitet werden!";
+
+/* Informative text for unsaved documents which will be processed by a generator. */
+"Caution: The file '%@' must be saved before it can be processed." = "Achtung: Die Datei '%@' muss gespeichert werden, bevor sie verarbeitet werden kann.";
 
 /* Error converting a Hex number from a String. */
 "Couldn’t convert to a hexadecimal value." = "Die Konvertierung in einen hexadezimalen Wert war nicht möglich.";
@@ -24,6 +33,9 @@
 
 /* Recovery suggestion showing in an alert window when log view is invisible */
 "Please open the log view to get detailed error information." = "Bitte die Protokollansicht öffnen, um detaillierte Fehlerinformationen zu erhalten.";
+
+/* Default button name for choosing 'Save' in an Alert. */
+"Save" = "Speichern";
 
 /* Title for opening Assembler files in Open Panel */
 "Select assembler source file" = "Assembler-Quelldatei auswählen";

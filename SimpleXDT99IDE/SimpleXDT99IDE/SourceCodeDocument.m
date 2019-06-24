@@ -311,15 +311,41 @@
 #pragma mark - Action Methods
 
 
+/*
+ This method should be overridden to implement the document typical code generator.
+ But it should call its super method to handle unsaved modifications for the document.
+ */
 - (void)checkCode:(id)sender
 {
-    /* This method should be overridden to implement the document typical code generator */
+    if (!self.isDocumentEdited) {
+        return;
+    }
+
+    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Can't process file!", @"Alert message for unsaved documents which will be processed by a generator.")
+                                     defaultButton:NSLocalizedString(@"Save", @"Default button name for choosing 'Save' in an Alert.")
+                                   alternateButton:NSLocalizedString(@"Abort", @"Alternate button name for choosing 'Abort' in an Alert.")
+                                       otherButton:nil
+                         informativeTextWithFormat:NSLocalizedString(@"Caution: The file '%@' must be saved before it can be processed.", @"Informative text for unsaved documents which will be processed by a generator."), self.fileURL.lastPathComponent];
+    alert.alertStyle = NSAlertStyleWarning;
+    [alert beginSheetModalForWindow:self.windowForSheet completionHandler:^(NSModalResponse returnCode) {
+        [NSApp stopModalWithCode:returnCode];
+    }];
+    NSModalResponse returnCode = [NSApp runModalForWindow:self.windowForSheet];
+    if (NSModalResponseContinue == returnCode ||
+        NSAlertDefaultReturn == returnCode) {
+        [self saveDocument:sender];
+        [self updateChangeCount:NSChangeCleared];
+    }
 }
 
 
+/*
+ This method should be overridden to implement the document typical code generator.
+ But it should call its super method to handle unsaved modifications for the document.
+ */
 - (void)generateCode:(id)sender
 {
-    /* This method should be overridden to implement the document typical code generator */
+    [self checkCode:sender];
 }
 
 

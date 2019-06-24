@@ -298,6 +298,10 @@
 
 - (void)checkCode:(id)sender
 {
+    [super checkCode:sender];
+    if (self.isDocumentEdited) {
+        return;
+    }
     NSError *error = nil;
 
     XDTBasic *basic = [self parseCode:&error];
@@ -315,6 +319,10 @@
 
 - (void)generateCode:(id)sender
 {
+    [super checkCode:sender];
+    if (self.isDocumentEdited) {
+        return;
+    }
     NSError *error = nil;
 
     XDTBasic *basic = [self parseCode:&error];

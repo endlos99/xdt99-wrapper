@@ -331,6 +331,10 @@
 
 - (void)checkCode:(id)sender
 {
+    [super checkCode:sender];
+    if (self.isDocumentEdited) {
+        return;
+    }
     NSError *error = nil;
 
     XDTAs99TargetType xdtTargetType = [self targetType];
@@ -347,6 +351,10 @@
 
 - (void)generateCode:(id)sender
 {
+    [super checkCode:sender];
+    if (self.isDocumentEdited) {
+        return;
+    }
     NSError *error = nil;
 
     XDTAs99TargetType xdtTargetType = [self targetType];
