@@ -224,6 +224,8 @@
         default:
             break;
     }
+
+    self.contentMinWidth.constant = self.xdt99OptionsToolbarItem.minSize.width + 16;
 }
 
 

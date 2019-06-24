@@ -109,6 +109,8 @@
     if (nil != optionsItem) {
         [optionsItem setView:[self xdt99OptionsToolbarView]];
     }
+
+    self.contentMinWidth.constant = self.xdt99OptionsToolbarItem.minSize.width + 16;
 }
 
 

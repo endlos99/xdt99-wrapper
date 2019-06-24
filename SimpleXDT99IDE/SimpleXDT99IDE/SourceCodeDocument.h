@@ -45,6 +45,7 @@
 
 @property (nonatomic, retain) IBOutlet NSView *generatorOptionsPlaceholderView;
 
+@property (assign) IBOutlet NSLayoutConstraint *contentMinWidth;
 @property (retain) IBOutlet NSScrollView *sourceScrollView;
 @property (retain) IBOutlet NSTextView *sourceView;
 @property (retain) IBOutlet NSTextView *logView;
