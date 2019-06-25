@@ -40,6 +40,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 XDTBasicOptionKey const XDTBasicOptionJoinLines = @"XDTBasicOptionJoinLines";
+XDTBasicOptionKey const XDTBasicOptionLineDelta = @"XDTBasicOptionLineDelta";
 XDTBasicOptionKey const XDTBasicOptionProtectFile = @"XDTBasicOptionProtectFile";
 XDTBasicOptionKey const XDTBasicOptionTarget = @"XDTBasicOptionTarget";
 
@@ -187,6 +188,8 @@ NS_ASSUME_NONNULL_END
     /* reading options from dictionary */
     _protect = [[options valueForKey:XDTBasicOptionProtectFile] boolValue];
     _join = [[options valueForKey:XDTBasicOptionJoinLines] boolValue];
+    NSNumber *number = [options valueForKey:XDTBasicOptionLineDelta];
+    _lineDelta = (nil == number)? 3 : [number unsignedIntegerValue];
     _version = [NSString stringWithCString:PyString_AsString(pVar) encoding:NSUTF8StringEncoding];
     Py_XDECREF(pVar);
 
@@ -443,7 +446,7 @@ NS_ASSUME_NONNULL_END
         /* TODO: Make the line delta (here fixed to the default value of 3) configurable by UI */
         PyObject *methodName = PyString_FromString("join");
         PyObject *pMinLineDelta = PyInt_FromLong(1);
-        PyObject *pMaxLineDelta = PyInt_FromLong(3);
+        PyObject *pMaxLineDelta = PyInt_FromLong(_lineDelta);
         PyObject *joinedLines = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pLinesList, pMinLineDelta, pMaxLineDelta, NULL);
         Py_XDECREF(pMaxLineDelta);
         Py_XDECREF(pMinLineDelta);

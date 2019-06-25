@@ -19,8 +19,11 @@
 /* Class = "NSMenuItem"; title = "Internal Format"; ObjectID = "GZZ-OM-S5w"; */
 "GZZ-OM-S5w.title" = "Internal Format";
 
-/* Class = "NSButton"; ibShadowedToolTip = "May be used to automatically join wrapped lines."; ObjectID = "IJj-RL-gha"; */
-"IJj-RL-gha.ibShadowedToolTip" = "Kann verwendet werden, um umgebrochene Zeilen automatisch zu verbinden.";
+/* Class = "NSButton"; ibShadowedToolTip = "May be used to automatically join wrapped lines. Any line that does not begin with a number or whose supposed line number is not between the previous line number and the previous line number plus line-delta is considered a continuation of the previous line."; ObjectID = "IJj-RL-gha"; */
+"IJj-RL-gha.ibShadowedToolTip" = "Kann verwendet werden, um um umgebrochene Zeilen automatisch zu verbinden.\nJede Zeile, die nicht mit einer Zahl beginnt oder deren angenommene Zeilennummer nicht zwischen der vorherigen Zeilennummer und der vorherigen Zeilennummer plus Zeilen-Delta liegt, gilt als Fortsetzung der vorherigen Zeile.";
+
+/* Class = "NSTextFieldCell"; title = "Line-Delta:"; ObjectID = "IjX-iK-sMh"; */
+"IjX-iK-sMh.title" = "Zeilen-Delta:";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Merge formated output will be stored using DIS/VAR 163 format. For petty technical reasons, the creation of programs in merge format is currently not supported."; ObjectID = "nY8-Vx-aao"; */
 "nY8-Vx-aao.ibShadowedToolTip" = "Das Merge formatierte Ausgabe wird im DIS/VAR 163-Format gespeichert. Aus technischen Gründen wird die Erstellung von Programmen im Merge-Format derzeit nicht unterstützt.";

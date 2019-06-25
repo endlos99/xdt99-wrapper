@@ -35,6 +35,7 @@
 
 @property (assign) BOOL shouldDumpTokensInLog;
 
+@property (assign) NSUInteger lineDelta;
 @property (assign) BOOL shouldJoinSourceLines;
 @property (assign) BOOL shouldProtectFile;
 @property (assign) NSUInteger outputFormatPopupButtonIndex;
@@ -63,6 +64,7 @@
     /* Setup documents options, before any data can read and processed */
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [self setShouldJoinSourceLines:[defaults boolForKey:UserDefaultKeyBasicOptionShouldJoinSourceLines]];
+    [self setLineDelta:[defaults integerForKey:UserDefaultKeyBasicOptionShouldJoinLineDelta]];
     [self setShouldProtectFile:[defaults boolForKey:UserDefaultKeyBasicOptionShouldProtectFile]];
     [self setOutputFormatPopupButtonIndex:[defaults integerForKey:UserDefaultKeyBasicOptionOutputTypePopupIndex]];
 
@@ -112,6 +114,7 @@
     /* Save the latest assembler options to user defaults before closing. */
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
     [defaults setBool:_shouldJoinSourceLines forKey:UserDefaultKeyBasicOptionShouldJoinSourceLines];
+    [defaults setInteger:_lineDelta forKey:UserDefaultKeyBasicOptionShouldJoinLineDelta];
     [defaults setBool:_shouldProtectFile forKey:UserDefaultKeyBasicOptionShouldProtectFile];
     [defaults setInteger:_outputFormatPopupButtonIndex forKey:UserDefaultKeyBasicOptionOutputTypePopupIndex];
 
@@ -395,6 +398,7 @@
 - (XDTBasic *)parseCode:(NSError **)error
 {
     XDTBasic *basic = [XDTBasic basicWithOptions:@{XDTBasicOptionJoinLines: [NSNumber numberWithBool:_shouldJoinSourceLines],
+                                                   XDTBasicOptionLineDelta: [NSNumber numberWithUnsignedInteger:_lineDelta],
                                                    XDTBasicOptionProtectFile: [NSNumber numberWithBool:_shouldProtectFile]
                                                    }];
     if (![basic parseSourceCode:[self sourceCode] error:error]) {

@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NSString * XDTBasicOptionKey NS_EXTENSIBLE_STRING_ENUM; /* Keys for use in the NSDictionry */
 
 FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionJoinLines;
+FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionLineDelta;
 FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionProtectFile;
 FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionTarget;
 
@@ -51,6 +52,7 @@ FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionTarget;
 
 @property (readonly) NSString *version;
 @property (readonly) BOOL join;
+@property (readonly) NSUInteger lineDelta;
 @property (readonly) BOOL protect;
 @property (readonly) XDTBasicTargetType targetType;
 

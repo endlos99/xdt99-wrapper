@@ -40,6 +40,7 @@
 #define UserDefaultKeyBasicOptionOutputTypePopupIndex @"BasicOptionOutputTypePopupIndex"
 #define UserDefaultKeyBasicOptionShouldProtectFile @"BasicOptionShouldProtectFile"
 #define UserDefaultKeyBasicOptionShouldJoinSourceLines @"BasicOptionShouldJoinSourceLines"
+#define UserDefaultKeyBasicOptionShouldJoinLineDelta @"BasicOptionShouldJoinLineDelta"
 
 #define UserDefaultKeyGPLOptionOutputTypePopupIndex @"GPLOptionOutputFileTypePopupButtonIndex"
 #define UserDefaultKeyGPLOptionSyntaxTypePopupIndex @"GPLOptionSyntaxTypePopupButtonIndex"
