@@ -2,49 +2,46 @@
 "0La-Pt-m59.title" = "Basic Options";
 
 /* Class = "NSMenu"; title = "Find"; ObjectID = "1b7-l0-nxx"; */
-"1b7-l0-nxx.title" = "Find";
+"1b7-l0-nxx.title" = "Suchen";
 
 /* Class = "NSMenuItem"; title = "Lower"; ObjectID = "1tx-W0-xDw"; */
-"1tx-W0-xDw.title" = "Lower";
+"1tx-W0-xDw.title" = "Niedriger";
 
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "1UK-8n-QPP"; */
-"1UK-8n-QPP.title" = "Customize Toolbar…";
-
-/* Class = "NSMenuItem"; title = "SimpleXDT99"; ObjectID = "1Xt-HY-uBw"; */
-"1Xt-HY-uBw.title" = "SimpleXDT99";
+"1UK-8n-QPP.title" = "Symbolleiste anpassen…";
 
 /* Class = "NSMenuItem"; title = "Raise"; ObjectID = "2h7-ER-AoG"; */
-"2h7-ER-AoG.title" = "Raise";
+"2h7-ER-AoG.title" = "Höher";
 
 /* Class = "NSMenuItem"; title = "Transformations"; ObjectID = "2oI-Rn-ZJC"; */
-"2oI-Rn-ZJC.title" = "Transformations";
+"2oI-Rn-ZJC.title" = "Transformationen";
 
 /* Class = "NSMenu"; title = "Spelling"; ObjectID = "3IN-sU-3Bg"; */
-"3IN-sU-3Bg.title" = "Spelling";
+"3IN-sU-3Bg.title" = "Rechtschreibung";
 
 /* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "3Om-Ey-2VK"; */
-"3Om-Ey-2VK.title" = "Use Default";
+"3Om-Ey-2VK.title" = "Normal";
 
 /* Class = "NSMenu"; title = "Speech"; ObjectID = "3rS-ZA-NoH"; */
-"3rS-ZA-NoH.title" = "Speech";
+"3rS-ZA-NoH.title" = "Sprachausgabe";
 
 /* Class = "NSMenuItem"; title = "Find"; ObjectID = "4EN-yA-p0u"; */
-"4EN-yA-p0u.title" = "Find";
+"4EN-yA-p0u.title" = "Suchen";
 
 /* Class = "NSMenuItem"; title = "Enter Full Screen"; ObjectID = "4J7-dP-txa"; */
-"4J7-dP-txa.title" = "Enter Full Screen";
+"4J7-dP-txa.title" = "Vollbildmodus";
 
 /* Class = "NSMenuItem"; title = "Quit SimpleXDT99"; ObjectID = "4sb-4s-VLi"; */
-"4sb-4s-VLi.title" = "Quit SimpleXDT99";
+"4sb-4s-VLi.title" = "SimpleXDT99 beenden";
 
 /* Class = "NSButtonCell"; title = "Protected"; ObjectID = "5k5-QX-UV7"; */
 "5k5-QX-UV7.title" = "Protected";
 
 /* Class = "NSMenuItem"; title = "About SimpleXDT99"; ObjectID = "5kV-Vb-QxS"; */
-"5kV-Vb-QxS.title" = "About SimpleXDT99";
+"5kV-Vb-QxS.title" = "Über SimpleXDT99";
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "5QF-Oa-p0T"; */
-"5QF-Oa-p0T.title" = "Edit";
+"5QF-Oa-p0T.title" = "Bearbeiten";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Generates a textual version of the raw binary.\nIt is useful for including the binary result of another program into some C/C++ source code.   Format example:   0x4861, 0x636b, 0x4d61, 0x6320,   0x7761, 0x7320, 0x6865, 0x7265"; ObjectID = "5sN-ug-geY"; */
 "5sN-ug-geY.ibShadowedToolTip" = "Erzeugt eine Textversion der Roh-Daten. Es ist nützlich, um das binäre Ergebnis eines anderen Programms in ein C/C++ Quellcode aufzunehmen.   Formatbeispiel:   0x4861, 0x636b, 0x4d61, 0x6320,   0x7761, 0x7320, 0x6865, 0x7265";
@@ -56,34 +53,34 @@
 "5TM-aO-4Oa.title" = "Symbols";
 
 /* Class = "NSMenuItem"; title = "Copy Style"; ObjectID = "5Vv-lz-BsD"; */
-"5Vv-lz-BsD.title" = "Copy Style";
+"5Vv-lz-BsD.title" = "Stil kopieren";
 
 /* Class = "NSMenuItem"; title = "Redo"; ObjectID = "6dh-zS-Vam"; */
-"6dh-zS-Vam.title" = "Redo";
+"6dh-zS-Vam.title" = "Wiederholen";
 
 /* Class = "NSMenu"; title = "Writing Direction"; ObjectID = "8mr-sm-Yjd"; */
-"8mr-sm-Yjd.title" = "Writing Direction";
+"8mr-sm-Yjd.title" = "Richtung beim Schreiben";
 
 /* Class = "NSButton"; ibShadowedToolTip = "The protection option will add list protection to the generated program. Programs which are protected cannot be listed or edited by the BASIC interpreter."; ObjectID = "8Ze-bI-5C2"; */
 "8Ze-bI-5C2.ibShadowedToolTip" = "Diese Option fügt dem erzeugten Programm einen List-Schutz hinzu. Geschützte Programme können mit dem BASIC-Interpreter nicht aufgelistet oder bearbeitet werden.";
 
 /* Class = "NSMenuItem"; title = "Substitutions"; ObjectID = "9ic-FL-obx"; */
-"9ic-FL-obx.title" = "Substitutions";
+"9ic-FL-obx.title" = "Ersetzungen";
 
 /* Class = "NSMenuItem"; title = "Smart Copy/Paste"; ObjectID = "9yt-4B-nSM"; */
-"9yt-4B-nSM.title" = "Smart Copy/Paste";
+"9yt-4B-nSM.title" = "Intelligentes Kopieren/Einsetzen";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Run the xga99 GPL Assembler like you would do from the command line."; ObjectID = "10W-eD-Vbl"; */
-"10W-eD-Vbl.ibShadowedToolTip" = "Run the xga99 GPL Assembler like you would do from the command line.";
+"10W-eD-Vbl.ibShadowedToolTip" = "Den xga99 GPL Assembler wie von der Kommandozeile aus ausführen.";
 
 /* Class = "NSMenuItem"; title = "Run GPL Assembler…"; ObjectID = "10W-eD-Vbl"; */
 "10W-eD-Vbl.title" = "GPL Assembler ausführen…";
 
 /* Class = "NSMenuItem"; title = "Tighten"; ObjectID = "46P-cB-AYj"; */
-"46P-cB-AYj.title" = "Tighten";
+"46P-cB-AYj.title" = "Enger";
 
 /* Class = "NSMenuItem"; title = "Correct Spelling Automatically"; ObjectID = "78Y-hA-62v"; */
-"78Y-hA-62v.title" = "Correct Spelling Automatically";
+"78Y-hA-62v.title" = "Rechtschreibung autom. korrigieren";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Create program binaries without any metadata, i.e. suitable for burning EPROMs."; ObjectID = "ADf-we-apO"; */
 "ADf-we-apO.ibShadowedToolTip" = "Programm-Binärdateien ohne Metadaten erstellen, z.B. geeignet zum Brennen von EPROMs.";
@@ -92,64 +89,58 @@
 "ADf-we-apO.title" = "Binärdatei";
 
 /* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "agt-UL-0e3"; */
-"agt-UL-0e3.title" = "Use Default";
+"agt-UL-0e3.title" = "Normal";
 
 /* Class = "NSMenuItem"; title = "Print…"; ObjectID = "aTl-1u-JFS"; */
-"aTl-1u-JFS.title" = "Print…";
+"aTl-1u-JFS.title" = "Drucken…";
 
 /* Class = "NSMenuItem"; title = "Window"; ObjectID = "aUF-d1-5bR"; */
-"aUF-d1-5bR.title" = "Window";
+"aUF-d1-5bR.title" = "Fenster";
 
 /* Class = "NSMenu"; title = "Font"; ObjectID = "aXa-aM-Jaq"; */
-"aXa-aM-Jaq.title" = "Font";
-
-/* Class = "NSMenu"; title = "Main Menu"; ObjectID = "AYu-sK-qS6"; */
-"AYu-sK-qS6.title" = "Main Menu";
+"aXa-aM-Jaq.title" = "Schrift";
 
 /* Class = "NSButton"; ibShadowedToolTip = "May be used to automatically join wrapped lines."; ObjectID = "B7F-pD-VqJ"; */
 "B7F-pD-VqJ.ibShadowedToolTip" = "Kann verwendet werden, um umgebrochene Zeilen automatisch zu verbinden.";
 
 /* Class = "NSMenuItem"; title = "\tLeft to Right"; ObjectID = "BgM-ve-c93"; */
-"BgM-ve-c93.title" = "\tLeft to Right";
+"BgM-ve-c93.title" = "\tVon links nach rechts";
 
 /* Class = "NSMenuItem"; title = "Show Colors"; ObjectID = "bgn-CT-cEk"; */
-"bgn-CT-cEk.title" = "Show Colors";
+"bgn-CT-cEk.title" = "Farben einblenden";
 
 /* Class = "NSMenu"; title = "File"; ObjectID = "bib-Uj-vzu"; */
-"bib-Uj-vzu.title" = "File";
+"bib-Uj-vzu.title" = "Datei";
 
 /* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "BOF-NM-1cW"; */
-"BOF-NM-1cW.title" = "Preferences…";
+"BOF-NM-1cW.title" = "Einstellungen...";
 
 /* Class = "NSMenuItem"; title = "Use Selection for Find"; ObjectID = "buJ-ug-pKt"; */
-"buJ-ug-pKt.title" = "Use Selection for Find";
+"buJ-ug-pKt.title" = "Auswahl für Suche übernehmen";
 
 /* Class = "NSMenuItem"; title = "Save As…"; ObjectID = "Bw7-FT-i3A"; */
-"Bw7-FT-i3A.title" = "Save As…";
+"Bw7-FT-i3A.title" = "Umbenennen...";
 
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "C5J-zq-IPl"; */
 "C5J-zq-IPl.title" = "Format:";
 
 /* Class = "NSMenu"; title = "Transformations"; ObjectID = "c8a-y6-VQd"; */
-"c8a-y6-VQd.title" = "Transformations";
+"c8a-y6-VQd.title" = "Transformationen";
 
 /* Class = "NSMenuItem"; title = "Use None"; ObjectID = "cDB-IK-hbR"; */
-"cDB-IK-hbR.title" = "Use None";
+"cDB-IK-hbR.title" = "Nicht verwenden";
 
 /* Class = "NSMenuItem"; title = "Selection"; ObjectID = "cqv-fj-IhA"; */
-"cqv-fj-IhA.title" = "Selection";
+"cqv-fj-IhA.title" = "Auswahl";
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "Cvf-X2-HBs"; */
 "Cvf-X2-HBs.title" = "Options:";
 
 /* Class = "NSMenuItem"; title = "Smart Links"; ObjectID = "cwL-P1-jid"; */
-"cwL-P1-jid.title" = "Smart Links";
-
-/* Class = "NSMenu"; title = "Text"; ObjectID = "d9c-me-L2H"; */
-"d9c-me-L2H.title" = "Text";
+"cwL-P1-jid.title" = "Intelligente Links";
 
 /* Class = "NSMenuItem"; title = "Make Lower Case"; ObjectID = "d9M-CD-aMd"; */
-"d9M-CD-aMd.title" = "Make Lower Case";
+"d9M-CD-aMd.title" = "Kleinbuchstaben";
 
 /* Class = "NSTextFieldCell"; title = "Cart Name:"; ObjectID = "dgb-Md-GnE"; */
 "dgb-Md-GnE.title" = "Cart Name:";
@@ -161,16 +152,16 @@
 "dl9-iq-Rpe.title" = "Objektcode";
 
 /* Class = "NSMenuItem"; title = "File"; ObjectID = "dMs-cI-mzQ"; */
-"dMs-cI-mzQ.title" = "File";
+"dMs-cI-mzQ.title" = "Datei";
 
 /* Class = "NSMenuItem"; title = "Undo"; ObjectID = "dRJ-4n-Yzg"; */
-"dRJ-4n-Yzg.title" = "Undo";
+"dRJ-4n-Yzg.title" = "Widerrufen";
 
 /* Class = "NSMenuItem"; title = "Spelling and Grammar"; ObjectID = "Dv1-io-Yv7"; */
-"Dv1-io-Yv7.title" = "Spelling and Grammar";
+"Dv1-io-Yv7.title" = "Rechtschreibung und Grammatik";
 
 /* Class = "NSMenuItem"; title = "Close"; ObjectID = "DVo-aG-piG"; */
-"DVo-aG-piG.title" = "Close";
+"DVo-aG-piG.title" = "Schließen";
 
 /* Class = "NSButtonCell"; title = "Strict"; ObjectID = "eli-HZ-TdX"; */
 "eli-HZ-TdX.title" = "Streng";
@@ -182,106 +173,91 @@
 "f0n-lJ-nff.title" = "GPL-Byte-Code mit Kopfdaten";
 
 /* Class = "NSMenu"; title = "Help"; ObjectID = "F2S-fz-NVQ"; */
-"F2S-fz-NVQ.title" = "Help";
-
-/* Class = "NSMenuItem"; title = "Text"; ObjectID = "Fal-I4-PZk"; */
-"Fal-I4-PZk.title" = "Text";
+"F2S-fz-NVQ.title" = "Hilfe";
 
 /* Class = "NSMenu"; title = "Substitutions"; ObjectID = "FeM-D8-WVr"; */
-"FeM-D8-WVr.title" = "Substitutions";
+"FeM-D8-WVr.title" = "Ersetzungen";
 
 /* Class = "NSMenuItem"; title = "SimpleXDT99 Help"; ObjectID = "FKE-Sm-Kum"; */
-"FKE-Sm-Kum.title" = "SimpleXDT99 Help";
+"FKE-Sm-Kum.title" = "SimpleXDT99-Hilfe";
 
 /* Class = "NSMenuItem"; title = "Bold"; ObjectID = "GB9-OM-e27"; */
-"GB9-OM-e27.title" = "Bold";
-
-/* Class = "NSMenu"; title = "Format"; ObjectID = "GEO-Iw-cKr"; */
-"GEO-Iw-cKr.title" = "Format";
+"GB9-OM-e27.title" = "Fett";
 
 /* Class = "NSMenuItem"; title = "Font"; ObjectID = "Gi5-1S-RQB"; */
-"Gi5-1S-RQB.title" = "Font";
+"Gi5-1S-RQB.title" = "Schrift";
 
 /* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "GUa-eO-cwY"; */
-"GUa-eO-cwY.title" = "Use Default";
+"GUa-eO-cwY.title" = "Normal";
 
 /* Class = "NSMenuItem"; title = "Paste"; ObjectID = "gVA-U4-sdL"; */
-"gVA-U4-sdL.title" = "Paste";
+"gVA-U4-sdL.title" = "Einfügen";
 
 /* Class = "NSMenuItem"; title = "Writing Direction"; ObjectID = "H1b-Si-o9J"; */
-"H1b-Si-o9J.title" = "Writing Direction";
-
-/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "h1x-nt-dNg"; */
-"h1x-nt-dNg.title" = "Format:";
+"H1b-Si-o9J.title" = "Richtung beim Schreiben";
 
 /* Class = "NSMenuItem"; title = "View"; ObjectID = "H8h-7b-M4v"; */
-"H8h-7b-M4v.title" = "View";
+"H8h-7b-M4v.title" = "Darstellung";
 
 /* Class = "NSMenuItem"; title = "Show Spelling and Grammar"; ObjectID = "HFo-cy-zxI"; */
-"HFo-cy-zxI.title" = "Show Spelling and Grammar";
+"HFo-cy-zxI.title" = "Rechtschreibung und Grammatik einblenden";
 
 /* Class = "NSMenuItem"; title = "Text Replacement"; ObjectID = "HFQ-gK-NFA"; */
-"HFQ-gK-NFA.title" = "Text Replacement";
+"HFQ-gK-NFA.title" = "Text ersetzen";
 
 /* Class = "NSMenuItem"; title = "Smart Quotes"; ObjectID = "hQb-2v-fYv"; */
-"hQb-2v-fYv.title" = "Smart Quotes";
+"hQb-2v-fYv.title" = "Intelligente Anführungszeichen";
 
 /* Class = "NSTextFieldCell"; placeholderString = "0xA000"; ObjectID = "HQh-QK-tRM"; */
 "HQh-QK-tRM.placeholderString" = "0xA000";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Run the xas99 Assembler like you would do from the command line."; ObjectID = "Hv8-fC-r6i"; */
-"Hv8-fC-r6i.ibShadowedToolTip" = "Run the xas99 Assembler like you would do from the command line.";
+"Hv8-fC-r6i.ibShadowedToolTip" = "Den xas99 Assembler wie von der Kommandozeile aus starten.";
 
 /* Class = "NSMenuItem"; title = "Run Assembler…"; ObjectID = "Hv8-fC-r6i"; */
 "Hv8-fC-r6i.title" = "Assembler ausführen…";
 
 /* Class = "NSMenu"; title = "View"; ObjectID = "HyV-fh-RgO"; */
-"HyV-fh-RgO.title" = "View";
+"HyV-fh-RgO.title" = "Darstellung";
 
 /* Class = "NSMenuItem"; title = "Check Document Now"; ObjectID = "hz2-CU-CR7"; */
-"hz2-CU-CR7.title" = "Check Document Now";
+"hz2-CU-CR7.title" = "Dokument jetzt prüfen";
 
 /* Class = "NSMenu"; title = "Services"; ObjectID = "hz9-B4-Xy5"; */
-"hz9-B4-Xy5.title" = "Services";
+"hz9-B4-Xy5.title" = "Dienste";
 
 /* Class = "NSMenuItem"; title = "Subscript"; ObjectID = "I0S-gh-46l"; */
-"I0S-gh-46l.title" = "Subscript";
+"I0S-gh-46l.title" = "Tiefgestellt";
 
 /* Class = "NSMenuItem"; title = "Smaller"; ObjectID = "i1d-Er-qST"; */
-"i1d-Er-qST.title" = "Smaller";
+"i1d-Er-qST.title" = "Kleiner";
 
 /* Class = "NSMenuItem"; title = "Open…"; ObjectID = "IAo-SY-fd9"; */
-"IAo-SY-fd9.title" = "Open…";
+"IAo-SY-fd9.title" = "Öffnen...";
 
 /* Class = "NSMenu"; title = "Baseline"; ObjectID = "ijk-EB-dga"; */
-"ijk-EB-dga.title" = "Baseline";
+"ijk-EB-dga.title" = "Schriftlinie";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Outputs the symbols as an EQU notation."; ObjectID = "Ijm-yZ-hNQ"; */
 "Ijm-yZ-hNQ.ibShadowedToolTip" = "Ausgabe der Symbole als EQU-Notation.";
 
 /* Class = "NSMenuItem"; title = "Justify"; ObjectID = "J5U-5w-g23"; */
-"J5U-5w-g23.title" = "Justify";
+"J5U-5w-g23.title" = "Blocksatz";
 
 /* Class = "NSMenuItem"; title = "Use None"; ObjectID = "J7y-lM-qPV"; */
-"J7y-lM-qPV.title" = "Use None";
+"J7y-lM-qPV.title" = "Nicht verwenden";
 
 /* Class = "NSMenuItem"; title = "Kern"; ObjectID = "jBQ-r6-VK2"; */
-"jBQ-r6-VK2.title" = "Kern";
-
-/* Class = "NSButtonCell"; title = "List File"; ObjectID = "Jeg-8b-cf6"; */
-"Jeg-8b-cf6.title" = "List File";
+"jBQ-r6-VK2.title" = "Zeichenabstand";
 
 /* Class = "NSMenuItem"; title = "\tRight to Left"; ObjectID = "jFq-tB-4Kx"; */
-"jFq-tB-4Kx.title" = "\tRight to Left";
-
-/* Class = "NSMenuItem"; title = "Format"; ObjectID = "jxT-CU-nIS"; */
-"jxT-CU-nIS.title" = "Format";
+"jFq-tB-4Kx.title" = "\tVon rechts nach links";
 
 /* Class = "NSMenuItem"; title = "Revert to Saved"; ObjectID = "KaW-ft-85H"; */
-"KaW-ft-85H.title" = "Revert to Saved";
+"KaW-ft-85H.title" = "Zurücksetzen auf";
 
 /* Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS"; */
-"Kd2-mp-pUS.title" = "Show All";
+"Kd2-mp-pUS.title" = "Alle anzeigen";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "The cartridge format relocates the GPL program to the cartridge GROM area, generates GPL header data, and packages the byte code image into a cartridge file suitable for the MESS emulator."; ObjectID = "KGa-br-7wl"; */
 "KGa-br-7wl.ibShadowedToolTip" = "Das Modulformat verschiebt das GPL-Programm in den GROM-Bereich der Module, erzeugt GPL-Headerdaten und verpackt das Bytecode-Image in eine für den MESS-Emulator geeignete Moduldatei.";
@@ -290,7 +266,7 @@
 "KGa-br-7wl.title" = "MESS Modul";
 
 /* Class = "NSMenuItem"; title = "Show Sidebar"; ObjectID = "kIP-vf-haE"; */
-"kIP-vf-haE.title" = "Show Sidebar";
+"kIP-vf-haE.title" = "Seitenleiste anzeigen";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Create an RPK cartridge file that can be used with the MESS emulator."; ObjectID = "kRs-wV-cFO"; */
 "kRs-wV-cFO.ibShadowedToolTip" = "Erstellung einer RPK-Modul-Datei, die mit dem MESS-Emulator verwendet werden kann.";
@@ -308,13 +284,13 @@
 "L8r-cM-ZBs.title" = "List File";
 
 /* Class = "NSMenuItem"; title = "\tLeft to Right"; ObjectID = "Lbh-J2-qVU"; */
-"Lbh-J2-qVU.title" = "\tLeft to Right";
+"Lbh-J2-qVU.title" = "\tVon links nach rechts";
 
 /* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "LE2-aR-0XJ"; */
-"LE2-aR-0XJ.title" = "Bring All to Front";
+"LE2-aR-0XJ.title" = "Alle nach vorne bringen";
 
 /* Class = "NSMenuItem"; title = "Paste Ruler"; ObjectID = "LVM-kO-fVI"; */
-"LVM-kO-fVI.title" = "Paste Ruler";
+"LVM-kO-fVI.title" = "Lineal einsetzen";
 
 /* Class = "NSMenuItem"; title = "Plain GPL Byte Code"; ObjectID = "mff-MI-tU8"; */
 "mff-MI-tU8.title" = "Einfacher GPL-Bytecode";
@@ -326,10 +302,10 @@
 "MJj-iE-aeb.title" = "Merge Format";
 
 /* Class = "NSMenuItem"; title = "Check Grammar With Spelling"; ObjectID = "mK6-2p-4JG"; */
-"mK6-2p-4JG.title" = "Check Grammar With Spelling";
+"mK6-2p-4JG.title" = "Rechtschreib- und Grammatikprüfung";
 
 /* Class = "NSMenuItem"; title = "Copy Ruler"; ObjectID = "MkV-Pr-PK5"; */
-"MkV-Pr-PK5.title" = "Copy Ruler";
+"MkV-Pr-PK5.title" = "Lineal kopieren";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Select the output file type."; ObjectID = "Mn0-yU-E6A"; */
 "Mn0-yU-E6A.ibShadowedToolTip" = "Den Ausgabedatei-Typ auswählen.";
@@ -347,10 +323,10 @@
 "NAg-qk-OYh.placeholderString" = "0xA000";
 
 /* Class = "NSMenuItem"; title = "Services"; ObjectID = "NMo-om-nkz"; */
-"NMo-om-nkz.title" = "Services";
+"NMo-om-nkz.title" = "Dienste";
 
 /* Class = "NSMenuItem"; title = "\tDefault"; ObjectID = "Nop-cj-93Q"; */
-"Nop-cj-93Q.title" = "\tDefault";
+"Nop-cj-93Q.title" = "\tStandard";
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NPE-vR-1xY"; */
 "NPE-vR-1xY.title" = "Options:";
@@ -362,13 +338,13 @@
 "nxo-as-15a.title" = "Internal Format";
 
 /* Class = "NSMenuItem"; title = "Ligatures"; ObjectID = "o6e-r0-MWq"; */
-"o6e-r0-MWq.title" = "Ligatures";
+"o6e-r0-MWq.title" = "Ligaturen";
 
 /* Class = "NSMenuItem"; title = "Baseline"; ObjectID = "OaQ-X3-Vso"; */
-"OaQ-X3-Vso.title" = "Baseline";
+"OaQ-X3-Vso.title" = "Schriftlinie";
 
 /* Class = "NSMenu"; title = "Open Recent"; ObjectID = "oas-Oc-fiZ"; */
-"oas-Oc-fiZ.title" = "Open Recent";
+"oas-Oc-fiZ.title" = "Benutzte Dateien";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Compiled code will be stored using PROGRAM format, which is used in Editor/Assembler Option 5"; ObjectID = "OB9-SM-bYa"; */
 "OB9-SM-bYa.ibShadowedToolTip" = "Der kompilierte Code wird im PROGRAM-Format gespeichert, das in Editor/Assembler Option 5 verwendet wird.";
@@ -377,10 +353,10 @@
 "OB9-SM-bYa.title" = "Programm Image";
 
 /* Class = "NSMenuItem"; title = "Loosen"; ObjectID = "ogc-rX-tC1"; */
-"ogc-rX-tC1.title" = "Loosen";
+"ogc-rX-tC1.title" = "Weiter";
 
 /* Class = "NSMenuItem"; title = "Hide SimpleXDT99"; ObjectID = "Olw-nP-bQN"; */
-"Olw-nP-bQN.title" = "Hide SimpleXDT99";
+"Olw-nP-bQN.title" = "SimpleXDT99 ausblenden";
 
 /* Class = "NSButtonCell"; title = "Symbols"; ObjectID = "ooe-kQ-yLw"; */
 "ooe-kQ-yLw.title" = "Symbols";
@@ -392,34 +368,34 @@
 "Otx-WD-4NR.title" = "Binärdaten als Basic-Text";
 
 /* Class = "NSMenuItem"; title = "Find Previous"; ObjectID = "OwM-mh-QMV"; */
-"OwM-mh-QMV.title" = "Find Previous";
+"OwM-mh-QMV.title" = "Weitersuchen (rückwärts)";
 
 /* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "OY7-WF-poV"; */
-"OY7-WF-poV.title" = "Minimize";
+"OY7-WF-poV.title" = "Minimieren";
 
 /* Class = "NSMenuItem"; title = "Stop Speaking"; ObjectID = "Oyz-dy-DGm"; */
-"Oyz-dy-DGm.title" = "Stop Speaking";
+"Oyz-dy-DGm.title" = "Sprachausgabe stoppen";
 
 /* Class = "NSMenuItem"; title = "Delete"; ObjectID = "pa3-QI-u2k"; */
-"pa3-QI-u2k.title" = "Delete";
+"pa3-QI-u2k.title" = "Löschen";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Select the output file type."; ObjectID = "Phc-mV-akD"; */
 "Phc-mV-akD.ibShadowedToolTip" = "Den Ausgabedatei-Typ auswählen.";
 
 /* Class = "NSMenuItem"; title = "Bigger"; ObjectID = "Ptp-SP-VEL"; */
-"Ptp-SP-VEL.title" = "Bigger";
+"Ptp-SP-VEL.title" = "Größer";
 
 /* Class = "NSMenuItem"; title = "Save…"; ObjectID = "pxx-59-PXV"; */
-"pxx-59-PXV.title" = "Save…";
+"pxx-59-PXV.title" = "Sichern…";
 
 /* Class = "NSMenuItem"; title = "Show Fonts"; ObjectID = "Q5e-8K-NDq"; */
-"Q5e-8K-NDq.title" = "Show Fonts";
+"Q5e-8K-NDq.title" = "Schriften einblenden";
 
 /* Class = "NSMenuItem"; title = "Find Next"; ObjectID = "q09-fT-Sye"; */
-"q09-fT-Sye.title" = "Find Next";
+"q09-fT-Sye.title" = "Weitersuchen (vorwärts)";
 
 /* Class = "NSMenuItem"; title = "Page Setup…"; ObjectID = "qIS-W8-SiK"; */
-"qIS-W8-SiK.title" = "Page Setup…";
+"qIS-W8-SiK.title" = "Papierformat...";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "This format wraps a XBasic program around the generated code."; ObjectID = "qji-qq-7BX"; */
 "qji-qq-7BX.ibShadowedToolTip" = "Mit diesem Format umschließt ein XBasic-Programm den generierten Code.";
@@ -434,37 +410,37 @@
 "qx2-hM-Df7.title" = "use EQU";
 
 /* Class = "NSMenuItem"; title = "Zoom"; ObjectID = "R4o-n2-Eq4"; */
-"R4o-n2-Eq4.title" = "Zoom";
+"R4o-n2-Eq4.title" = "Zoomen";
 
 /* Class = "NSMenuItem"; title = "\tRight to Left"; ObjectID = "RB4-Sm-HuC"; */
-"RB4-Sm-HuC.title" = "\tRight to Left";
+"RB4-Sm-HuC.title" = "\tVon rechts nach links";
 
 /* Class = "NSMenuItem"; title = "Check Spelling While Typing"; ObjectID = "rbD-Rh-wIN"; */
-"rbD-Rh-wIN.title" = "Check Spelling While Typing";
+"rbD-Rh-wIN.title" = "Während der Texteingabe prüfen";
 
 /* Class = "NSMenuItem"; title = "Smart Dashes"; ObjectID = "rgM-f4-ycn"; */
-"rgM-f4-ycn.title" = "Smart Dashes";
+"rgM-f4-ycn.title" = "Intelligente Bindestriche";
 
 /* Class = "NSMenuItem"; title = "Superscript"; ObjectID = "Rqc-34-cIF"; */
-"Rqc-34-cIF.title" = "Superscript";
+"Rqc-34-cIF.title" = "Hochgestellt";
 
 /* Class = "NSButton"; ibShadowedToolTip = "The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources"; ObjectID = "RTj-cq-oqc"; */
 "RTj-cq-oqc.ibShadowedToolTip" = "Die Strenge-Option deaktiviert alle xas99-spezifischen Erweiterungen, um die Rückwärtskompatibilität für alte Quellen zu erhöhen.";
 
 /* Class = "NSMenuItem"; title = "Select All"; ObjectID = "Ruw-6m-B2m"; */
-"Ruw-6m-B2m.title" = "Select All";
+"Ruw-6m-B2m.title" = "Alles auswählen";
 
 /* Class = "NSMenuItem"; title = "Jump to Selection"; ObjectID = "S0p-oC-mLd"; */
-"S0p-oC-mLd.title" = "Jump to Selection";
+"S0p-oC-mLd.title" = "Auswahl anzeigen";
 
 /* Class = "NSButtonCell"; title = "Join Lines"; ObjectID = "SFR-iZ-okB"; */
-"SFR-iZ-okB.title" = "Zeilen Verbinden";
+"SFR-iZ-okB.title" = "Verbinden";
 
 /* Class = "NSTextFieldCell"; title = "Cart Name:"; ObjectID = "slt-xe-9UM"; */
 "slt-xe-9UM.title" = "Cart Name:";
 
 /* Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "snW-S8-Cw5"; */
-"snW-S8-Cw5.title" = "Show Toolbar";
+"snW-S8-Cw5.title" = "Symbolleiste einblenden";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Long programs are stored as INT/VAR 254 files and loaded within the 32 KB memory expansion and may be larger than conventional programs."; ObjectID = "sXb-X0-rMh"; */
 "sXb-X0-rMh.ibShadowedToolTip" = "Lange Programme werden als INT/VAR 254-Dateien gespeichert und innerhalb der 32 KB Speichererweiterung geladen und können größer sein als herkömmliche Programme.";
@@ -473,7 +449,7 @@
 "sXb-X0-rMh.title" = "Long Format";
 
 /* Class = "NSMenu"; title = "Window"; ObjectID = "Td7-aD-5lo"; */
-"Td7-aD-5lo.title" = "Window";
+"Td7-aD-5lo.title" = "Fenster";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Syntax of the output generated by the GPL Disassembler of the TI Image Tool."; ObjectID = "tHD-HH-UT5"; */
 "tHD-HH-UT5.ibShadowedToolTip" = "Syntax der Ausgabe, die vom GPL Disassembler des TI Image Tools erzeugt wird.";
@@ -485,46 +461,43 @@
 "TJa-Qh-DJi.title" = "GROM:";
 
 /* Class = "NSMenu"; title = "Kern"; ObjectID = "tlD-Oa-oAM"; */
-"tlD-Oa-oAM.title" = "Kern";
+"tlD-Oa-oAM.title" = "Zeichenabstand";
 
 /* Class = "NSMenuItem"; title = "Data Detectors"; ObjectID = "tRr-pd-1PS"; */
-"tRr-pd-1PS.title" = "Data Detectors";
+"tRr-pd-1PS.title" = "Datenerkennung";
 
 /* Class = "NSMenuItem"; title = "Open Recent"; ObjectID = "tXI-mr-wws"; */
-"tXI-mr-wws.title" = "Open Recent";
+"tXI-mr-wws.title" = "Benutzte Dateien";
 
 /* Class = "NSMenuItem"; title = "Capitalize"; ObjectID = "UEZ-Bs-lqG"; */
-"UEZ-Bs-lqG.title" = "Capitalize";
-
-/* Class = "NSMenu"; title = "SimpleXDT99"; ObjectID = "uQy-DD-JDr"; */
-"uQy-DD-JDr.title" = "SimpleXDT99";
+"UEZ-Bs-lqG.title" = "Großschreibung";
 
 /* Class = "NSMenuItem"; title = "Cut"; ObjectID = "uRl-iY-unG"; */
-"uRl-iY-unG.title" = "Cut";
+"uRl-iY-unG.title" = "Ausschneiden";
 
 /* Class = "NSButtonCell"; title = "Register"; ObjectID = "vAy-6i-MD0"; */
 "vAy-6i-MD0.title" = "Register";
 
 /* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "Vdr-fp-XzO"; */
-"Vdr-fp-XzO.title" = "Hide Others";
+"Vdr-fp-XzO.title" = "Andere ausblenden";
 
 /* Class = "NSMenuItem"; title = "Center"; ObjectID = "VIY-Ag-zcb"; */
-"VIY-Ag-zcb.title" = "Center";
+"VIY-Ag-zcb.title" = "Zentrieren";
 
 /* Class = "NSMenuItem"; title = "Italic"; ObjectID = "Vjx-xi-njq"; */
-"Vjx-xi-njq.title" = "Italic";
+"Vjx-xi-njq.title" = "Kursiv";
 
 /* Class = "NSMenuItem"; title = "Paste Style"; ObjectID = "vKC-jM-MkH"; */
-"vKC-jM-MkH.title" = "Paste Style";
+"vKC-jM-MkH.title" = "Stil einfügen";
 
 /* Class = "NSMenuItem"; title = "Show Ruler"; ObjectID = "vLm-3I-IUL"; */
-"vLm-3I-IUL.title" = "Show Ruler";
+"vLm-3I-IUL.title" = "Lineal einblenden";
 
 /* Class = "NSMenuItem"; title = "Make Upper Case"; ObjectID = "vmV-6d-7jI"; */
-"vmV-6d-7jI.title" = "Make Upper Case";
+"vmV-6d-7jI.title" = "Großbuchstaben";
 
 /* Class = "NSMenuItem"; title = "Clear Menu"; ObjectID = "vNY-rz-j42"; */
-"vNY-rz-j42.title" = "Clear Menu";
+"vNY-rz-j42.title" = "Einträge löschen";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Generates a textual version of the raw binary.\nIt is useful for including the binary result of another program into some assembly or GPL source code.   Format example:        data >4861, >636b, >4d61, >6320        data >7761, >7320, >6865, >7265"; ObjectID = "VRh-AH-e0c"; */
 "VRh-AH-e0c.ibShadowedToolTip" = "Erzeugt eine Textversion der Roh-Daten.\nEs ist nützlich, um das binäre Ergebnis eines anderen Programms in ein Assembler- oder GPL-Quellcode einzubinden.   Formatbeispiel:        data >4861, >636b, >4d61, >6320        data >7761, >7320, >6865, >7265";
@@ -533,34 +506,34 @@
 "VRh-AH-e0c.title" = "Binärdaten als Assembler-Text";
 
 /* Class = "NSMenu"; title = "Ligatures"; ObjectID = "w0m-vy-SC9"; */
-"w0m-vy-SC9.title" = "Ligatures";
+"w0m-vy-SC9.title" = "Ligaturen";
 
 /* Class = "NSMenu"; title = "Edit"; ObjectID = "W48-6f-4Dl"; */
-"W48-6f-4Dl.title" = "Edit";
+"W48-6f-4Dl.title" = "Bearbeiten";
 
 /* Class = "NSButton"; ibShadowedToolTip = "This is the equivalent to the option 'S' of the TI Editor/Assembler module."; ObjectID = "Wac-w4-daU"; */
 "Wac-w4-daU.ibShadowedToolTip" = "Dies entspricht der Option 'S' des TI Editor/Assembler-Moduls.";
 
 /* Class = "NSMenuItem"; title = "New"; ObjectID = "Was-JA-tGl"; */
-"Was-JA-tGl.title" = "New";
+"Was-JA-tGl.title" = "Neu";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Outputs the symbols as an EQU notation."; ObjectID = "waS-rq-yv1"; */
 "waS-rq-yv1.ibShadowedToolTip" = "Ausgabe der Symbole als EQU-Notation.";
 
 /* Class = "NSMenuItem"; title = "Align Right"; ObjectID = "wb2-vD-lq4"; */
-"wb2-vD-lq4.title" = "Align Right";
+"wb2-vD-lq4.title" = "Rechtsbündig";
 
 /* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "WeT-3V-zwk"; */
-"WeT-3V-zwk.title" = "Paste and Match Style";
+"WeT-3V-zwk.title" = "Einsetzen und Stil anpassen";
 
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Wly-jW-pVF"; */
 "Wly-jW-pVF.title" = "Format:";
 
 /* Class = "NSMenuItem"; title = "Help"; ObjectID = "wpr-3q-Mcd"; */
-"wpr-3q-Mcd.title" = "Help";
+"wpr-3q-Mcd.title" = "Hilfe";
 
 /* Class = "NSMenuItem"; title = "Underline"; ObjectID = "WRG-CD-K1S"; */
-"WRG-CD-K1S.title" = "Underline";
+"WRG-CD-K1S.title" = "Unterstreichen";
 
 /* Class = "NSBox"; title = "Assembler Options"; ObjectID = "wxC-ue-LoQ"; */
 "wxC-ue-LoQ.title" = "Assembler Options";
@@ -569,19 +542,19 @@
 "x0P-FY-59U.title" = "use EQU";
 
 /* Class = "NSMenuItem"; title = "Copy"; ObjectID = "x3v-GG-iWU"; */
-"x3v-GG-iWU.title" = "Copy";
+"x3v-GG-iWU.title" = "Kopieren";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Run the xbas99 Basic Encoder like you would do from the command line."; ObjectID = "Xas-Vt-xLQ"; */
-"Xas-Vt-xLQ.ibShadowedToolTip" = "Run the xbas99 Basic Encoder like you would do from the command line.";
+"Xas-Vt-xLQ.ibShadowedToolTip" = "Den xbas99 Basic Encoder wie von der Kommandozeile aus starten.";
 
 /* Class = "NSMenuItem"; title = "Run Basic Encoder…"; ObjectID = "Xas-Vt-xLQ"; */
 "Xas-Vt-xLQ.title" = "Basic Encoder ausführen…";
 
 /* Class = "NSMenuItem"; title = "Use All"; ObjectID = "xQD-1f-W4t"; */
-"xQD-1f-W4t.title" = "Use All";
+"xQD-1f-W4t.title" = "Alle verwenden";
 
 /* Class = "NSMenuItem"; title = "Speech"; ObjectID = "xrE-MZ-jX0"; */
-"xrE-MZ-jX0.title" = "Speech";
+"xrE-MZ-jX0.title" = "Sprachausgabe";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Compiled code will be stored in an compressed format using DIS/FIX 80 format, which is used in Editor/Assembler Option 3"; ObjectID = "XxF-mh-KWp"; */
 "XxF-mh-KWp.ibShadowedToolTip" = "Der kompilierte Code wird in einem komprimierten Format im DIS/FIX 80-Format gespeichert, das in Editor/Assembler Option 3 verwendet wird.";
@@ -590,37 +563,37 @@
 "XxF-mh-KWp.title" = "Komprimierter Objektcode";
 
 /* Class = "NSMenuItem"; title = "Find…"; ObjectID = "Xz5-n4-O0W"; */
-"Xz5-n4-O0W.title" = "Find…";
+"Xz5-n4-O0W.title" = "Suchen…";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Generates an additionally file with a list output. This is the equivalent to the option 'L' of the TI Editor/Assembler module."; ObjectID = "xZz-vw-Tqb"; */
 "xZz-vw-Tqb.ibShadowedToolTip" = "Generates an additionally file with a list output. This is the equivalent to the option 'L' of the TI Editor/Assembler module.";
 
 /* Class = "NSMenuItem"; title = "Find and Replace…"; ObjectID = "YEy-JH-Tfz"; */
-"YEy-JH-Tfz.title" = "Find and Replace…";
+"YEy-JH-Tfz.title" = "Suchen und ersetzen…";
 
 /* Class = "NSButton"; ibShadowedToolTip = "This is the equivalent to the option 'S' of the TI Editor/Assembler module."; ObjectID = "yfG-tm-fKE"; */
 "yfG-tm-fKE.ibShadowedToolTip" = "Dies entspricht der Option 'S' des TI Editor/Assembler-Moduls.";
 
 /* Class = "NSMenuItem"; title = "\tDefault"; ObjectID = "YGs-j5-SAR"; */
-"YGs-j5-SAR.title" = "\tDefault";
+"YGs-j5-SAR.title" = "\tStandard";
 
 /* Class = "NSMenuItem"; title = "Start Speaking"; ObjectID = "Ynk-f8-cLZ"; */
-"Ynk-f8-cLZ.title" = "Start Speaking";
+"Ynk-f8-cLZ.title" = "Sprachausgabe starten";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Select the output file type."; ObjectID = "YWa-jA-we8"; */
 "YWa-jA-we8.ibShadowedToolTip" = "Den Ausgabedatei-Typ auswählen.";
 
 /* Class = "NSMenuItem"; title = "Show Substitutions"; ObjectID = "z6F-FW-3nz"; */
-"z6F-FW-3nz.title" = "Show Substitutions";
+"z6F-FW-3nz.title" = "Ersetzungen einblenden";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Generates an additionally file with a list output. This is the equivalent to the option 'L' of the TI Editor/Assembler module."; ObjectID = "zKb-Xn-eiR"; */
 "zKb-Xn-eiR.ibShadowedToolTip" = "Generates an additionally file with a list output. This is the equivalent to the option 'L' of the TI Editor/Assembler module.";
 
 /* Class = "NSMenuItem"; title = "Align Left"; ObjectID = "ZM1-6Q-yy1"; */
-"ZM1-6Q-yy1.title" = "Align Left";
+"ZM1-6Q-yy1.title" = "Linksbündig";
 
 /* Class = "NSMenuItem"; title = "Paragraph"; ObjectID = "ZvO-Gk-QUH"; */
-"ZvO-Gk-QUH.title" = "Paragraph";
+"ZvO-Gk-QUH.title" = "Absatz";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "The native xdt99 syntax style is more \"modern\" in that it supports lower case sources and relaxes the use of whitespace. This style also handles Ryte and R.A.G syntax variants."; ObjectID = "ZZ0-xn-XWe"; */
 "ZZ0-xn-XWe.ibShadowedToolTip" = "Der native Syntax-Stil von xdt99 ist \"moderner\", da er Kleinbuchstaben unterstützt und die Verwendung von Leerzeichen erleichtert. Er berücksichtigt auch die Ryte und R.A.G. Syntaxvarianten.";
