@@ -112,6 +112,14 @@
     }
 
     self.contentMinWidth.constant = self.xdt99OptionsToolbarItem.minSize.width + 16;
+    NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
+    BOOL openNestedFiles = [defaults boolForKey:UserDefaultKeyDocumentOptionOpenNestedFiles];
+    if (openNestedFiles) {
+        NSError *error = nil;
+        if (![self openNestedFiles:&error]) {
+            [self presentError:error];
+        }
+    }
 }
 
 
@@ -184,6 +192,11 @@
     }
 
     [self setSourceCode:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+    NSDictionary *options = @{XDTGa99ParserOptionSyntaxType: [NSString stringWithCString:[XDTGPLAssembler syntaxTypeAsCString:self.syntaxType] encoding:NSUTF8StringEncoding]};
+    XDTGa99Parser *ga99Parser = [XDTGa99Parser parserWithOptions:options];
+    [ga99Parser setSource:self.sourceCode];
+    [ga99Parser setPath:[[self.fileURL URLByDeletingLastPathComponent] path]];
+    self.parser = ga99Parser;
 
     [self setCartridgeName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]];
     [self setOutputFileName:[_cartridgeName stringByAppendingString:@"-obj"]];
@@ -327,6 +340,24 @@
         }
     }
 
+    return retVal;
+}
+
+
+- (NSURL *)urlForIncludedFile:(NSString *)name
+{
+    NSError *error = nil;
+
+    XDTGa99Parser *parser = [XDTGa99Parser parserWithOptions:@{XDTGa99ParserOptionSyntaxType: [NSString stringWithCString:[XDTGPLAssembler syntaxTypeAsCString:self.syntaxType] encoding:NSUTF8StringEncoding]}];
+    parser.path = [[self.fileURL URLByDeletingLastPathComponent] path];
+    NSString *filePath = [parser findFile:name error:&error];
+    if (nil != error) {
+        NSLog(@"File not found: %@/%@", [[self.fileURL URLByDeletingLastPathComponent] path], name);
+        [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+        return nil;
+    }
+
+    NSURL *retVal = [NSURL fileURLWithPath:filePath];
     return retVal;
 }
 

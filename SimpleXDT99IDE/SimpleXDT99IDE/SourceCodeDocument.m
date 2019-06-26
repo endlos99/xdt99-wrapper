@@ -38,6 +38,7 @@
 
 @interface SourceCodeDocument () {
     NoodleLineNumberView *_lineNumberRulerView;
+    XDTObject<XDTParserProtocol> *_parser;
 }
 
 @property (retain) NSNumber *lineNumberDigits;
@@ -136,6 +137,37 @@
         *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
     }
     return NO;
+}
+
+
+- (BOOL)openNestedFiles:(NSError **)outError
+{
+    __block NSError *myError = nil;
+    NSOrderedSet<NSURL *> *includeFiles = [_parser includedFiles:&myError];
+    if (nil != myError) {
+        if (nil != outError) {
+            *outError = myError;
+        }
+        return NO;
+    }
+    [includeFiles enumerateObjectsUsingBlock:^(NSURL *includingURL, NSUInteger idx, BOOL *stop) {
+        /* open new tab with the included file. */
+        [NSDocumentController.sharedDocumentController openDocumentWithContentsOfURL:includingURL
+                                                                             display:YES
+                                                                   completionHandler:^(NSDocument *document, BOOL documentWasAlreadyOpen, NSError *error) {
+                                                                       if (nil == document || documentWasAlreadyOpen) {
+                                                                           myError = error;
+                                                                           return;
+                                                                       }
+                                                                       SourceCodeDocument *includedGPLDoc = (SourceCodeDocument *)document;
+                                                                       [self.xdt99OptionsToolbarItem.view.window addTabbedWindow:includedGPLDoc.xdt99OptionsToolbarItem.view.window ordered:NSWindowOut];
+                                                                   }];
+    }];
+
+    if (nil != outError) {
+        *outError = myError;
+    }
+    return nil == myError;
 }
 
 

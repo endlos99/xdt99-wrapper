@@ -28,6 +28,7 @@
 #import "XDTObject.h"
 
 #import "XDTGa99Objcode.h"
+#import "XDTGa99Parser.h"
 #import "XDTGPLAssembler.h"
 
 #import "XDTZipFile.h"

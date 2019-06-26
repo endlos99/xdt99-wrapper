@@ -1,6 +1,6 @@
 //
 //  XDTObject.m
-//  SimpleXDT99
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 05.12.16.
 //

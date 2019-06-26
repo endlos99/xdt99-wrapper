@@ -66,6 +66,7 @@
 @property (readonly) NSString *symbolsOutput;
 
 @property (readonly) XDTAs99TargetType targetType;
+
 - (BOOL)assembleCode:(XDTAs99TargetType)xdtTargetType error:(NSError **)error;
 - (BOOL)exportBinaries:(XDTAs99TargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error;
 
@@ -151,6 +152,13 @@
             self.binaryTextMode = XDTGenerateTextModeOutputAssembler | (_binaryTextMode & !XDTGenerateTextModeOutputMask);
             _assemblerTextModeRadioButton.state = NSOnState;
             break;
+    }
+    BOOL openNestedFiles = [defaults boolForKey:UserDefaultKeyDocumentOptionOpenNestedFiles];
+    if (openNestedFiles) {
+        NSError *error = nil;
+        if (![self openNestedFiles:&error]) {
+            [self presentError:error];
+        }
     }
 }
 
@@ -251,6 +259,10 @@
     }
 
     [self setSourceCode:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+    XDTAs99Parser *as99Parser = [XDTAs99Parser parserWithOptions:@{}];
+    [as99Parser setSource:self.sourceCode];
+    [as99Parser setPath:[[self.fileURL URLByDeletingLastPathComponent] path]];
+    self.parser = as99Parser;
 
     [self setCartridgeName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]];
     [self setOutputFileName:[_cartridgeName stringByAppendingString:@"-obj"]];

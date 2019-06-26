@@ -25,11 +25,14 @@
 #import <Cocoa/Cocoa.h>
 
 
-@class XDTMessage;
+@protocol XDTParserProtocol;
+@class XDTObject, XDTMessage;
 
 @interface SourceCodeDocument : NSDocument <NSTextViewDelegate>
 
 @property (retain) NSString *sourceCode;
+
+@property (retain) XDTObject<XDTParserProtocol> *parser;
 
 @property (assign) BOOL shouldShowLog;
 @property (assign) BOOL shouldShowErrorsInLog;
@@ -54,6 +57,8 @@
 @property (readonly) NSImage *statusImage;
 @property (retain) XDTMessage *generatorMessages;
 @property (readonly) NSMutableAttributedString *generatedLogMessage;
+
+- (BOOL)openNestedFiles:(NSError **)error;
 
 - (IBAction)checkCode:(id)sender;
 - (IBAction)generateCode:(id)sender;

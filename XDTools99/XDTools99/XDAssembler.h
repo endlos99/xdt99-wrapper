@@ -1,6 +1,6 @@
 //
 //  XDAssembler.h
-//  XDAssembler
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 09.12.16.
 //
@@ -29,6 +29,7 @@
 
 #import "XDTAs99Symbols.h"
 #import "XDTAs99Objcode.h"
+#import "XDTAs99Parser.h"
 #import "XDTAssembler.h"
 
 #import "XDTZipFile.h"

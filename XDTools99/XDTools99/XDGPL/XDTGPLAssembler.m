@@ -288,9 +288,9 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Accessors
 
 
-- (const char *)syntaxTypeAsCString
++ (const char *)syntaxTypeAsCString:(XDTGa99SyntaxType)syntaxType
 {
-    switch (_syntaxType) {
+    switch (syntaxType) {
         case XDTGa99SyntaxTypeRAGGPL:
             //return "rag";     // removed in xga99 v1.8.5 - RAG is combined with Ryte
         case XDTGa99SyntaxTypeNativeXDT99:
@@ -301,6 +301,12 @@ NS_ASSUME_NONNULL_END
         default:
             return NULL;
     }
+}
+
+
+- (const char *)syntaxTypeAsCString
+{
+    return [self.class syntaxTypeAsCString:_syntaxType];
 }
 
 

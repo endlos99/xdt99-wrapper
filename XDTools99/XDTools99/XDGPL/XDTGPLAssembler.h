@@ -64,6 +64,8 @@ FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionWarnings;
 @property (readonly) BOOL outputWarnings;
 @property (readonly, nullable) XDTMessage *messages;    /* Object that contains all messages (Error, Warning, etc) after the assembler run */
 
++ (const char *_Nullable)syntaxTypeAsCString:(XDTGa99SyntaxType)syntaxType;
+
 + (BOOL)checkRequiredModuleVersion;
 
 + (nullable instancetype)gplAssemblerWithOptions:(NSDictionary<XDTGa99OptionKey, id> *)options includeURL:(NSURL *)url;

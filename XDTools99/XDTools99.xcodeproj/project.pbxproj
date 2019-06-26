@@ -70,12 +70,16 @@
 		AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A21DFF246400C08E36 /* XDTBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CF8A31DFF246400C08E36 /* XDTBasic.m */; };
 		AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A61DFF266B00C08E36 /* XDBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF63832D22CB56D000150E5D /* XDTGa99Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = AF63832B22CB56D000150E5D /* XDTGa99Parser.m */; };
+		AF63832E22CB56D000150E5D /* XDTGa99Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = AF63832C22CB56D000150E5D /* XDTGa99Parser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF9C22081E06D88A00BB02FC /* XDTGPLAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */; };
 		AF9C220B1E06FD4E00BB02FC /* XDTGa99Objcode.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22091E06FD4E00BB02FC /* XDTGa99Objcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF9C220C1E06FD4E00BB02FC /* XDTGa99Objcode.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C220A1E06FD4E00BB02FC /* XDTGa99Objcode.m */; };
 		AFBDC41E22BA8B8C00DDD4C2 /* XDTMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBDC41C22BA8B8C00DDD4C2 /* XDTMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFBDC41F22BA8B8C00DDD4C2 /* XDTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = AFBDC41D22BA8B8C00DDD4C2 /* XDTMessage.m */; };
+		AFC6A7D422CA3BD900CDF34A /* XDTAs99Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = AFC6A7D222CA3BD900CDF34A /* XDTAs99Parser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AFC6A7D522CA3BD900CDF34A /* XDTAs99Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = AFC6A7D322CA3BD900CDF34A /* XDTAs99Parser.m */; };
 		AFE630581DF9BB67005FFD01 /* XDTools99.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE630561DF9BB67005FFD01 /* XDTools99.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE6305F1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h */; };
 		AFE6306E1DF9BB9E005FFD01 /* NSArrayPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE630601DF9BB9E005FFD01 /* NSArrayPythonAdditions.m */; };
@@ -128,6 +132,8 @@
 		AF5CF8A21DFF246400C08E36 /* XDTBasic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTBasic.h; path = XDBasic/XDTBasic.h; sourceTree = "<group>"; };
 		AF5CF8A31DFF246400C08E36 /* XDTBasic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTBasic.m; path = XDBasic/XDTBasic.m; sourceTree = "<group>"; };
 		AF5CF8A61DFF266B00C08E36 /* XDBasic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDBasic.h; sourceTree = "<group>"; };
+		AF63832B22CB56D000150E5D /* XDTGa99Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTGa99Parser.m; path = XDGPL/XDTGa99Parser.m; sourceTree = "<group>"; };
+		AF63832C22CB56D000150E5D /* XDTGa99Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTGa99Parser.h; path = XDGPL/XDTGa99Parser.h; sourceTree = "<group>"; };
 		AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTGPLAssembler.h; path = XDGPL/XDTGPLAssembler.h; sourceTree = "<group>"; };
 		AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTGPLAssembler.m; path = XDGPL/XDTGPLAssembler.m; sourceTree = "<group>"; };
 		AF9C22091E06FD4E00BB02FC /* XDTGa99Objcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTGa99Objcode.h; path = XDGPL/XDTGa99Objcode.h; sourceTree = "<group>"; };
@@ -139,6 +145,8 @@
 		AFBCB61E1E07FE1F004EC53D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../xdt99/README.md; sourceTree = "<group>"; };
 		AFBDC41C22BA8B8C00DDD4C2 /* XDTMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDTMessage.h; sourceTree = "<group>"; };
 		AFBDC41D22BA8B8C00DDD4C2 /* XDTMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XDTMessage.m; sourceTree = "<group>"; };
+		AFC6A7D222CA3BD900CDF34A /* XDTAs99Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTAs99Parser.h; path = XDAssembler/XDTAs99Parser.h; sourceTree = "<group>"; };
+		AFC6A7D322CA3BD900CDF34A /* XDTAs99Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTAs99Parser.m; path = XDAssembler/XDTAs99Parser.m; sourceTree = "<group>"; };
 		AFE630531DF9BB67005FFD01 /* XDTools99.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XDTools99.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFE630561DF9BB67005FFD01 /* XDTools99.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDTools99.h; sourceTree = "<group>"; };
 		AFE630571DF9BB67005FFD01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -178,6 +186,8 @@
 				AF2D96AC1DFABF39006EE618 /* XDTAs99Symbols.m */,
 				AF2D96AF1DFABF39006EE618 /* XDTAs99Objcode.h */,
 				AF2D96AD1DFABF39006EE618 /* XDTAs99Objcode.m */,
+				AFC6A7D222CA3BD900CDF34A /* XDTAs99Parser.h */,
+				AFC6A7D322CA3BD900CDF34A /* XDTAs99Parser.m */,
 				AF2D96B01DFABF39006EE618 /* XDTAssembler.h */,
 				AF2D96AE1DFABF39006EE618 /* XDTAssembler.m */,
 			);
@@ -198,6 +208,8 @@
 			children = (
 				AF9C22091E06FD4E00BB02FC /* XDTGa99Objcode.h */,
 				AF9C220A1E06FD4E00BB02FC /* XDTGa99Objcode.m */,
+				AF63832C22CB56D000150E5D /* XDTGa99Parser.h */,
+				AF63832B22CB56D000150E5D /* XDTGa99Parser.m */,
 				AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */,
 				AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */,
 			);
@@ -322,10 +334,12 @@
 			files = (
 				AFE630581DF9BB67005FFD01 /* XDTools99.h in Headers */,
 				AF125EBB1E0414A600F659AA /* XDGPL.h in Headers */,
+				AF63832E22CB56D000150E5D /* XDTGa99Parser.h in Headers */,
 				AF9C220B1E06FD4E00BB02FC /* XDTGa99Objcode.h in Headers */,
 				AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */,
 				AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */,
 				AF2D96B31DFABF39006EE618 /* XDTAs99Symbols.h in Headers */,
+				AFC6A7D422CA3BD900CDF34A /* XDTAs99Parser.h in Headers */,
 				AF2D96B71DFABF39006EE618 /* XDTAs99Objcode.h in Headers */,
 				AF2D96B81DFABF39006EE618 /* XDTAssembler.h in Headers */,
 				AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */,
@@ -472,11 +486,13 @@
 				AF2D96B91DFABF39006EE618 /* XDTObject.m in Sources */,
 				AF9C22081E06D88A00BB02FC /* XDTGPLAssembler.m in Sources */,
 				AF06979422BE3081001E1749 /* NSSetPythonAdditions.m in Sources */,
+				AF63832D22CB56D000150E5D /* XDTGa99Parser.m in Sources */,
 				AF9C220C1E06FD4E00BB02FC /* XDTGa99Objcode.m in Sources */,
 				AF2D96B41DFABF39006EE618 /* XDTAs99Symbols.m in Sources */,
 				AFE6306E1DF9BB9E005FFD01 /* NSArrayPythonAdditions.m in Sources */,
 				AF157DFF1FBF06B300679D82 /* NSStringPythonAdditions.m in Sources */,
 				AF2D96B51DFABF39006EE618 /* XDTAs99Objcode.m in Sources */,
+				AFC6A7D522CA3BD900CDF34A /* XDTAs99Parser.m in Sources */,
 				AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */,
 				AF2D96B61DFABF39006EE618 /* XDTAssembler.m in Sources */,
 				AFE630701DF9BB9E005FFD01 /* NSErrorPythonAdditions.m in Sources */,

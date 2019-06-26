@@ -1,6 +1,6 @@
 //
 //  XDTObject.h
-//  SimpleXDT99
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 05.12.16.
 //
@@ -33,6 +33,26 @@ typedef NS_ENUM(NSInteger, XDTErrorCode) {
     XDTErrorCodePythonError = 2,
     XDTErrorCodePythonException = 3,
 };
+
+
+@protocol XDTParserProtocol <NSObject>
+
+/**
+ Set the source code where the parser works on.
+ */
+- (void)setSource:(NSString *)source;
+
+/**
+ Subclasses needts to overwrite this method!
+ This Method will be called from \p openNestedFiles: before it loads and opens new documents.
+
+ @return    A non nullable set of URL of files this document needs to include.
+
+ Default implementation retruns an empty list.
+ */
+- (NSOrderedSet<NSURL *> *)includedFiles:(NSError **)error;
+
+@end
 
 
 @interface XDTObject : NSObject

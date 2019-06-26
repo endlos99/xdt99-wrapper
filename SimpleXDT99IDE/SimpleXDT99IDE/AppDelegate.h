@@ -24,6 +24,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define UserDefaultKeyDocumentOptionOpenNestedFiles @"DocumentOptionOpenNestedFiles"
 #define UserDefaultKeyDocumentOptionShowLog @"DocumentOptionShowLog"
 #define UserDefaultKeyDocumentOptionShowErrorsInLog @"DocumentOptionShowErrorsInLog"
 #define UserDefaultKeyDocumentOptionShowWarningsInLog @"DocumentOptionShowWarningsInLog"

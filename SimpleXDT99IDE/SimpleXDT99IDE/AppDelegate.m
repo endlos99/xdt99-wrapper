@@ -74,6 +74,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     NSDictionary *defaultsDict = @{
+                                   UserDefaultKeyDocumentOptionOpenNestedFiles: @YES,
                                    UserDefaultKeyDocumentOptionShowLog: @YES,
                                    UserDefaultKeyDocumentOptionShowErrorsInLog: @YES,
                                    UserDefaultKeyDocumentOptionShowWarningsInLog: @YES,
