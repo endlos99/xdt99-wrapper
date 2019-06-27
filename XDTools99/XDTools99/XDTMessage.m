@@ -41,13 +41,18 @@ static NSRegularExpression *warningRegex;
 static NSRegularExpression *errorRegex;
 static NSRegularExpression *basicRegex;
 
+static NSArray<NSSortDescriptor *> *sortDescriptorsAscendingType;
+static NSArray<NSSortDescriptor *> *sortDescriptorsDecendingType;
+
+
 @interface XDTMessage () {
     @protected
-    NSMutableSet<NSDictionary<XDTMessageTypeKey, id> *> *_messages;
+    NSMutableOrderedSet<NSDictionary<XDTMessageTypeKey, id> *> *_messages;
+    NSArray<NSSortDescriptor *> *_usedSortDescriptors;
 }
 
 - (instancetype)initWithPythonList:(PyObject *)messageList treatingAs:(XDTMessageTypeValue)type;
-- (instancetype)initWithSet:(NSSet<NSDictionary<XDTMessageTypeKey, id> *> *)messageArray;
+- (instancetype)initWithSet:(NSOrderedSet<NSDictionary<XDTMessageTypeKey, id> *> *)messageArray;
 
 @end
 
@@ -72,6 +77,18 @@ NS_ASSUME_NONNULL_END
          Missing line number: [15] GOTO 500
          */
         basicRegex = [NSRegularExpression regularExpressionWithPattern:@"(.+):\\s\\[(\\d+)\\]\\s(.*)" options:0 error:nil];
+        sortDescriptorsAscendingType = @[
+                                         [NSSortDescriptor sortDescriptorWithKey:[NSString stringWithFormat:@"self.%@.path", XDTMessageFileURL] ascending:YES],
+                                         [NSSortDescriptor sortDescriptorWithKey:XDTMessageLineNumber ascending:YES],
+                                         [NSSortDescriptor sortDescriptorWithKey:XDTMessagePassNumber ascending:YES],
+                                         [NSSortDescriptor sortDescriptorWithKey:XDTMessageType ascending:YES],
+                                         ];
+        sortDescriptorsDecendingType = @[
+                                         [NSSortDescriptor sortDescriptorWithKey:[NSString stringWithFormat:@"self.%@.path", XDTMessageFileURL] ascending:YES],
+                                         [NSSortDescriptor sortDescriptorWithKey:XDTMessageLineNumber ascending:YES],
+                                         [NSSortDescriptor sortDescriptorWithKey:XDTMessagePassNumber ascending:YES],
+                                         [NSSortDescriptor sortDescriptorWithKey:XDTMessageType ascending:NO],
+                                         ];
     }
 }
 
@@ -108,7 +125,7 @@ NS_ASSUME_NONNULL_END
     }
 
     /* Check if the messageList comes from xbas99, which delivers its messages in an array of strings, not an array of tuples like the other does. */
-    NSMutableSet<NSDictionary<XDTMessageTypeKey, id> *> *newMessages = [NSMutableSet setWithCapacity:messageCount];
+    NSMutableOrderedSet<NSDictionary<XDTMessageTypeKey, id> *> *newMessages = [NSMutableOrderedSet orderedSetWithCapacity:messageCount];
     NSSet<NSString *> *messageStrings = [NSSet setWithPyListOfString:messageList];
     if (nil != messageStrings) {
         // I'm still the old and ugly style of message exchange, that xbas99 still uses.
@@ -205,6 +222,7 @@ NS_ASSUME_NONNULL_END
         }];
     }
     _messages = newMessages;
+    _usedSortDescriptors = nil;
 
     return self;
 }
@@ -213,12 +231,13 @@ NS_ASSUME_NONNULL_END
 + (instancetype)messageWithMessages:(XDTMessage *)messages
 {
     XDTMessage *retVal = [[XDTMessage alloc] init];
-    retVal->_messages = [NSMutableSet setWithSet:messages->_messages];
+    retVal->_messages = [NSMutableOrderedSet orderedSetWithOrderedSet:messages->_messages];
+    retVal->_usedSortDescriptors = messages->_usedSortDescriptors;
     return retVal;
 }
 
 
-- (instancetype)initWithSet:(NSSet<NSDictionary<XDTMessageTypeKey,id> *> *)messageSet
+- (instancetype)initWithSet:(NSOrderedSet<NSDictionary<XDTMessageTypeKey,id> *> *)messageSet
 {
     assert(NULL != messageSet);
 
@@ -231,7 +250,8 @@ NS_ASSUME_NONNULL_END
     if (0 >= [messageSet count]) {
         return self;
     }
-    _messages = [NSMutableSet setWithSet:messageSet];
+    _messages = [NSMutableOrderedSet orderedSetWithOrderedSet:messageSet];
+    _usedSortDescriptors = nil;
 
     return self;
 }
@@ -253,11 +273,53 @@ NS_ASSUME_NONNULL_END
 - (XDTMessage *)messagesOfType:(XDTMessageTypeValue)type
 {
     NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", XDTMessageType, type];
-    NSSet<NSDictionary<XDTMessageTypeKey,id> *> *filtered = [_messages filteredSetUsingPredicate:p];
+    NSOrderedSet<NSDictionary<XDTMessageTypeKey,id> *> *filtered = [_messages filteredOrderedSetUsingPredicate:p];
     XDTMessage *retVal = [[XDTMessage alloc] initWithSet:filtered];
 #if !__has_feature(objc_arc)
     [retVal autorelease];
 #endif
+    return retVal;
+}
+
+
+- (XDTMessage *)sortedByPriorityAscendingType
+{
+    if (_usedSortDescriptors == sortDescriptorsAscendingType) {
+        XDTMessage *retVal = [[XDTMessage alloc] initWithSet:_messages];
+#if !__has_feature(objc_arc)
+        [retVal autorelease];
+#endif
+        retVal->_usedSortDescriptors = _usedSortDescriptors;
+        return retVal;
+    }
+
+    NSArray<NSDictionary<XDTMessageTypeKey,id> *> *sorted = [_messages sortedArrayUsingDescriptors:sortDescriptorsAscendingType];
+    XDTMessage *retVal = [[XDTMessage alloc] initWithSet:[NSOrderedSet orderedSetWithArray:sorted]];
+#if !__has_feature(objc_arc)
+    [retVal autorelease];
+#endif
+    retVal->_usedSortDescriptors = sortDescriptorsAscendingType;
+    return retVal;
+}
+
+
+- (XDTMessage *)sortedByPriorityDecendingType
+{
+    if (_usedSortDescriptors == sortDescriptorsDecendingType) {
+        XDTMessage *retVal = [[XDTMessage alloc] initWithSet:_messages];
+#if !__has_feature(objc_arc)
+        [retVal autorelease];
+#endif
+        retVal->_usedSortDescriptors = _usedSortDescriptors;
+        return retVal;
+    }
+
+    NSArray<NSDictionary<XDTMessageTypeKey,id> *> *sorted = [_messages sortedArrayUsingDescriptors:sortDescriptorsDecendingType];
+    XDTMessage *retVal = [[XDTMessage alloc] initWithSet:[NSOrderedSet orderedSetWithArray:sorted]];
+#if !__has_feature(objc_arc)
+    [retVal autorelease];
+#endif
+    retVal->_usedSortDescriptors = sortDescriptorsDecendingType;
     return retVal;
 }
 
@@ -275,21 +337,23 @@ NS_ASSUME_NONNULL_END
     }
 
     NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", XDTMessageType, type];
-    NSSet<NSDictionary<XDTMessageTypeKey,id> *> *filtered = [_messages filteredSetUsingPredicate:p];
+    NSOrderedSet<NSDictionary<XDTMessageTypeKey,id> *> *filtered = [_messages filteredOrderedSetUsingPredicate:p];
     return filtered.count;
 }
 
 
 - (void)enumerateMessagesUsingBlock:(NS_NOESCAPE XDTMessageEnumBlock)block
 {
-    [_messages enumerateObjectsUsingBlock:block];
+    [_messages enumerateObjectsUsingBlock:^(NSDictionary<XDTMessageTypeKey,id> * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        block(obj, stop);
+    }];
 }
 
 
 - (void)enumerateMessagesOfType:(XDTMessageTypeValue)type usingBlock:(NS_NOESCAPE XDTMessageEnumBlock)block
 {
     NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", XDTMessageType, type];
-    [_messages enumerateObjectsUsingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, BOOL *stop) {
+    [_messages enumerateObjectsUsingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, NSUInteger idx, BOOL *stop) {
         if ([p evaluateWithObject:obj]) {
             block(obj, stop);
         };
@@ -307,7 +371,7 @@ NS_ASSUME_NONNULL_END
 - (void)addMessages:(XDTMessage *)messages
 {
     [self willChangeValueForKey:NSStringFromSelector(@selector(count))];
-    [_messages unionSet:messages->_messages];
+    [_messages unionOrderedSet:messages->_messages];
     [self didChangeValueForKey:NSStringFromSelector(@selector(count))];
 }
 
@@ -315,14 +379,36 @@ NS_ASSUME_NONNULL_END
 - (void)replaceMessagesOfType:(XDTMessageTypeValue)type withMessagesOfSameType:(XDTMessage *)messages
 {
     NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", XDTMessageType, type];
-    NSSet<NSDictionary<XDTMessageTypeKey,id> *> *messagesOfSameType = [messages->_messages filteredSetUsingPredicate:p];
+    NSOrderedSet<NSDictionary<XDTMessageTypeKey,id> *> *messagesOfSameType = [messages->_messages filteredOrderedSetUsingPredicate:p];
 
     p = [NSPredicate predicateWithFormat:@"%K != %d", XDTMessageType, type];
 
     [self willChangeValueForKey:NSStringFromSelector(@selector(count))];
     [_messages filterUsingPredicate:p];
-    [_messages unionSet:messagesOfSameType];
+    [_messages unionOrderedSet:messagesOfSameType];
     [self didChangeValueForKey:NSStringFromSelector(@selector(count))];
+}
+
+
+- (void)sortByPriorityAscendingType
+{
+    if (_usedSortDescriptors == sortDescriptorsAscendingType) {
+        return;
+    }
+
+    [_messages sortUsingDescriptors:sortDescriptorsAscendingType];
+    _usedSortDescriptors = sortDescriptorsAscendingType;
+}
+
+
+- (void)sortByPriorityDecendingType
+{
+    if (_usedSortDescriptors == sortDescriptorsDecendingType) {
+        return;
+    }
+
+    [_messages sortUsingDescriptors:sortDescriptorsDecendingType];
+    _usedSortDescriptors = sortDescriptorsDecendingType;
 }
 
 @end

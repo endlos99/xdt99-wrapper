@@ -273,10 +273,11 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    XDTMessage *retVal = nil;
+    XDTMutableMessage *retVal = nil;
     const Py_ssize_t warningCount = PyList_Size(warningsObject);
     if (0 < warningCount) {
-        retVal = [XDTMessage messageWithPythonList:warningsObject treatingAs:XDTMessageTypeWarning];    /* there is no automatic type detection possible, so treat all messages as warnings */
+        retVal = [XDTMutableMessage messageWithPythonList:warningsObject treatingAs:XDTMessageTypeWarning];    /* there is no automatic type detection possible, so treat all messages as warnings */
+        [retVal sortByPriorityAscendingType];
     }
 
     Py_DECREF(warningsObject);

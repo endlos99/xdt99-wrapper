@@ -352,12 +352,12 @@ NS_ASSUME_NONNULL_END
 
      Fetch the console return value which contains all messages the assembler generates.
      */
-    XDTMessage *newMessages = nil;
+    XDTMutableMessage *newMessages = nil;
     PyObject *messageList = PyTuple_GetItem(pValueTupel, 2);
     if (NULL != messageList) {
         const Py_ssize_t messageCount = PyList_Size(messageList);
         if (0 < messageCount) {
-            newMessages = [XDTMessage messageWithPythonList:messageList];
+            newMessages = [XDTMutableMessage messageWithPythonList:messageList];
             const NSUInteger errCount = [newMessages countOfType:XDTMessageTypeError];
             if (0 < errCount) {
                 if (nil != error) {
@@ -371,6 +371,7 @@ NS_ASSUME_NONNULL_END
                 }
                 NSLog(@"Assembler found %ld error(s) while assembling '%@'", errCount, baseName);
             }
+            [newMessages sortByPriorityAscendingType];
         }
     }
     [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];

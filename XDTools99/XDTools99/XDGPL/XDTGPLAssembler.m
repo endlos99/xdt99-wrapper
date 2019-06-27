@@ -377,6 +377,7 @@ NS_ASSUME_NONNULL_END
                 }
                 NSLog(@"Assembler found %ld error(s) while assembling '%@'", errCount, basename);
             }
+            [newMessages sortByPriorityAscendingType];
         }
     }
     [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];

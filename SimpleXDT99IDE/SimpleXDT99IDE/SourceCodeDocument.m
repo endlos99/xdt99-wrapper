@@ -200,8 +200,10 @@
     }
 
     /* This method should be overridden to implement the document typical log output */
-    if ([self shouldShowErrorsInLog]) {
-        [_generatorMessages enumerateMessagesOfType:XDTMessageTypeError usingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, BOOL *stop) {
+    [[_generatorMessages sortedByPriorityAscendingType] enumerateMessagesUsingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, BOOL *stop) {
+        const XDTMessageTypeValue messageType = (XDTMessageTypeValue)[(NSNumber *)[obj valueForKey:XDTMessageType] unsignedIntegerValue];
+
+        if (self.shouldShowErrorsInLog && XDTMessageTypeError == messageType) {
             NSString *fileName = [(NSURL *)[obj valueForKey:XDTMessageFileURL] lastPathComponent];
             NSNumber *passNumber = (NSNumber *)[obj valueForKey:XDTMessagePassNumber];
             NSNumber *lineNumber = (NSNumber *)[obj valueForKey:XDTMessageLineNumber];
@@ -213,10 +215,9 @@
              */
             NSString *logFormat = [NSString stringWithFormat:@"%%@ <%%u> %%.%@lu - %%@\n%%@\n", (nil != self->_lineNumberDigits)? [self->_lineNumberDigits stringValue] : @""];
             [retVal appendFormat:logFormat, fileName, [passNumber unsignedShortValue], [lineNumber unsignedIntegerValue], codeLine, messageText];
-        }];
-    }
-    if ([self shouldShowWarningsInLog]) {
-        [_generatorMessages enumerateMessagesOfType:XDTMessageTypeWarning usingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, BOOL *stop) {
+        }
+        
+        if (self.shouldShowWarningsInLog && XDTMessageTypeWarning == messageType) {
             NSString *fileName = [(NSURL *)[obj valueForKey:XDTMessageFileURL] lastPathComponent];
             if (nil == fileName) {
                 fileName = [[self fileURL] lastPathComponent];
@@ -230,13 +231,13 @@
             NSString *messageText = (NSString *)[obj valueForKey:XDTMessageText];
             NSString *logFormat = [NSString stringWithFormat:@"%%@ <%%u> %%.%@lu - %%@\nWarning: %%@\n", (nil != self->_lineNumberDigits)? [self->_lineNumberDigits stringValue] : @""];
             [retVal appendFormat:logFormat, fileName, [passNumber unsignedShortValue], [lineNumber unsignedIntegerValue], codeLine, messageText];
-        }];
-        // TODO: an Ralf: Für xas99 und xga99 fehlen noch Angaben über Datei, Durchlauf und Zeilennummer vor der Warnung, so wie es in stderr ausgegeben wird.
-        /*
-         Treating as register, did you intend an @address?
-         asmacs-ti.asm <2> 0034 - Warning: Treating as register, did you intend an @address?
-         */
-    }
+            // TODO: an Ralf: Für xas99 und xga99 fehlen noch Angaben über Datei, Durchlauf und Zeilennummer vor der Warnung, so wie es in stderr ausgegeben wird.
+            /*
+             Treating as register, did you intend an @address?
+             asmacs-ti.asm <2> 0034 - Warning: Treating as register, did you intend an @address?
+             */
+        }
+    }];
     
     return retVal;
 }

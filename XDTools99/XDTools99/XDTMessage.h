@@ -58,6 +58,8 @@ typedef void (^XDTMessageEnumBlock)(NSDictionary<XDTMessageTypeKey, id> *obj, BO
 + (instancetype)messageWithMessages:(XDTMessage *)messages;
 
 - (XDTMessage *)messagesOfType:(XDTMessageTypeValue)type;
+- (XDTMessage *)sortedByPriorityAscendingType;
+- (XDTMessage *)sortedByPriorityDecendingType;
 
 @property (readonly) NSUInteger count;
 - (NSUInteger)countOfType:(XDTMessageTypeValue)type;
@@ -72,6 +74,9 @@ typedef void (^XDTMessageEnumBlock)(NSDictionary<XDTMessageTypeKey, id> *obj, BO
 
 - (void)addMessages:(XDTMessage *)messages;
 - (void)replaceMessagesOfType:(XDTMessageTypeValue)type withMessagesOfSameType:(XDTMessage * _Nullable)messages;
+
+- (void)sortByPriorityAscendingType;
+- (void)sortByPriorityDecendingType;
 
 @end
 
