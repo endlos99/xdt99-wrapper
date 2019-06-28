@@ -27,7 +27,7 @@
 
 @class XDTMessage;
 
-@interface SourceCodeDocument : NSDocument
+@interface SourceCodeDocument : NSDocument <NSTextViewDelegate>
 
 @property (retain) NSString *sourceCode;
 

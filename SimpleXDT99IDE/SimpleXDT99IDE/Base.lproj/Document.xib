@@ -299,6 +299,7 @@
                                                                 <bool key="NSConditionallySetsEditable" value="NO"/>
                                                             </dictionary>
                                                         </binding>
+                                                        <outlet property="delegate" destination="-2" id="cjy-GP-Kxx"/>
                                                     </connections>
                                                 </textView>
                                             </subviews>

@@ -184,6 +184,51 @@
 }
 
 
+- (BOOL)textView:(NSTextView *)textView clickedOnLink:(id)link atIndex:(NSUInteger)charIndex
+{
+    NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:link resolvingAgainstBaseURL:NO];
+    if ([@"xdt99" isEqualToString:urlComponents.scheme]) {
+        // TODO: select or open document with the filePath
+        NSString *filePath = urlComponents.path;
+        
+        // scroll the source to line numer in link
+        __block NSInteger lineNumberToSelect = NSNotFound;
+        [urlComponents.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([@"line" isEqualToString:obj.name]) {
+                lineNumberToSelect = [obj.value integerValue];
+            }
+        }];
+
+        NSLayoutManager *layoutManager = [_sourceView layoutManager];
+        NSUInteger numberOfGlyphs = [layoutManager numberOfGlyphs];
+
+        NSUInteger numberOfLines = 1;
+        NSRange lineRange;
+        for (NSUInteger indexOfGlyph = 0; indexOfGlyph < numberOfGlyphs; numberOfLines++) {
+            [layoutManager lineFragmentRectForGlyphAtIndex:indexOfGlyph effectiveRange:&lineRange];
+            // check if we've found our line number
+            if (numberOfLines == lineNumberToSelect) {
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    [self->_sourceView.window makeFirstResponder:self->_sourceView];
+                    [self->_sourceView.animator scrollRangeToVisible:lineRange];
+                    [self->_sourceView.animator setSelectedRange:lineRange];
+                }];
+                break;
+            }
+            indexOfGlyph = NSMaxRange(lineRange);
+        }
+        return YES;
+    }
+    return NO;
+}
+
+
+- (BOOL)textView:(NSTextView *)textView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString
+{
+    return NO;
+}
+
+
 #pragma mark - Accessor Methods
 
 
@@ -227,6 +272,12 @@
             NSInteger digitsOfLineNumber = (nil != self->_lineNumberDigits)? [self->_lineNumberDigits integerValue] : [lineNumber stringValue].length;
             NSString *logFormat = [NSString stringWithFormat:@"%%.%ldlu", (long)digitsOfLineNumber];
             [formattedlogEntry appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:logFormat, [lineNumber unsignedIntegerValue]]]];
+            NSURLComponents *urlComponents = [NSURLComponents new];
+            [urlComponents setScheme:@"xdt99"];
+            [urlComponents setPath:[@"/" stringByAppendingString:fileName]];
+            [urlComponents setQueryItems:@[[NSURLQueryItem queryItemWithName:@"line" value:[lineNumber stringValue]]]];
+            [formattedlogEntry addAttributes:@{NSLinkAttributeName: [urlComponents URL]}
+                                       range:NSMakeRange(formattedlogEntry.length-digitsOfLineNumber, digitsOfLineNumber)];
         } else {
             /* insert spaces instead of a line number */
             int digitsOfLineNumber = (nil != self->_lineNumberDigits)? [self->_lineNumberDigits intValue] : 0;
