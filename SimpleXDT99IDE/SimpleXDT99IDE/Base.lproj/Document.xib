@@ -276,7 +276,7 @@
                                             <rect key="frame" x="1" y="1" width="588" height="255"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsNonContiguousLayout="YES" id="jxr-ky-IFb">
+                                                <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsCharacterPickerTouchBarItem="NO" allowsNonContiguousLayout="YES" textCompletion="NO" id="jxr-ky-IFb">
                                                     <rect key="frame" x="0.0" y="-1" width="588" height="255"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -294,7 +294,11 @@
                                                     </attributedString>
                                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                     <connections>
-                                                        <binding destination="-2" name="value" keyPath="self.generatedLogMessage" id="GRs-QJ-XwV"/>
+                                                        <binding destination="-2" name="attributedString" keyPath="self.generatedLogMessage" id="axg-gm-flu">
+                                                            <dictionary key="options">
+                                                                <bool key="NSConditionallySetsEditable" value="NO"/>
+                                                            </dictionary>
+                                                        </binding>
                                                     </connections>
                                                 </textView>
                                             </subviews>

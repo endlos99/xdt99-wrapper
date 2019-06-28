@@ -44,6 +44,7 @@
 
 @property (retain) XDTGa99Objcode *assemblingResult;
 @property (readonly) NSString *listOutput;
+@property (readonly) NSString *symbolsOutput;
 
 @property (readonly) XDTGa99TargetType targetType;
 @property (readonly) XDTGa99SyntaxType syntaxType;
@@ -221,27 +222,44 @@
 - (NSString *)listOutput
 {
     NSMutableString *retVal = nil;
-    NSError *error = nil;
     if (nil == _assemblingResult) {
-        return @"";
+        return nil;
     }
 
-    NSData *data = [_assemblingResult generateListing:_shouldShowSymbolsInListing && !_shouldShowSymbolsAsEqus error:&error];
+    NSError *error = nil;
+    NSData *data = [_assemblingResult generateListing:NO error:&error];
     if (nil == error && nil != data) {
         retVal = [[NSMutableString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 #if !__has_feature(objc_arc)
         [retVal autorelease];
 #endif
-        if (_shouldShowSymbolsInListing && _shouldShowSymbolsAsEqus) {
-            data = [_assemblingResult generateSymbols:YES error:&error];
-            if (nil == error && nil != data) {
-                [retVal appendFormat:@"\n%@\n", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-            }
-        }
     }
     if (nil != error) {
         [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
-        return @"";
+        return nil;
+    }
+    return retVal;
+}
+
+
+- (NSString *)symbolsOutput
+{
+    NSString *retVal = nil;
+    if (nil == _assemblingResult) {
+        return nil;
+    }
+
+    NSError *error = nil;
+    NSData *data = [_assemblingResult generateSymbols:_shouldShowSymbolsAsEqus error:&error];
+    if (nil == error && nil != data) {
+        retVal = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+#if !__has_feature(objc_arc)
+        [retVal autorelease];
+#endif
+    }
+    if (nil != error) {
+        [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+        return nil;
     }
     return retVal;
 }
@@ -260,17 +278,52 @@
 }
 
 
-- (NSMutableString *)generatedLogMessage
+- (NSAttributedString *)generatedLogMessage
 {
-    NSMutableString *retVal = [super generatedLogMessage];
+    NSMutableAttributedString *retVal = [super generatedLogMessage];
     if (nil == retVal || ![self shouldShowLog]) {
         return retVal;
     }
 
     if (_shouldShowListingInLog) {
+        NSColor *textColor = [NSColor textColor];
+        NSColor *systemGrayColor = [NSColor systemGrayColor];
+        __block NSFont *monacoFont = nil;
+
         NSString *listOut = [self listOutput];
         if (nil != listOut && 0 < [listOut length]) {
-            [retVal appendFormat:@"%@\n", listOut];
+            [listOut enumerateLinesUsingBlock:^(NSString * _Nonnull line, BOOL * _Nonnull stop) {
+                if (nil == monacoFont) {
+                    /* formatting generator information */
+                    NSAttributedString *formattedLine = [[NSAttributedString alloc] initWithString:(0 < retVal.length)? [NSString stringWithFormat:@"\n%@\n", line] : [line stringByAppendingString:@"\n"]
+                                                                                        attributes:@{NSForegroundColorAttributeName: textColor}];
+                    [retVal appendAttributedString:formattedLine];
+                    monacoFont = [NSFont fontWithName:@"Monaco" size:0.0];
+                } else {
+                    /* formatting generated listing (first line is NOT header, like xas99 has) */
+                    NSMutableAttributedString *formattedLine = [NSMutableAttributedString alloc];
+                    formattedLine = [formattedLine initWithString:[line stringByAppendingString:@"\n"]
+                                                       attributes:@{NSFontAttributeName: monacoFont}];
+                    NSRange range = NSMakeRange(0, MIN(15, line.length));
+                    [formattedLine addAttribute:NSForegroundColorAttributeName value:systemGrayColor range:range];
+                    range.location += range.length;
+                    range.length = line.length - range.length;
+                    [formattedLine addAttribute:NSForegroundColorAttributeName value:textColor range:range];
+                    [retVal appendAttributedString:formattedLine];
+                }
+            }];
+        }
+
+        if (_shouldShowSymbolsInListing) {
+            NSString *symbolsOut = [self symbolsOutput];
+            if (nil != symbolsOut && 0 < [symbolsOut length]) {
+                NSAttributedString *formattedLine = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@\n", symbolsOut]
+                                                                                    attributes:@{
+                                                                                                 NSForegroundColorAttributeName: textColor,
+                                                                                                 NSFontAttributeName: monacoFont
+                                                                                                 }];
+                [retVal appendAttributedString:formattedLine];
+            }
         }
     }
 

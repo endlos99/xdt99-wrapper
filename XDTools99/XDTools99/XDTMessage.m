@@ -200,10 +200,12 @@ NS_ASSUME_NONNULL_END
                 }
             }
 
-            NSString *fileName = [[NSString alloc] initWithData:[messageItem objectAtIndex:1] encoding:NSUTF8StringEncoding];  /* Name of te Source file. */
+            NSData *stringData = [messageItem objectAtIndex:1];
+            NSString *fileName = [[NSNull null] isEqual:stringData]? @"" : [[NSString alloc] initWithData:stringData encoding:NSUTF8StringEncoding];  /* Name of te Source file. */
             NSNumber *passNum = [messageItem objectAtIndex:2];  /* Number of the Assembler pass. */
             NSNumber *lineNum = [messageItem objectAtIndex:3];  /* Number of the line in source code. */
-            NSString *sourceLine = [[NSString alloc] initWithData:[messageItem objectAtIndex:4] encoding:NSUTF8StringEncoding];  /* Line of source code where the line number points to. */
+            stringData = [messageItem objectAtIndex:4];
+            NSString *sourceLine = [[NSNull null] isEqualTo:stringData]? @"" : [[NSString alloc] initWithData:stringData encoding:NSUTF8StringEncoding];  /* Line of source code where the line number points to. */
             NSString *message = [[NSString alloc] initWithData:[messageItem objectAtIndex:5] encoding:NSUTF8StringEncoding];  /* Text of the generated message. */
 
             if (nil == message || 0 >= message.length) {

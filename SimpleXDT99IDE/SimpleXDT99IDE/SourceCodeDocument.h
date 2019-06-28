@@ -53,7 +53,7 @@
 
 @property (readonly) NSImage *statusImage;
 @property (retain) XDTMessage *generatorMessages;
-@property (readonly) NSMutableString *generatedLogMessage;
+@property (readonly) NSMutableAttributedString *generatedLogMessage;
 
 - (IBAction)checkCode:(id)sender;
 - (IBAction)generateCode:(id)sender;

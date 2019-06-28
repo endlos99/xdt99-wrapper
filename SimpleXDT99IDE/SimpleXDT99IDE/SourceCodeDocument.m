@@ -25,6 +25,7 @@
 #import "SourceCodeDocument.h"
 
 #import "NSViewAutolayoutAdditions.h"
+#import "NSColorAdditions.h"
 
 #import "AppDelegate.h"
 
@@ -192,53 +193,84 @@
 }
 
 
-- (NSMutableString *)generatedLogMessage
+- (NSMutableAttributedString *)generatedLogMessage
 {
-    NSMutableString *retVal = [NSMutableString string];
+    NSMutableAttributedString *retVal = [NSMutableAttributedString new];
     if (![self shouldShowLog]) {
         return retVal;
     }
+
+    NSColor *errorForeColor = [NSColor XDTErrorTextColor];
+    NSColor *warningForeColor = [NSColor XDTWarningTextColor];
+
+    NSDictionary<NSAttributedStringKey, id> *fontAttributeMonaco = @{
+                                                                     NSFontAttributeName: [NSFont fontWithName:@"Monaco" size:0.0]
+                                                                     };
 
     /* This method should be overridden to implement the document typical log output */
     [[_generatorMessages sortedByPriorityAscendingType] enumerateMessagesUsingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, BOOL *stop) {
         const XDTMessageTypeValue messageType = (XDTMessageTypeValue)[(NSNumber *)[obj valueForKey:XDTMessageType] unsignedIntegerValue];
 
-        if (self.shouldShowErrorsInLog && XDTMessageTypeError == messageType) {
-            NSString *fileName = [(NSURL *)[obj valueForKey:XDTMessageFileURL] lastPathComponent];
-            NSNumber *passNumber = (NSNumber *)[obj valueForKey:XDTMessagePassNumber];
-            NSNumber *lineNumber = (NSNumber *)[obj valueForKey:XDTMessageLineNumber];
-            NSString *codeLine = (NSString *)[obj valueForKey:XDTMessageCodeLine];
-            NSString *messageText = (NSString *)[obj valueForKey:XDTMessageText];
-            /*
-             > gaops.gpl <1> 0028 -         STx   @>8391,@>8302
-             ***** Syntax error
-             */
-            NSString *logFormat = [NSString stringWithFormat:@"%%@ <%%u> %%.%@lu - %%@\n%%@\n", (nil != self->_lineNumberDigits)? [self->_lineNumberDigits stringValue] : @""];
-            [retVal appendFormat:logFormat, fileName, [passNumber unsignedShortValue], [lineNumber unsignedIntegerValue], codeLine, messageText];
+        NSString *fileName = [(NSURL *)[obj valueForKey:XDTMessageFileURL] lastPathComponent];
+        if (nil == fileName) {
+            fileName = [[self fileURL] lastPathComponent];
+        }
+        NSMutableAttributedString *formattedlogEntry = [[NSMutableAttributedString alloc] initWithString:[fileName stringByAppendingString:@" "]];
+        
+        NSNumber *passNumber = (NSNumber *)[obj valueForKey:XDTMessagePassNumber];
+        if (nil != passNumber && [[NSNull null] isNotEqualTo:passNumber]) {
+            [formattedlogEntry appendAttributedString:[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"<%@> ", passNumber]]];
         }
         
-        if (self.shouldShowWarningsInLog && XDTMessageTypeWarning == messageType) {
-            NSString *fileName = [(NSURL *)[obj valueForKey:XDTMessageFileURL] lastPathComponent];
-            if (nil == fileName) {
-                fileName = [[self fileURL] lastPathComponent];
-            }
-            NSNumber *passNumber = (NSNumber *)[obj valueForKey:XDTMessagePassNumber];
-            NSNumber *lineNumber = (NSNumber *)[obj valueForKey:XDTMessageLineNumber];
-            NSString *codeLine = (NSString *)[obj valueForKey:XDTMessageCodeLine];
-            if (nil == codeLine) {
-                codeLine = @"";
-            }
-            NSString *messageText = (NSString *)[obj valueForKey:XDTMessageText];
-            NSString *logFormat = [NSString stringWithFormat:@"%%@ <%%u> %%.%@lu - %%@\nWarning: %%@\n", (nil != self->_lineNumberDigits)? [self->_lineNumberDigits stringValue] : @""];
-            [retVal appendFormat:logFormat, fileName, [passNumber unsignedShortValue], [lineNumber unsignedIntegerValue], codeLine, messageText];
-            // TODO: an Ralf: Für xas99 und xga99 fehlen noch Angaben über Datei, Durchlauf und Zeilennummer vor der Warnung, so wie es in stderr ausgegeben wird.
-            /*
-             Treating as register, did you intend an @address?
-             asmacs-ti.asm <2> 0034 - Warning: Treating as register, did you intend an @address?
-             */
+        NSNumber *lineNumber = (NSNumber *)[obj valueForKey:XDTMessageLineNumber];
+        if (nil != lineNumber && [[NSNull null] isNotEqualTo:lineNumber]) {
+            NSInteger digitsOfLineNumber = (nil != self->_lineNumberDigits)? [self->_lineNumberDigits integerValue] : [lineNumber stringValue].length;
+            NSString *logFormat = [NSString stringWithFormat:@"%%.%ldlu", (long)digitsOfLineNumber];
+            [formattedlogEntry appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:logFormat, [lineNumber unsignedIntegerValue]]]];
+        } else {
+            /* insert spaces instead of a line number */
+            int digitsOfLineNumber = (nil != self->_lineNumberDigits)? [self->_lineNumberDigits intValue] : 0;
+            [formattedlogEntry appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%*s", digitsOfLineNumber, ""]]];
+        }
+        
+        NSString *codeLine = (NSString *)[obj valueForKey:XDTMessageCodeLine];
+        if (nil != codeLine && [[NSNull null] isNotEqualTo:codeLine] && 0 < codeLine.length) {
+            [formattedlogEntry appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" - %@", codeLine] attributes:fontAttributeMonaco]];
+        }
+
+        NSString *messageText = (NSString *)[obj valueForKey:XDTMessageText];
+        switch (messageType) {
+            case XDTMessageTypeError:
+                if (self.shouldShowErrorsInLog) {
+                    NSRange prefixRange = [messageText rangeOfString:@"Error: " options:NSCaseInsensitiveSearch];
+                    if (NSNotFound != prefixRange.location) {
+                        messageText = [messageText substringFromIndex:NSMaxRange(prefixRange)];
+                    }
+                    [formattedlogEntry appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\nError: %@\n", messageText]]];
+                    [formattedlogEntry addAttribute:NSForegroundColorAttributeName value:errorForeColor range:NSMakeRange(0, formattedlogEntry.length)];
+                    [retVal appendAttributedString:formattedlogEntry];
+                }
+                break;
+
+            case XDTMessageTypeWarning:
+                if (self.shouldShowWarningsInLog) {
+                    NSRange prefixRange = [messageText rangeOfString:@"Warning: " options:NSCaseInsensitiveSearch];
+                    if (NSNotFound != prefixRange.location) {
+                        messageText = [messageText substringFromIndex:NSMaxRange(prefixRange)];
+                    }
+                    [formattedlogEntry appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\nWarning: %@\n", messageText]]];
+
+                    [formattedlogEntry addAttribute:NSForegroundColorAttributeName value:warningForeColor range:NSMakeRange(0, formattedlogEntry.length)];
+                    [retVal appendAttributedString:formattedlogEntry];
+                    // TODO: an Ralf: Für xas99 und xga99 fehlen noch Angaben über Datei, Durchlauf und Zeilennummer vor der Warnung, so wie es in stderr ausgegeben wird.
+                }
+                break;
+
+            default:
+                break;
         }
     }];
-    
+
     return retVal;
 }
 

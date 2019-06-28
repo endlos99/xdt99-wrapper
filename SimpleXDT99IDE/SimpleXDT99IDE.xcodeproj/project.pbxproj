@@ -29,6 +29,7 @@
 		AFDECF321DF176B1008870F7 /* Document.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF301DF176B1008870F7 /* Document.xib */; };
 		AFDECF341DF176B1008870F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF331DF176B1008870F7 /* Assets.xcassets */; };
 		AFDECF371DF176B1008870F7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF351DF176B1008870F7 /* MainMenu.xib */; };
+		AFE5BAF722CCC237002C046B /* NSColorAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE5BAF622CCC237002C046B /* NSColorAdditions.m */; };
 		AFF5D04A225E511700A69BEB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AFF5D048225E511700A69BEB /* Localizable.strings */; };
 		AFFDB6871DFC6A95006788CC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AFFDB6831DFC6A95006788CC /* InfoPlist.strings */; };
 		AFFDB6881DFC6A95006788CC /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = AFFDB6851DFC6A95006788CC /* Credits.html */; };
@@ -97,6 +98,8 @@
 		AFDECF331DF176B1008870F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AFDECF361DF176B1008870F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		AFDECF381DF176B1008870F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AFE5BAF522CCC237002C046B /* NSColorAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NSColorAdditions.h; path = Categories/NSColorAdditions.h; sourceTree = "<group>"; };
+		AFE5BAF622CCC237002C046B /* NSColorAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NSColorAdditions.m; path = Categories/NSColorAdditions.m; sourceTree = "<group>"; };
 		AFF5D041225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/GPLAssemblerOptionsView.strings; sourceTree = "<group>"; };
 		AFF5D042225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/BasicOptionsView.strings; sourceTree = "<group>"; };
 		AFF5D043225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AssemblerOptionsView.strings; sourceTree = "<group>"; };
@@ -171,6 +174,8 @@
 			children = (
 				AFB73F171E002FF40063BBCC /* NSViewAutolayoutAdditions.h */,
 				AFB73F181E002FF40063BBCC /* NSViewAutolayoutAdditions.m */,
+				AFE5BAF522CCC237002C046B /* NSColorAdditions.h */,
+				AFE5BAF622CCC237002C046B /* NSColorAdditions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -344,6 +349,7 @@
 				AF0944CB1E0C10CC00EE41B7 /* NoodleLineNumberView.m in Sources */,
 				AF5CF8A01DFF1FEC00C08E36 /* BasicCodeDocument.m in Sources */,
 				AF87FF9B1E040CF800CF752F /* GPLAssemblerDocument.m in Sources */,
+				AFE5BAF722CCC237002C046B /* NSColorAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

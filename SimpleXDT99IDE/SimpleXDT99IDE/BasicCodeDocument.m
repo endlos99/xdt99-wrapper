@@ -283,15 +283,19 @@
 }
 
 
-- (NSMutableString *)generatedLogMessage
+- (NSAttributedString *)generatedLogMessage
 {
-    NSMutableString *retVal = [super generatedLogMessage];
+    NSMutableAttributedString *retVal = [super generatedLogMessage];
     if (nil == retVal || ![self shouldShowLog]) {
         return retVal;
     }
 
     if (_shouldDumpTokensInLog && nil != _tokenDump && 0 < [_tokenDump length]) {
-        [retVal appendFormat:@"%@\n", _tokenDump];
+        [retVal appendAttributedString:[[NSAttributedString alloc] initWithString:[_tokenDump stringByAppendingString:@"\n"]
+                                                                       attributes:@{
+                                                                                    NSForegroundColorAttributeName: [NSColor textColor],
+                                                                                    NSFontAttributeName: [NSFont fontWithName:@"Monaco" size:0.0]
+                                                                                    }]];
     }
     
     return retVal;
