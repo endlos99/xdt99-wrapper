@@ -420,18 +420,18 @@
         return;
     }
 
-    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Can't process file!", @"Alert message for unsaved documents which will be processed by a generator.")
-                                     defaultButton:NSLocalizedString(@"Save", @"Default button name for choosing 'Save' in an Alert.")
-                                   alternateButton:NSLocalizedString(@"Abort", @"Alternate button name for choosing 'Abort' in an Alert.")
-                                       otherButton:nil
-                         informativeTextWithFormat:NSLocalizedString(@"Caution: The file '%@' must be saved before it can be processed.", @"Informative text for unsaved documents which will be processed by a generator."), self.fileURL.lastPathComponent];
+    NSAlert *alert = [NSAlert new];
+    alert.messageText = NSLocalizedString(@"Can't process file!", @"Alert message for unsaved documents which will be processed by a generator.");
+    [alert addButtonWithTitle:NSLocalizedString(@"Save", @"Default button name for choosing 'Save' in an Alert.")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Abort", @"Alternate button name for choosing 'Abort' in an Alert.")];
+    alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"Caution: The file '%@' must be saved before it can be processed.", @"Informative text for unsaved documents which will be processed by a generator."), self.fileURL.lastPathComponent];
     alert.alertStyle = NSAlertStyleWarning;
     [alert beginSheetModalForWindow:self.windowForSheet completionHandler:^(NSModalResponse returnCode) {
         [NSApp stopModalWithCode:returnCode];
     }];
     NSModalResponse returnCode = [NSApp runModalForWindow:self.windowForSheet];
     if (NSModalResponseContinue == returnCode ||
-        NSAlertDefaultReturn == returnCode) {
+        NSAlertFirstButtonReturn == returnCode) {
         [self saveDocument:sender];
         [self updateChangeCount:NSChangeCleared];
     }

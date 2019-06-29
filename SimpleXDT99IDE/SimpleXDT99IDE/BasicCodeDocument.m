@@ -243,9 +243,9 @@
         if (nil == error) {
             /* binary Basic files cannot be handled as source code files, so force to save as a new file. */
             [self setFileURL:nil];
-            NSAlert *info = [NSAlert alertWithMessageText:NSLocalizedString(@"Creating new file", @"Message text for alerting to create a new file.")
-                                            defaultButton:nil alternateButton:nil otherButton:nil
-                                informativeTextWithFormat:NSLocalizedString(@"Binary file imported. You will have to save the source code within a new file.", @"Informative text for imported binary Basic files to store them into a new file.")];
+            NSAlert *info = [NSAlert new];
+            info.messageText = NSLocalizedString(@"Creating new file", @"Message text for alerting to create a new file.");
+            info.informativeText = NSLocalizedString(@"Binary file imported. You will have to save the source code within a new file.", @"Informative text for imported binary Basic files to store them into a new file.");
             [info runModal];
             //[info beginSheetModalForWindow:[self windowForSheet] modalDelegate:nil didEndSelector:nil contextInfo:nil];
         }
