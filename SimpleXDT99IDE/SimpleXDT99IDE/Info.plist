@@ -11,6 +11,7 @@
 			<array>
 				<string>a99</string>
 				<string>asm</string>
+				<string>s</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
@@ -46,7 +47,9 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>g99</string>
 				<string>gpl</string>
+				<string>g</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>Xga99DocumentType</string>
