@@ -790,9 +790,9 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                                     <binding destination="mgF-NG-uKE" name="value" keyPath="values.AssemblerOptionUseRegisterSymbols" id="nRO-I0-rKT"/>
                                 </connections>
                             </button>
-                            <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources" translatesAutoresizingMaskIntoConstraints="NO" id="RTj-cq-oqc">
+                            <button toolTip="This option disables all xas99-specific extensions to improve backwards compatibility for old sources" translatesAutoresizingMaskIntoConstraints="NO" id="RTj-cq-oqc">
                                 <rect key="frame" x="94" y="68" width="55" height="18"/>
-                                <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="eli-HZ-TdX">
+                                <buttonCell key="cell" type="check" title="Traditional" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="eli-HZ-TdX">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>

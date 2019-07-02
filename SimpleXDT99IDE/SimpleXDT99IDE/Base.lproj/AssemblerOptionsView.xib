@@ -235,9 +235,9 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <binding destination="-2" name="value" keyPath="self.shouldUseRegisterSymbols" id="DjF-zb-Odd"/>
                     </connections>
                 </button>
-                <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vj0-IZ-zQA">
+                <button toolTip="The traditional option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vj0-IZ-zQA">
                     <rect key="frame" x="202" y="30" width="51" height="18"/>
-                    <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="6fP-ge-rDd">
+                    <buttonCell key="cell" type="check" title="Traditional" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="6fP-ge-rDd">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
@@ -285,9 +285,9 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <binding destination="-2" name="value" keyPath="self.shouldUseRegisterSymbols" id="N0a-jk-hJY"/>
                     </connections>
                 </button>
-                <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Tb-7R-c8K">
+                <button toolTip="The traditional option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Tb-7R-c8K">
                     <rect key="frame" x="154" y="31" width="51" height="18"/>
-                    <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="ZYW-fr-h5S">
+                    <buttonCell key="cell" type="check" title="Traditional" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="ZYW-fr-h5S">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
@@ -323,9 +323,9 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <binding destination="-2" name="value" keyPath="self.shouldUseRegisterSymbols" id="nyj-d1-9oX"/>
                     </connections>
                 </button>
-                <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="moA-5F-B7r">
+                <button toolTip="This option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="moA-5F-B7r">
                     <rect key="frame" x="76" y="31" width="51" height="18"/>
-                    <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Cgh-8M-Kuy">
+                    <buttonCell key="cell" type="check" title="Traditional" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Cgh-8M-Kuy">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
@@ -385,9 +385,9 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <binding destination="-2" name="value" keyPath="self.shouldUseRegisterSymbols" id="vTX-mh-qoe"/>
                     </connections>
                 </button>
-                <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rdX-im-d0M">
+                <button toolTip="The traditional option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rdX-im-d0M">
                     <rect key="frame" x="202" y="30" width="51" height="18"/>
-                    <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="K8P-Jj-W5P">
+                    <buttonCell key="cell" type="check" title="Traditional" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="K8P-Jj-W5P">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
@@ -470,9 +470,9 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <binding destination="-2" name="value" keyPath="self.shouldUseRegisterSymbols" id="ClU-q7-Viy"/>
                     </connections>
                 </button>
-                <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wcc-Ql-aql">
+                <button toolTip="The traditional option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wcc-Ql-aql">
                     <rect key="frame" x="316" y="27" width="51" height="18"/>
-                    <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="fUo-lC-Yz7">
+                    <buttonCell key="cell" type="check" title="Traditional" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="fUo-lC-Yz7">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
@@ -608,9 +608,9 @@ This is the equivalent to the option 'R' of the TI Assembler.</string>
                         <binding destination="-2" name="value" keyPath="self.cartridgeName" id="Yd6-jc-beh"/>
                     </connections>
                 </textField>
-                <button toolTip="The strictness option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E59-2i-alZ">
+                <button toolTip="The traditional option disables all xas99-specific extensions to improve backwards compatibility for old sources." horizontalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E59-2i-alZ">
                     <rect key="frame" x="205" y="30" width="51" height="18"/>
-                    <buttonCell key="cell" type="check" title="Strict" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="hgQ-BO-K7U">
+                    <buttonCell key="cell" type="check" title="Traditional" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="hgQ-BO-K7U">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
