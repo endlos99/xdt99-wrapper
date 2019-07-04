@@ -390,22 +390,22 @@
     if (_shouldShowListingInLog) {
         NSColor *textColor = [NSColor textColor];
         NSColor *systemGrayColor = [NSColor systemGrayColor];
-        __block NSFont *monacoFont = nil;
+        __block NSFont *monoSpacedFont = self.logView.font;
 
         NSString *listOut = [self listOutput];
         if (nil != listOut && 0 < [listOut length]) {
             [listOut enumerateLinesUsingBlock:^(NSString * _Nonnull line, BOOL * _Nonnull stop) {
-                if (nil == monacoFont) {
+                if (nil == monoSpacedFont) {
                     /* formatting generator information */
                     NSAttributedString *formattedLine = [[NSAttributedString alloc] initWithString:(0 < retVal.length)? [NSString stringWithFormat:@"\n%@\n", line] : [line stringByAppendingString:@"\n"]
                                                                                         attributes:@{NSForegroundColorAttributeName: textColor}];
                     [retVal appendAttributedString:formattedLine];
-                    monacoFont = [NSFont fontWithName:@"Monaco" size:0.0];
+                    monoSpacedFont = [NSFont fontWithName:@"Menlo" size:0.0];
                 } else {
                     /* formatting generated listing (first line is header) */
                     NSMutableAttributedString *formattedLine = [NSMutableAttributedString alloc];
                     formattedLine = [formattedLine initWithString:[line stringByAppendingString:@"\n"]
-                                                       attributes:@{NSFontAttributeName: monacoFont}];
+                                                       attributes:@{NSFontAttributeName: monoSpacedFont}];
                     NSRange range = NSMakeRange(0, MIN(18, line.length));
                     [formattedLine addAttribute:NSForegroundColorAttributeName value:systemGrayColor range:range];
                     range.location += range.length;
@@ -422,7 +422,7 @@
                 NSAttributedString *formattedLine = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@\n", symbolsOut]
                                                                                     attributes:@{
                                                                                                  NSForegroundColorAttributeName: textColor,
-                                                                                                 NSFontAttributeName: monacoFont
+                                                                                                 NSFontAttributeName: monoSpacedFont
                                                                                                  }];
                 [retVal appendAttributedString:formattedLine];
             }

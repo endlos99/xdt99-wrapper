@@ -372,9 +372,7 @@
     NSColor *errorForeColor = [NSColor XDTErrorTextColor];
     NSColor *warningForeColor = [NSColor XDTWarningTextColor];
 
-    NSDictionary<NSAttributedStringKey, id> *fontAttributeMonaco = @{
-                                                                     NSFontAttributeName: [NSFont fontWithName:@"Monaco" size:0.0]
-                                                                     };
+    NSDictionary<NSAttributedStringKey, id> *monospacedFontAttribute = @{NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]};
 
     /* This method should be overridden to implement the document typical log output */
     [[_generatorMessages sortedByPriorityAscendingType] enumerateMessagesUsingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, BOOL *stop) {
@@ -411,7 +409,7 @@
         
         NSString *codeLine = (NSString *)[obj valueForKey:XDTMessageCodeLine];
         if (nil != codeLine && [[NSNull null] isNotEqualTo:codeLine] && 0 < codeLine.length) {
-            [formattedlogEntry appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" - %@", codeLine] attributes:fontAttributeMonaco]];
+            [formattedlogEntry appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" - %@", codeLine] attributes:monospacedFontAttribute]];
         }
 
         NSString *messageText = (NSString *)[obj valueForKey:XDTMessageText];

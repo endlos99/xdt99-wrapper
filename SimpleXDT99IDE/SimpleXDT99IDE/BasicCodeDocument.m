@@ -306,7 +306,7 @@
         [retVal appendAttributedString:[[NSAttributedString alloc] initWithString:[_tokenDump stringByAppendingString:@"\n"]
                                                                        attributes:@{
                                                                                     NSForegroundColorAttributeName: [NSColor textColor],
-                                                                                    NSFontAttributeName: [NSFont fontWithName:@"Monaco" size:0.0]
+                                                                                    NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]
                                                                                     }]];
     }
     
