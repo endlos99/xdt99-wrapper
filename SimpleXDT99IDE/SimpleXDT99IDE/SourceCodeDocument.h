@@ -56,7 +56,7 @@
 @property (readonly) BOOL hasLogContentToSave;
 
 @property (readonly) NSImage *statusImage;
-@property (retain) XDTMessage *generatorMessages;
+@property (retain, nonatomic) XDTMessage *generatorMessages;
 @property (readonly) NSMutableAttributedString *generatedLogMessage;
 
 - (BOOL)setupSyntaxHighlighting;

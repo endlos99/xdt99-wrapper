@@ -17,14 +17,14 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenNone="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="772" y="617" width="327" height="108"/>
+            <rect key="contentRect" x="772" y="617" width="275" height="132"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="275" height="74"/>
+                <rect key="frame" x="0.0" y="0.0" width="275" height="114"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="84t-T5-9bp">
-                        <rect key="frame" x="18" y="38" width="239" height="18"/>
+                        <rect key="frame" x="18" y="78" width="239" height="18"/>
                         <buttonCell key="cell" type="check" title="Automatically open all included files" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vVp-5R-4In">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -33,29 +33,60 @@
                             <binding destination="oDn-pK-WtN" name="value" keyPath="values.DocumentOptionOpenNestedFiles" id="v7T-f4-z6v"/>
                         </connections>
                     </button>
+                    <button toolTip="Enable or disable global higlighting." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="d1g-vy-3ad">
+                        <rect key="frame" x="18" y="58" width="96" height="18"/>
+                        <buttonCell key="cell" type="check" title="Highlighting" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="CRY-Z7-Og0">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="toggleAllHighlighting:" target="-2" id="cme-2O-pNY"/>
+                            <binding destination="oDn-pK-WtN" name="value" keyPath="values.DocumentOptionEnableHighlighting" id="lv0-Uc-FEp"/>
+                        </connections>
+                    </button>
                     <button toolTip="Coloring the source code depending syntactical contexts." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oYd-fN-HkE">
-                        <rect key="frame" x="18" y="18" width="164" height="18"/>
+                        <rect key="frame" x="38" y="38" width="164" height="18"/>
                         <buttonCell key="cell" type="check" title="Use syntax highlighting" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="4J5-2j-Ygb">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
                             <action selector="toggleSyntaxHighlighting:" target="-2" id="IVo-Kd-3Y9"/>
+                            <binding destination="oDn-pK-WtN" name="enabled" keyPath="values.DocumentOptionEnableHighlighting" id="kjt-it-oJi"/>
                             <binding destination="oDn-pK-WtN" name="value" keyPath="values.DocumentOptionHighlightSyntax" id="yiX-LY-faW"/>
+                        </connections>
+                    </button>
+                    <button toolTip="Highligthing of lines of source code with an issue." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ez0-iX-Lmy">
+                        <rect key="frame" x="38" y="18" width="152" height="18"/>
+                        <buttonCell key="cell" type="check" title="Message highlighting" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vsB-wO-863">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="toggleMessageHighlighting:" target="-2" id="41X-z8-7kd"/>
+                            <binding destination="oDn-pK-WtN" name="enabled" keyPath="values.DocumentOptionEnableHighlighting" id="Rhg-uO-2zg"/>
+                            <binding destination="oDn-pK-WtN" name="value" keyPath="values.DocumentOptionHighlightMessages" id="IWX-Yl-Lci"/>
                         </connections>
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="oYd-fN-HkE" secondAttribute="bottom" constant="20" symbolic="YES" id="6aS-Cv-saw"/>
-                    <constraint firstItem="oYd-fN-HkE" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="8xt-QH-0Zm"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ez0-iX-Lmy" secondAttribute="trailing" constant="20" symbolic="YES" id="436-Dc-fO2"/>
+                    <constraint firstItem="d1g-vy-3ad" firstAttribute="top" secondItem="84t-T5-9bp" secondAttribute="bottom" constant="6" symbolic="YES" id="7vZ-ho-pMs"/>
+                    <constraint firstItem="oYd-fN-HkE" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="40" id="8xt-QH-0Zm"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="d1g-vy-3ad" secondAttribute="trailing" constant="20" symbolic="YES" id="MGG-3w-9N5"/>
+                    <constraint firstAttribute="bottom" secondItem="ez0-iX-Lmy" secondAttribute="bottom" constant="20" symbolic="YES" id="PE6-lI-IJ6"/>
+                    <constraint firstItem="ez0-iX-Lmy" firstAttribute="top" secondItem="oYd-fN-HkE" secondAttribute="bottom" constant="6" symbolic="YES" id="PQX-ug-u1D"/>
+                    <constraint firstItem="ez0-iX-Lmy" firstAttribute="leading" secondItem="oYd-fN-HkE" secondAttribute="leading" id="T7B-wZ-VTq"/>
+                    <constraint firstItem="oYd-fN-HkE" firstAttribute="leading" secondItem="d1g-vy-3ad" secondAttribute="leading" constant="20" id="Ts5-Ko-isW"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="oYd-fN-HkE" secondAttribute="trailing" constant="20" symbolic="YES" id="VqF-WF-n4M"/>
                     <constraint firstAttribute="trailing" secondItem="84t-T5-9bp" secondAttribute="trailing" constant="20" symbolic="YES" id="hC8-KI-CSa"/>
                     <constraint firstItem="84t-T5-9bp" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="hZC-EE-7d3"/>
+                    <constraint firstItem="oYd-fN-HkE" firstAttribute="top" secondItem="d1g-vy-3ad" secondAttribute="bottom" constant="6" symbolic="YES" id="lGi-NS-bNc"/>
+                    <constraint firstItem="d1g-vy-3ad" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="nhc-iR-9GE"/>
                     <constraint firstItem="84t-T5-9bp" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="t90-rC-vG9"/>
-                    <constraint firstItem="oYd-fN-HkE" firstAttribute="top" secondItem="84t-T5-9bp" secondAttribute="bottom" constant="6" symbolic="YES" id="ubc-oc-ijg"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="62.5" y="66"/>
+            <point key="canvasLocation" x="62.5" y="78"/>
         </window>
         <userDefaultsController id="ndc-Js-iS2"/>
         <userDefaultsController representsSharedInstance="YES" id="oDn-pK-WtN"/>

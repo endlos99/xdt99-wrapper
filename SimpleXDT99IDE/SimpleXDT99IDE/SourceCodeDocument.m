@@ -25,6 +25,7 @@
 #import "SourceCodeDocument.h"
 
 #import "NSViewAutolayoutAdditions.h"
+#import "NSTextStorageAdditions.h"
 #import "NSColorAdditions.h"
 
 #import "AppDelegate.h"
@@ -48,6 +49,8 @@
 - (IBAction)hideShowLog:(nullable id)sender;
 
 - (IBAction)saveLog:(id)sender;
+
+- (void)updateMessagesToSource;
 
 @end
 
@@ -291,6 +294,14 @@
 
 
 #pragma mark - Accessor Methods
+
+
+- (void)setGeneratorMessages:(XDTMessage *)generatorMessages
+{
+    _generatorMessages = generatorMessages;
+
+    [self updateMessagesToSource];
+}
 
 
 /* subclasses should override this method to implement attributings */
@@ -568,6 +579,79 @@
         NSURL *listingFileURL = [NSURL fileURLWithPath:logFileName relativeToURL:[self outputBasePathURL]];
         [logData writeToURL:listingFileURL atomically:YES];
     }
+}
+
+
+#pragma mark - Private Methods
+
+
+- (void)updateMessagesToSource
+{
+    [_sourceView.textStorage beginEditing];
+
+    [_sourceView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, _sourceView.textStorage.length)];
+    [_sourceView.textStorage removeAttribute:NSToolTipAttributeName range:NSMakeRange(0, _sourceView.textStorage.length)];
+
+    NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
+    BOOL useMessageHighlighting = [defaults boolForKey:UserDefaultKeyDocumentOptionHighlightMessages];
+    if (!useMessageHighlighting) {
+        [_sourceView.textStorage endEditing];
+        return;
+    }
+
+    NSEnumerator<NSDictionary<XDTMessageTypeKey, id> *> *messageEnumerator = _generatorMessages.objectEnumerator;
+    __block NSDictionary<XDTMessageTypeKey, id> *currentMessage = messageEnumerator.nextObject;
+    if (nil != currentMessage) {
+        NSNumber *lineNumberObj = [currentMessage valueForKey:XDTMessageLineNumber];
+        while([[NSNull null] isEqualTo:lineNumberObj]) {
+            currentMessage = messageEnumerator.nextObject;
+            lineNumberObj = [currentMessage valueForKey:XDTMessageLineNumber];
+        }
+
+        __block NSUInteger currentMessageLineNumber = [lineNumberObj unsignedIntegerValue];
+        __block XDTMessageTypeValue currentMessageType = [[currentMessage valueForKey:XDTMessageType] unsignedIntegerValue];
+        [_sourceView.textStorage enumerateLinesUsingBlock:^(NSRange lineRange, NSUInteger lineNumber, BOOL *stop) {
+            if (lineNumber < currentMessageLineNumber) {
+                return;
+            }
+
+            NSColor *backgroundColor = nil;
+            NSString *toolTip = nil;
+            switch (currentMessageType) {
+                case XDTMessageTypeError:
+                    backgroundColor = [NSColor XDTErrorBackgroundColor];
+                    toolTip = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Error", @"the word 'Error'"), [currentMessage valueForKey:XDTMessageText]];
+                    break;
+
+                case XDTMessageTypeWarning:
+                    backgroundColor = [NSColor XDTWarningBackgroundColor];
+                    toolTip = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Warning", @"the word 'Warning'"), [currentMessage valueForKey:XDTMessageText]];
+                    break;
+
+                default:
+                    break;
+            }
+            if (nil != backgroundColor) {
+                [self.sourceView.textStorage addAttribute:NSBackgroundColorAttributeName value:backgroundColor range:lineRange];
+                [self.sourceView.textStorage addAttribute:NSToolTipAttributeName value:toolTip range:lineRange];
+            }
+
+            do {
+                currentMessage = messageEnumerator.nextObject;
+                if (nil == currentMessage) {
+                    *stop = YES;
+                    return;
+                }
+                NSNumber *lineNumber = [currentMessage valueForKey:XDTMessageLineNumber];
+                if ([NSNull.null isNotEqualTo:lineNumber]) {
+                    currentMessageLineNumber = [lineNumber unsignedIntegerValue];
+                }
+            } while (lineNumber == currentMessageLineNumber);   // skip other messages with lower priority
+            currentMessageType = [[currentMessage valueForKey:XDTMessageType] unsignedIntegerValue];
+        }];
+    }
+
+    [_sourceView.textStorage endEditing];
 }
 
 @end

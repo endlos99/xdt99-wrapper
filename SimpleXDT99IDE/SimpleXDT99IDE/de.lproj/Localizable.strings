@@ -25,6 +25,9 @@
 /* Error description of a missing option. */
 "Missing Option!" = "Fehlende Option!";
 
+/* the word 'Error' */
+"Error" = "Fehler";
+
 /* Tool tip text for a linked include file. */
 "Opens '%@' in a new tabbed window." = "Öffnet '%@' in einem neuen Tab-Fenster.";
 
@@ -58,4 +61,7 @@
 
 /* Reason for the error if the Basic file cannot be recognized. */
 "Unknown binary Basic file format." = "Unbekanntes Binärformat der Basic-Datei.";
+
+/* the word 'Warning' */
+"Warning" = "Warnung";
 

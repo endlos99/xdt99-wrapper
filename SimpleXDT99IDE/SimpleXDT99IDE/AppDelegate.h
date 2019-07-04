@@ -28,7 +28,9 @@
 #define UserDefaultKeyDocumentOptionShowLog @"DocumentOptionShowLog"
 #define UserDefaultKeyDocumentOptionShowErrorsInLog @"DocumentOptionShowErrorsInLog"
 #define UserDefaultKeyDocumentOptionShowWarningsInLog @"DocumentOptionShowWarningsInLog"
+#define UserDefaultKeyDocumentOptionEnableHighlighting @"DocumentOptionEnableHighlighting"
 #define UserDefaultKeyDocumentOptionHighlightSyntax @"DocumentOptionHighlightSyntax"
+#define UserDefaultKeyDocumentOptionHighlightMessages @"DocumentOptionHighlightMessages"
 
 #define UserDefaultKeyAssemblerOptionOutputTypePopupIndex @"AssemblerOptionOutputFileTypePopupButtonIndex"
 #define UserDefaultKeyAssemblerOptionDisableXDTExtensions @"AssemblerOptionDisableXDTExtensions"

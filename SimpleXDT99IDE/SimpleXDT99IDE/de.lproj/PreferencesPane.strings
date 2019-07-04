@@ -1,11 +1,23 @@
 /* Class = "NSButtonCell"; title = "Use syntax highlighting"; ObjectID = "4J5-2j-Ygb"; */
 "4J5-2j-Ygb.title" = "Syntaxhervorhebung verwenden";
 
+/* Class = "NSButtonCell"; title = "Highlighting"; ObjectID = "CRY-Z7-Og0"; */
+"CRY-Z7-Og0.title" = "Hervorhebungen";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Enable or disable global higlighting."; ObjectID = "d1g-vy-3ad"; */
+"d1g-vy-3ad.ibShadowedToolTip" = "Hervorhebungen (de-)aktivieren";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Highligthing of lines of source code with an issue."; ObjectID = "ez0-iX-Lmy"; */
+"ez0-iX-Lmy.ibShadowedToolTip" = "Hervorhebung von Zeilen im Quell-Code mit Problemfällen.";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Coloring the source code depending syntactical contexts."; ObjectID = "oYd-fN-HkE"; */
 "oYd-fN-HkE.ibShadowedToolTip" = "Einfärbung des Quell-Codes abhängig vom syntaktischen Kontext.";
 
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "QvC-M9-y7g"; */
 "QvC-M9-y7g.title" = "Einstellungen";
+
+/* Class = "NSButtonCell"; title = "Message highlighting"; ObjectID = "vsB-wO-863"; */
+"vsB-wO-863.title" = "Problemmeldungen hervorheben";
 
 /* Class = "NSButtonCell"; title = "Automatically open all included files"; ObjectID = "vVp-5R-4In"; */
 "vVp-5R-4In.title" = "Automatisches Öffnen aller eingebundenen Dateien";

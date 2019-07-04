@@ -11,12 +11,30 @@
 
 @implementation NSColor (NSColorAdditions)
 
++ (NSColor *)XDTErrorBackgroundColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTErrorBackgroundColor"];
+    }
+    return [NSColor colorWithSRGBRed:1.0 green:0.400 blue:0.085 alpha:1.0];
+}
+
+
 + (NSColor *)XDTErrorTextColor
 {
     if (@available(macOS 10.13, *)) {
         return [NSColor colorNamed:@"XDTErrorTextColor"];
     }
     return [NSColor colorWithSRGBRed:0.950 green:0.200 blue:0.025 alpha:1.0];
+}
+
+
++ (NSColor *)XDTExceptionBackgroundColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTExceptionBackgroundColor"];
+    }
+    return [NSColor colorWithSRGBRed:0.333 green:0.550 blue:1.0 alpha:1.0];
 }
 
 
@@ -107,6 +125,15 @@
         return [NSColor colorNamed:@"XDTSourceTextualLiteralColor"];
     }
     return [NSColor systemYellowColor];
+}
+
+
++ (NSColor *)XDTWarningBackgroundColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTWarningBackgroundColor"];
+    }
+    return [NSColor colorWithSRGBRed:1.0 green:0.650 blue:0.085 alpha:1.0];
 }
 
 

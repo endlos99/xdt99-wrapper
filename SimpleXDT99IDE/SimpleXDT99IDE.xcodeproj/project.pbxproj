@@ -24,6 +24,7 @@
 		AFBF2B661FE95B1B008248B6 /* xbas99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFBF2B621FE95B1B008248B6 /* xbas99.py */; };
 		AFBF2B671FE95B1B008248B6 /* xga99.py in Resources */ = {isa = PBXBuildFile; fileRef = AFBF2B631FE95B1B008248B6 /* xga99.py */; };
 		AFBF2B681FE95B1B008248B6 /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = AFBF2B641FE95B1B008248B6 /* COPYING */; };
+		AFCD690522DE28F1003B3C36 /* NSTextStorageAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCD690422DE28F1003B3C36 /* NSTextStorageAdditions.m */; };
 		AFDC40B31DFB254A006B2A27 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = AFF958511DF178EC00062DEB /* README.md */; };
 		AFDECF291DF176B1008870F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AFDECF281DF176B1008870F7 /* AppDelegate.m */; };
 		AFDECF2C1DF176B1008870F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AFDECF2B1DF176B1008870F7 /* main.m */; };
@@ -103,6 +104,8 @@
 		AFBF2B621FE95B1B008248B6 /* xbas99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xbas99.py; path = ../xdt99/xbas99.py; sourceTree = SOURCE_ROOT; };
 		AFBF2B631FE95B1B008248B6 /* xga99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xga99.py; path = ../xdt99/xga99.py; sourceTree = SOURCE_ROOT; };
 		AFBF2B641FE95B1B008248B6 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = COPYING; path = ../xdt99/COPYING; sourceTree = SOURCE_ROOT; };
+		AFCD690322DE28F1003B3C36 /* NSTextStorageAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSTextStorageAdditions.h; path = Categories/NSTextStorageAdditions.h; sourceTree = "<group>"; };
+		AFCD690422DE28F1003B3C36 /* NSTextStorageAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSTextStorageAdditions.m; path = Categories/NSTextStorageAdditions.m; sourceTree = "<group>"; };
 		AFDECF271DF176B1008870F7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		AFDECF281DF176B1008870F7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		AFDECF2B1DF176B1008870F7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -193,6 +196,8 @@
 				AFB73F181E002FF40063BBCC /* NSViewAutolayoutAdditions.m */,
 				AFE5BAF522CCC237002C046B /* NSColorAdditions.h */,
 				AFE5BAF622CCC237002C046B /* NSColorAdditions.m */,
+				AFCD690322DE28F1003B3C36 /* NSTextStorageAdditions.h */,
+				AFCD690422DE28F1003B3C36 /* NSTextStorageAdditions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -385,6 +390,7 @@
 				AFB73F191E002FF40063BBCC /* NSViewAutolayoutAdditions.m in Sources */,
 				AFDECF291DF176B1008870F7 /* AppDelegate.m in Sources */,
 				AF0944CE1E0C156C00EE41B7 /* NoodleLineNumberMarker.m in Sources */,
+				AFCD690522DE28F1003B3C36 /* NSTextStorageAdditions.m in Sources */,
 				AFDECF2C1DF176B1008870F7 /* main.m in Sources */,
 				AF0944CB1E0C10CC00EE41B7 /* NoodleLineNumberView.m in Sources */,
 				AF5CF8A01DFF1FEC00C08E36 /* BasicCodeDocument.m in Sources */,

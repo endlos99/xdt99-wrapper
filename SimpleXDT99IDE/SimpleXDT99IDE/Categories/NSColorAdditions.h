@@ -13,8 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSColor (NSColorAdditions)
 
+@property (class, strong, readonly) NSColor *XDTErrorBackgroundColor;
 @property (class, strong, readonly) NSColor *XDTErrorTextColor;
+
+@property (class, strong, readonly) NSColor *XDTExceptionBackgroundColor;
 @property (class, strong, readonly) NSColor *XDTExceptionTextColor;
+
 @property (class, strong, readonly) NSColor *XDTSourceBlockCommentColor;
 @property (class, strong, readonly) NSColor *XDTSourceLabelDefinitionColor;
 @property (class, strong, readonly) NSColor *XDTSourceLabelReferenceColor;
@@ -24,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (class, strong, readonly) NSColor *XDTSourcePreProcColor;
 @property (class, strong, readonly) NSColor *XDTSourceTextColor;
 @property (class, strong, readonly) NSColor *XDTSourceTextualLiteralColor;
+
+@property (class, strong, readonly) NSColor *XDTWarningBackgroundColor;
 @property (class, strong, readonly) NSColor *XDTWarningTextColor;
 
 @end

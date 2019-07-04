@@ -25,6 +25,7 @@
 #import "PreferencesPaneController.h"
 
 #import "SourceCodeDocument.h"
+#import "AppDelegate.h"
 
 
 @interface PreferencesPaneController ()
@@ -56,6 +57,19 @@ static PreferencesPaneController *_sharedPreferencesPane = nil;
 }
 
 
+- (IBAction)toggleAllHighlighting:(id)sender
+{
+    NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
+    BOOL enableHighlighting = [defaults boolForKey:UserDefaultKeyDocumentOptionEnableHighlighting];
+    if (!enableHighlighting) {
+        [defaults setBool:NO forKey:UserDefaultKeyDocumentOptionHighlightSyntax];
+        [defaults setBool:NO forKey:UserDefaultKeyDocumentOptionHighlightMessages];
+        [self toggleSyntaxHighlighting:sender];
+        //[self toggleMessageHighlighting:sender];
+    }
+}
+
+
 - (IBAction)toggleSyntaxHighlighting:(id)sender
 {
     [NSDocumentController.sharedDocumentController.documents enumerateObjectsUsingBlock:^(SourceCodeDocument *doc, NSUInteger idx, BOOL *stop) {
@@ -63,6 +77,15 @@ static PreferencesPaneController *_sharedPreferencesPane = nil;
         [doc setupSyntaxHighlighting];
         doc.sourceView.selectedRange = saveSelection;
         [doc.sourceView scrollRangeToVisible:saveSelection];
+        doc.generatorMessages = doc.generatorMessages;
+    }];
+}
+
+
+- (IBAction)toggleMessageHighlighting:(id)sender
+{
+    [NSDocumentController.sharedDocumentController.documents enumerateObjectsUsingBlock:^(SourceCodeDocument *doc, NSUInteger idx, BOOL *stop) {
+        doc.generatorMessages = doc.generatorMessages;
     }];
 }
 
