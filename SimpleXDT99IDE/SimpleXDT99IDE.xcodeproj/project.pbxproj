@@ -17,6 +17,7 @@
 		AF64ED6C22D71C9D000E0AB4 /* PreferencesPaneController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF64ED6B22D71C9D000E0AB4 /* PreferencesPaneController.m */; };
 		AF64ED7022D738D4000E0AB4 /* PreferencesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF64ED7222D738D4000E0AB4 /* PreferencesPane.xib */; };
 		AF70E0B822F5BC080024BBDF /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF70E0B722F5BC080024BBDF /* ScriptingBridge.framework */; };
+		AF795E8122CDE8D800479524 /* SourceCodeTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF795E8022CDE8D800479524 /* SourceCodeTextView.m */; };
 		AF87FF9B1E040CF800CF752F /* GPLAssemblerDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AF87FF9A1E040CF800CF752F /* GPLAssemblerDocument.m */; };
 		AFA4DC7322F5CBBE00B70699 /* Terminal.app in Sources */ = {isa = PBXBuildFile; fileRef = AFA4DC7222F5CBBE00B70699 /* Terminal.app */; };
 		AFADBC351DF9D4DE000AD2F2 /* XDTools99.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */; };
@@ -111,6 +112,8 @@
 		AF64ED7122D738D4000E0AB4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreferencesPane.xib; sourceTree = "<group>"; };
 		AF64ED7422D738DD000E0AB4 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/PreferencesPane.strings; sourceTree = "<group>"; };
 		AF70E0B722F5BC080024BBDF /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
+		AF795E7F22CDE8D800479524 /* SourceCodeTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SourceCodeTextView.h; sourceTree = "<group>"; };
+		AF795E8022CDE8D800479524 /* SourceCodeTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SourceCodeTextView.m; sourceTree = "<group>"; };
 		AF87FF991E040CF800CF752F /* GPLAssemblerDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPLAssemblerDocument.h; sourceTree = "<group>"; };
 		AF87FF9A1E040CF800CF752F /* GPLAssemblerDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPLAssemblerDocument.m; sourceTree = "<group>"; };
 		AFA4DC7222F5CBBE00B70699 /* Terminal.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Terminal.app; path = /System/Applications/Utilities/Terminal.app; sourceTree = "<absolute>"; };
@@ -238,6 +241,8 @@
 				AFB73F161E002F280063BBCC /* Categories */,
 				AFE86BA622C8D6E20007CB8C /* Delegates */,
 				AF3FC4291DF8583D0021F050 /* Document Types */,
+				AF795E7F22CDE8D800479524 /* SourceCodeTextView.h */,
+				AF795E8022CDE8D800479524 /* SourceCodeTextView.m */,
 				AF125EC11E0415E600F659AA /* GPLAssemblerOptionsView.xib */,
 				AF5CF8B61DFF30F900C08E36 /* BasicOptionsView.xib */,
 				AF5CF8B31DFF30F400C08E36 /* AssemblerOptionsView.xib */,
@@ -406,6 +411,7 @@
 			files = (
 				AFA4DC7322F5CBBE00B70699 /* Terminal.app in Sources */,
 				AFDECF2F1DF176B1008870F7 /* SourceCodeDocument.m in Sources */,
+				AF795E8122CDE8D800479524 /* SourceCodeTextView.m in Sources */,
 				AF64ED6C22D71C9D000E0AB4 /* PreferencesPaneController.m in Sources */,
 				AFE86BA522C8CA280007CB8C /* HighlighterDelegate.m in Sources */,
 				AF3FC42C1DF858690021F050 /* AssemblerDocument.m in Sources */,

@@ -24,6 +24,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "SourceCodeTextView.h"
+
 
 @protocol XDTParserProtocol;
 @class XDTObject, XDTMessage;
@@ -51,7 +53,7 @@
 
 @property (assign) IBOutlet NSLayoutConstraint *contentMinWidth;
 @property (retain) IBOutlet NSScrollView *sourceScrollView;
-@property (retain) IBOutlet NSTextView *sourceView;
+@property (retain) IBOutlet SourceCodeTextView *sourceView;
 @property (retain) IBOutlet NSTextView *logView;
 @property (readonly) BOOL hasLogContentToSave;
 

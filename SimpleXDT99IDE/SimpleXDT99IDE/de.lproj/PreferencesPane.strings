@@ -1,5 +1,26 @@
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Pressing the tab key will insert spaces that conform to the behavior typical of the TI-Editor/Assembler's editor."; ObjectID = "1dm-gD-U4I"; */
+"1dm-gD-U4I.ibShadowedToolTip" = "Durch Drücken der Tabulatortaste werden Leerzeichen eingefügt, die dem für den Editor des TI-Editors/Assemblers typischen Verhalten entsprechen.";
+
+/* Class = "NSMenuItem"; title = "TI typical behaviour"; ObjectID = "1dm-gD-U4I"; */
+"1dm-gD-U4I.title" = "TI typisches Verhalten";
+
 /* Class = "NSButtonCell"; title = "Use syntax highlighting"; ObjectID = "4J5-2j-Ygb"; */
 "4J5-2j-Ygb.title" = "Syntaxhervorhebung verwenden";
+
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Pressing the tab key will insert the specified number of spaces."; ObjectID = "8bT-RF-xAT"; */
+"8bT-RF-xAT.ibShadowedToolTip" = "Durch Drücken der Tabulatortaste wird die angegebene Anzahl von Leerzeichen eingefügt.";
+
+/* Class = "NSMenuItem"; title = "Inserts spaces"; ObjectID = "8bT-RF-xAT"; */
+"8bT-RF-xAT.title" = "Leerzeichen einfügen";
+
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Pressing the tab key will insert one tab character each."; ObjectID = "Ak6-BD-ISX"; */
+"Ak6-BD-ISX.ibShadowedToolTip" = "Durch Drücken der Tabulatortaste wird jeweils ein Tabulatorzeichen eingefügt.";
+
+/* Class = "NSMenuItem"; title = "Inserts tab character"; ObjectID = "Ak6-BD-ISX"; */
+"Ak6-BD-ISX.title" = "Tabulatorzeichen einfügen";
+
+/* Class = "NSStepper"; ibShadowedToolTip = "Increases or decreases the number of spaces to be inserted for a tab character by one."; ObjectID = "c0E-IG-5Ch"; */
+"c0E-IG-5Ch.ibShadowedToolTip" = "Erhöht oder verringert die Anzahl der einzufügenden Leerzeichen für ein Tabulatorzeichen um eins.";
 
 /* Class = "NSButtonCell"; title = "Highlighting"; ObjectID = "CRY-Z7-Og0"; */
 "CRY-Z7-Og0.title" = "Hervorhebungen";
@@ -10,15 +31,30 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Highligthing of lines of source code with an issue."; ObjectID = "ez0-iX-Lmy"; */
 "ez0-iX-Lmy.ibShadowedToolTip" = "Hervorhebung von Zeilen im Quell-Code mit Problemfällen.";
 
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Select the behaviour of the tab key."; ObjectID = "mU9-rS-XdU"; */
+"mU9-rS-XdU.ibShadowedToolTip" = "Auswahl des Verhaltens der Tabulatortaste.";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Coloring the source code depending syntactical contexts."; ObjectID = "oYd-fN-HkE"; */
 "oYd-fN-HkE.ibShadowedToolTip" = "Einfärbung des Quell-Codes abhängig vom syntaktischen Kontext.";
 
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "QvC-M9-y7g"; */
 "QvC-M9-y7g.title" = "Einstellungen";
 
+/* Class = "NSTextField"; ibShadowedToolTip = "The number of spaces to insert for a tab character."; ObjectID = "T2v-Ps-Dxe"; */
+"T2v-Ps-Dxe.ibShadowedToolTip" = "Die Anzahl der einzufügenden Leerzeichen für ein Tabulatorzeichen.";
+
+/* Class = "NSTextFieldCell"; title = "spaces"; ObjectID = "t9T-6B-9DG"; */
+"t9T-6B-9DG.title" = "Leerzeichen";
+
+/* Class = "NSTextFieldCell"; title = "Tab width:"; ObjectID = "tdU-UN-mS5"; */
+"tdU-UN-mS5.title" = "Tab-Weite:";
+
 /* Class = "NSButtonCell"; title = "Message highlighting"; ObjectID = "vsB-wO-863"; */
 "vsB-wO-863.title" = "Problemmeldungen hervorheben";
 
 /* Class = "NSButtonCell"; title = "Automatically open all included files"; ObjectID = "vVp-5R-4In"; */
 "vVp-5R-4In.title" = "Automatisches Öffnen aller eingebundenen Dateien";
+
+/* Class = "NSTextFieldCell"; title = "Tab key:"; ObjectID = "WiD-LF-Uwf"; */
+"WiD-LF-Uwf.title" = "Tab-Taste:";
 

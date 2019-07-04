@@ -88,6 +88,8 @@ NS_ASSUME_NONNULL_END
                                    UserDefaultKeyDocumentOptionEnableHighlighting: @YES,
                                    UserDefaultKeyDocumentOptionHighlightSyntax: @YES,
                                    UserDefaultKeyDocumentOptionHighlightMessages: @YES,
+                                   UserDefaultKeyDocumentOptionTabBehaviour: [NSNumber numberWithUnsignedInteger:TabBehaviourTIStyle],
+                                   UserDefaultKeyDocumentOptionTabWidth: @4,
 
                                    UserDefaultKeyAssemblerOptionOutputTypePopupIndex: @1,
                                    UserDefaultKeyAssemblerOptionDisableXDTExtensions: @NO,

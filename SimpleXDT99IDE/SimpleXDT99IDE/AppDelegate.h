@@ -31,6 +31,8 @@
 #define UserDefaultKeyDocumentOptionEnableHighlighting @"DocumentOptionEnableHighlighting"
 #define UserDefaultKeyDocumentOptionHighlightSyntax @"DocumentOptionHighlightSyntax"
 #define UserDefaultKeyDocumentOptionHighlightMessages @"DocumentOptionHighlightMessages"
+#define UserDefaultKeyDocumentOptionTabBehaviour @"DocumentOptionTabBehaviour"
+#define UserDefaultKeyDocumentOptionTabWidth @"DocumentOptionTabWidth"
 
 #define UserDefaultKeyAssemblerOptionOutputTypePopupIndex @"AssemblerOptionOutputFileTypePopupButtonIndex"
 #define UserDefaultKeyAssemblerOptionDisableXDTExtensions @"AssemblerOptionDisableXDTExtensions"
