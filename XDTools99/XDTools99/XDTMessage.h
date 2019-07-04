@@ -81,6 +81,8 @@ typedef void (^XDTMessageEnumBlock)(NSDictionary<XDTMessageTypeKey, id> *obj, BO
  */
 - (void)refresh;
 
+- (NSEnumerator<NSDictionary<XDTMessageTypeKey, id> *> *)objectEnumerator;
+
 - (void)enumerateMessagesUsingBlock:(NS_NOESCAPE XDTMessageEnumBlock)block;
 - (void)enumerateMessagesOfType:(XDTMessageTypeValue)type usingBlock:(NS_NOESCAPE XDTMessageEnumBlock)block;
 

@@ -416,6 +416,12 @@ NS_ASSUME_NONNULL_END
 }
 
 
+- (NSEnumerator<NSDictionary<XDTMessageTypeKey, id> *> *)objectEnumerator
+{
+    return _messages.objectEnumerator;
+}
+
+
 - (void)enumerateMessagesUsingBlock:(NS_NOESCAPE XDTMessageEnumBlock)block
 {
     [_messages enumerateObjectsUsingBlock:^(NSDictionary<XDTMessageTypeKey,id> * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
