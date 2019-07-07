@@ -247,17 +247,31 @@
 {
     NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:link resolvingAgainstBaseURL:NO];
     if ([@"xdt99" isEqualToString:urlComponents.scheme]) {
-        // TODO: select or open document with the filePath
-        NSString *filePath = [urlComponents.path lastPathComponent];
-        if (NSOrderedSame != [[self.fileURL lastPathComponent] caseInsensitiveCompare:filePath])
-        {
-            NSLog(@"This is not the document '%@'! You should open it programmatical.", filePath);
-            return NO;
+        NSString *fileName = [urlComponents.path lastPathComponent];
+        if (NSOrderedSame != [[self.fileURL lastPathComponent] caseInsensitiveCompare:fileName]) {
+            NSError *error = nil;
+            NSString *filePath = [_parser findFile:urlComponents.path error:&error];
+            if (nil == filePath) {
+                if (nil != error) {
+                    [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
+                }
+                return YES;
+            }
+            NSURL *includingURL = [NSURL fileURLWithPath:filePath];
+            if (nil != includingURL) {
+                [NSDocumentController.sharedDocumentController openDocumentWithContentsOfURL:includingURL
+                                                                                     display:YES
+                                                                           completionHandler:^(NSDocument *document, BOOL alreadyOpen, NSError *error) {
+                                                                               SourceCodeDocument *includedGPLDoc = (SourceCodeDocument *)document;
+                                                                               [self.xdt99OptionsToolbarItem.view.window addTabbedWindow:includedGPLDoc.xdt99OptionsToolbarItem.view.window ordered:NSWindowBelow];
+                                                                           }];
+            }
+            return YES;
         }
         
         // scroll the source to line numer in link
         __block NSInteger lineNumberToSelect = NSNotFound;
-        [urlComponents.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [urlComponents.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem *obj, NSUInteger idx, BOOL *stop) {
             if ([@"line" isEqualToString:obj.name]) {
                 lineNumberToSelect = [obj.value integerValue];
             }

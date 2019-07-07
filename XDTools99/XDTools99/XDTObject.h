@@ -89,6 +89,16 @@ FOUNDATION_EXPORT XDTModuleName const XDTBas99ModuleName;   // XDTBas99ModuleNam
 - (NSOrderedSet<NSURL *> *)includedFiles:(NSError **)error;
 
 /**
+ Finds the location of a file with given name
+
+ @param name    the name of the file to search for
+ @param error   Return by reference the error. Can set to nil if the information is not nedded.
+ @return the path of the located file
+
+ */
+- (nullable NSString *)findFile:(NSString *)name error:(NSError **_Nullable)error;
+
+/**
  Splits a line of Assembler source code into its components like label, mnemonic, operands and comment and returns thier values within an array.
 
  @param line    A line of Source code to be split into tits components. Can not be nil.
