@@ -311,6 +311,21 @@
 #pragma mark - Action Methods
 
 
+- (IBAction)saveDocument:(id)sender
+{
+    /*
+     Overwrite the original behavior, that steels the focus of the source view and places the selected range at the end of the text.
+     */
+    NSArray<NSValue *> *selRanges = _sourceView.selectedRanges;
+
+    [super saveDocument:sender];
+
+    _sourceView.selectedRanges = selRanges;
+    [_sourceView scrollRangeToVisible:_sourceView.selectedRange];
+    [_sourceView.window makeFirstResponder:_sourceView];
+}
+
+
 /*
  This method should be overridden to implement the document typical code generator.
  But it should call its super method to handle unsaved modifications for the document.
