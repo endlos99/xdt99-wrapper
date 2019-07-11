@@ -30,6 +30,8 @@
 #import <XDTools99/XDBasic.h>
 #import <XDTools99/XDGPL.h>
 
+#import "PreferencesPaneController.h"
+
 
 NSErrorDomain const IDEErrorDomain = @"IDEErrorDomain";
 
@@ -51,6 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly) BOOL shouldCartridgeNameActivated;
 @property (readonly) BOOL shouldBaseAddressActivated;
 
+- (IBAction)orderToFrontPreferencesPanel:(nullable id)sender;
 - (IBAction)runAssembler:(nullable id)sender;
 - (IBAction)runGPLAssembler:(nullable id)sender;
 - (IBAction)runBasicEncoder:(nullable id)sender;
@@ -109,6 +112,12 @@ NS_ASSUME_NONNULL_END
 
 
 #pragma mark - Menu Action Methods
+
+
+- (IBAction)orderToFrontPreferencesPanel:(id)sender
+{
+    [PreferencesPaneController.sharedPreferencesPane showWindow:sender];
+}
 
 
 - (IBAction)runAssembler:(nullable id)sender

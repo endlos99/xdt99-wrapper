@@ -1,0 +1,6 @@
+/* Class = "NSWindow"; title = "Preferences"; ObjectID = "QvC-M9-y7g"; */
+"QvC-M9-y7g.title" = "Einstellungen";
+
+/* Class = "NSButtonCell"; title = "Automatically open all included files"; ObjectID = "vVp-5R-4In"; */
+"vVp-5R-4In.title" = "Automatisches Öffnen aller eingebundenen Dateien";
+

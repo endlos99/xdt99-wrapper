@@ -14,6 +14,8 @@
 		AF5CF8A01DFF1FEC00C08E36 /* BasicCodeDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CF89F1DFF1FEC00C08E36 /* BasicCodeDocument.m */; };
 		AF5CF8B11DFF30F400C08E36 /* AssemblerOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF5CF8B31DFF30F400C08E36 /* AssemblerOptionsView.xib */; };
 		AF5CF8B41DFF30F900C08E36 /* BasicOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF5CF8B61DFF30F900C08E36 /* BasicOptionsView.xib */; };
+		AF64ED6C22D71C9D000E0AB4 /* PreferencesPaneController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF64ED6B22D71C9D000E0AB4 /* PreferencesPaneController.m */; };
+		AF64ED7022D738D4000E0AB4 /* PreferencesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF64ED7222D738D4000E0AB4 /* PreferencesPane.xib */; };
 		AF87FF9B1E040CF800CF752F /* GPLAssemblerDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AF87FF9A1E040CF800CF752F /* GPLAssemblerDocument.m */; };
 		AFADBC351DF9D4DE000AD2F2 /* XDTools99.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */; };
 		AFADBC371DF9D5B7000AD2F2 /* XDTools99.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -86,6 +88,10 @@
 		AF5CF89F1DFF1FEC00C08E36 /* BasicCodeDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicCodeDocument.m; sourceTree = "<group>"; };
 		AF5CF8B21DFF30F400C08E36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AssemblerOptionsView.xib; sourceTree = "<group>"; };
 		AF5CF8B51DFF30F900C08E36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/BasicOptionsView.xib; sourceTree = "<group>"; };
+		AF64ED6A22D71C9D000E0AB4 /* PreferencesPaneController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PreferencesPaneController.h; sourceTree = "<group>"; };
+		AF64ED6B22D71C9D000E0AB4 /* PreferencesPaneController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesPaneController.m; sourceTree = "<group>"; };
+		AF64ED7122D738D4000E0AB4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreferencesPane.xib; sourceTree = "<group>"; };
+		AF64ED7422D738DD000E0AB4 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/PreferencesPane.strings; sourceTree = "<group>"; };
 		AF87FF991E040CF800CF752F /* GPLAssemblerDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPLAssemblerDocument.h; sourceTree = "<group>"; };
 		AF87FF9A1E040CF800CF752F /* GPLAssemblerDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPLAssemblerDocument.m; sourceTree = "<group>"; };
 		AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XDTools99.xcodeproj; path = ../XDTools99/XDTools99.xcodeproj; sourceTree = "<group>"; };
@@ -210,6 +216,9 @@
 				AF5CF8B31DFF30F400C08E36 /* AssemblerOptionsView.xib */,
 				AFDECF301DF176B1008870F7 /* Document.xib */,
 				AFDECF351DF176B1008870F7 /* MainMenu.xib */,
+				AF64ED7222D738D4000E0AB4 /* PreferencesPane.xib */,
+				AF64ED6A22D71C9D000E0AB4 /* PreferencesPaneController.h */,
+				AF64ED6B22D71C9D000E0AB4 /* PreferencesPaneController.m */,
 				AFDECF331DF176B1008870F7 /* Assets.xcassets */,
 				AFDECF381DF176B1008870F7 /* Info.plist */,
 				AFF5D048225E511700A69BEB /* Localizable.strings */,
@@ -339,6 +348,7 @@
 				AFDECF321DF176B1008870F7 /* Document.xib in Resources */,
 				AFDECF371DF176B1008870F7 /* MainMenu.xib in Resources */,
 				AF125EBF1E0415E600F659AA /* GPLAssemblerOptionsView.xib in Resources */,
+				AF64ED7022D738D4000E0AB4 /* PreferencesPane.xib in Resources */,
 				AFFDB6871DFC6A95006788CC /* InfoPlist.strings in Resources */,
 				AFBF2B681FE95B1B008248B6 /* COPYING in Resources */,
 				AFBF2B671FE95B1B008248B6 /* xga99.py in Resources */,
@@ -355,6 +365,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFDECF2F1DF176B1008870F7 /* SourceCodeDocument.m in Sources */,
+				AF64ED6C22D71C9D000E0AB4 /* PreferencesPaneController.m in Sources */,
 				AF3FC42C1DF858690021F050 /* AssemblerDocument.m in Sources */,
 				AFFF3A3A1E05640700909C6C /* HWHexNumberFormatter.m in Sources */,
 				AFB73F191E002FF40063BBCC /* NSViewAutolayoutAdditions.m in Sources */,
@@ -404,6 +415,15 @@
 				AFF5D042225E3C0A00A69BEB /* de */,
 			);
 			name = BasicOptionsView.xib;
+			sourceTree = "<group>";
+		};
+		AF64ED7222D738D4000E0AB4 /* PreferencesPane.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AF64ED7122D738D4000E0AB4 /* Base */,
+				AF64ED7422D738DD000E0AB4 /* de */,
+			);
+			name = PreferencesPane.xib;
 			sourceTree = "<group>";
 		};
 		AFDECF301DF176B1008870F7 /* Document.xib */ = {
