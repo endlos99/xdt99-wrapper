@@ -697,6 +697,41 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="Navigate" id="GtO-nj-GRq">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Navigate" id="Y7f-gY-0IC">
+                        <items>
+                            <menuItem title="Go to Line…" keyEquivalent="l" id="DV5-QG-zWV">
+                                <connections>
+                                    <action selector="jumpToLineNumber:" target="-1" id="tCX-zh-cvW"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Go to Label" id="pCj-48-juK">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Go to Label" id="wIB-K9-6r7">
+                                    <items>
+                                        <menuItem title="Item" id="lVP-Cz-Mdb">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="jumpToLabel:" target="-1" id="VyY-6m-CjI"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                                <connections>
+                                    <action selector="jumpToLabel:" target="-1" id="qcC-Ql-Gvf"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="2ET-a4-A1W"/>
+                            <menuItem title="Next Issue" id="KGI-B1-mDL">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem title="Previous Issue" id="5Jf-iS-u9z">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
                 <menuItem title="Window" id="aUF-d1-5bR">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">

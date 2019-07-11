@@ -47,14 +47,24 @@
 }
 
 @property (retain) NSNumber *lineNumberDigits;
+@property (retain) NSNumber *lineNumberJump;
 
-- (IBAction)generateCode:(nullable id)sender;
+@property (retain) IBOutlet NSPanel *lineNumberPanel;
+
+- (IBAction)jumpToLineNumber:(id)sender;
+- (IBAction)jumpToLabel:(id<NSValidatedUserInterfaceItem>)sender;
+- (IBAction)jumpToNextIssue:(id)sender;
+- (IBAction)jumpToPreviousIssue:(id)sender;
+
+- (IBAction)endLineNumberSheet:(id)sender;  // only for quitting the line number sheet
+
 - (IBAction)selectOutputFile:(nullable id)sender;
 - (IBAction)hideShowLog:(nullable id)sender;
 
 - (IBAction)saveLog:(id)sender;
 
 - (void)updateMessagesToSource;
+- (void)buildLabelMenu:(NSMenu *)labelMenu;
 
 @end
 
@@ -524,6 +534,87 @@
 #pragma mark - Action Methods
 
 
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    if (menuItem.action == @selector(jumpToLineNumber:)) {
+        return 0 < self.sourceView.textStorage.length;
+    }
+
+    if (menuItem.action == @selector(jumpToLabel:)) {
+        if (!menuItem.hasSubmenu) {
+            return YES; // Every single label menu item is valid
+        }
+        if (nil == _parser) {   // i.e. Basic document has no parser (and no labels), so disable this item
+            return NO;
+        }
+        NSMenu *jumpToLabelMenu = menuItem.submenu;
+        [self buildLabelMenu:jumpToLabelMenu];  // Build/update label list
+        return 0 < jumpToLabelMenu.numberOfItems;
+    }
+
+    if (menuItem.action == @selector(jumpToNextIssue:)) {
+        return NO;
+    }
+
+    if (menuItem.action == @selector(jumpToPreviousIssue:)) {
+        return NO;
+    }
+
+    return YES;
+}
+
+
+- (IBAction)jumpToLineNumber:(id)sender
+{
+    [self.windowForSheet beginSheet:_lineNumberPanel completionHandler:^(NSModalResponse returnCode) {
+        const NSInteger jumpLineNumber = [self->_lineNumberJump integerValue];
+        if (NSModalResponseStop != returnCode || nil == self->_lineNumberJump) {
+            return;
+        }
+        __block NSRange lastLineRange;
+        [self->_sourceView.textStorage enumerateLinesUsingBlock:^(NSRange lineRange, NSUInteger lineNumber, BOOL *stop) {
+            lastLineRange = lineRange;
+            if (lineNumber == jumpLineNumber) {
+                *stop = YES;
+            }
+        }];
+        self.sourceView.selectedRange = lastLineRange;
+        [self.sourceView scrollRangeToVisible:lastLineRange];
+    }];
+}
+
+
+- (IBAction)jumpToLabel:(id<NSValidatedUserInterfaceItem>)sender
+{
+    const NSInteger jumpLineNumber = sender.tag;
+    [_sourceView.textStorage enumerateLinesUsingBlock:^(NSRange lineRange, NSUInteger lineNumber, BOOL *stop) {
+        if (lineNumber == jumpLineNumber) {
+            self.sourceView.selectedRange = lineRange;
+            [self.sourceView scrollRangeToVisible:lineRange];
+            *stop = YES;
+        }
+    }];
+}
+
+
+- (IBAction)jumpToNextIssue:(id)sender
+{
+
+}
+
+
+- (IBAction)jumpToPreviousIssue:(id)sender
+{
+
+}
+
+
+- (IBAction)endLineNumberSheet:(id)sender
+{
+    [self.windowForSheet endSheet:_lineNumberPanel];
+}
+
+
 - (IBAction)saveDocument:(id)sender
 {
     /*
@@ -740,6 +831,37 @@
     }
 
     [_sourceView.textStorage endEditing];
+}
+
+
+/**
+ Builds the specified menu with a list of all labels from the current (GPL-)Assembler document that will be used as jump locations.
+ @param labelMenu   The Menu which will contain all available labels defined in the source code. All existing menu items will be removed.
+ */
+- (void)buildLabelMenu:(NSMenu *)labelMenu
+{
+    [labelMenu removeAllItems];
+
+    __block NSInteger lineCounter = 0;
+    [self.sourceView.textStorage.mutableString enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+        lineCounter++;
+        NSArray<id> *lineComponents = [self.parser splitLine:line];
+        if (0 >= lineComponents.count) {    // comment or empty line?
+            return;
+        }
+        NSString *label = [[NSString alloc] initWithData:lineComponents.firstObject encoding:NSUTF8StringEncoding];
+        if (nil == label || 0 == label.length) {
+            return;
+        }
+        if ([label hasSuffix:@":"]) {
+            label = [label substringToIndex:label.length-1];
+        }
+
+        NSMenuItem *labelItem = [[NSMenuItem alloc] initWithTitle:label action:@selector(jumpToLabel:) keyEquivalent:@""];
+        labelItem.tag = lineCounter;
+        labelItem.target = self;
+        [labelMenu addItem:labelItem];
+    }];
 }
 
 @end

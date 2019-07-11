@@ -34,6 +34,9 @@
 /* Class = "NSMenuItem"; title = "Quit SimpleXDT99"; ObjectID = "4sb-4s-VLi"; */
 "4sb-4s-VLi.title" = "SimpleXDT99 beenden";
 
+/* Class = "NSMenuItem"; title = "Previous Issue"; ObjectID = "5Jf-iS-u9z"; */
+"5Jf-iS-u9z.title" = "Vorheriger Problemfall";
+
 /* Class = "NSButtonCell"; title = "Protected"; ObjectID = "5k5-QX-UV7"; */
 "5k5-QX-UV7.title" = "Protected";
 
@@ -160,6 +163,9 @@
 /* Class = "NSMenuItem"; title = "Spelling and Grammar"; ObjectID = "Dv1-io-Yv7"; */
 "Dv1-io-Yv7.title" = "Rechtschreibung und Grammatik";
 
+/* Class = "NSMenuItem"; title = "Go to Line…"; ObjectID = "DV5-QG-zWV"; */
+"DV5-QG-zWV.title" = "Gehe zu Zeile…";
+
 /* Class = "NSMenuItem"; title = "Close"; ObjectID = "DVo-aG-piG"; */
 "DVo-aG-piG.title" = "Schließen";
 
@@ -192,6 +198,9 @@
 
 /* Class = "NSMenuItem"; title = "Open Include Files"; ObjectID = "gpA-0v-lyQ"; */
 "gpA-0v-lyQ.title" = "Eingebundene Dateien öffnen";
+
+/* Class = "NSMenuItem"; title = "Navigate"; ObjectID = "GtO-nj-GRq"; */
+"GtO-nj-GRq.title" = "Navigieren";
 
 /* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "GUa-eO-cwY"; */
 "GUa-eO-cwY.title" = "Normal";
@@ -270,6 +279,9 @@
 
 /* Class = "NSMenuItem"; title = "MESS Cartridge"; ObjectID = "KGa-br-7wl"; */
 "KGa-br-7wl.title" = "MESS Modul";
+
+/* Class = "NSMenuItem"; title = "Next Issue"; ObjectID = "KGI-B1-mDL"; */
+"KGI-B1-mDL.title" = "Nächster Problemfall";
 
 /* Class = "NSMenuItem"; title = "Show Sidebar"; ObjectID = "kIP-vf-haE"; */
 "kIP-vf-haE.title" = "Seitenleiste anzeigen";
@@ -384,6 +396,9 @@
 
 /* Class = "NSMenuItem"; title = "Delete"; ObjectID = "pa3-QI-u2k"; */
 "pa3-QI-u2k.title" = "Löschen";
+
+/* Class = "NSMenuItem"; title = "Go to Label"; ObjectID = "pCj-48-juK"; */
+"pCj-48-juK.title" = "Gehe zu Label";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Select the output file type."; ObjectID = "Phc-mV-akD"; */
 "Phc-mV-akD.ibShadowedToolTip" = "Den Ausgabedatei-Typ auswählen.";
@@ -532,6 +547,9 @@
 /* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "WeT-3V-zwk"; */
 "WeT-3V-zwk.title" = "Einsetzen und Stil anpassen";
 
+/* Class = "NSMenu"; title = "Go to Label"; ObjectID = "wIB-K9-6r7"; */
+"wIB-K9-6r7.title" = "Gehe zu Label";
+
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Wly-jW-pVF"; */
 "Wly-jW-pVF.title" = "Format:";
 
@@ -573,6 +591,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Generates an additionally file with a list output. This is the equivalent to the option 'L' of the TI Editor/Assembler module."; ObjectID = "xZz-vw-Tqb"; */
 "xZz-vw-Tqb.ibShadowedToolTip" = "Generates an additionally file with a list output. This is the equivalent to the option 'L' of the TI Editor/Assembler module.";
+
+/* Class = "NSMenu"; title = "Navigate"; ObjectID = "Y7f-gY-0IC"; */
+"Y7f-gY-0IC.title" = "Navigieren";
 
 /* Class = "NSMenuItem"; title = "Find and Replace…"; ObjectID = "YEy-JH-Tfz"; */
 "YEy-JH-Tfz.title" = "Suchen und ersetzen…";

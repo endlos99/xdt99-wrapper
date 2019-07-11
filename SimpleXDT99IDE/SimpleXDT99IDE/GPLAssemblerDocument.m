@@ -468,7 +468,7 @@
 #pragma mark - Action Methods
 
 
-- (void)checkCode:(id)sender
+- (IBAction)checkCode:(id)sender
 {
     [super checkCode:sender];
     if (self.isDocumentEdited) {
@@ -488,7 +488,7 @@
 }
 
 
-- (void)generateCode:(id)sender
+- (IBAction)generateCode:(id)sender
 {
     [super checkCode:sender];
     if (self.isDocumentEdited) {

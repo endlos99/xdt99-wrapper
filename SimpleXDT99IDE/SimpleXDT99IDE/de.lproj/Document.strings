@@ -7,6 +7,9 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Check this to print out any warning messages into the console."; ObjectID = "bZo-s1-xFm"; */
 "bZo-s1-xFm.ibShadowedToolTip" = "Aktivieren um Warnmeldungen im Konsolen-Fenster anzuzeigen.";
 
+/* Class = "NSWindow"; title = "Line Number"; ObjectID = "JiA-fV-jaA"; */
+"JiA-fV-jaA.title" = "Zeilennummer";
+
 /* Class = "NSImageView"; ibShadowedToolTip = "Status Lamp. It shows you if there are errors found (red) or if everything is okay (green)."; ObjectID = "MVj-UF-zr3"; */
 "MVj-UF-zr3.ibShadowedToolTip" = "Statusleuchte. Es zeigt an, ob Fehler gefunden wurden (rot) oder ob alles in Ordnung ist (grün).";
 

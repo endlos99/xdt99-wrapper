@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="SourceCodeDocument">
             <connections>
                 <outlet property="contentMinWidth" destination="REm-wI-jqJ" id="6Lp-0v-fjA"/>
+                <outlet property="lineNumberPanel" destination="JiA-fV-jaA" id="TWN-K9-lTS"/>
                 <outlet property="logOptionsPlaceholderView" destination="gcM-9i-Ow0" id="FbJ-GC-kqs"/>
                 <outlet property="logView" destination="jxr-ky-IFb" id="2MU-ER-XEh"/>
                 <outlet property="sourceScrollView" destination="ho4-qy-mEv" id="8ae-d8-djd"/>
@@ -364,13 +365,76 @@
             </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-x8E"/>
+                <outlet property="initialFirstResponder" destination="Gma-Oa-hJn" id="UUf-En-lJH"/>
             </connections>
             <point key="canvasLocation" x="182.5" y="179.5"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="7yQ-g3-ex7"/>
+        <window title="Line Number" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hasShadow="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="JiA-fV-jaA" customClass="NSPanel">
+            <windowStyleMask key="styleMask" titled="YES" utility="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="817" y="671" width="271" height="67"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
+            <view key="contentView" wantsLayer="YES" alphaValue="0.90000000000000002" id="Lkv-oe-X1n">
+                <rect key="frame" x="0.0" y="0.0" width="271" height="67"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView translatesAutoresizingMaskIntoConstraints="NO" id="JO3-PI-C4Z">
+                        <rect key="frame" x="10" y="19" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="JO3-PI-C4Z" secondAttribute="height" multiplier="1:1" id="2N7-WP-JL1"/>
+                        </constraints>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSTouchBarSearchTemplate" id="PLu-nN-qGA"/>
+                    </imageView>
+                    <textField focusRingType="none" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="L47-IQ-7rN">
+                        <rect key="frame" x="48" y="18" width="174" height="31"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" focusRingType="none" drawsBackground="YES" usesSingleLineMode="YES" id="8yj-8k-kko">
+                            <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="74t-li-FKW"/>
+                            <font key="font" metaFont="system" size="22"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="lineNumberJump" id="vgB-1b-jiA"/>
+                        </connections>
+                    </textField>
+                    <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p4o-z5-QrP">
+                        <rect key="frame" x="230" y="17" width="31" height="33"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="p4o-z5-QrP" secondAttribute="height" multiplier="1:1" id="Bca-yO-VGG"/>
+                        </constraints>
+                        <buttonCell key="cell" type="smallSquare" title="✓" bezelStyle="smallSquare" alignment="center" borderStyle="border" inset="2" id="GvG-s0-qgi">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system" size="22"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="endLineNumberSheet:" target="-2" id="DhY-bL-sto"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="JO3-PI-C4Z" firstAttribute="centerY" secondItem="Lkv-oe-X1n" secondAttribute="centerY" id="9Oy-bR-xZb"/>
+                    <constraint firstItem="L47-IQ-7rN" firstAttribute="leading" secondItem="JO3-PI-C4Z" secondAttribute="trailing" constant="8" symbolic="YES" id="9YN-Ts-5mg"/>
+                    <constraint firstItem="p4o-z5-QrP" firstAttribute="leading" secondItem="L47-IQ-7rN" secondAttribute="trailing" constant="8" symbolic="YES" id="IxR-hu-NRA"/>
+                    <constraint firstItem="p4o-z5-QrP" firstAttribute="centerY" secondItem="Lkv-oe-X1n" secondAttribute="centerY" id="UaG-Xa-aYK"/>
+                    <constraint firstItem="L47-IQ-7rN" firstAttribute="centerY" secondItem="Lkv-oe-X1n" secondAttribute="centerY" id="bub-Kq-oq5"/>
+                    <constraint firstAttribute="trailing" secondItem="p4o-z5-QrP" secondAttribute="trailing" constant="10" id="dNz-7T-Uza"/>
+                    <constraint firstItem="JO3-PI-C4Z" firstAttribute="leading" secondItem="Lkv-oe-X1n" secondAttribute="leading" constant="10" id="kGV-D7-iqe"/>
+                    <constraint firstItem="p4o-z5-QrP" firstAttribute="height" secondItem="L47-IQ-7rN" secondAttribute="height" id="q0C-Sz-8dX"/>
+                </constraints>
+            </view>
+            <connections>
+                <outlet property="initialFirstResponder" destination="L47-IQ-7rN" id="yVS-yR-j8H"/>
+            </connections>
+            <point key="canvasLocation" x="-293.5" y="72.5"/>
+        </window>
     </objects>
     <resources>
         <image name="NSStatusAvailable" width="16" height="16"/>
+        <image name="NSTouchBarSearchTemplate" width="19" height="30"/>
         <image name="buttonCell:ghm-4k-1bg:image" width="1" height="1">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPT5YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
