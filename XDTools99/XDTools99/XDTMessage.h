@@ -62,6 +62,8 @@ typedef void (^XDTMessageEnumBlock)(NSDictionary<XDTMessageTypeKey, id> *obj, BO
 + (instancetype)messageWithPythonList:(PyObject *)messageList;
 + (instancetype)messageWithMessages:(XDTMessage *)messages;
 
+- (nullable instancetype)messagesForLineNumberRange:(NSRange)lineNumberRange;
+
 - (instancetype)messagesOfType:(XDTMessageTypeValue)type;
 - (instancetype)sortedByPriorityAscendingType;
 - (instancetype)sortedByPriorityDecendingType;
@@ -75,6 +77,7 @@ typedef void (^XDTMessageEnumBlock)(NSDictionary<XDTMessageTypeKey, id> *obj, BO
 - (void)refresh;
 
 - (NSEnumerator<NSDictionary<XDTMessageTypeKey, id> *> *)objectEnumerator;
+- (NSEnumerator<NSDictionary<XDTMessageTypeKey, id> *> *)reverseObjectEnumerator;
 
 - (void)enumerateMessagesUsingBlock:(NS_NOESCAPE XDTMessageEnumBlock)block;
 - (void)enumerateMessagesOfType:(XDTMessageTypeValue)type usingBlock:(NS_NOESCAPE XDTMessageEnumBlock)block;

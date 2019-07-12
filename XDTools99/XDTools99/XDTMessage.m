@@ -165,6 +165,37 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Accessor Methods
 
 
+- (instancetype)messagesForLineNumberRange:(NSRange)lineNumberRange
+{
+    if (0 == lineNumberRange.length) {
+        return nil;
+    }
+
+    const NSUInteger startLineNumber = lineNumberRange.location;
+    const NSUInteger stopLineNumber = NSMaxRange(lineNumberRange);
+
+    NSIndexSet *messageIndexes = [_messages indexesOfObjectsPassingTest:^BOOL(NSDictionary<XDTMessageTypeKey,id> *message, NSUInteger idx, BOOL *stop) {
+        NSNumber *lineNumber = [message valueForKey:XDTMessageLineNumber];
+        if (nil == lineNumber || [[NSNull null] isEqualTo:lineNumber]) {
+            return NO;
+        }
+        const NSUInteger issueLineNumber = [lineNumber unsignedIntegerValue];
+        return issueLineNumber >= startLineNumber && issueLineNumber < stopLineNumber;
+    }];
+
+    if (0 == messageIndexes.count) {
+        return nil;
+    }
+
+    id retVal = [[self.class alloc] initWithSet:[NSOrderedSet orderedSetWithArray:[_messages objectsAtIndexes:messageIndexes]]];
+#if !__has_feature(objc_arc)
+    return [retVal autorelease];
+#else
+    return retVal;
+#endif
+}
+
+
 - (instancetype)messagesOfType:(XDTMessageTypeValue)type
 {
     NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", XDTMessageType, type];
@@ -292,7 +323,21 @@ NS_ASSUME_NONNULL_END
 
 - (NSEnumerator<NSDictionary<XDTMessageTypeKey, id> *> *)objectEnumerator
 {
+    if (_usedSortDescriptors != sortDescriptorsAscendingType) {
+        [_messages sortUsingDescriptors:sortDescriptorsAscendingType];
+        _usedSortDescriptors = sortDescriptorsAscendingType;
+    }
     return _messages.objectEnumerator;
+}
+
+
+- (NSEnumerator<NSDictionary<XDTMessageTypeKey, id> *> *)reverseObjectEnumerator
+{
+    if (_usedSortDescriptors != sortDescriptorsDecendingType) {
+        [_messages sortUsingDescriptors:sortDescriptorsDecendingType];
+        _usedSortDescriptors = sortDescriptorsDecendingType;
+    }
+    return _messages.reverseObjectEnumerator;
 }
 
 

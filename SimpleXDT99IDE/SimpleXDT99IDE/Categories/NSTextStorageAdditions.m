@@ -38,4 +38,17 @@
                                         }];
 }
 
+
+- (NSRange)rangeForLineNumber:(NSUInteger)lineNumber
+{
+    __block NSRange retVal = {NSNotFound, 0};
+    [self enumerateLinesUsingBlock:^(NSRange lineRange, NSUInteger ln, BOOL *stop) {
+        if (ln == lineNumber) {
+            retVal = lineRange;
+            *stop = YES;
+        }
+    }];
+    return retVal;
+}
+
 @end

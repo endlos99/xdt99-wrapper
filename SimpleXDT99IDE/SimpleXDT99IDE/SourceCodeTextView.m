@@ -129,6 +129,43 @@ static NSUInteger const tabstops[] = {7, 12, 25, 30, 45, 59, 79, 0};
 }
 
 
+- (NSUInteger)lineNumberAtIndex:(NSUInteger)index
+{
+    if (self.textStorage.length < index) {
+        return 0;
+    }
+
+    NSUInteger numberOfLines = 0;
+    NSRange range = {0, 0};
+
+    while (range.location < index) {
+        numberOfLines++;
+        range.location += [self.textStorage.mutableString lineRangeForRange:range].length;
+    }
+
+    return numberOfLines;
+}
+
+
+- (NSUInteger)wrappedLineNumberAtIndex:(NSUInteger)index
+{
+    if (self.textStorage.length < index) {
+        return 0;
+    }
+
+    NSUInteger numberOfLines = 0;
+    NSRange range = {0, 0};
+
+    while (range.location < index) {
+        numberOfLines++;
+        (void) [self.layoutManager lineFragmentRectForGlyphAtIndex:range.location effectiveRange:&range];
+        range.location += range.length;
+    }
+
+    return numberOfLines;
+}
+
+
 - (void)insertTIStyledTab:(id)sender
 {
     NSRange lineRange = [self.textStorage.mutableString lineRangeForRange:self.selectedRange];

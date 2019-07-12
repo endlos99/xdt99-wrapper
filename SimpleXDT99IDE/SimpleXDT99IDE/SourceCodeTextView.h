@@ -36,6 +36,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SourceCodeTextView : NSTextView
 
+/**
+ Counting the number of hard breaked lines within the receivers text up to the specified index.
+
+ @param index   Index of a character. \p index must be in the range of the text bounds.
+ @return        Number of the line of text that the specified index contains. Line numbers are counting starting 1. If \p index does not match the bound of the text, 0 will be returned.
+ */
+- (NSUInteger)lineNumberAtIndex:(NSUInteger)index;
+
+/**
+ Counting the number of lines of wrapped text in the receiver up to the specified index.
+
+ @param index   Index of a character. \p index must be in the range of the text bounds.
+ @return        Number of the line of wrapped text that the specified index contains. Line numbers are counting starting 1. If \p index does not match the bound of the text, 0 will be returned.
+ */
+- (NSUInteger)wrappedLineNumberAtIndex:(NSUInteger)index;
+
 - (void)insertTIStyledTab:(id)sender;
 
 @end

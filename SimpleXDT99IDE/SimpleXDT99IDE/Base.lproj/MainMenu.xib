@@ -723,11 +723,29 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="2ET-a4-A1W"/>
-                            <menuItem title="Next Issue" id="KGI-B1-mDL">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Next Issue" keyEquivalent="" id="KGI-B1-mDL">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="jumpToNextIssue:" target="-1" id="ocX-vz-1dh"/>
+                                </connections>
                             </menuItem>
-                            <menuItem title="Previous Issue" id="5Jf-iS-u9z">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Last Issue" alternate="YES" keyEquivalent="" id="4K8-ol-The">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="jumpToLastIssue:" target="-1" id="rjz-6k-1ME"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Previous Issue" keyEquivalent="" id="5Jf-iS-u9z">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="jumpToPreviousIssue:" target="-1" id="3DL-gp-pmj"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="First Issue" alternate="YES" keyEquivalent="" id="Gxg-uh-3bG">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="jumpToFirstIssue:" target="-1" id="0bg-0u-wf6"/>
+                                </connections>
                             </menuItem>
                         </items>
                     </menu>

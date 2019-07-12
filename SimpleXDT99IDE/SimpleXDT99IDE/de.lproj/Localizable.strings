@@ -28,6 +28,33 @@
 /* the word 'Error' */
 "Error" = "Fehler";
 
+/* Menu item title for jumping to the first unspecified entry in a list of messages. */
+"First Issue" = "Erster Problemfall";
+
+/* Menu item title for jumping to the last unspecified entry in a list of messages. */
+"Last Issue" = "Letzter Problemfall";
+
+/* Menu item title for jumping to the next error in a list of messages. */
+"Next Error" = "Nächster Fehler";
+
+/* Menu item title for jumping to the next unspecified entry in a list of messages. */
+"Next Issue" = "Nächster Problemfall";
+
+/* Menu item title for jumping to the next warning in a list of messages. */
+"Next Warning" = "Nächste Warnung";
+
+/* Menu item title for no first entry in a list of messages. */
+"No First Issue" = "Kein erster Problemfall";
+
+/* Menu item title for no last entry in a list of messages. */
+"No Last Issue" = "Kein letzter Problemfall";
+
+/* Menu item title for no next entry in a list of messages. */
+"No Next Issue" = "Kein weiterer Problemfall";
+
+/* Menu item title for no previous entry in a list of messages. */
+"No Previous Issue" = "Kein vorheriger Problemfall";
+
 /* Tool tip text for a linked include file. */
 "Opens '%@' in a new tabbed window." = "Öffnet '%@' in einem neuen Tab-Fenster.";
 
@@ -39,6 +66,15 @@
 
 /* Recovery suggestion showing in an alert window when log view is invisible */
 "Please open the log view to get detailed error information." = "Bitte die Protokollansicht öffnen, um detaillierte Fehlerinformationen zu erhalten.";
+
+/* Menu item title for jumping to the previous error in a list of messages. */
+"Previous Error" = "Vorheriger Fehler";
+
+/* Menu item title for jumping to the previous unspecified entry in a list of messages. */
+"Previous Issue" = "Vorheriger Problemfall";
+
+/* Menu item title for jumping to the previous warning in a list of messages. */
+"Previous Warning" = "Vorherige Warnung";
 
 /* Default button name for choosing 'Save' in an Alert. */
 "Save" = "Speichern";

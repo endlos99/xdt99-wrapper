@@ -41,6 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)enumerateLinesUsingBlock:(void (^)(NSRange lineRange, NSUInteger lineNumber, BOOL *stop))block;
 
+/**
+ */
+- (NSRange)rangeForLineNumber:(NSUInteger)lineNumber;
+
 @end
 
 NS_ASSUME_NONNULL_END

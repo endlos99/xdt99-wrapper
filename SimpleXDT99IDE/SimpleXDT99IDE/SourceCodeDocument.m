@@ -53,8 +53,10 @@
 
 - (IBAction)jumpToLineNumber:(id)sender;
 - (IBAction)jumpToLabel:(id<NSValidatedUserInterfaceItem>)sender;
+- (IBAction)jumpToLastIssue:(id)sender;
 - (IBAction)jumpToNextIssue:(id)sender;
 - (IBAction)jumpToPreviousIssue:(id)sender;
+- (IBAction)jumpToFirstIssue:(id)sender;
 
 - (IBAction)endLineNumberSheet:(id)sender;  // only for quitting the line number sheet
 
@@ -552,12 +554,80 @@
         return 0 < jumpToLabelMenu.numberOfItems;
     }
 
+    if (menuItem.action == @selector(jumpToLastIssue:)) {
+        if (nil == _generatorMessages || 0 >= _generatorMessages.count) {
+            menuItem.title = NSLocalizedString(@"No Last Issue", @"Menu item title for no last entry in a list of messages.");
+            return NO;
+        }
+        menuItem.title = NSLocalizedString(@"Last Issue", @"Menu item title for jumping to the last unspecified entry in a list of messages.");
+        return YES;
+    }
+
     if (menuItem.action == @selector(jumpToNextIssue:)) {
-        return NO;
+        if (nil == _generatorMessages || 0 >= _generatorMessages.count || _sourceView.selectedRange.location >= _sourceView.textStorage.length) {
+            return NO;
+        }
+        NSRange lineNumberRange = {_sourceView.selectedRange.location, 0};
+        lineNumberRange = [_sourceView.textStorage.mutableString lineRangeForRange:lineNumberRange];
+        lineNumberRange.location += lineNumberRange.length / 2;
+        lineNumberRange = NSMakeRange([_sourceView lineNumberAtIndex:lineNumberRange.location] + 1, NSNotFound);
+        XDTMessage *nextMessages = [_generatorMessages messagesForLineNumberRange:lineNumberRange];
+        if (nil == nextMessages) {
+            menuItem.title = NSLocalizedString(@"No Next Issue", @"Menu item title for no next entry in a list of messages.");
+            return NO;
+        }
+        XDTMessageTypeValue msgType = [[nextMessages.objectEnumerator.nextObject valueForKey:XDTMessageType] unsignedIntegerValue];
+        switch (msgType) {
+            case XDTMessageTypeError:
+                menuItem.title = NSLocalizedString(@"Next Error", @"Menu item title for jumping to the next error in a list of messages.");
+                break;
+            case XDTMessageTypeWarning:
+                menuItem.title = NSLocalizedString(@"Next Warning", @"Menu item title for jumping to the next warning in a list of messages.");
+                break;
+
+            default:
+                menuItem.title = NSLocalizedString(@"Next Issue", @"Menu item title for jumping to the next unspecified entry in a list of messages.");
+                break;
+        }
+        return YES;
     }
 
     if (menuItem.action == @selector(jumpToPreviousIssue:)) {
-        return NO;
+        if (nil == _generatorMessages || 0 >= _generatorMessages.count || 0 >= _sourceView.selectedRange.location) {
+            return NO;
+        }
+        NSRange lineNumberRange = {_sourceView.selectedRange.location, 0};
+        lineNumberRange = [_sourceView.textStorage.mutableString lineRangeForRange:lineNumberRange];
+        lineNumberRange.location += lineNumberRange.length / 2;
+        lineNumberRange = NSMakeRange(1, [_sourceView lineNumberAtIndex:lineNumberRange.location] - 1);
+        XDTMessage *prevMessages = [_generatorMessages messagesForLineNumberRange:lineNumberRange];
+        if (nil == prevMessages) {
+            menuItem.title = NSLocalizedString(@"No Previous Issue", @"Menu item title for no previous entry in a list of messages.");
+            return NO;
+        }
+        XDTMessageTypeValue msgType = [[prevMessages.reverseObjectEnumerator.nextObject valueForKey:XDTMessageType] unsignedIntegerValue];
+        switch (msgType) {
+            case XDTMessageTypeError:
+                menuItem.title = NSLocalizedString(@"Previous Error", @"Menu item title for jumping to the previous error in a list of messages.");
+                break;
+            case XDTMessageTypeWarning:
+                menuItem.title = NSLocalizedString(@"Previous Warning", @"Menu item title for jumping to the previous warning in a list of messages.");
+                break;
+
+            default:
+                menuItem.title = NSLocalizedString(@"Previous Issue", @"Menu item title for jumping to the previous unspecified entry in a list of messages.");
+                break;
+        }
+        return YES;
+    }
+
+    if (menuItem.action == @selector(jumpToFirstIssue:)) {
+        if (nil == _generatorMessages || 0 >= _generatorMessages.count) {
+            menuItem.title = NSLocalizedString(@"No First Issue", @"Menu item title for no first entry in a list of messages.");
+            return NO;
+        }
+        menuItem.title = NSLocalizedString(@"First Issue", @"Menu item title for jumping to the first unspecified entry in a list of messages.");
+        return YES;
     }
 
     return YES;
@@ -567,14 +637,14 @@
 - (IBAction)jumpToLineNumber:(id)sender
 {
     [self.windowForSheet beginSheet:_lineNumberPanel completionHandler:^(NSModalResponse returnCode) {
-        const NSInteger jumpLineNumber = [self->_lineNumberJump integerValue];
-        if (NSModalResponseStop != returnCode || nil == self->_lineNumberJump) {
+        const NSInteger jumpLineNumber = [self.lineNumberJump integerValue];
+        if (NSModalResponseStop != returnCode || nil == self.lineNumberJump) {
             return;
         }
-        __block NSRange lastLineRange;
-        [self->_sourceView.textStorage enumerateLinesUsingBlock:^(NSRange lineRange, NSUInteger lineNumber, BOOL *stop) {
-            lastLineRange = lineRange;
+        __block NSRange lastLineRange = self.sourceView.selectedRange;
+        [self.sourceView.textStorage enumerateLinesUsingBlock:^(NSRange lineRange, NSUInteger lineNumber, BOOL *stop) {
             if (lineNumber == jumpLineNumber) {
+                lastLineRange = lineRange;
                 *stop = YES;
             }
         }];
@@ -597,15 +667,75 @@
 }
 
 
+- (IBAction)jumpToLastIssue:(id)sender
+{
+    NSEnumerator<NSDictionary<XDTMessageTypeKey,id> *> *messageEnumerator = _generatorMessages.reverseObjectEnumerator;
+    NSDictionary<XDTMessageTypeKey, id> *lastMessage = messageEnumerator.nextObject;
+    if (nil == lastMessage) {
+        return;
+    }
+
+    NSNumber *lineNumber = [lastMessage valueForKey:XDTMessageLineNumber];
+    while ([NSNull.null isEqualTo:lineNumber]) {
+        lastMessage = messageEnumerator.nextObject;
+        lineNumber = [lastMessage valueForKey:XDTMessageLineNumber];
+    }
+    NSUInteger firstLineNumber = [lineNumber unsignedIntegerValue];
+    _sourceView.selectedRange = [_sourceView.textStorage rangeForLineNumber:firstLineNumber];
+    [_sourceView scrollRangeToVisible:_sourceView.selectedRange];
+}
+
+
 - (IBAction)jumpToNextIssue:(id)sender
 {
+    NSRange lineNumberRange = {_sourceView.selectedRange.location, 0};
+    lineNumberRange = [_sourceView.textStorage.mutableString lineRangeForRange:lineNumberRange];
+    lineNumberRange.location += lineNumberRange.length / 2;
+    lineNumberRange = NSMakeRange([_sourceView lineNumberAtIndex:lineNumberRange.location] + 1, NSNotFound);
+    XDTMessage *nextMessages = [_generatorMessages messagesForLineNumberRange:lineNumberRange];
+    if (nil == nextMessages) {
+        return;
+    }
 
+    NSUInteger nextLineNumber = [[nextMessages.objectEnumerator.nextObject valueForKey:XDTMessageLineNumber] unsignedIntegerValue];
+    _sourceView.selectedRange = [_sourceView.textStorage rangeForLineNumber:nextLineNumber];
+    [_sourceView scrollRangeToVisible:_sourceView.selectedRange];
 }
 
 
 - (IBAction)jumpToPreviousIssue:(id)sender
 {
+    NSRange lineNumberRange = {_sourceView.selectedRange.location, 0};
+    lineNumberRange = [_sourceView.textStorage.mutableString lineRangeForRange:lineNumberRange];
+    lineNumberRange.location += lineNumberRange.length / 2;
+    lineNumberRange = NSMakeRange(1, [_sourceView lineNumberAtIndex:lineNumberRange.location] - 1);
+    XDTMessage *prevMessages = [_generatorMessages messagesForLineNumberRange:lineNumberRange];
+    if (nil == prevMessages) {
+        return;
+    }
 
+    NSUInteger prevLineNumber = [[prevMessages.reverseObjectEnumerator.nextObject valueForKey:XDTMessageLineNumber] unsignedIntegerValue];
+    _sourceView.selectedRange = [_sourceView.textStorage rangeForLineNumber:prevLineNumber];
+    [_sourceView scrollRangeToVisible:_sourceView.selectedRange];
+}
+
+
+- (IBAction)jumpToFirstIssue:(id)sender
+{
+    NSEnumerator<NSDictionary<XDTMessageTypeKey,id> *> *messageEnumerator = _generatorMessages.objectEnumerator;
+    NSDictionary<XDTMessageTypeKey, id> *firstMessage = messageEnumerator.nextObject;
+    if (nil == firstMessage) {
+        return;
+    }
+
+    NSNumber *lineNumber = [firstMessage valueForKey:XDTMessageLineNumber];
+    while ([NSNull.null isEqualTo:lineNumber]) {
+        firstMessage = messageEnumerator.nextObject;
+        lineNumber = [firstMessage valueForKey:XDTMessageLineNumber];
+    }
+    NSUInteger firstLineNumber = [lineNumber unsignedIntegerValue];
+    _sourceView.selectedRange = [_sourceView.textStorage rangeForLineNumber:firstLineNumber];
+    [_sourceView scrollRangeToVisible:_sourceView.selectedRange];
 }
 
 

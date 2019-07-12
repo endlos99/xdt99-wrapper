@@ -31,6 +31,9 @@
 /* Class = "NSMenuItem"; title = "Enter Full Screen"; ObjectID = "4J7-dP-txa"; */
 "4J7-dP-txa.title" = "Vollbildmodus";
 
+/* Class = "NSMenuItem"; title = "Last Issue"; ObjectID = "4K8-ol-The"; */
+"4K8-ol-The.title" = "Letzter Problemfall";
+
 /* Class = "NSMenuItem"; title = "Quit SimpleXDT99"; ObjectID = "4sb-4s-VLi"; */
 "4sb-4s-VLi.title" = "SimpleXDT99 beenden";
 
@@ -207,6 +210,9 @@
 
 /* Class = "NSMenuItem"; title = "Paste"; ObjectID = "gVA-U4-sdL"; */
 "gVA-U4-sdL.title" = "Einfügen";
+
+/* Class = "NSMenuItem"; title = "First Issue"; ObjectID = "Gxg-uh-3bG"; */
+"Gxg-uh-3bG.title" = "Erster Problemfall";
 
 /* Class = "NSMenuItem"; title = "Writing Direction"; ObjectID = "H1b-Si-o9J"; */
 "H1b-Si-o9J.title" = "Richtung beim Schreiben";
