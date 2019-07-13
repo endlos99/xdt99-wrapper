@@ -68,6 +68,9 @@
                                                 </textView>
                                             </subviews>
                                         </clipView>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="Iue-nF-uen"/>
+                                        </constraints>
                                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="WnJ-TZ-qLa">
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
@@ -281,7 +284,7 @@
                                                     <size key="minSize" width="588" height="255"/>
                                                     <size key="maxSize" width="695" height="10000000"/>
                                                     <attributedString key="textStorage">
-                                                        <fragment content="Log">
+                                                        <fragment content="Log 2 3">
                                                             <attributes>
                                                                 <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                 <font key="NSFont" size="12" name="Menlo-Regular"/>
@@ -296,6 +299,9 @@
                                                 </textView>
                                             </subviews>
                                         </clipView>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="PQY-F8-bBD"/>
+                                        </constraints>
                                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="sfG-cX-5ur">
                                             <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                             <autoresizingMask key="autoresizingMask"/>
