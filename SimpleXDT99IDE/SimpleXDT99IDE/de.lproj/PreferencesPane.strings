@@ -40,6 +40,9 @@
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "QvC-M9-y7g"; */
 "QvC-M9-y7g.title" = "Einstellungen";
 
+/* Class = "NSButtonCell"; title = "Reset Suppressed Alerts"; ObjectID = "STG-Wo-vjq"; */
+"STG-Wo-vjq.title" = "Unterdrückte Warnhinweise zurücksetzen";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "The number of spaces to insert for a tab character."; ObjectID = "T2v-Ps-Dxe"; */
 "T2v-Ps-Dxe.ibShadowedToolTip" = "Die Anzahl der einzufügenden Leerzeichen für ein Tabulatorzeichen.";
 

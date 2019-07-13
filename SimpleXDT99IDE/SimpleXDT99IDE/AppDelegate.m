@@ -80,11 +80,16 @@ NS_ASSUME_NONNULL_END
 
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {
+    NSData *emptyIndexSet = [NSKeyedArchiver archivedDataWithRootObject:NSIndexSet.indexSet];
     NSDictionary *defaultsDict = @{
                                    UserDefaultKeyDocumentOptionOpenNestedFiles: @YES,
                                    UserDefaultKeyDocumentOptionShowLog: @YES,
                                    UserDefaultKeyDocumentOptionShowErrorsInLog: @YES,
                                    UserDefaultKeyDocumentOptionShowWarningsInLog: @YES,
+                                   UserDefaultKeyDocumentOptionSuppressedAlerts: @{
+                                           IDEErrorDomain: emptyIndexSet,
+                                           XDTErrorDomain: emptyIndexSet
+                                           },
                                    UserDefaultKeyDocumentOptionEnableHighlighting: @YES,
                                    UserDefaultKeyDocumentOptionHighlightSyntax: @YES,
                                    UserDefaultKeyDocumentOptionHighlightMessages: @YES,
@@ -145,7 +150,7 @@ NS_ASSUME_NONNULL_END
     SourceCodeDocument *doc = NSDocumentController.sharedDocumentController.currentDocument;
     NSError *error = nil;
     if (![doc openNestedFiles:&error]) {
-        [doc presentError:error];
+        (void)[doc presentError:error];
     }
 }
 

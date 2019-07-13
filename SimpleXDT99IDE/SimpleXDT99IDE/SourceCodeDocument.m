@@ -219,6 +219,46 @@
  */
 
 
+- (BOOL)presentError:(NSError *)error
+{
+    NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
+    NSDictionary<NSErrorDomain, NSData *> *suppressedAlerts = [defaults objectForKey:UserDefaultKeyDocumentOptionSuppressedAlerts];
+    NSIndexSet *suppressedErrorCodes = [NSKeyedUnarchiver unarchiveObjectWithData:[suppressedAlerts objectForKey:error.domain]];
+    BOOL isSuppressedErrorCode = [suppressedErrorCodes containsIndex:error.code];
+
+    if (isSuppressedErrorCode) {
+        [self willNotPresentError:error];
+        return NO;
+    }
+
+    NSErrorDomain errorDomain = error.domain;
+    NSInteger errorCode = error.code;
+    BOOL isXDTLoggedError = [errorDomain isEqualToString:XDTErrorDomain] && XDTErrorCodeToolLoggedError == errorCode;
+    if (isXDTLoggedError) {
+        /*
+         The content/message of an logged error will change, because it is already be shown in the log console.
+         */
+        error = [self willPresentError:error];
+    }
+
+    NSAlert *errorAlert = [NSAlert alertWithError:error];
+    errorAlert.alertStyle = (isXDTLoggedError)? NSAlertStyleWarning : NSAlertStyleCritical;
+    errorAlert.showsSuppressionButton = isXDTLoggedError; // Using default checkbox title
+    [errorAlert beginSheetModalForWindow:self.windowForSheet completionHandler:^(NSModalResponse returnCode) {
+        if (errorAlert.suppressionButton.state == NSOnState) {
+            // Suppress this alert for the specific error domain and error code from now on
+            NSMutableIndexSet *newSuppressedErrorCode = suppressedErrorCodes.mutableCopy;
+            [newSuppressedErrorCode addIndex:errorCode];
+            NSMutableDictionary<NSErrorDomain, NSData *> *newSuppressedAlerts = suppressedAlerts.mutableCopy;
+            [newSuppressedAlerts setObject:[NSKeyedArchiver archivedDataWithRootObject:newSuppressedErrorCode] forKey:errorDomain];
+            [defaults setObject:newSuppressedAlerts forKey:UserDefaultKeyDocumentOptionSuppressedAlerts];
+        }
+    }];
+    
+    return NO;
+}
+
+
 /* This method returns a new error witch will displayed in an alert when no Log View is visible or the option showing errors is deactivated. */
 - (NSError *)willPresentError:(NSError *)error
 {
@@ -769,6 +809,14 @@
     if (!self.isDocumentEdited) {
         return;
     }
+    NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
+    NSDictionary<NSErrorDomain, NSData *> *suppressedAlerts = [defaults objectForKey:UserDefaultKeyDocumentOptionSuppressedAlerts];
+    NSIndexSet *suppressedErrorCodes = [NSKeyedUnarchiver unarchiveObjectWithData:[suppressedAlerts objectForKey:IDEErrorDomain]];
+    if ([suppressedErrorCodes containsIndex:IDEErrorCodeDocumentNotSaved]) {
+        [self saveDocument:sender];
+        [self updateChangeCount:NSChangeCleared];
+        return;
+    }
 
     NSAlert *alert = [NSAlert new];
     alert.messageText = NSLocalizedString(@"Can't process file!", @"Alert message for unsaved documents which will be processed by a generator.");
@@ -776,7 +824,16 @@
     [alert addButtonWithTitle:NSLocalizedString(@"Abort", @"Alternate button name for choosing 'Abort' in an Alert.")];
     alert.informativeText = [NSString stringWithFormat:NSLocalizedString(@"Caution: The file '%@' must be saved before it can be processed.", @"Informative text for unsaved documents which will be processed by a generator."), self.fileURL.lastPathComponent];
     alert.alertStyle = NSAlertStyleWarning;
+    alert.showsSuppressionButton = YES;
     [alert beginSheetModalForWindow:self.windowForSheet completionHandler:^(NSModalResponse returnCode) {
+        if (alert.suppressionButton.state == NSOnState) {
+            // Suppress this alert for the specific error domain and error code from now on
+            NSMutableIndexSet *newSuppressedErrorCode = suppressedErrorCodes.mutableCopy;
+            [newSuppressedErrorCode addIndex:IDEErrorCodeDocumentNotSaved];
+            NSMutableDictionary<NSErrorDomain, NSData *> *newSuppressedAlerts = suppressedAlerts.mutableCopy;
+            [newSuppressedAlerts setObject:[NSKeyedArchiver archivedDataWithRootObject:newSuppressedErrorCode] forKey:IDEErrorDomain];
+            [defaults setObject:newSuppressedAlerts forKey:UserDefaultKeyDocumentOptionSuppressedAlerts];
+        }
         [NSApp stopModalWithCode:returnCode];
     }];
     NSModalResponse returnCode = [NSApp runModalForWindow:self.windowForSheet];

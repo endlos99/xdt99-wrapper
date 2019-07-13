@@ -28,6 +28,7 @@
 #define UserDefaultKeyDocumentOptionShowLog @"DocumentOptionShowLog"
 #define UserDefaultKeyDocumentOptionShowErrorsInLog @"DocumentOptionShowErrorsInLog"
 #define UserDefaultKeyDocumentOptionShowWarningsInLog @"DocumentOptionShowWarningsInLog"
+#define UserDefaultKeyDocumentOptionSuppressedAlerts @"DocumentOptionSuppressedAlerts"      /* An NSDictionary with NSErrorDomain as key and NSData as value (which will be need to unarchived to NSIndexSet). */
 #define UserDefaultKeyDocumentOptionEnableHighlighting @"DocumentOptionEnableHighlighting"
 #define UserDefaultKeyDocumentOptionHighlightSyntax @"DocumentOptionHighlightSyntax"
 #define UserDefaultKeyDocumentOptionHighlightMessages @"DocumentOptionHighlightMessages"

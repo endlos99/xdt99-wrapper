@@ -137,7 +137,7 @@
     if (openNestedFiles) {
         NSError *error = nil;
         if (![self openNestedFiles:&error]) {
-            [self presentError:error];
+            (void)[self presentError:error];
         }
     }
 }
@@ -479,10 +479,7 @@
     XDTGa99TargetType xdtTargetType = [self targetType];
     if (![self assembleCode:xdtTargetType error:&error]) {
         if (nil != error) {
-            if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
-                [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
-            }
-            return;
+            (void)[self presentError:error];
         }
     }
 }
@@ -500,10 +497,7 @@
     if (![self assembleCode:xdtTargetType error:&error] || nil != error ||
         ![self exportBinaries:xdtTargetType error:&error] || nil != error) {
         if (nil != error) {
-            if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
-                [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
-            }
-            return;
+            (void)[self presentError:error];
         }
     }
 }

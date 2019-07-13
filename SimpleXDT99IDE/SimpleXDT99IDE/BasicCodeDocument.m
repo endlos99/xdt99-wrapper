@@ -382,9 +382,7 @@
     XDTBasic *basic = [self parseCode:&error];
     if (nil == basic) {
         if (nil != error) {
-            if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
-                [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
-            }
+            (void)[self presentError:error];
         }
         return;
     }
@@ -403,9 +401,7 @@
     XDTBasic *basic = [self parseCode:&error];
     if (nil == basic) {
         if (nil != error) {
-            if (!self.shouldShowErrorsInLog || !self.shouldShowLog) {
-                [self presentError:error modalForWindow:[self windowForSheet] delegate:nil didPresentSelector:nil contextInfo:nil];
-            }
+            (void)[self presentError:error];
         }
         return;
     }

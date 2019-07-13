@@ -27,6 +27,8 @@
 #import "SourceCodeDocument.h"
 #import "AppDelegate.h"
 
+#import <XDTools99/XDTools99.h>
+
 
 @interface PreferencesPaneController ()
 
@@ -87,6 +89,15 @@ static PreferencesPaneController *_sharedPreferencesPane = nil;
     [NSDocumentController.sharedDocumentController.documents enumerateObjectsUsingBlock:^(SourceCodeDocument *doc, NSUInteger idx, BOOL *stop) {
         doc.generatorMessages = doc.generatorMessages;
     }];
+}
+
+
+- (IBAction)resetSuppressedAlerts:(id)sender
+{
+    NSData *emptyIndexSet = [NSKeyedArchiver archivedDataWithRootObject:NSIndexSet.indexSet];
+    NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
+
+    [defaults setObject:@{IDEErrorDomain: emptyIndexSet, XDTErrorDomain: emptyIndexSet} forKey:UserDefaultKeyDocumentOptionSuppressedAlerts];
 }
 
 @end
