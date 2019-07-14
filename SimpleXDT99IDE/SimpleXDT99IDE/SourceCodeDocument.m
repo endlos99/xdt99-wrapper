@@ -51,19 +51,21 @@
 
 @property (retain) IBOutlet NSPanel *lineNumberPanel;
 
-- (IBAction)jumpToLineNumber:(id)sender;
-- (IBAction)jumpToLabel:(id<NSValidatedUserInterfaceItem>)sender;
-- (IBAction)jumpToLastIssue:(id)sender;
-- (IBAction)jumpToNextIssue:(id)sender;
-- (IBAction)jumpToPreviousIssue:(id)sender;
-- (IBAction)jumpToFirstIssue:(id)sender;
+- (IBAction)jumpToLineNumber:(nullable id)sender;
+- (IBAction)jumpToLabel:(nullable id<NSValidatedUserInterfaceItem>)sender;
+- (IBAction)jumpToLastIssue:(nullable id)sender;
+- (IBAction)jumpToNextIssue:(nullable id)sender;
+- (IBAction)jumpToPreviousIssue:(nullable id)sender;
+- (IBAction)jumpToFirstIssue:(nullable id)sender;
 
-- (IBAction)endLineNumberSheet:(id)sender;  // only for quitting the line number sheet
+- (IBAction)endLineNumberSheet:(nullable id)sender;  // only for quitting the line number sheet
 
 - (IBAction)selectOutputFile:(nullable id)sender;
 - (IBAction)hideShowLog:(nullable id)sender;
+- (IBAction)toggleErrors:(nullable id)sender;
+- (IBAction)toggleWarnings:(nullable id)sender;
 
-- (IBAction)saveLog:(id)sender;
+- (IBAction)saveLog:(nullable id)sender;
 
 - (void)updateMessagesToSource;
 - (void)buildLabelMenu:(NSMenu *)labelMenu;
@@ -670,6 +672,21 @@
         return YES;
     }
 
+    if (menuItem.action == @selector(hideShowLog:)) {
+        menuItem.title = (_shouldShowLog)? NSLocalizedString(@"Hide Log", @"Menu item title for hiding the log view.") : NSLocalizedString(@"Show Log", @"Menu item title for showing the log view.");
+        return YES;
+    }
+
+    if (menuItem.action == @selector(toggleErrors:)) {
+        menuItem.title = (_shouldShowErrorsInLog)? NSLocalizedString(@"Suppress Errors in Log", @"Menu item title for suppressing errors in the log view") : NSLocalizedString(@"Display Errors in Log", @"Menu item title for displaying errors in the log view");
+        return _shouldShowLog;
+    }
+
+    if (menuItem.action == @selector(toggleWarnings:)) {
+        menuItem.title = (_shouldShowWarningsInLog)? NSLocalizedString(@"Suppress Warnings in Log", @"Menu item title for suppressing warnings in the log view") : NSLocalizedString(@"Display Warnings in Log", @"Menu item title for displaying warnings in the log view");
+        return _shouldShowLog;
+    }
+
     return YES;
 }
 
@@ -908,7 +925,19 @@
 
 - (IBAction)hideShowLog:(id)sender
 {
-    [self setShouldShowLog:[sender state] == NSOnState];
+    [self setShouldShowLog:!_shouldShowLog];
+}
+
+
+- (IBAction)toggleErrors:(id)sender
+{
+    [self setShouldShowErrorsInLog:!_shouldShowErrorsInLog];
+}
+
+
+- (IBAction)toggleWarnings:(id)sender
+{
+    [self setShouldShowWarningsInLog:!_shouldShowWarningsInLog];
 }
 
 

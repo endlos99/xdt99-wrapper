@@ -151,8 +151,14 @@
 /* Class = "NSMenu"; title = "Substitutions"; ObjectID = "FeM-D8-WVr"; */
 "FeM-D8-WVr.title" = "Ersetzungen";
 
+/* Class = "NSMenuItem"; title = "Display Warnings in Log"; ObjectID = "FiV-Zf-e1O"; */
+"FiV-Zf-e1O.title" = "Warnungen im Log anzeigen";
+
 /* Class = "NSMenuItem"; title = "SimpleXDT99 Help"; ObjectID = "FKE-Sm-Kum"; */
 "FKE-Sm-Kum.title" = "SimpleXDT99-Hilfe";
+
+/* Class = "NSMenuItem"; title = "Show Log"; ObjectID = "fYi-lx-0y6"; */
+"fYi-lx-0y6.title" = "Log-Ansicht zeigen";
 
 /* Class = "NSMenuItem"; ibShadowedToolTip = "Opens all included source files recursively."; ObjectID = "gpA-0v-lyQ"; */
 "gpA-0v-lyQ.ibShadowedToolTip" = "Öffnet alle eingebundenen Quelldateien rekursiv.";
@@ -204,6 +210,9 @@
 
 /* Class = "NSButton"; ibShadowedToolTip = "Outputs the symbols as an EQU notation."; ObjectID = "Ijm-yZ-hNQ"; */
 "Ijm-yZ-hNQ.ibShadowedToolTip" = "Ausgabe der Symbole als EQU-Notation.";
+
+/* Class = "NSMenuItem"; title = "Show All Logs"; ObjectID = "jhG-3C-BDZ"; */
+"jhG-3C-BDZ.title" = "Alle Log-Ansichten zeigen";
 
 /* Class = "NSMenuItem"; title = "Revert to Saved"; ObjectID = "KaW-ft-85H"; */
 "KaW-ft-85H.title" = "Zurücksetzen auf";
@@ -399,6 +408,9 @@
 
 /* Class = "NSButtonCell"; title = "Register"; ObjectID = "vAy-6i-MD0"; */
 "vAy-6i-MD0.title" = "Register";
+
+/* Class = "NSMenuItem"; title = "Display Errors in Log"; ObjectID = "vCY-BK-5Rs"; */
+"vCY-BK-5Rs.title" = "Fehler in der Log-Ansicht zeigen";
 
 /* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "Vdr-fp-XzO"; */
 "Vdr-fp-XzO.title" = "Andere ausblenden";

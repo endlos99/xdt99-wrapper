@@ -432,6 +432,31 @@
                                     <action selector="toggleFullScreen:" target="-1" id="dU3-MA-1Rq"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="rxq-z8-o25"/>
+                            <menuItem title="Show Log" keyEquivalent="l" id="fYi-lx-0y6">
+                                <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                <connections>
+                                    <action selector="hideShowLog:" target="-1" id="rEc-nH-46B"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show All Logs" alternate="YES" keyEquivalent="l" id="jhG-3C-BDZ">
+                                <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="hideShowAllLogs:" target="Voe-Tx-rLC" id="8XL-lY-nfe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Display Errors in Log" id="vCY-BK-5Rs">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="toggleErrors:" target="-1" id="eXY-jd-CV2"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Display Warnings in Log" id="FiV-Zf-e1O">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="toggleWarnings:" target="-1" id="PAc-vL-QGg"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>

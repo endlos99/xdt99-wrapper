@@ -19,11 +19,11 @@
 /* Message text for alerting to create a new file. */
 "Creating new file" = "Neue Datei erstellen";
 
-/* Reason for the error if the recognized file format cannot be decoded. */
-"It seems that this Basic file is not in %@ format." = "Es scheint, dass diese Basic-Datei nicht im %@-Format vorliegt.";
+/* Menu item title for displaying errors in the log view */
+"Display Errors in Log" = "Fehler in der Log-Ansicht zeigen";
 
-/* Error description of a missing option. */
-"Missing Option!" = "Fehlende Option!";
+/* Menu item title for displaying warnings in the log view */
+"Display Warnings in Log" = "Warnungen in der Log-Ansicht zeigen";
 
 /* the word 'Error' */
 "Error" = "Fehler";
@@ -31,8 +31,20 @@
 /* Menu item title for jumping to the first unspecified entry in a list of messages. */
 "First Issue" = "Erster Problemfall";
 
+/* Menu item titel for hiding all log view for every document. */
+"Hide All Logs" = "Alle Log-Ansichten verbergen";
+
+/* Menu item title for hiding the log view. */
+"Hide Log" = "Log-Ansicht verbergen";
+
+/* Reason for the error if the recognized file format cannot be decoded. */
+"It seems that this Basic file is not in %@ format." = "Es scheint, dass diese Basic-Datei nicht im %@-Format vorliegt.";
+
 /* Menu item title for jumping to the last unspecified entry in a list of messages. */
 "Last Issue" = "Letzter Problemfall";
+
+/* Error description of a missing option. */
+"Missing Option!" = "Fehlende Option!";
 
 /* Menu item title for jumping to the next error in a list of messages. */
 "Next Error" = "Nächster Fehler";
@@ -91,6 +103,18 @@
 
 /* Title for opening TI Basics files in Open Panel */
 "Select TI Basic source file" = "TI Basic Quelldatei auswählen";
+
+/* Menu item titel for showing all log view for every document. */
+"Show All Logs" = "Alle Log-Ansichten zeigen";
+
+/* Menu item title for showing the log view. */
+"Show Log" = "Log-Ansicht zeigen";
+
+/* Menu item title for suppressing errors in the log view */
+"Suppress Errors in Log" = "Fehler in der Log-Ansicht unterdrücken";
+
+/* Menu item title for suppressing warnings in the log view */
+"Suppress Warnings in Log" = "Warnungen in der Log-Ansicht unterdrücken";
 
 /* Explanation for an error of a missing cartridge name option. */
 "The cartridge name is missing! Please specify a name of the cartridge to create!" = "Der Modulname fehlt! Bitte geben Sie einen Namen für das zu erstellende Modul an!";

@@ -100,7 +100,6 @@
                                                     <font key="font" metaFont="smallSystem"/>
                                                 </buttonCell>
                                                 <connections>
-                                                    <action selector="hideShowLog:" target="-2" id="6lb-84-0J2"/>
                                                     <binding destination="-2" name="value" keyPath="self.shouldShowLog" id="4cx-49-9mD"/>
                                                 </connections>
                                             </button>

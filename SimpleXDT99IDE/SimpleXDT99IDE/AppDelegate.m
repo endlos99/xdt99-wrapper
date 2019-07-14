@@ -61,6 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)runAssembler:(nullable id)sender;
 - (IBAction)runGPLAssembler:(nullable id)sender;
 - (IBAction)runBasicEncoder:(nullable id)sender;
+- (IBAction)hideShowAllLogs:(nullable id)sender;
 
 - (nullable NSURL *)selectInputFileWithExtension:(NSString *)extension;
 
@@ -133,6 +134,12 @@ NS_ASSUME_NONNULL_END
     if (menuItem.action == @selector(openEmbeddedFiles:)) {
         SourceCodeDocument *doc = NSDocumentController.sharedDocumentController.currentDocument;
         return nil != doc && ([doc isKindOfClass:AssemblerDocument.class] || [doc isKindOfClass:GPLAssemblerDocument.class]);
+    }
+
+    if (menuItem.action == @selector(hideShowAllLogs:)) {
+        BOOL logIsVisible = ((SourceCodeDocument *)NSDocumentController.sharedDocumentController.currentDocument).shouldShowLog;
+        menuItem.title = (logIsVisible)? NSLocalizedString(@"Hide All Logs", @"Menu item titel for hiding all log view for every document.") : NSLocalizedString(@"Show All Logs", @"Menu item titel for showing all log view for every document.");
+        return YES;
     }
 
     return YES;
@@ -574,6 +581,18 @@ NS_ASSUME_NONNULL_END
         }
 
         return successfullySaved;
+    }];
+}
+
+
+- (IBAction)hideShowAllLogs:(nullable id)sender
+{
+    const BOOL isLogVisible = ((SourceCodeDocument *)NSDocumentController.sharedDocumentController.currentDocument).shouldShowLog;
+    [NSDocumentController.sharedDocumentController.documents enumerateObjectsUsingBlock:^(__kindof NSDocument *doc, NSUInteger idx, BOOL *stop) {
+        if (![doc isKindOfClass:[SourceCodeDocument class]]) {
+            return;
+        }
+        ((SourceCodeDocument *)doc).shouldShowLog = !isLogVisible;
     }];
 }
 
