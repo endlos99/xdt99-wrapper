@@ -141,13 +141,6 @@
                                     </binding>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="unb-rz-cNK"/>
-                            <menuItem title="Run in Terminal" toolTip="Runs the xdt99 tool diretly as a command line instruction of the Terminal." id="yJY-fe-7XR">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="runToolInTerminal:" target="-1" id="2FI-Vk-TX6"/>
-                                </connections>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="7eP-kJ-Kjr"/>
                             <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                 <connections>
@@ -508,6 +501,32 @@
                                 <modifierMask key="keyEquivalentModifierMask" shift="YES" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="jumpToFirstIssue:" target="-1" id="0bg-0u-wf6"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Generator" id="6uN-SG-coS">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Generator" id="pGN-jj-tVp">
+                        <items>
+                            <menuItem title="Check" id="woe-rS-pld">
+                                <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                <connections>
+                                    <action selector="checkCode:" target="-1" id="gC6-xj-ogp"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Generate" keyEquivalent="b" id="Kes-hb-MOG">
+                                <connections>
+                                    <action selector="generateCode:" target="-1" id="vUt-TJ-xgW"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="unb-rz-cNK"/>
+                            <menuItem title="Run in Terminal" keyEquivalent="B" toolTip="Runs the xdt99 tool diretly as a command line instruction of the Terminal." id="yJY-fe-7XR">
+                                <connections>
+                                    <action selector="runToolInTerminal:" target="-1" id="2FI-Vk-TX6"/>
                                 </connections>
                             </menuItem>
                         </items>

@@ -220,6 +220,9 @@
 /* Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS"; */
 "Kd2-mp-pUS.title" = "Alle anzeigen";
 
+/* Class = "NSMenuItem"; title = "Generate"; ObjectID = "Kes-hb-MOG"; */
+"Kes-hb-MOG.title" = "Erzeugen";
+
 /* Class = "NSMenuItem"; ibShadowedToolTip = "The cartridge format relocates the GPL program to the cartridge GROM area, generates GPL header data, and packages the byte code image into a cartridge file suitable for the MESS emulator."; ObjectID = "KGa-br-7wl"; */
 "KGa-br-7wl.ibShadowedToolTip" = "Das Modulformat verschiebt das GPL-Programm in den GROM-Bereich der Module, erzeugt GPL-Headerdaten und verpackt das Bytecode-Image in eine für den MESS-Emulator geeignete Moduldatei.";
 
@@ -447,6 +450,9 @@
 
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "Wly-jW-pVF"; */
 "Wly-jW-pVF.title" = "Format:";
+
+/* Class = "NSMenuItem"; title = "Check"; ObjectID = "woe-rS-pld"; */
+"woe-rS-pld.title" = "Prüfen";
 
 /* Class = "NSMenuItem"; title = "Help"; ObjectID = "wpr-3q-Mcd"; */
 "wpr-3q-Mcd.title" = "Hilfe";
