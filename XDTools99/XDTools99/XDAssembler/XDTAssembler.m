@@ -72,6 +72,7 @@ XDTAs99OptionKey const XDTAs99OptionWarnings = @"XDTAs99OptionWarnings";
 @interface XDTAssembler () {
     const PyObject *assemblerPythonModule;
     PyObject *assemblerPythonClass;
+    XDTMessage *_messages;
 }
 
 @property NSString *version;
@@ -313,6 +314,28 @@ NS_ASSUME_NONNULL_END
 }
 
 
+- (XDTMessage *)messages
+{
+    if (nil != _messages) {
+        return _messages;
+    }
+
+    PyObject *messageList = PyObject_GetAttrString(assemblerPythonClass, "console");
+    if (NULL == messageList) {
+        return nil;
+    }
+
+    XDTMutableMessage *retVal = [XDTMutableMessage messageWithPythonList:messageList];
+    if (0 >= retVal.count) {
+        return nil;
+    }
+    [retVal sortByPriorityAscendingType];
+
+    _messages = retVal;
+    return _messages;
+}
+
+
 #pragma mark - Parsing Methods
 
 
@@ -350,33 +373,29 @@ NS_ASSUME_NONNULL_END
      Don't need to process the dedicated error return value. So skip the item 1 of the value tupel.
      Modern version of xas99 has a console return value which contains all messages (errors and warnings).
 
-     Fetch the console return value which contains all messages the assembler generates.
+     Fetching the console return value which contains all messages the assembler generates is also skiped
+     here for the item 2 of the value tupel. The messages can be obtained via the console property of the
+     Assembler object.
      */
-    XDTMutableMessage *newMessages = nil;
-    PyObject *messageList = PyTuple_GetItem(pValueTupel, 2);
-    if (NULL != messageList) {
-        const Py_ssize_t messageCount = PyList_Size(messageList);
-        if (0 < messageCount) {
-            newMessages = [XDTMutableMessage messageWithPythonList:messageList];
-            const NSUInteger errCount = [newMessages countOfType:XDTMessageTypeError];
-            if (0 < errCount) {
-                if (nil != error) {
-                    NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
-                    NSDictionary *errorDict = @{
-                                                NSLocalizedDescriptionKey: [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Error occured while assembling '%@'", nil, myBundle, @"Description for an error object, discribing that the Assembler faild assembling a given file name."), baseName],
-                                                NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Assembler ends with %ld found error(s).", nil, myBundle, @"Reason for an error object, why the Assembler stopped abnormally."), errCount],
-                                                NSLocalizedRecoverySuggestionErrorKey: NSLocalizedStringFromTableInBundle(@"For more information see messages in the log view. Please check your code and all assembler options and try again.", nil, myBundle, @"Recovery suggestion for an error object, when the Assembler terminates abnormally.")
-                                                };
-                    *error = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolLoggedError userInfo:errorDict];
-                }
-                NSLog(@"Assembler found %ld error(s) while assembling '%@'", errCount, baseName);
-            }
-            [newMessages sortByPriorityAscendingType];
-        }
-    }
+
     [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
-    _messages = newMessages;
+    _messages = nil;
     [self didChangeValueForKey:NSStringFromSelector(@selector(messages))];
+
+    XDTMessage *newMessages = self.messages;
+    const NSUInteger errCount = [newMessages countOfType:XDTMessageTypeError];
+    if (0 < errCount) {
+        if (nil != error) {
+            NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
+            NSDictionary *errorDict = @{
+                                        NSLocalizedDescriptionKey: [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Error occured while assembling '%@'", nil, myBundle, @"Description for an error object, discribing that the Assembler faild assembling a given file name."), baseName],
+                                        NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Assembler ends with %ld found error(s).", nil, myBundle, @"Reason for an error object, why the Assembler stopped abnormally."), errCount],
+                                        NSLocalizedRecoverySuggestionErrorKey: NSLocalizedStringFromTableInBundle(@"For more information see messages in the log view. Please check your code and all assembler options and try again.", nil, myBundle, @"Recovery suggestion for an error object, when the Assembler terminates abnormally.")
+                                        };
+            *error = [NSError errorWithDomain:XDTErrorDomain code:XDTErrorCodeToolLoggedError userInfo:errorDict];
+        }
+        NSLog(@"Assembler found %ld error(s) while assembling '%@'", errCount, baseName);
+    }
 
     XDTAs99Objcode *retVal = nil;
     PyObject *objectCodeObject = PyTuple_GetItem(pValueTupel, 0);
