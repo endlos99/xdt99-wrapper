@@ -166,6 +166,12 @@
     /* Setup syntax highlighting */
     (void)[self setupSyntaxHighlighting];
 
+    // The Method -refreshHighlighting repositions the cursor at the end of the source code.
+    if (self.sourceView.textStorage.length >= self.sourceView.selectedRange.location && 0 >= self.sourceView.selectedRange.length) {
+        self.sourceView.selectedRange = NSMakeRange(0, 0);
+        [self.sourceView scrollRangeToVisible:self.sourceView.selectedRange];
+    }
+
     /* After syntax highlighting, messages get to be highlighted. */
     [self checkCode:nil];
 
