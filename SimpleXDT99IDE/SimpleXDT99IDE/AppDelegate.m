@@ -31,6 +31,9 @@
 #import <XDTools99/XDGPL.h>
 
 #import "PreferencesPaneController.h"
+#import "SourceCodeDocument.h"
+#import "AssemblerDocument.h"
+#import "GPLAssemblerDocument.h"
 
 
 NSErrorDomain const IDEErrorDomain = @"IDEErrorDomain";
@@ -54,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly) BOOL shouldBaseAddressActivated;
 
 - (IBAction)orderToFrontPreferencesPanel:(nullable id)sender;
+- (IBAction)openEmbeddedFiles:(nullable id)sender;
 - (IBAction)runAssembler:(nullable id)sender;
 - (IBAction)runGPLAssembler:(nullable id)sender;
 - (IBAction)runBasicEncoder:(nullable id)sender;
@@ -115,9 +119,30 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Menu Action Methods
 
 
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    if (menuItem.action == @selector(openEmbeddedFiles:)) {
+        SourceCodeDocument *doc = NSDocumentController.sharedDocumentController.currentDocument;
+        return nil != doc && ([doc isKindOfClass:AssemblerDocument.class] || [doc isKindOfClass:GPLAssemblerDocument.class]);
+    }
+
+    return YES;
+}
+
+
 - (IBAction)orderToFrontPreferencesPanel:(id)sender
 {
     [PreferencesPaneController.sharedPreferencesPane showWindow:sender];
+}
+
+
+- (IBAction)openEmbeddedFiles:(id)sender
+{
+    SourceCodeDocument *doc = NSDocumentController.sharedDocumentController.currentDocument;
+    NSError *error = nil;
+    if (![doc openNestedFiles:&error]) {
+        [doc presentError:error];
+    }
 }
 
 

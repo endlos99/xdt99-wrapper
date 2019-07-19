@@ -101,6 +101,12 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Open Include Files" toolTip="Opens all included source files recursively." id="gpA-0v-lyQ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="openEmbeddedFiles:" target="Voe-Tx-rLC" id="xBR-6i-mMp"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
                             <menuItem title="Run Assembler…" toolTip="Run the xas99 Assembler like you would do from the command line." id="Hv8-fC-r6i">
                                 <modifierMask key="keyEquivalentModifierMask"/>

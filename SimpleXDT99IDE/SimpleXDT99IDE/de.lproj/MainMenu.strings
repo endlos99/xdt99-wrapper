@@ -187,6 +187,12 @@
 /* Class = "NSMenuItem"; title = "Font"; ObjectID = "Gi5-1S-RQB"; */
 "Gi5-1S-RQB.title" = "Schrift";
 
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Opens all included source files recursively."; ObjectID = "gpA-0v-lyQ"; */
+"gpA-0v-lyQ.ibShadowedToolTip" = "Öffnet alle eingebundenen Quelldateien rekursiv.";
+
+/* Class = "NSMenuItem"; title = "Open Include Files"; ObjectID = "gpA-0v-lyQ"; */
+"gpA-0v-lyQ.title" = "Eingebundene Dateien öffnen";
+
 /* Class = "NSMenuItem"; title = "Use Default"; ObjectID = "GUa-eO-cwY"; */
 "GUa-eO-cwY.title" = "Normal";
 
