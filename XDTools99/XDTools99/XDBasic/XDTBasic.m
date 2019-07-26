@@ -432,10 +432,8 @@ NS_ASSUME_NONNULL_END
     }
     for (NSString *line in lines) {
         NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" \t\n"]];
-        if (0 < [trimmedLine length]) { /* skip empty lines */
-            PyObject *pLine = PyString_FromString([trimmedLine UTF8String]);
-            PyList_Append(pLinesList, pLine);
-        }
+        PyObject *pLine = PyString_FromString([trimmedLine UTF8String]);
+        PyList_Append(pLinesList, pLine);
     }
 
     if (_join) {
