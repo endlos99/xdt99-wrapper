@@ -60,13 +60,6 @@ typedef void (^XDTMessageEnumBlock)(NSDictionary<XDTMessageTypeKey, id> *obj, BO
 + (instancetype)message;
 
 + (instancetype)messageWithPythonList:(PyObject *)messageList;
-
-/**
- Creates a new message object with messages retrieved from a Python List object.
- This constructor is normally only called from a xbas99 context, so therefor the second argument is used to specify the message type.
- The Basic tool xdt99 does currently not use the well defined interface like the other tools (xas99 and xga99) uses.
- */
-+ (instancetype)messageWithPythonList:(PyObject *)messageList treatingAs:(XDTMessageTypeValue)type;
 + (instancetype)messageWithMessages:(XDTMessage *)messages;
 
 - (instancetype)messagesOfType:(XDTMessageTypeValue)type;

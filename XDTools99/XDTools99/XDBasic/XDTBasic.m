@@ -40,7 +40,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XDTBasic () {
+@interface XDTBasic ()  {
+    XDTMessage *_messages;
     NSArray<NSString *>*_codeLines;
 }
 
@@ -164,21 +165,24 @@ NS_ASSUME_NONNULL_END
 
 - (XDTMessage *)messages
 {
-    PyObject *warningsObject = PyObject_GetAttrString(self.pythonInstance, "warnings");
-    if (NULL == warningsObject) {
+    if (nil != _messages) {
+        [_messages refresh];
+        return _messages;
+    }
+
+    PyObject *messageList = PyObject_GetAttrString(self.pythonInstance, "console");
+    if (NULL == messageList) {
         return nil;
     }
 
-    XDTMutableMessage *retVal = nil;
-    const Py_ssize_t warningCount = PyList_Size(warningsObject);
-    if (0 < warningCount) {
-        retVal = [XDTMutableMessage messageWithPythonList:warningsObject treatingAs:XDTMessageTypeWarning];    /* there is no automatic type detection possible, so treat all messages as warnings */
-        [retVal sortByPriorityAscendingType];
+    XDTMutableMessage *retVal = [XDTMutableMessage messageWithPythonList:messageList];
+    if (0 >= retVal.count) {
+        return nil;
     }
+    [retVal sortByPriorityAscendingType];
 
-    Py_DECREF(warningsObject);
-
-    return retVal;
+    _messages = retVal;
+    return _messages;
 }
 
 
@@ -382,6 +386,25 @@ NS_ASSUME_NONNULL_END
             PyErr_Print();
         }
         return NO;
+    }
+
+    [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
+    _messages = nil;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(messages))];
+
+    XDTMessage *newMessages = self.messages;
+    const NSUInteger errCount = [newMessages countOfType:XDTMessageTypeError];
+    if (0 < errCount) {
+        if (nil != error) {
+            NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
+            NSDictionary *errorDict = @{
+                                        NSLocalizedDescriptionKey: [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Error occured while parsing Basic source", nil, myBundle, @"Description for an error object, discribing that the Basic parser faild parsing the given source code.")],
+                                        NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Basic parser ends with %ld found error(s).", nil, myBundle, @"Reason for an error object, why the BAsic parser stopped abnormally."), errCount],
+                                        NSLocalizedRecoverySuggestionErrorKey: NSLocalizedStringFromTableInBundle(@"For more information see messages in the log view. Please check your code and all Basic options and try again.", nil, myBundle, @"Recovery suggestion for an error object, when the Basic parser terminates abnormally.")
+                                        };
+            *error = [NSError errorWithDomain:XDTErrorDomain code:-1 userInfo:errorDict];
+        }
+        NSLog(@"Basic parser found %ld error(s) while parsing source.", errCount);
     }
 
     assert(Py_None == pNonValue);
