@@ -1,3 +1,9 @@
+/* Class = "NSButtonCell"; title = "Use syntax highlighting"; ObjectID = "4J5-2j-Ygb"; */
+"4J5-2j-Ygb.title" = "Syntaxhervorhebung verwenden";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Coloring the source code depending syntactical contexts."; ObjectID = "oYd-fN-HkE"; */
+"oYd-fN-HkE.ibShadowedToolTip" = "Einfärbung des Quell-Codes abhängig vom syntaktischen Kontext.";
+
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "QvC-M9-y7g"; */
 "QvC-M9-y7g.title" = "Einstellungen";
 

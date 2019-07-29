@@ -1,11 +1,11 @@
 //
-//  XDGPL.h
-//  XDTools99
+//  XDTAs99Objdummy.h
+//  SimpleXDT99
 //
-//  Created by Henrik Wedekind on 16.12.16.
+//  Created by Henrik Wedekind on 30.06.19.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,18 +22,17 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#ifndef XDGPL_h
-#define XDGPL_h
+#import <Foundation/Foundation.h>
 
-#import "XDTObject.h"
+#import <XDTObject.h>
 
-#import "XDTGa99Symbols.h"
-#import "XDTGa99Objcode.h"
-#import "XDTGa99Parser.h"
-#import "XDTGPLAssembler.h"
 
-#import "XDTZipFile.h"
-#import "XDTMessage.h"
-#import "XDTLineScanner.h"
+NS_ASSUME_NONNULL_BEGIN
 
-#endif /* XDGPL_h */
+@interface XDTAs99Objdummy : XDTObject
+
++ (instancetype)objdummyWithPythonInstance:(void *)object;
+
+@end
+
+NS_ASSUME_NONNULL_END

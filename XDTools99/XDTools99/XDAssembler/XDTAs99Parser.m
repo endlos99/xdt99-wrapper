@@ -30,9 +30,15 @@
 #import "NSErrorPythonAdditions.h"
 #import "NSArrayPythonAdditions.h"
 
+#import "XDTLineScanner.h"
+#import "XDTAs99Symbols.h"
+#import "XDTAs99Objdummy.h"
+
 
 #define XDTModuleNameAssembler "xas99"
 #define XDTClassNameParser "Parser"
+
+#define XDTClassNameSymbols "Symbols"   /* defined in XDTSymbols.m */
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -45,6 +51,7 @@ XDTAs99ParserOptionKey const XDTAs99ParserOptionWarnings = @"XDTAs99ParserOption
 @interface XDTAs99Parser () {
     const PyObject *parserPythonModule;
     PyObject *parserPythonClass;
+    //PyObject *_objdummy;
 }
 
 @property BOOL beStrict;
@@ -116,23 +123,26 @@ NS_ASSUME_NONNULL_END
     }
     Py_XDECREF(pVersion);
 
-    PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameParser);
-    if (NULL == pFunc || !PyCallable_Check(pFunc)) {
-        NSLog(@"%s ERROR: Cannot find class \"%s\" in module %s", __FUNCTION__, XDTClassNameParser, PyModule_GetName(pModule));
+    /* reading options from dictionary */
+    _beStrict = [[options valueForKey:XDTAs99ParserOptionStrict] boolValue];
+    _useRegisterSymbols = [[options valueForKey:XDTAs99ParserOptionRegister] boolValue];
+    _outputWarnings = [[options valueForKey:XDTAs99ParserOptionWarnings] boolValue];
+
+    /*
+     Create instance of the Symbol class which will be passed as a parameter for the constructor of Parser()
+     */
+    PyObject *pSymbolsFunc = PyObject_GetAttrString(pModule, XDTClassNameSymbols);
+    if (NULL == pSymbolsFunc || !PyCallable_Check(pSymbolsFunc)) {
+        NSLog(@"%s ERROR: Cannot find class \"%s\" in module %s", __FUNCTION__, XDTClassNameSymbols, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
-        Py_XDECREF(pFunc);
+        Py_XDECREF(pSymbolsFunc);
 #if !__has_feature(objc_arc)
         [self release];
 #endif
         return nil;
     }
-
-    /* reading option from dictionary */
-    _beStrict = [[options valueForKey:XDTAs99ParserOptionStrict] boolValue];
-    _useRegisterSymbols = [[options valueForKey:XDTAs99ParserOptionRegister] boolValue];
-    _outputWarnings = [[options valueForKey:XDTAs99ParserOptionWarnings] boolValue];
 
     /* preparing parameters */
     PyObject *defs = PyList_New(0);
@@ -146,11 +156,32 @@ NS_ASSUME_NONNULL_END
     PyObject *addRegisters = PyBool_FromLong(_useRegisterSymbols);
     PyObject *console = PyList_New(0);
 
+    /* creating symbols object:
+        symbols = Symbols(add_registers=self.optr, add_defs=self.defs)
+     */
+    PyObject *pSymbolsArgs = PyTuple_Pack(2, addRegisters, defs);
+    PyObject *symbols = PyObject_CallObject(pSymbolsFunc, pSymbolsArgs);
+    Py_XDECREF(pSymbolsArgs);
+    Py_XDECREF(pSymbolsFunc);
+
+    PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameParser);
+    if (NULL == pFunc || !PyCallable_Check(pFunc)) {
+        NSLog(@"%s ERROR: Cannot find class \"%s\" in module %s", __FUNCTION__, XDTClassNameParser, PyModule_GetName(pModule));
+        if (PyErr_Occurred()) {
+            PyErr_Print();
+        }
+        Py_XDECREF(pFunc);
+#if !__has_feature(objc_arc)
+        [self release];
+#endif
+        return nil;
+    }
+
     /* creating parser object:
         parser = Parser(symbols, path=path, includes=self.includes, strict=self.strict, warnings=self.warnings,
                         use_R=self.optr, console=self.console)
      */
-    PyObject *pArgs = PyTuple_Pack(7, defs, path, includePath, strictMode, outputWarnings, addRegisters, console);
+    PyObject *pArgs = PyTuple_Pack(7, symbols, path, includePath, strictMode, outputWarnings, addRegisters, console);
     PyObject *parser = PyObject_CallObject(pFunc, pArgs);
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
@@ -192,6 +223,19 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Property Wrapper
 
 
+/**
+ Part of \p XDTParserProtocol
+ */
+- (XDTAs99Symbols *)symbols
+{
+    PyObject *symbolObject = PyObject_GetAttrString(parserPythonClass, "symbols");
+    XDTAs99Symbols *codeSymbols = [XDTAs99Symbols symbolsWithPythonInstance:symbolObject];
+    Py_XDECREF(symbolObject);
+
+    return codeSymbols;
+}
+
+
 - (void)setPath:(NSString *)path
 {
     PyStringObject *pathString = [path pythonString];
@@ -224,6 +268,36 @@ NS_ASSUME_NONNULL_END
 }
 
 
+/**
+ Part of \p XDTParserProtocol
+ */
+- (NSString *)literalForPlaceholder:(NSString *)key
+{
+    if (![key hasPrefix:@"'"] || ![key hasSuffix:@"'"]) {
+        return nil;
+    }
+
+    PyObject *literalList = PyObject_GetAttrString(parserPythonClass, "text_literals");
+    if (NULL == literalList) {
+        return nil;
+    }
+
+    const Py_ssize_t itemCount = PyList_Size(literalList);
+    if (0 > itemCount) {
+        return nil;
+    }
+    NSString *retVal = nil;
+    int i = [[key substringWithRange:NSMakeRange(1, key.length-2)] intValue];
+    PyObject *literal = PyList_GetItem(literalList, i);
+    if (NULL != literal) {
+        retVal = [NSString stringWithPythonString:literal encoding:NSUTF8StringEncoding];
+    }
+    Py_DECREF(literalList);
+
+    return retVal;
+}
+
+
 #pragma mark - Method Wrapper
 
 
@@ -249,10 +323,184 @@ NS_ASSUME_NONNULL_END
         }
         return nil;
     }
+
     NSString *retVal = [NSString stringWithPythonString:filePath encoding:NSUTF8StringEncoding];
-    
     Py_DECREF(filePath);
+
+    return retVal;
+}
+
+
+/**
+ The method \p parseFirstPass is not finally implemented!
+ */
+- (BOOL)parseFirstPass
+{
+    XDTAs99Objdummy *objdummy = nil;
+    /*
+     Function call in Python:
+     source, errors = pass_1(dummy)
+     */
+    PyObject *methodName = PyString_FromString("pass_1");
+    PyObject *lcTracker = NULL;
+    PyObject *dummy = PyObject_CallMethodObjArgs(parserPythonClass, methodName, lcTracker, NULL);
+    Py_XDECREF(methodName);
+    Py_XDECREF(dummy);
+
+    [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
+    //_messages = (XDTMessage *)newMessages;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(messages))];
+
+    return YES;
+}
+
+
+/**
+ The method \p parseSecondPass is not finally implemented!
+ */
+- (BOOL)parseSecondPass
+{
+    /*
+     Function call in Python:
+     errors = pass_2(source, code, errors)
+     */
+    PyObject *methodName = PyString_FromString("pass_2");
+    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(parserPythonClass, methodName, NULL);
+    Py_XDECREF(methodName);
+    if (NULL == lineCountInteger) {
+        return NO;
+    }
+
+    NSUInteger retVal = PyInt_AsLong(lineCountInteger);
+    Py_DECREF(lineCountInteger);
+
+    [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
+    //_messages = (XDTMessage *)newMessages;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(messages))];
     
+    return YES;
+}
+
+
+/**
+ Part of \p XDTParserProtocol
+ */
+- (NSArray<id> *)splitLine:(NSString *)line error:(NSError **)error
+{
+    /*
+     Function call in Python:
+     label, mnemonic, operands, comment, is_stmt = line(line)
+     */
+    PyObject *methodName = PyString_FromString("line");
+    PyObject *pLine = PyString_FromString([line UTF8String]);
+    PyObject *pValueTupel = PyObject_CallMethodObjArgs(parserPythonClass, methodName, pLine, NULL);
+    Py_XDECREF(pLine);
+    Py_XDECREF(methodName);
+    if (NULL == pValueTupel) {
+        NSLog(@"%s ERROR: line(\"%@\") returns NULL!", __FUNCTION__, line);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return nil;
+    }
+
+    NSMutableArray<id> *retVal = [NSMutableArray arrayWithPyTuple:pValueTupel];
+    Py_DECREF(pValueTupel);
+    if (![retVal.lastObject boolValue]) {
+        /* line contains no statement */
+        return @[];
+    }
+
+    [retVal removeLastObject];
+    return retVal;
+}
+
+
+/**
+ Part of \p XDTParserProtocol
+ */
+- (NSArray<id> *)splitLine:(NSString *)line
+{
+    return [self splitLine:line error:nil];
+}
+
+
+/**
+ Part of \p XDTParserProtocol
+ */
+- (NSString *)filename:(NSString *)key error:(NSError **)error
+{
+    /*
+     Function call in Python:
+     filename = parser.filename(op)
+     */
+    PyObject *methodName = PyString_FromString("filename");
+    PyObject *pKey = PyString_FromString([key UTF8String]);
+    PyObject *pFilename = PyObject_CallMethodObjArgs(parserPythonClass, methodName, pKey, NULL);
+    Py_XDECREF(pKey);
+    Py_XDECREF(methodName);
+    if (NULL == pFilename) {
+        NSLog(@"%s ERROR: filename(\"%@\") returns NULL!", __FUNCTION__, key);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return nil;
+    }
+
+    NSString *retVal = [NSString stringWithPythonString:pFilename encoding:NSUTF8StringEncoding];
+    Py_DECREF(pFilename);
+
+    return retVal;
+}
+
+
+/**
+ Part of \p XDTParserProtocol
+ */
+- (NSString *)text:(NSString *)key error:(NSError **)error
+{
+    /*
+     Function call in Python:
+     text = parser.text(op)
+     */
+    PyObject *methodName = PyString_FromString("text");
+    PyObject *pKey = PyString_FromString([key UTF8String]);
+    PyObject *pText = PyObject_CallMethodObjArgs(parserPythonClass, methodName, pKey, NULL);
+    Py_XDECREF(pKey);
+    Py_XDECREF(methodName);
+    if (NULL == pText) {
+        NSLog(@"%s ERROR: text(\"%@\") returns NULL!", __FUNCTION__, key);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return nil;
+    }
+
+    NSString *retVal = nil;
+    // since TEXT can have a byte string, which can contains 0x00 (so string terminators), handle that like an byte array.
+    if (PyString_Check(pText)) {
+        NSUInteger textSize = PyString_Size(pText);
+        const char *textString = PyString_AsString(pText);
+        retVal = [[NSString alloc] initWithBytes:textString length:textSize encoding:NSASCIIStringEncoding];
+    } else {
+        NSUInteger textSize = PyByteArray_Size(pText);
+        const char *textString = PyByteArray_AsString(pText);
+        retVal = [[NSString alloc] initWithBytes:textString length:textSize encoding:NSASCIIStringEncoding];
+    }
+    Py_DECREF(pText);
+
     return retVal;
 }
 

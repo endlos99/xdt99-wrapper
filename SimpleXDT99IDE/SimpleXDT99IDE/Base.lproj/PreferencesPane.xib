@@ -20,11 +20,11 @@
             <rect key="contentRect" x="772" y="617" width="327" height="108"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="275" height="108"/>
+                <rect key="frame" x="0.0" y="0.0" width="275" height="74"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="84t-T5-9bp">
-                        <rect key="frame" x="18" y="45" width="239" height="18"/>
+                        <rect key="frame" x="18" y="38" width="239" height="18"/>
                         <buttonCell key="cell" type="check" title="Automatically open all included files" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vVp-5R-4In">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -33,11 +33,26 @@
                             <binding destination="oDn-pK-WtN" name="value" keyPath="values.DocumentOptionOpenNestedFiles" id="v7T-f4-z6v"/>
                         </connections>
                     </button>
+                    <button toolTip="Coloring the source code depending syntactical contexts." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oYd-fN-HkE">
+                        <rect key="frame" x="18" y="18" width="164" height="18"/>
+                        <buttonCell key="cell" type="check" title="Use syntax highlighting" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="4J5-2j-Ygb">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="toggleSyntaxHighlighting:" target="-2" id="IVo-Kd-3Y9"/>
+                            <binding destination="oDn-pK-WtN" name="value" keyPath="values.DocumentOptionHighlightSyntax" id="yiX-LY-faW"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="bottom" secondItem="oYd-fN-HkE" secondAttribute="bottom" constant="20" symbolic="YES" id="6aS-Cv-saw"/>
+                    <constraint firstItem="oYd-fN-HkE" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="8xt-QH-0Zm"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="oYd-fN-HkE" secondAttribute="trailing" constant="20" symbolic="YES" id="VqF-WF-n4M"/>
                     <constraint firstAttribute="trailing" secondItem="84t-T5-9bp" secondAttribute="trailing" constant="20" symbolic="YES" id="hC8-KI-CSa"/>
-                    <constraint firstItem="84t-T5-9bp" firstAttribute="centerY" secondItem="EiT-Mj-1SZ" secondAttribute="centerY" id="me7-qz-ruF"/>
+                    <constraint firstItem="84t-T5-9bp" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="hZC-EE-7d3"/>
                     <constraint firstItem="84t-T5-9bp" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="t90-rC-vG9"/>
+                    <constraint firstItem="oYd-fN-HkE" firstAttribute="top" secondItem="84t-T5-9bp" secondAttribute="bottom" constant="6" symbolic="YES" id="ubc-oc-ijg"/>
                 </constraints>
             </view>
             <point key="canvasLocation" x="62.5" y="66"/>

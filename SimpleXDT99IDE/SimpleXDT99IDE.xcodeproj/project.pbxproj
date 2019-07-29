@@ -32,6 +32,7 @@
 		AFDECF341DF176B1008870F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF331DF176B1008870F7 /* Assets.xcassets */; };
 		AFDECF371DF176B1008870F7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = AFDECF351DF176B1008870F7 /* MainMenu.xib */; };
 		AFE5BAF722CCC237002C046B /* NSColorAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE5BAF622CCC237002C046B /* NSColorAdditions.m */; };
+		AFE86BA522C8CA280007CB8C /* HighlighterDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE86BA422C8CA280007CB8C /* HighlighterDelegate.m */; };
 		AFF5D04A225E511700A69BEB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AFF5D048225E511700A69BEB /* Localizable.strings */; };
 		AFFDB6871DFC6A95006788CC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AFFDB6831DFC6A95006788CC /* InfoPlist.strings */; };
 		AFFDB6881DFC6A95006788CC /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = AFFDB6851DFC6A95006788CC /* Credits.html */; };
@@ -113,6 +114,8 @@
 		AFDECF381DF176B1008870F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AFE5BAF522CCC237002C046B /* NSColorAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NSColorAdditions.h; path = Categories/NSColorAdditions.h; sourceTree = "<group>"; };
 		AFE5BAF622CCC237002C046B /* NSColorAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NSColorAdditions.m; path = Categories/NSColorAdditions.m; sourceTree = "<group>"; };
+		AFE86BA322C8CA280007CB8C /* HighlighterDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HighlighterDelegate.h; sourceTree = "<group>"; };
+		AFE86BA422C8CA280007CB8C /* HighlighterDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HighlighterDelegate.m; sourceTree = "<group>"; };
 		AFF5D041225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/GPLAssemblerOptionsView.strings; sourceTree = "<group>"; };
 		AFF5D042225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/BasicOptionsView.strings; sourceTree = "<group>"; };
 		AFF5D043225E3C0A00A69BEB /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AssemblerOptionsView.strings; sourceTree = "<group>"; };
@@ -208,9 +211,8 @@
 			isa = PBXGroup;
 			children = (
 				AFB73F161E002F280063BBCC /* Categories */,
+				AFE86BA622C8D6E20007CB8C /* Delegates */,
 				AF3FC4291DF8583D0021F050 /* Document Types */,
-				AFDECF271DF176B1008870F7 /* AppDelegate.h */,
-				AFDECF281DF176B1008870F7 /* AppDelegate.m */,
 				AF125EC11E0415E600F659AA /* GPLAssemblerOptionsView.xib */,
 				AF5CF8B61DFF30F900C08E36 /* BasicOptionsView.xib */,
 				AF5CF8B31DFF30F400C08E36 /* AssemblerOptionsView.xib */,
@@ -241,6 +243,17 @@
 				AFDECF2B1DF176B1008870F7 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AFE86BA622C8D6E20007CB8C /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				AFE86BA322C8CA280007CB8C /* HighlighterDelegate.h */,
+				AFE86BA422C8CA280007CB8C /* HighlighterDelegate.m */,
+				AFDECF271DF176B1008870F7 /* AppDelegate.h */,
+				AFDECF281DF176B1008870F7 /* AppDelegate.m */,
+			);
+			name = Delegates;
 			sourceTree = "<group>";
 		};
 		AFF9585D1DF1A7C200062DEB /* Frameworks */ = {
@@ -366,6 +379,7 @@
 			files = (
 				AFDECF2F1DF176B1008870F7 /* SourceCodeDocument.m in Sources */,
 				AF64ED6C22D71C9D000E0AB4 /* PreferencesPaneController.m in Sources */,
+				AFE86BA522C8CA280007CB8C /* HighlighterDelegate.m in Sources */,
 				AF3FC42C1DF858690021F050 /* AssemblerDocument.m in Sources */,
 				AFFF3A3A1E05640700909C6C /* HWHexNumberFormatter.m in Sources */,
 				AFB73F191E002FF40063BBCC /* NSViewAutolayoutAdditions.m in Sources */,

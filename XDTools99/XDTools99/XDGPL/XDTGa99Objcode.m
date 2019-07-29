@@ -28,6 +28,8 @@
 #import "NSDataPythonAdditions.h"
 #import "NSErrorPythonAdditions.h"
 
+#import "XDTGa99Symbols.h"
+
 
 #define XDTClassNameObjcode "Objcode"
 
@@ -92,6 +94,16 @@ NS_ASSUME_NONNULL_END
 
 
 #pragma mark - Property Wrapper
+
+
+- (XDTGa99Symbols *)symbols
+{
+    PyObject *symbolObject = PyObject_GetAttrString(objectcodePythonClass, "symbols");
+    XDTGa99Symbols *codeSymbols = [XDTGa99Symbols symbolsWithPythonInstance:symbolObject];
+    Py_XDECREF(symbolObject);
+
+    return codeSymbols;
+}
 
 
 - (NSData *)generateDump:(NSError **)error

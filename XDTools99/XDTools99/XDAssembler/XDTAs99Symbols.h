@@ -33,10 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable instancetype)symbolsWithPythonInstance:(void *)object;
 
-@property (nullable, readonly) NSDictionary *symbols;
-@property (nullable, readonly) NSArray *refdefs;
-@property (nullable, readonly) NSDictionary *xops;
-@property (nullable, readonly) NSDictionary *locations;
+@property (nullable, readonly, copy) NSDictionary<NSString *, NSArray<id> *> *symbols;   // Values for keys are tripel: symbols[name] = (value, weak, unused)
+@property (nullable, readonly, copy) NSArray<NSString *> *symbolList;
+@property (nullable, readonly, copy) NSArray<NSString *> *refdefs;
+@property (nullable, readonly, copy) NSDictionary<NSString *, NSNumber *> *xops;
+@property (nullable, readonly, copy) NSDictionary<NSString *, NSNumber *> *locations;
 
 - (void)resetLineCounter;
 - (NSUInteger)effectiveLineCounter;

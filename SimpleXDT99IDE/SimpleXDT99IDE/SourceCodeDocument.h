@@ -30,7 +30,8 @@
 
 @interface SourceCodeDocument : NSDocument <NSTextViewDelegate>
 
-@property (retain) NSString *sourceCode;
+@property (retain) NSAttributedString *attributedSourceCode;
+@property (copy) NSString *sourceCode;
 
 @property (retain) XDTObject<XDTParserProtocol> *parser;
 
@@ -57,6 +58,8 @@
 @property (readonly) NSImage *statusImage;
 @property (retain) XDTMessage *generatorMessages;
 @property (readonly) NSMutableAttributedString *generatedLogMessage;
+
+- (BOOL)setupSyntaxHighlighting;
 
 - (BOOL)openNestedFiles:(NSError **)error;
 

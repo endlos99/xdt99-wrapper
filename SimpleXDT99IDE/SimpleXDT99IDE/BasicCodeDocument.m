@@ -104,6 +104,12 @@
     }
 
     self.contentMinWidth.constant = self.xdt99OptionsToolbarItem.minSize.width + 16;
+
+    /* Setup syntax highlighting */
+    // TODO: Probably in future Basic will get its own highlighting [self setupSyntaxHighlighting];
+
+    /* After syntax highlighting, messages get to be highlighted. */
+    [self checkCode:nil];
 }
 
 

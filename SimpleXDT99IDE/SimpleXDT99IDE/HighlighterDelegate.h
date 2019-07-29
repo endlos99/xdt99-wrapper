@@ -1,11 +1,11 @@
 //
-//  XDGPL.h
-//  XDTools99
+//  HighlighterDelegate.h
+//  SimpleXDT99IDE
 //
-//  Created by Henrik Wedekind on 16.12.16.
+//  Created by Henrik Wedekind on 30.06.19.
 //
-//  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
+//  SimpleXDT99IDE a simple IDE based on xdt99 that shows how to use the XDTools99.framework
+//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,18 +22,19 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#ifndef XDGPL_h
-#define XDGPL_h
+#import <Cocoa/Cocoa.h>
 
-#import "XDTObject.h"
+#import <XDTools99/XDTools99.h>
 
-#import "XDTGa99Symbols.h"
-#import "XDTGa99Objcode.h"
-#import "XDTGa99Parser.h"
-#import "XDTGPLAssembler.h"
 
-#import "XDTZipFile.h"
-#import "XDTMessage.h"
-#import "XDTLineScanner.h"
+NS_ASSUME_NONNULL_BEGIN
 
-#endif /* XDGPL_h */
+@interface HighlighterDelegate : NSObject <NSTextStorageDelegate, XDTConsumerProtocol>
+
++ (instancetype)highlighterWithLineScanner:(NSObject<XDTLineScannerProtocol> *)lineScanner;
+
+- (void)processAttributesOfText:(NSMutableAttributedString *)text inRange:(NSRange)lineRange;
+
+@end
+
+NS_ASSUME_NONNULL_END

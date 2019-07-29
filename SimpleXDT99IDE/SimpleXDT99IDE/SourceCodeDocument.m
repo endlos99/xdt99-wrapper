@@ -79,6 +79,8 @@
     [_generatorMessages release];
     [_lineNumberRulerView release];
     [_lineNumberDigits release];
+
+    [_parser release];
     
     [super dealloc];
 #endif
@@ -137,6 +139,19 @@
         *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
     }
     return NO;
+}
+
+
+- (BOOL)setupSyntaxHighlighting
+{
+    NSUserDefaults *defaults = NSUserDefaultsController.sharedUserDefaultsController.defaults;
+    BOOL useSyntaxHighlighting = [defaults boolForKey:UserDefaultKeyDocumentOptionHighlightSyntax];
+    if (!useSyntaxHighlighting) {
+        self.sourceView.textStorage.delegate = nil;
+        self.sourceCode = self.sourceView.textStorage.mutableString;
+    }
+
+    return useSyntaxHighlighting;
 }
 
 
@@ -216,12 +231,20 @@
 }
 
 
+#pragma mark - Implementation of NSTextViewDelegate
+
+
 - (BOOL)textView:(NSTextView *)textView clickedOnLink:(id)link atIndex:(NSUInteger)charIndex
 {
     NSURLComponents *urlComponents = [NSURLComponents componentsWithURL:link resolvingAgainstBaseURL:NO];
     if ([@"xdt99" isEqualToString:urlComponents.scheme]) {
         // TODO: select or open document with the filePath
-        NSString *filePath = urlComponents.path;
+        NSString *filePath = [urlComponents.path lastPathComponent];
+        if (NSOrderedSame != [[self.fileURL lastPathComponent] caseInsensitiveCompare:filePath])
+        {
+            NSLog(@"This is not the document '%@'! You should open it programmatical.", filePath);
+            return NO;
+        }
         
         // scroll the source to line numer in link
         __block NSInteger lineNumberToSelect = NSNotFound;
@@ -257,11 +280,36 @@
 
 - (BOOL)textView:(NSTextView *)textView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString
 {
-    return NO;
+    return textView == _sourceView;
+}
+
+
+- (BOOL)textView:(NSTextView *)textView shouldChangeTextInRanges:(NSArray<NSValue *> *)affectedRanges replacementStrings:(NSArray<NSString *> *)replacementStrings
+{
+    return textView == _sourceView;
 }
 
 
 #pragma mark - Accessor Methods
+
+
+/* subclasses should override this method to implement attributings */
+- (void)setSourceCode:(NSString *)newSourceCode
+{
+    if (nil != self.parser) {
+        [self.parser setSource:newSourceCode];
+    }
+    self.attributedSourceCode = [[NSAttributedString alloc] initWithString:newSourceCode
+                                                                attributes:@{NSForegroundColorAttributeName: [NSColor XDTSourceTextColor],
+                                                                             NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]
+                                                                             }];
+}
+
+
+- (NSString *)sourceCode
+{
+    return _attributedSourceCode.string;
+}
 
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingGeneratedLogMessage

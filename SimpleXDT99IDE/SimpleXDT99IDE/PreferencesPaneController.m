@@ -24,6 +24,9 @@
 
 #import "PreferencesPaneController.h"
 
+#import "SourceCodeDocument.h"
+
+
 @interface PreferencesPaneController ()
 
 @end
@@ -50,6 +53,17 @@ static PreferencesPaneController *_sharedPreferencesPane = nil;
 
     self.window.excludedFromWindowsMenu = YES;
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+}
+
+
+- (IBAction)toggleSyntaxHighlighting:(id)sender
+{
+    [NSDocumentController.sharedDocumentController.documents enumerateObjectsUsingBlock:^(SourceCodeDocument *doc, NSUInteger idx, BOOL *stop) {
+        NSRange saveSelection = doc.sourceView.selectedRange;
+        [doc setupSyntaxHighlighting];
+        doc.sourceView.selectedRange = saveSelection;
+        [doc.sourceView scrollRangeToVisible:saveSelection];
+    }];
 }
 
 @end

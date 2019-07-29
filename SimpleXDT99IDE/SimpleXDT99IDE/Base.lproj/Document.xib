@@ -59,11 +59,8 @@
                                                     </attributedString>
                                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                     <connections>
-                                                        <binding destination="-2" name="value" keyPath="self.sourceCode" id="iaC-zL-phc">
-                                                            <dictionary key="options">
-                                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                                            </dictionary>
-                                                        </binding>
+                                                        <binding destination="-2" name="attributedString" keyPath="self.attributedSourceCode" id="FT3-Lc-mnk"/>
+                                                        <outlet property="delegate" destination="-2" id="xhF-zX-GmJ"/>
                                                     </connections>
                                                 </textView>
                                             </subviews>

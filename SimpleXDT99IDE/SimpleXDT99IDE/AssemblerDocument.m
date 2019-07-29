@@ -24,7 +24,10 @@
 
 #import "AssemblerDocument.h"
 
+#import "NSColorAdditions.h"
+
 #import "AppDelegate.h"
+#import "HighlighterDelegate.h"
 
 #import <XDTools99/XDAssembler.h>
 
@@ -65,6 +68,8 @@
 @property (readonly) NSString *listOutput;
 @property (readonly) NSString *symbolsOutput;
 
+@property (retain) HighlighterDelegate *highlighterDelegate;
+
 @property (readonly) XDTAs99TargetType targetType;
 
 - (BOOL)assembleCode:(XDTAs99TargetType)xdtTargetType error:(NSError **)error;
@@ -104,6 +109,7 @@
 #if !__has_feature(objc_arc)
     [_assemblingResult release];
     [_cartridgeName release];
+    [_syntaxHighlighter release];
     
     [super dealloc];
 #endif
@@ -153,6 +159,14 @@
             _assemblerTextModeRadioButton.state = NSOnState;
             break;
     }
+
+    /* Setup syntax highlighting */
+    (void)[self setupSyntaxHighlighting];
+
+    /* After syntax highlighting, messages get to be highlighted. */
+    [self checkCode:nil];
+
+    /* Recursive load nested files */
     BOOL openNestedFiles = [defaults boolForKey:UserDefaultKeyDocumentOptionOpenNestedFiles];
     if (openNestedFiles) {
         NSError *error = nil;
@@ -258,12 +272,9 @@
         return NO;
     }
 
-    [self setSourceCode:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-    XDTAs99Parser *as99Parser = [XDTAs99Parser parserWithOptions:@{}];
-    [as99Parser setSource:self.sourceCode];
-    [as99Parser setPath:[[self.fileURL URLByDeletingLastPathComponent] path]];
-    self.parser = as99Parser;
+    self.parser = nil;
 
+    [self setSourceCode:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
     [self setCartridgeName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]];
     [self setOutputFileName:[_cartridgeName stringByAppendingString:@"-obj"]];
     [self setOutputBasePathURL:[[self fileURL] URLByDeletingLastPathComponent]];
@@ -273,6 +284,12 @@
 
 
 #pragma mark - Accessor Methods
+
+
+- (void)setSourceCode:(NSString *)newSourceCode
+{
+    super.sourceCode = newSourceCode;
+}
 
 
 + (NSSet *)keyPathsForValuesAffectingListOutput
@@ -450,6 +467,44 @@
 
 
 #pragma mark - Private Methods
+
+
+- (BOOL)setupSyntaxHighlighting
+{
+    BOOL useSyntaxHighlighting = [super setupSyntaxHighlighting];
+    if (!useSyntaxHighlighting) {
+        return NO;
+    }
+
+    if (nil == self.parser) {
+        NSDictionary *options = @{
+                                  XDTAs99ParserOptionRegister: [NSNumber numberWithBool:self.shouldUseRegisterSymbols],
+                                  XDTAs99ParserOptionStrict: [NSNumber numberWithBool:self.shouldBeStrict],
+                                  XDTAs99ParserOptionWarnings: [NSNumber numberWithBool:self.shouldShowWarningsInLog]
+                                  };
+        self.parser = [XDTAs99Parser parserWithOptions:options];
+        [(XDTAs99Parser *)self.parser setPath:self.fileURL.URLByDeletingLastPathComponent.path];
+        self.parser.source = self.sourceView.textStorage.mutableString;
+
+        if (nil == self.highlighterDelegate) {
+            self.highlighterDelegate = [HighlighterDelegate highlighterWithLineScanner:[XDTLineScanner scannerWithParser:self.parser
+                                                                                                                 symbols:self.assemblingResult.symbols.symbolList]];
+        }
+    }
+    self.sourceView.textStorage.delegate = self.highlighterDelegate;
+
+    NSMutableAttributedString *newSourceCode = self.attributedSourceCode.mutableCopy;
+    [newSourceCode beginEditing];
+    [newSourceCode.mutableString enumerateSubstringsInRange:(NSRange)NSMakeRange(0, newSourceCode.length)
+                                                    options:NSStringEnumerationByLines + NSStringEnumerationSubstringNotRequired
+                                                 usingBlock:^(NSString *line, NSRange lineRange, NSRange enclosingRange, BOOL *stop) {
+                                                     [self.highlighterDelegate processAttributesOfText:newSourceCode inRange:lineRange];
+                                                 }];
+    [newSourceCode endEditing];
+    self.attributedSourceCode = newSourceCode;
+
+    return useSyntaxHighlighting;
+}
 
 
 + (NSSet *)keyPathsForValuesAffectingTargetType

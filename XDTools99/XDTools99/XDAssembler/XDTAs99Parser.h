@@ -28,6 +28,9 @@
 #define XDTAssemblerVersionRequired "2.0.2"
 
 
+@class XDTAs99Symbols, XDTMessage;
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NSString * XDTAs99ParserOptionKey NS_EXTENSIBLE_STRING_ENUM; /* Type for keys used in the options dictionry */
@@ -39,6 +42,8 @@ FOUNDATION_EXPORT XDTAs99ParserOptionKey const XDTAs99ParserOptionWarnings;
 
 @interface XDTAs99Parser : XDTObject <XDTParserProtocol>
 
+@property (readonly, copy) XDTAs99Symbols *symbols;
+@property (readonly, nullable) XDTMessage *messages;
 @property (copy, nullable) NSString *path;
 
 /**
@@ -49,7 +54,12 @@ FOUNDATION_EXPORT XDTAs99ParserOptionKey const XDTAs99ParserOptionWarnings;
 + (nullable instancetype)parserWithOptions:(NSDictionary<XDTAs99ParserOptionKey,id> *)options;
 
 /**
- Finds the locationof a file with given name
+ Set the source code where the parser works on.
+ */
+- (void)setSource:(NSString *)source;
+
+/**
+ Finds the location of a file with given name
 
  @param name    the name of the file to search for
  @param error   Return by reference the error. Can set to nil if the information is not nedded.
@@ -63,6 +73,17 @@ FOUNDATION_EXPORT XDTAs99ParserOptionKey const XDTAs99ParserOptionWarnings;
 
 @interface XDTAs99Parser (XDTAs99ParserExtensionMethods)
 
+
+/**
+ Starts the first pass of parsing the Assembler source code for gathering symbols and apply preprocessor.
+ @return YES if the pass was successful, otherwise NO
+ */
+- (BOOL)parseFirstPass;
+/**
+ Starts the second pass of parsing the Assembler source code for generating code.
+ @return YES if the pass was successful, otherwise NO
+ */
+- (BOOL)parseSecondPass;
 
 @end
 

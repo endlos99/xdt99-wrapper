@@ -25,6 +25,9 @@
 /* Error description of a missing option. */
 "Missing Option!" = "Fehlende Option!";
 
+/* Tool tip text for a linked include file. */
+"Opens '%@' in a new tabbed window." = "Öffnet '%@' in einem neuen Tab-Fenster.";
+
 /* Recovery suggestion showing in an alert window when error logging is disabled */
 "Please enable error logging to get detailed error information." = "Bitte die Fehlerprotokollierung aktivieren, um detaillierte Fehlerinformationen zu erhalten.";
 

@@ -33,7 +33,7 @@
 #import "XDTAssembler.h"
 
 #import "XDTZipFile.h"
-
 #import "XDTMessage.h"
+#import "XDTLineScanner.h"
 
 #endif /* XDAssembler_h */

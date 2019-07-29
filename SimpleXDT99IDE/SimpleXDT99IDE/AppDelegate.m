@@ -81,6 +81,7 @@ NS_ASSUME_NONNULL_END
                                    UserDefaultKeyDocumentOptionShowLog: @YES,
                                    UserDefaultKeyDocumentOptionShowErrorsInLog: @YES,
                                    UserDefaultKeyDocumentOptionShowWarningsInLog: @YES,
+                                   UserDefaultKeyDocumentOptionHighlightSyntax: @YES,
 
                                    UserDefaultKeyAssemblerOptionOutputTypePopupIndex: @1,
                                    UserDefaultKeyAssemblerOptionDisableXDTExtensions: @NO,

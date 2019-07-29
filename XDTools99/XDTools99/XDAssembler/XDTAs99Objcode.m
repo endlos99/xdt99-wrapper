@@ -110,12 +110,6 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (void)setSymbols:(XDTAs99Symbols *)symbols
-{
-    // TODO: Implement function
-}
-
-
 #pragma mark - Generator Method Wrapper
 
 

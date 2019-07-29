@@ -24,9 +24,14 @@
 
 #import "XDTObject.h"
 
+@class XDTGa99Symbols;
+
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface XDTGa99Objcode : XDTObject
+
+@property (readonly, copy) XDTGa99Symbols *symbols;
 
 /**
  *
@@ -43,4 +48,5 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSData *)generateSymbols:(BOOL)useEqu error:(NSError **)error;
 
 @end
+
 NS_ASSUME_NONNULL_END

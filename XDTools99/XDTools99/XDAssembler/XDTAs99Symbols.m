@@ -26,6 +26,8 @@
 
 #import <Python/Python.h>
 
+#import "NSStringPythonAdditions.h"
+
 
 #define XDTClassNameSymbols "Symbols"
 
@@ -82,7 +84,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Property Wrapper
 
 
-- (NSDictionary *)symbols
+- (NSDictionary<NSString *, NSArray<id> *> *)symbols
 {
     PyObject *symbolDict = PyObject_GetAttrString(symbolsPythonClass, "symbols");
     if (NULL == symbolDict) {
@@ -93,12 +95,14 @@ NS_ASSUME_NONNULL_END
     if (0 > itemCount) {
         return nil;
     }
-    NSMutableDictionary *retVal = [NSMutableDictionary dictionaryWithCapacity:itemCount];
-    PyObject *key, *value;
+    NSMutableDictionary<NSString *, id/*NSArray<id> **/> *retVal = [NSMutableDictionary dictionaryWithCapacity:itemCount];
+    PyObject *key, *list;
     Py_ssize_t pos = 0;
-    while (PyDict_Next(symbolDict, &pos, &key, &value)) {
+    // Values for keys are tripel: symbols[name] = (value, weak, unused)
+    while (PyDict_Next(symbolDict, &pos, &key, &list)) {
         if (NULL != key) {
-            [retVal setValue:[NSNumber numberWithLong:PyInt_AsLong(value)] forKey:[NSString stringWithUTF8String:PyString_AsString(key)]];
+            long value = PyInt_AsLong(list);
+            [retVal setValue:[NSNumber numberWithLong:value] forKey:[NSString stringWithPythonString:key encoding:NSUTF8StringEncoding]];
         }
     }
     Py_DECREF(symbolDict);
@@ -107,7 +111,33 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSArray *)refdefs
+- (NSArray<NSString *> *)symbolList
+{
+    PyObject *symbolDict = PyObject_GetAttrString(symbolsPythonClass, "symbols");
+    if (NULL == symbolDict) {
+        return nil;
+    }
+
+    Py_ssize_t itemCount = PyDict_Size(symbolDict);
+    if (0 > itemCount) {
+        return nil;
+    }
+    NSMutableArray<NSString *> *retVal = [NSMutableArray arrayWithCapacity:itemCount];
+    PyObject *pKey, *pTuple;
+    Py_ssize_t pos = 0;
+    // Values for keys are tripel: symbols[name] = (value, weak, unused)
+    while (PyDict_Next(symbolDict, &pos, &pKey, &pTuple)) {
+        if (NULL != pKey) {
+            [retVal addObject:[NSString stringWithPythonString:pKey encoding:NSUTF8StringEncoding]];
+        }
+    }
+    Py_DECREF(symbolDict);
+
+    return retVal;
+}
+
+
+- (NSArray<NSString *> *)refdefs
 {
     PyObject *refdefsList = PyObject_GetAttrString(symbolsPythonClass, "refdefs");
     if (NULL == refdefsList) {
@@ -118,7 +148,7 @@ NS_ASSUME_NONNULL_END
     if (0 > itemCount) {
         return nil;
     }
-    NSMutableArray *retVal = [NSMutableArray arrayWithCapacity:itemCount];
+    NSMutableArray<NSString *> *retVal = [NSMutableArray arrayWithCapacity:itemCount];
     for (int i = 0; i < itemCount; i++) {
         PyObject *name = PyList_GetItem(refdefsList, i);
         if (NULL != name) {
@@ -131,7 +161,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSDictionary *)xops
+- (NSDictionary<NSString *, NSNumber *> *)xops
 {
     PyObject *xopDict = PyObject_GetAttrString(symbolsPythonClass, "xops");
     if (NULL == xopDict) {
@@ -142,7 +172,7 @@ NS_ASSUME_NONNULL_END
     if (0 > itemCount) {
         return nil;
     }
-    NSMutableDictionary *retVal = [NSMutableDictionary dictionaryWithCapacity:itemCount];
+    NSMutableDictionary<NSString *, NSNumber *> *retVal = [NSMutableDictionary dictionaryWithCapacity:itemCount];
     PyObject *key, *value;
     Py_ssize_t pos = 0;
     while (PyDict_Next(xopDict, &pos, &key, &value)) {
@@ -156,7 +186,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (NSDictionary *)locations
+- (NSDictionary<NSString *, NSNumber *> *)locations
 {
     PyObject *locationsList = PyObject_GetAttrString(symbolsPythonClass, "locations");
     if (NULL == locationsList) {
@@ -167,7 +197,7 @@ NS_ASSUME_NONNULL_END
     if (0 > itemCount) {
         return nil;
     }
-    NSMutableDictionary *retVal = [NSMutableDictionary dictionaryWithCapacity:itemCount];
+    NSMutableDictionary<NSString *, NSNumber *> *retVal = [NSMutableDictionary dictionaryWithCapacity:itemCount];
     for (int i = 0; i < itemCount; i++) {
         PyObject *itemTupel = PyList_GetItem(locationsList, i);
         PyObject *location = PyTuple_GetItem(itemTupel, 0);

@@ -42,6 +42,7 @@ FOUNDATION_EXPORT XDTGa99ParserOptionKey const XDTGa99ParserOptionSyntaxType;
 @interface XDTGa99Parser : XDTObject <XDTParserProtocol>
 
 @property (copy, nullable) NSString *path;
+@property (readonly, nullable) XDTMessage *messages;
 
 /**
  Creates an autoreleased instance of XDTParser
@@ -51,7 +52,12 @@ FOUNDATION_EXPORT XDTGa99ParserOptionKey const XDTGa99ParserOptionSyntaxType;
 + (nullable instancetype)parserWithOptions:(NSDictionary<XDTGa99ParserOptionKey,id> *)options;
 
 /**
- Finds the locationof a file with given name
+ Set the source code where the parser works on.
+ */
+- (void)setSource:(NSString *)source;
+
+/**
+ Finds the location of a file with given name
 
  @param name    the name of the file to search for
  @param error   Return by reference the error. Can set to nil if the information is not nedded.
@@ -65,6 +71,15 @@ FOUNDATION_EXPORT XDTGa99ParserOptionKey const XDTGa99ParserOptionSyntaxType;
 
 @interface XDTGa99Parser (XDTGa99ParserExtensionMethods)
 
+
+/**
+ Starts parsing the GPL-Assembler source code for gathering symbols and apply preprocessor and for generating code.
+
+ @return YES if the pass was successful, otherwise NO
+
+ Errors can be obtained through the property \p messages.
+ */
+- (BOOL)parse;
 
 @end
 

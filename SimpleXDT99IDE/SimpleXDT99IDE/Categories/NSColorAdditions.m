@@ -29,6 +29,87 @@
 }
 
 
++ (NSColor *)XDTSourceBlockCommentColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTSourceBlockCommentColor"];
+    }
+    return [NSColor secondaryLabelColor];
+}
+
+
++ (NSColor *)XDTSourceLabelDefinitionColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTSourceLabelDefinitionColor"];
+    }
+    return [NSColor systemBlueColor];
+}
+
+
++ (NSColor *)XDTSourceLabelReferenceColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTSourceLabelReferenceColor"];
+    }
+    return [NSColor colorWithSRGBRed:0.539 green:0.518 blue:1.000 alpha:1.0];
+}
+
+
++ (NSColor *)XDTSourceLineCommentColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTSourceLineCommentColor"];
+    }
+    return [NSColor secondaryLabelColor];
+}
+
+
++ (NSColor *)XDTSourceMacroColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTSourceMacroColor"];
+    }
+    return [NSColor systemOrangeColor];
+}
+
+
++ (NSColor *)XDTSourceNumericLiteralColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTSourceNumericLiteralColor"];
+    }
+    return [NSColor colorWithSRGBRed:0.196 green:0.619 blue:0.169 alpha:1.0];
+}
+
+
++ (NSColor *)XDTSourcePreProcColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTSourcePreProcColor"];
+    }
+    return [NSColor systemBrownColor];
+}
+
+
++ (NSColor *)XDTSourceTextColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTSourceTextColor"];
+    }
+    return [NSColor textColor];
+}
+
+
++ (NSColor *)XDTSourceTextualLiteralColor
+{
+    if (@available(macOS 10.13, *)) {
+        return [NSColor colorNamed:@"XDTSourceTextualLiteralColor"];
+    }
+    return [NSColor systemYellowColor];
+}
+
+
 + (NSColor *)XDTWarningTextColor
 {
     if (@available(macOS 10.13, *)) {

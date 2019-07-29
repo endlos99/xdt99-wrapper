@@ -35,6 +35,28 @@ typedef NS_ENUM(NSInteger, XDTErrorCode) {
 };
 
 
+NS_ASSUME_NONNULL_BEGIN
+
+@class XDTObject;
+
+
+@protocol XDTConsumerProtocol <NSObject>
+
+@optional
+- (void)consumeBlockComment:(NSString *)comment inRange:(NSRange)commentRange;
+- (void)consumeLineComment:(NSString *)comment inRange:(NSRange)commentRange;
+- (void)consumePreProcDirective:(NSString *)directive inRange:(NSRange)directiveRange;
+- (void)consumeDirective:(NSString *)directive inRange:(NSRange)directiveRange;
+- (void)consumeNumericLiteral:(NSString *)literal inRange:(NSRange)literalRange;
+- (void)consumeTextLiteral:(NSString *)text inRange:(NSRange)textRange;
+- (void)consumeFilename:(NSString *)link inRange:(NSRange)linkRange;
+- (void)consumeMacro:(NSString *)macro inRange:(NSRange)macroRange;
+- (void)consumeLabelDefinition:(NSString *)label inRange:(NSRange)labelRange;
+- (void)consumeLabelReference:(NSString *)label inRange:(NSRange)labelRange;
+
+@end
+
+
 @protocol XDTParserProtocol <NSObject>
 
 /**
@@ -52,6 +74,80 @@ typedef NS_ENUM(NSInteger, XDTErrorCode) {
  */
 - (NSOrderedSet<NSURL *> *)includedFiles:(NSError **)error;
 
+/**
+ Splits a line of Assembler source code into its components like label, mnemonic, operands and comment and returns thier values within an array.
+
+ @param line    A line of Source code to be split into tits components. Can not be nil.
+ @param error   Return by reference an error object. Pass nil if the value is not needed.
+
+ @return An array which contains four elements with the separated components of the given line of source code.\n
+ When the line is not a comment line the array is filled with following values:\n
+ Element at index 0 contains a label as a NSString.\n
+ Element at index 1 contains the mnemonic as a NSString.\n
+ Element at index 2 contains the operands as a NSArray.\n
+ Element at index 3 contains the comment as a NSString.\n
+ If the given line is a comment line, the array is empty. On an error \p nil will be returned and \p error is set.
+
+ This method corresponds to that in the Python class named Parser. It splits a line of Assembler source code into its components like label, mnemonic, operands and a comment. All line components will returned uppercased. The original Python function also returns in its fifths return value a flag that indicates if that line contains a valid statement. But this flag is kipped here, becaus it is redundand. If the line doesn't is one with a statement, i.e. it is a line comment, the returned array will have no items.
+ */
+@required
+- (NSArray<id> *_Nullable)splitLine:(NSString *)line error:(NSError **_Nullable)error;
+
+/**
+ Same as \p splitLine:error:, but whithout returning the error by reference.
+ Check message property for any arrors.
+
+ @param line    Line of source code to split in its components.
+ @return An array which contains four elements with the separated components of the given line of source code.
+
+ For more information see \p splitLine:error:
+ */
+@required
+- (NSArray<id> *_Nullable)splitLine:(NSString *)line;
+
+/**
+ Searches in the parsers internal lookup table for the given placeholder \p key and returns the literal.
+
+ @param key The name of the key for the corresponding literal
+ @return The literal to the given key. \p Nil if key is an invalid placeholder or literal does not exists.
+
+ */
+- (nullable NSString *)literalForPlaceholder:(NSString *)key;
+
+/**
+ */
+- (nullable NSString *)filename:(NSString *)key error:(NSError **_Nullable)error;
+
+/**
+ Parses the given operand of a \p TEXT directive and returns the character as a stirng.
+ @param op      The operant of a \p TEXT directive, it can be a string literal or a byte string.
+ @param error   Return by reference the Python internal error.
+ @return A string of character of the given operand, \p nil if the given operator is syntactical incorrect.
+ */
+- (nullable NSString *)text:(NSString *)op error:(NSError **_Nullable)error;
+
+@end
+
+
+@protocol XDTLineScannerProtocol <NSObject>
+
+/**
+ Creates and initialize a new instance of a \p XDTLineScanner.
+
+ @param codeLine    The line of assembler source to scan for syntactical components.
+ @param parser      An instance of a \p XDTGPLParser or \p XDTParser class.
+
+ */
+@required
++ (nullable instancetype)scannerWithParser:(XDTObject<XDTParserProtocol> *)parser symbols:(NSArray<NSString *> *)symbolList;
+
+/**
+ Processes the given \p line using \p delegate to consume the processed results.
+ @param line        Line of source code to processed.
+ @param delegate    The consumer which gets the processed results for further processing.
+ */
+- (BOOL)processLine:(NSString *)line consumer:(id<XDTConsumerProtocol>)delegate;
+
 @end
 
 
@@ -60,3 +156,6 @@ typedef NS_ENUM(NSInteger, XDTErrorCode) {
 + (void)reinitializeWithXDTModulePath:(NSString *)modulePath;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XDTAs99Objcode : XDTObject
 
-@property (retain) XDTAs99Symbols *symbols;
+@property (readonly, copy) XDTAs99Symbols *symbols;
 
 /**
  *
