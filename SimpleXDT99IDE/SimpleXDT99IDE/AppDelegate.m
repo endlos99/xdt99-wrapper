@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_END
 #pragma mark - NSApplicationDelegate Methods
 
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+- (void)applicationWillFinishLaunching:(NSNotification *)notification {
     NSDictionary *defaultsDict = @{
                                    UserDefaultKeyDocumentOptionOpenNestedFiles: @YES,
                                    UserDefaultKeyDocumentOptionShowLog: @YES,
