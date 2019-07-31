@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF016E8522EA061800443077 /* XDTAs99Opcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = AF016E8322EA061800443077 /* XDTAs99Opcodes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF016E8622EA061800443077 /* XDTAs99Opcodes.m in Sources */ = {isa = PBXBuildFile; fileRef = AF016E8422EA061800443077 /* XDTAs99Opcodes.m */; };
+		AF016E8A22EA254A00443077 /* XDTCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = AF016E8822EA254A00443077 /* XDTCallback.m */; };
 		AF06979322BE3081001E1749 /* NSSetPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AF06979122BE3081001E1749 /* NSSetPythonAdditions.h */; };
 		AF06979422BE3081001E1749 /* NSSetPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AF06979222BE3081001E1749 /* NSSetPythonAdditions.m */; };
 		AF08A74022BD11B800770FC3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AF08A73E22BD11B800770FC3 /* InfoPlist.strings */; };
@@ -120,6 +123,8 @@
 		AFE630751DF9BB9E005FFD01 /* XDTZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE630671DF9BB9E005FFD01 /* XDTZipFile.m */; };
 		AFE630791DF9BB9E005FFD01 /* XDTZipFile.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE6306B1DF9BB9E005FFD01 /* XDTZipFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFE6308A1DF9C084005FFD01 /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFE630861DF9BD66005FFD01 /* Python.framework */; };
+		AFFEE00722E9F713006E9317 /* XDTAs99Optimizer.h in Headers */ = {isa = PBXBuildFile; fileRef = AFFEE00522E9F713006E9317 /* XDTAs99Optimizer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AFFEE00822E9F713006E9317 /* XDTAs99Optimizer.m in Sources */ = {isa = PBXBuildFile; fileRef = AFFEE00622E9F713006E9317 /* XDTAs99Optimizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -139,6 +144,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AF016E8322EA061800443077 /* XDTAs99Opcodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99Opcodes.h; path = XDAssembler/XDTAs99Opcodes.h; sourceTree = "<group>"; };
+		AF016E8422EA061800443077 /* XDTAs99Opcodes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99Opcodes.m; path = XDAssembler/XDTAs99Opcodes.m; sourceTree = "<group>"; };
+		AF016E8722EA254A00443077 /* XDTCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDTCallback.h; sourceTree = "<group>"; };
+		AF016E8822EA254A00443077 /* XDTCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XDTCallback.m; sourceTree = "<group>"; };
 		AF06979122BE3081001E1749 /* NSSetPythonAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSSetPythonAdditions.h; sourceTree = "<group>"; };
 		AF06979222BE3081001E1749 /* NSSetPythonAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSSetPythonAdditions.m; sourceTree = "<group>"; };
 		AF08A73F22BD11B800770FC3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -221,6 +230,8 @@
 		AFE630671DF9BB9E005FFD01 /* XDTZipFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XDTZipFile.m; sourceTree = "<group>"; };
 		AFE6306B1DF9BB9E005FFD01 /* XDTZipFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDTZipFile.h; sourceTree = "<group>"; };
 		AFE630861DF9BD66005FFD01 /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = System/Library/Frameworks/Python.framework; sourceTree = SDKROOT; };
+		AFFEE00522E9F713006E9317 /* XDTAs99Optimizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99Optimizer.h; path = XDAssembler/XDTAs99Optimizer.h; sourceTree = "<group>"; };
+		AFFEE00622E9F713006E9317 /* XDTAs99Optimizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99Optimizer.m; path = XDAssembler/XDTAs99Optimizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -262,8 +273,12 @@
 				AF2D96AC1DFABF39006EE618 /* XDTAs99Symbols.m */,
 				AFD7B7B622E07E58006FC9CB /* XDTAs99Directives.h */,
 				AFD7B7B722E07E58006FC9CB /* XDTAs99Directives.m */,
+				AF016E8322EA061800443077 /* XDTAs99Opcodes.h */,
+				AF016E8422EA061800443077 /* XDTAs99Opcodes.m */,
 				AF2D96AF1DFABF39006EE618 /* XDTAs99Objcode.h */,
 				AF2D96AD1DFABF39006EE618 /* XDTAs99Objcode.m */,
+				AFFEE00522E9F713006E9317 /* XDTAs99Optimizer.h */,
+				AFFEE00622E9F713006E9317 /* XDTAs99Optimizer.m */,
 				AFC6A7CF22CA3BC200CDF34A /* XDTAs99Objdummy.h */,
 				AFC6A7CE22CA3BC200CDF34A /* XDTAs99Objdummy.m */,
 				AFCD3BBF22E2693B00A501BC /* XDTAs99Preprocessor.h */,
@@ -347,6 +362,8 @@
 				AF5CF8A11DFF23FB00C08E36 /* XDBasic */,
 				AF2D96B21DFABF39006EE618 /* XDTObject.h */,
 				AF2D96B11DFABF39006EE618 /* XDTObject.m */,
+				AF016E8722EA254A00443077 /* XDTCallback.h */,
+				AF016E8822EA254A00443077 /* XDTCallback.m */,
 				AFE6305E1DF9BB9E005FFD01 /* Categories */,
 				AFE6306B1DF9BB9E005FFD01 /* XDTZipFile.h */,
 				AFE630671DF9BB9E005FFD01 /* XDTZipFile.m */,
@@ -445,7 +462,9 @@
 				AF5CB1B622DF16E300FBF6D3 /* XDTAs99Line.h in Headers */,
 				AF2D96B31DFABF39006EE618 /* XDTAs99Symbols.h in Headers */,
 				AFD7B7B822E07E58006FC9CB /* XDTAs99Directives.h in Headers */,
+				AF016E8522EA061800443077 /* XDTAs99Opcodes.h in Headers */,
 				AF2D96B71DFABF39006EE618 /* XDTAs99Objcode.h in Headers */,
+				AFFEE00722E9F713006E9317 /* XDTAs99Optimizer.h in Headers */,
 				AFC6A7D122CA3BC200CDF34A /* XDTAs99Objdummy.h in Headers */,
 				AFCD3BC122E2693B00A501BC /* XDTAs99Preprocessor.h in Headers */,
 				AFC6A7D422CA3BD900CDF34A /* XDTAs99Parser.h in Headers */,
@@ -621,9 +640,12 @@
 				AF2D96B51DFABF39006EE618 /* XDTAs99Objcode.m in Sources */,
 				AFC6A7D522CA3BD900CDF34A /* XDTAs99Parser.m in Sources */,
 				AF5CB1C322DF177F00FBF6D3 /* XDTAs99Block.m in Sources */,
+				AF016E8A22EA254A00443077 /* XDTCallback.m in Sources */,
 				AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */,
 				AF2D96B61DFABF39006EE618 /* XDTAssembler.m in Sources */,
 				AFE630701DF9BB9E005FFD01 /* NSErrorPythonAdditions.m in Sources */,
+				AF016E8622EA061800443077 /* XDTAs99Opcodes.m in Sources */,
+				AFFEE00822E9F713006E9317 /* XDTAs99Optimizer.m in Sources */,
 				AF2D96CA1DFAFF29006EE618 /* NSDataPythonAdditions.m in Sources */,
 				AFE630751DF9BB9E005FFD01 /* XDTZipFile.m in Sources */,
 			);

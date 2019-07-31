@@ -1,11 +1,11 @@
 //
-//  XDAssembler.h
+//  XDTCallback.h
 //  XDTools99
 //
-//  Created by Henrik Wedekind on 09.12.16.
+//  Created by Henrik Wedekind on 25.07.19.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,27 +22,28 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#ifndef XDAssembler_h
-#define XDAssembler_h
+#import <Foundation/Foundation.h>
 
-#import "XDTObject.h"
+#import <Python/object.h>
 
-#import "XDTAs99Address.h"
-#import "XDTAs99DelayedAddress.h"
-#import "XDTAs99LocalReference.h"
-#import "XDTAs99ExternalReference.h"
-#import "XDTAs99Block.h"
-#import "XDTAs99Line.h"
-#import "XDTAs99Symbols.h"
-#import "XDTAs99Directives.h"
-#import "XDTAs99Opcodes.h"
-#import "XDTAs99Objcode.h"
-#import "XDTAs99Optimizer.h"
-#import "XDTAs99Parser.h"
-#import "XDTAssembler.h"
 
-#import "XDTZipFile.h"
-#import "XDTMessage.h"
-#import "XDTLineScanner.h"
+NS_ASSUME_NONNULL_BEGIN
 
-#endif /* XDAssembler_h */
+@interface XDTCallback : NSObject
+
++ (instancetype)callableWithPyObject:(PyObject *)object;
+
+- (nullable id)call;
+- (nullable id)callWithArrayOfArguments:(NSArray *)args;
+- (nullable id)callWithArguments:(NSObject *)firstArg, ... NS_REQUIRES_NIL_TERMINATION;
+
+@end
+
+
+@interface XDTCallback (Private)
+
+@property (readonly) PyObject *pythonInstance;
+
+@end
+
+NS_ASSUME_NONNULL_END

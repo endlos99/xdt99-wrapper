@@ -1,11 +1,11 @@
 //
-//  XDAssembler.h
+//  XDTAs99Optimizer.h
 //  XDTools99
 //
-//  Created by Henrik Wedekind on 09.12.16.
+//  Created by Henrik Wedekind on 25.07.19.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,27 +22,21 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#ifndef XDAssembler_h
-#define XDAssembler_h
-
 #import "XDTObject.h"
 
-#import "XDTAs99Address.h"
-#import "XDTAs99DelayedAddress.h"
-#import "XDTAs99LocalReference.h"
-#import "XDTAs99ExternalReference.h"
-#import "XDTAs99Block.h"
-#import "XDTAs99Line.h"
-#import "XDTAs99Symbols.h"
-#import "XDTAs99Directives.h"
-#import "XDTAs99Opcodes.h"
-#import "XDTAs99Objcode.h"
-#import "XDTAs99Optimizer.h"
-#import "XDTAs99Parser.h"
-#import "XDTAssembler.h"
 
-#import "XDTZipFile.h"
-#import "XDTMessage.h"
-#import "XDTLineScanner.h"
+@class XDTAs99Objcode, XDTAs99Parser;
 
-#endif /* XDAssembler_h */
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface XDTAs99Optimizer : XDTObject
+
++ (nullable instancetype)optimizer;
+
+- (void)optimizeCode:(XDTAs99Objcode *)code usingParser:(XDTAs99Parser *)parser forMnemonic:(NSString *)mnemonic arguments:(NSArray<NSString *> *)args;
+- (void)optimizeCode:(XDTAs99Objcode *)code usingParser:(XDTAs99Parser *)parser forMnemonic:(NSString *)mnemonic opCode:(NSUInteger)opCode format:(NSUInteger)fmt argument1:(NSObject * _Nullable)arg1 argument2:(NSObject * _Nullable)arg2;
+
+@end
+
+NS_ASSUME_NONNULL_END

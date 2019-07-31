@@ -24,7 +24,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <Python/Python.h>
+#import <XDTObject.h>
 
 
 typedef NS_ENUM(NSUInteger, XDTMessageTypeValue) {
@@ -51,18 +51,35 @@ FOUNDATION_EXPORT XDTMessageTypeKey const XDTMessageType;       /* Kind of messa
 typedef void (^XDTMessageEnumBlock)(NSDictionary<XDTMessageTypeKey, id> *obj, BOOL *stop);
 
 
-@interface XDTMessage : NSObject
+@interface XDTMessage : XDTObject
+
+/**
+ This creates a new message object for use in classes like XDTAs99Parser which does not create their own.
+ This also creates a new underlying data structure.
+ */
++ (instancetype)message;
 
 + (instancetype)messageWithPythonList:(PyObject *)messageList;
+
+/**
+ Creates a new message object with messages retrieved from a Python List object.
+ This constructor is normally only called from a xbas99 context, so therefor the second argument is used to specify the message type.
+ The Basic tool xdt99 does currently not use the well defined interface like the other tools (xas99 and xga99) uses.
+ */
 + (instancetype)messageWithPythonList:(PyObject *)messageList treatingAs:(XDTMessageTypeValue)type;
 + (instancetype)messageWithMessages:(XDTMessage *)messages;
 
-- (XDTMessage *)messagesOfType:(XDTMessageTypeValue)type;
-- (XDTMessage *)sortedByPriorityAscendingType;
-- (XDTMessage *)sortedByPriorityDecendingType;
+- (instancetype)messagesOfType:(XDTMessageTypeValue)type;
+- (instancetype)sortedByPriorityAscendingType;
+- (instancetype)sortedByPriorityDecendingType;
 
 @property (readonly) NSUInteger count;
 - (NSUInteger)countOfType:(XDTMessageTypeValue)type;
+
+/**
+ Syncronizes the internal cache of the receiver with the underlaying Python data.
+ */
+- (void)refresh;
 
 - (void)enumerateMessagesUsingBlock:(NS_NOESCAPE XDTMessageEnumBlock)block;
 - (void)enumerateMessagesOfType:(XDTMessageTypeValue)type usingBlock:(NS_NOESCAPE XDTMessageEnumBlock)block;
@@ -72,7 +89,20 @@ typedef void (^XDTMessageEnumBlock)(NSDictionary<XDTMessageTypeKey, id> *obj, BO
 
 @interface XDTMutableMessage : XDTMessage
 
+/**
+ Adds a new message to the receiver.
+ This method is incomplete implemented!
+
+ TODO: Update the underlying Python data!
+ */
 - (void)addMessages:(XDTMessage *)messages;
+
+/**
+ Replaces messages of the specified type in the receiver with messages of an other object with the same type.
+ This method is incomplete implemented!
+
+ TODO: Update the underlying Python data!
+ */
 - (void)replaceMessagesOfType:(XDTMessageTypeValue)type withMessagesOfSameType:(XDTMessage * _Nullable)messages;
 
 - (void)sortByPriorityAscendingType;

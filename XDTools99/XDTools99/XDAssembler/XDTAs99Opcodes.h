@@ -1,11 +1,11 @@
 //
-//  XDAssembler.h
+//  XDTAs99Opcodes.h
 //  XDTools99
 //
-//  Created by Henrik Wedekind on 09.12.16.
+//  Created by Henrik Wedekind on 25.07.19.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,27 +22,21 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#ifndef XDAssembler_h
-#define XDAssembler_h
-
 #import "XDTObject.h"
 
-#import "XDTAs99Address.h"
-#import "XDTAs99DelayedAddress.h"
-#import "XDTAs99LocalReference.h"
-#import "XDTAs99ExternalReference.h"
-#import "XDTAs99Block.h"
-#import "XDTAs99Line.h"
-#import "XDTAs99Symbols.h"
-#import "XDTAs99Directives.h"
-#import "XDTAs99Opcodes.h"
-#import "XDTAs99Objcode.h"
-#import "XDTAs99Optimizer.h"
-#import "XDTAs99Parser.h"
-#import "XDTAssembler.h"
 
-#import "XDTZipFile.h"
-#import "XDTMessage.h"
-#import "XDTLineScanner.h"
+NS_ASSUME_NONNULL_BEGIN
 
-#endif /* XDAssembler_h */
+@interface XDTAs99Opcodes : XDTObject
+
+@property (readonly, nullable) NSDictionary<NSString *, NSArray<id> *> *instructions;       // values are tuple of (opCode, fmt, Parser, Parser, Timing)
+@property (readonly, nullable) NSDictionary<NSString *, NSArray<id> *> *pseudoInstructions; // values are tuple of (Mnemonic, Args[])
+
+@property (readonly, nullable, class) XDTAs99Opcodes *sharedOpcodes;
+
+// TODO: process(parser, code, label, mnemonic, operands)
+// TODO: generate(code, opcode, fmt, arg1, arg2, timing)
+
+@end
+
+NS_ASSUME_NONNULL_END

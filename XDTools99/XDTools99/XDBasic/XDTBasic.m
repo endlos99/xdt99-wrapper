@@ -126,6 +126,7 @@ NS_ASSUME_NONNULL_END
     }
 
     self = [super initWithPythonInstance:basicObject];
+    Py_DECREF(basicObject);
     if (nil == self) {
         return nil;
     }
@@ -223,6 +224,7 @@ NS_ASSUME_NONNULL_END
     }
 
     assert(Py_None == pNonValue);
+    Py_DECREF(pNonValue);
     return YES;
 }
 
@@ -251,6 +253,7 @@ NS_ASSUME_NONNULL_END
     }
 
     assert(Py_None == pNonValue);
+    Py_DECREF(pNonValue);
     return YES;
 }
 

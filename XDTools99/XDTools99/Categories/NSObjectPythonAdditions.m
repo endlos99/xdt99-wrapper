@@ -38,6 +38,8 @@
 #import "XDTAs99Block.h"
 #import "XDTAs99Line.h"
 
+#import "XDTCallback.h"
+
 
 @implementation NSObject (NSObjectPythonAdditions)
 
@@ -55,6 +57,8 @@
         object = [NSArray arrayWithPythonTuple:obj];
     } else if (PyDict_Check(obj)) {
         object = [NSDictionary dictionaryWithPythonDictionary:obj];
+    } else if (PyCallable_Check(obj)) {
+        object = [XDTCallback callableWithPyObject:obj];
     } else if (Py_None == obj) {
         object = [NSNull null];
     } else if ([XDTAs99Address checkInstanceForPythonObject:obj]) {
@@ -68,17 +72,18 @@
     } else if ([XDTAs99Line checkInstanceForPythonObject:obj]) {
         object = [XDTAs99Line lineWithPythonInstance:obj];
     } else {
-        PyTypeObject *dataType = obj->ob_type;
-        NSLog(@"%s ERROR: Cannot convert Python type '%s' to an Objective-C type", __FUNCTION__, dataType->tp_name);
+        Py_XINCREF(obj);    // Usually all other work with an scalar representation of the Python object or they retain its pointer
+        object = [NSValue valueWithPointer:obj];
     }
 
+    NSAssert(nil != object, @"%s EXCEPTION: Cannot create an instance of NSObject for a value of type %s.", __FUNCTION__, obj->ob_type->tp_name);
     return object;
 }
 
 
 - (PyObject *)asPythonType
 {
-    PyObject *retVal = Py_None;
+    PyObject *retVal = nil;
 
     if ([self isKindOfClass:[NSNumber class]]) {
         retVal = [(NSNumber *)self asPythonType];
@@ -94,8 +99,14 @@
         retVal = [(NSDictionary *)self asPythonType];
     } else if ([self isKindOfClass:[XDTObject class]]) {
         retVal = [(XDTObject *)self pythonInstance];
+        Py_XINCREF(retVal); // Usually new instances will be created in this method, so increment the reference count for borrowed pointers
+    } else if ([self isKindOfClass:[NSValue class]]) {
+        retVal = [(NSValue *)self pointerValue];
+        Py_XINCREF(retVal); // Usually new instances will be created in this method, so increment the reference count for borrowed pointers
     } else {
-        NSLog(@"%s ERROR: Cannot convert Objective-C type '%@' to a Python type", __FUNCTION__, [self className]);
+        retVal = Py_None;
+        Py_INCREF(retVal);
+        NSAssert(false, @"%s EXCEPTION: Cannot create an Python instance for an onbject of type %@.", __FUNCTION__, [self className]);
     }
 
     return retVal;

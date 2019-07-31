@@ -24,6 +24,8 @@
 
 #import "XDTMessage.h"
 
+#import <Python/Python.h>
+
 #import "NSSetPythonAdditions.h"
 
 
@@ -54,12 +56,24 @@ static NSArray<NSSortDescriptor *> *sortDescriptorsDecendingType;
 - (instancetype)initWithPythonList:(PyObject *)messageList treatingAs:(XDTMessageTypeValue)type;
 - (instancetype)initWithSet:(NSOrderedSet<NSDictionary<XDTMessageTypeKey, id> *> *)messageArray;
 
++ (NSDictionary<XDTMessageTypeKey, id> *)createMessageElement:(NSArray<id> *)messageTupel;
+
+- (instancetype)sortedUsingDescriptior:(NSArray<NSSortDescriptor *> *)descriptor;
+
+- (void)refreshBasicMessagesTreatingAs:(XDTMessageTypeValue)treatingType;
+
 @end
 
 NS_ASSUME_NONNULL_END
 
 
 @implementation XDTMessage
+
++ (NSString *)pythonClassName
+{
+    return [NSString stringWithUTF8String:PyList_New(0)->ob_type->tp_name];
+}
+
 
 + (void)initialize
 {
@@ -93,15 +107,10 @@ NS_ASSUME_NONNULL_END
 }
 
 
-+ (instancetype)messageWithPythonList:(PyObject *)messageList
-{
-    return [self messageWithPythonList:messageList treatingAs:XDTMessageTypeAll];
-}
-
-
+// only calles from within Basic context.
 + (instancetype)messageWithPythonList:(PyObject *)messageList treatingAs:(XDTMessageTypeValue)type
 {
-    id retVal = [[[self class] alloc] initWithPythonList:messageList treatingAs:type];
+    id retVal = [[self.class alloc] initWithPythonList:messageList treatingAs:type];
 #if !__has_feature(objc_arc)
     return [retVal autorelease];
 #else
@@ -110,133 +119,66 @@ NS_ASSUME_NONNULL_END
 }
 
 
+// only calles from within Basic context.
 - (instancetype)initWithPythonList:(PyObject *)messageList treatingAs:(XDTMessageTypeValue)treatingType
 {
     assert(NULL != messageList);
 
-    self = [super init];
+    self = [super initWithPythonInstance:messageList];
     if (nil == self) {
         return nil;
     }
 
     _messages = nil;
-    const Py_ssize_t messageCount = PyList_Size(messageList);
-    if (0 >= messageCount) {
-        return self;
-    }
-
-    /* Check if the messageList comes from xbas99, which delivers its messages in an array of strings, not an array of tuples like the other does. */
-    NSMutableOrderedSet<NSDictionary<XDTMessageTypeKey, id> *> *newMessages = [NSMutableOrderedSet orderedSetWithCapacity:messageCount];
-    NSSet<NSString *> *messageStrings = [NSSet setWithPythonListOfString:messageList];
-    if (nil != messageStrings && 0 < messageStrings.count) {
-        // I'm still the old and ugly style of message exchange, that xbas99 still uses.
-        [messageStrings enumerateObjectsUsingBlock:^(NSString *obj, BOOL *stop) {
-            NSDictionary<XDTMessageTypeKey, id> *msg = nil;
-
-            NSRange range = NSMakeRange(0, [obj length]);
-            NSTextCheckingResult *match = [warningRegex firstMatchInString:obj options:0 range:range];
-            if (nil != match) {
-                /* Assembler warnings */
-                msg = @{
-                        XDTMessageFileURL: [NSURL fileURLWithPath:[obj substringWithRange:[match rangeAtIndex:1]]],
-                        XDTMessagePassNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:2]] integerValue]],
-                        XDTMessageLineNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:3]] integerValue]],
-                        //XDTMessageCodeLine:nil;
-                        XDTMessageText: [obj substringWithRange:[match rangeAtIndex:4]],
-                        XDTMessageType: [NSNumber numberWithUnsignedInteger:(XDTMessageTypeAll != treatingType)? treatingType : XDTMessageTypeWarning]
-                        };
-            } else {
-                match = [errorRegex firstMatchInString:obj options:0 range:range];
-                if (nil != match) {
-                    /* Assembler errors */
-                    msg = @{
-                            XDTMessageFileURL: [NSURL fileURLWithPath:[obj substringWithRange:[match rangeAtIndex:1]]],
-                            XDTMessagePassNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:2]] integerValue]],
-                            XDTMessageLineNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:3]] integerValue]],
-                            XDTMessageCodeLine: [obj substringWithRange:[match rangeAtIndex:4]],
-                            XDTMessageText: [obj substringWithRange:[match rangeAtIndex:5]],
-                            XDTMessageType: [NSNumber numberWithUnsignedInteger:(XDTMessageTypeAll != treatingType)? treatingType : XDTMessageTypeError]
-                            };
-                } else {
-                    /* Basic warnings */
-                    match = [basicRegex firstMatchInString:obj options:0 range:range];
-                    if (nil != match) {
-                        msg = @{
-                                //XDTMessageFileURL: nil,
-                                //XDTMessagePassNumber: nil,
-                                XDTMessageLineNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:2]] integerValue] + 1],
-                                XDTMessageCodeLine: [obj substringWithRange:[match rangeAtIndex:3]],
-                                XDTMessageText: [obj substringWithRange:[match rangeAtIndex:1]],
-                                XDTMessageType: [NSNumber numberWithUnsignedInteger:(XDTMessageTypeAll != treatingType)? treatingType : XDTMessageTypeWarning]
-                                };
-                    } else {
-                        /* old school style of Assembler warnings */
-                        msg = @{
-                                //XDTMessageFileURL: nil,
-                                XDTMessagePassNumber: @2,
-                                //XDTMessageLineNumber: nil,
-                                //XDTMessageCodeLine: @"",
-                                XDTMessageText: obj,
-                                XDTMessageType: [NSNumber numberWithUnsignedInteger:(XDTMessageTypeAll != treatingType)? treatingType : XDTMessageTypeError]
-                                };
-                    }
-                }
-            }
-            [newMessages addObject:msg];
-        }];
-    } else {
-        NSSet<NSArray *> *messageTupel = [NSSet setWithPythonListOfTuple:messageList];
-        [messageTupel enumerateObjectsUsingBlock:^(NSArray *messageItem, BOOL *stop) {
-            NSDictionary<XDTMessageTypeKey, id> *msg = nil;
-
-            NSString *typeString = [[NSString alloc] initWithData:[messageItem objectAtIndex:0] encoding:NSUTF8StringEncoding].uppercaseString;  /* Message type: E=Error; W=Warning */
-            XDTMessageTypeValue typeValue = treatingType;
-            if (XDTMessageTypeAll == treatingType) {
-                if ([@"E" isEqualToString:typeString]) {
-                    typeValue = XDTMessageTypeError;
-                } else if ([@"W" isEqualToString:typeString]) {
-                    typeValue = XDTMessageTypeWarning;
-                } else {
-                    NSLog(@"Warning: unknown message type: %@", typeString);
-                }
-            }
-
-            NSData *stringData = [messageItem objectAtIndex:1];
-            NSString *fileName = [[NSNull null] isEqual:stringData]? @"" : [[NSString alloc] initWithData:stringData encoding:NSUTF8StringEncoding];  /* Name of te Source file. */
-            NSNumber *passNum = [messageItem objectAtIndex:2];  /* Number of the Assembler pass. */
-            NSNumber *lineNum = [messageItem objectAtIndex:3];  /* Number of the line in source code. */
-            stringData = [messageItem objectAtIndex:4];
-            NSString *sourceLine = [[NSNull null] isEqualTo:stringData]? @"" : [[NSString alloc] initWithData:stringData encoding:NSUTF8StringEncoding];  /* Line of source code where the line number points to. */
-            NSString *message = [[NSString alloc] initWithData:[messageItem objectAtIndex:5] encoding:NSUTF8StringEncoding];  /* Text of the generated message. */
-
-            if (nil == message || 0 >= message.length) {
-                NSLog(@"Warning: XDT Message without text!");
-                return;
-            }
-            msg = @{
-                    XDTMessageFileURL: [NSURL fileURLWithPath:fileName],
-                    XDTMessagePassNumber: passNum,
-                    XDTMessageLineNumber: (nil == lineNum)? [NSNull null] : lineNum,
-                    XDTMessageCodeLine: (nil == sourceLine)? @"" : sourceLine,
-                    XDTMessageText: message,
-                    XDTMessageType: [NSNumber numberWithUnsignedInteger:typeValue]
-                    };
-            [newMessages addObject:msg];
-        }];
-    }
-    _messages = newMessages;
     _usedSortDescriptors = nil;
+
+    [self refreshBasicMessagesTreatingAs:XDTMessageTypeWarning];
 
     return self;
 }
 
 
++ (instancetype)message
+{
+    PyObject *console = PyList_New(0);
+    id retVal = [self messageWithPythonList:console];
+    Py_XDECREF(console);
+    return retVal;
+}
+
+
 + (instancetype)messageWithMessages:(XDTMessage *)messages
 {
-    XDTMessage *retVal = [[XDTMessage alloc] init];
-    retVal->_messages = [NSMutableOrderedSet orderedSetWithOrderedSet:messages->_messages];
-    retVal->_usedSortDescriptors = messages->_usedSortDescriptors;
+    id retVal = [self.class messageWithPythonList:messages.pythonInstance];
+    return [retVal sortedUsingDescriptior:messages->_usedSortDescriptors];
+}
+
+
++ (instancetype)messageWithPythonList:(PyObject *)messageList
+{
+    id retVal = [[self.class alloc] initWithPythonList:messageList];
+#if !__has_feature(objc_arc)
+    return [retVal autorelease];
+#else
     return retVal;
+#endif
+}
+
+
+- (instancetype)initWithPythonList:(PyObject *)messageList
+{
+    assert(NULL != messageList);
+
+    self = [super initWithPythonInstance:messageList];
+    if (nil == self) {
+        return nil;
+    }
+
+    _usedSortDescriptors = sortDescriptorsAscendingType;
+    _messages = nil;
+    [self refresh];
+
+    return self;
 }
 
 
@@ -244,17 +186,17 @@ NS_ASSUME_NONNULL_END
 {
     assert(NULL != messageSet);
 
-    self = [super init];
+    self = [super initWithPythonInstance:NULL];
     if (nil == self) {
         return nil;
     }
 
+    _usedSortDescriptors = nil;
     _messages = nil;
     if (0 >= [messageSet count]) {
         return self;
     }
     _messages = [NSMutableOrderedSet orderedSetWithOrderedSet:messageSet];
-    _usedSortDescriptors = nil;
 
     return self;
 }
@@ -263,6 +205,7 @@ NS_ASSUME_NONNULL_END
 - (void)dealloc
 {
     //Py_CLEAR(objectcodePythonClass);
+    
 #if !__has_feature(objc_arc)
     [_messages release];
     [super dealloc];
@@ -273,57 +216,52 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Accessor Methods
 
 
-- (XDTMessage *)messagesOfType:(XDTMessageTypeValue)type
+- (instancetype)messagesOfType:(XDTMessageTypeValue)type
 {
     NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", XDTMessageType, type];
     NSOrderedSet<NSDictionary<XDTMessageTypeKey,id> *> *filtered = [_messages filteredOrderedSetUsingPredicate:p];
-    XDTMessage *retVal = [[XDTMessage alloc] initWithSet:filtered];
+    XDTMessage *retVal = [[self.class alloc] initWithSet:filtered];
+
 #if !__has_feature(objc_arc)
-    [retVal autorelease];
-#endif
+    return [retVal autorelease];
+#else
     return retVal;
+#endif
 }
 
 
-- (XDTMessage *)sortedByPriorityAscendingType
+- (instancetype)sortedByPriorityAscendingType
 {
-    if (_usedSortDescriptors == sortDescriptorsAscendingType) {
-        XDTMessage *retVal = [[XDTMessage alloc] initWithSet:_messages];
-#if !__has_feature(objc_arc)
-        [retVal autorelease];
-#endif
-        retVal->_usedSortDescriptors = _usedSortDescriptors;
-        return retVal;
-    }
-
-    NSArray<NSDictionary<XDTMessageTypeKey,id> *> *sorted = [_messages sortedArrayUsingDescriptors:sortDescriptorsAscendingType];
-    XDTMessage *retVal = [[XDTMessage alloc] initWithSet:[NSOrderedSet orderedSetWithArray:sorted]];
-#if !__has_feature(objc_arc)
-    [retVal autorelease];
-#endif
-    retVal->_usedSortDescriptors = sortDescriptorsAscendingType;
-    return retVal;
+    return [self sortedUsingDescriptior:sortDescriptorsAscendingType];
 }
 
 
-- (XDTMessage *)sortedByPriorityDecendingType
+- (instancetype)sortedByPriorityDecendingType
 {
-    if (_usedSortDescriptors == sortDescriptorsDecendingType) {
-        XDTMessage *retVal = [[XDTMessage alloc] initWithSet:_messages];
-#if !__has_feature(objc_arc)
-        [retVal autorelease];
-#endif
+    return [self sortedUsingDescriptior:sortDescriptorsDecendingType];
+}
+
+
+- (instancetype)sortedUsingDescriptior:(NSArray<NSSortDescriptor *> *)descriptor
+{
+    if (_usedSortDescriptors == descriptor) {
+        XDTMessage *retVal = [[self.class alloc] initWithSet:_messages];
         retVal->_usedSortDescriptors = _usedSortDescriptors;
+#if !__has_feature(objc_arc)
+        return [retVal autorelease];
+#else
         return retVal;
+#endif
     }
 
-    NSArray<NSDictionary<XDTMessageTypeKey,id> *> *sorted = [_messages sortedArrayUsingDescriptors:sortDescriptorsDecendingType];
-    XDTMessage *retVal = [[XDTMessage alloc] initWithSet:[NSOrderedSet orderedSetWithArray:sorted]];
+    NSArray<NSDictionary<XDTMessageTypeKey,id> *> *sorted = [_messages sortedArrayUsingDescriptors:descriptor];
+    XDTMessage *retVal = [[self.class alloc] initWithSet:[NSOrderedSet orderedSetWithArray:sorted]];
+    retVal->_usedSortDescriptors = descriptor;
 #if !__has_feature(objc_arc)
-    [retVal autorelease];
-#endif
-    retVal->_usedSortDescriptors = sortDescriptorsDecendingType;
+    return [retVal autorelease];
+#else
     return retVal;
+#endif
 }
 
 
@@ -342,6 +280,139 @@ NS_ASSUME_NONNULL_END
     NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", XDTMessageType, type];
     NSOrderedSet<NSDictionary<XDTMessageTypeKey,id> *> *filtered = [_messages filteredOrderedSetUsingPredicate:p];
     return filtered.count;
+}
+
+
++ (NSDictionary<XDTMessageTypeKey, id> *)createMessageElement:(NSArray<id> *)messageTuple
+{
+    NSDictionary<XDTMessageTypeKey, id> *msg = nil;
+
+    NSString *typeString = [[NSString alloc] initWithData:[messageTuple objectAtIndex:0] encoding:NSUTF8StringEncoding].uppercaseString;  /* Message type: E=Error; W=Warning */
+    XDTMessageTypeValue typeValue = XDTMessageTypeInfo;
+    if ([@"E" isEqualToString:typeString]) {
+        typeValue = XDTMessageTypeError;
+    } else if ([@"W" isEqualToString:typeString]) {
+        typeValue = XDTMessageTypeWarning;
+    } else {
+        NSLog(@"Warning: unknown message type: %@", typeString);
+    }
+
+    NSData *stringData = [messageTuple objectAtIndex:1];
+    NSString *fileName = [NSNull.null isEqualTo:stringData]? @"" : [[NSString alloc] initWithData:stringData encoding:NSUTF8StringEncoding];  /* Name of te Source file. */
+    NSURL *fileUrl = [NSURL fileURLWithPath:fileName.lastPathComponent relativeToURL:[NSURL fileURLWithPath:fileName.stringByDeletingLastPathComponent isDirectory:YES]];
+    NSNumber *passNum = [messageTuple objectAtIndex:2];  /* Number of the Assembler pass. */
+    NSNumber *lineNum = [messageTuple objectAtIndex:3];  /* Number of the line in source code. */
+    stringData = [messageTuple objectAtIndex:4];
+    NSString *sourceLine = [[NSNull null] isEqualTo:stringData]? @"" : [[NSString alloc] initWithData:stringData encoding:NSUTF8StringEncoding];  /* Line of source code where the line number points to. */
+    NSString *message = [[NSString alloc] initWithData:[messageTuple objectAtIndex:5] encoding:NSUTF8StringEncoding];  /* Text of the generated message. */
+
+    if (nil == message || 0 >= message.length) {
+        NSLog(@"%s ERROR: XDT Message without text!", __FUNCTION__);
+    }
+    msg = @{
+            XDTMessageFileURL: (nil == fileUrl)? NSNull.null : fileUrl,
+            XDTMessagePassNumber: passNum,
+            XDTMessageLineNumber: (nil == lineNum)? NSNull.null : lineNum,
+            XDTMessageCodeLine: (nil == sourceLine)? @"" : sourceLine,
+            XDTMessageText: (nil == message || 0 >= message.length)? NSNull.null : message,
+            XDTMessageType: [NSNumber numberWithUnsignedInteger:typeValue]
+            };
+    return msg;
+}
+
+
+- (void)refresh
+{
+    /* Check if the messageList comes from xbas99, which delivers its messages in an array of strings, not an array of tuples like the other does. */
+    NSSet<NSArray<id> *> *listOfMessageTupel = [NSSet setWithPythonListOfTuple:self.pythonInstance];
+    if (nil == listOfMessageTupel) {
+        // TODO: I'm still the old and ugly style of message exchange, that xbas99 still uses.
+        [self refreshBasicMessagesTreatingAs:XDTMessageTypeWarning];
+    } else {
+        const Py_ssize_t messageCount = PyList_Size(self.pythonInstance);
+        if (0 >= messageCount) {
+            [_messages removeAllObjects];
+            return;
+        }
+
+        NSMutableOrderedSet<NSDictionary<XDTMessageTypeKey, id> *> *newMessages = [NSMutableOrderedSet orderedSetWithCapacity:messageCount];
+        [listOfMessageTupel enumerateObjectsUsingBlock:^(NSArray<id> *messageTupel, BOOL *stop) {
+            NSDictionary<XDTMessageTypeKey, id> *msg = [self.class createMessageElement:messageTupel];
+            [newMessages addObject:msg];
+        }];
+        _messages = newMessages;
+    }
+}
+
+
+// TODO: remove this method when Ralph finally implemented the correct message interface in xbas99.
+- (void)refreshBasicMessagesTreatingAs:(XDTMessageTypeValue)treatingType
+{
+    NSSet<NSString *> *messageStrings = [NSSet setWithPythonListOfString:self.pythonInstance];
+    const Py_ssize_t messageCount = PyList_Size(self.pythonInstance);
+    if (0 >= messageCount || nil == messageStrings) {
+        [_messages removeAllObjects];
+        return;
+    }
+
+    NSMutableOrderedSet<NSDictionary<XDTMessageTypeKey, id> *> *newMessages = [NSMutableOrderedSet orderedSetWithCapacity:messageCount];
+    // I'm still the old and ugly style of message exchange, that xbas99 still uses.
+    [messageStrings enumerateObjectsUsingBlock:^(NSString *obj, BOOL *stop) {
+        NSDictionary<XDTMessageTypeKey, id> *msg = nil;
+
+        NSRange range = NSMakeRange(0, [obj length]);
+        NSTextCheckingResult *match = [warningRegex firstMatchInString:obj options:0 range:range];
+        if (nil != match) {
+            /* Assembler warnings */
+            msg = @{
+                    XDTMessageFileURL: [NSURL fileURLWithPath:[obj substringWithRange:[match rangeAtIndex:1]]],
+                    XDTMessagePassNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:2]] integerValue]],
+                    XDTMessageLineNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:3]] integerValue]],
+                    //XDTMessageCodeLine:nil;
+                    XDTMessageText: [obj substringWithRange:[match rangeAtIndex:4]],
+                    XDTMessageType: [NSNumber numberWithUnsignedInteger:(XDTMessageTypeAll != treatingType)? treatingType : XDTMessageTypeWarning]
+                    };
+        } else {
+            match = [errorRegex firstMatchInString:obj options:0 range:range];
+            if (nil != match) {
+                /* Assembler errors */
+                msg = @{
+                        XDTMessageFileURL: [NSURL fileURLWithPath:[obj substringWithRange:[match rangeAtIndex:1]]],
+                        XDTMessagePassNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:2]] integerValue]],
+                        XDTMessageLineNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:3]] integerValue]],
+                        XDTMessageCodeLine: [obj substringWithRange:[match rangeAtIndex:4]],
+                        XDTMessageText: [obj substringWithRange:[match rangeAtIndex:5]],
+                        XDTMessageType: [NSNumber numberWithUnsignedInteger:(XDTMessageTypeAll != treatingType)? treatingType : XDTMessageTypeError]
+                        };
+            } else {
+                /* Basic warnings */
+                match = [basicRegex firstMatchInString:obj options:0 range:range];
+                if (nil != match) {
+                    msg = @{
+                            //XDTMessageFileURL: nil,
+                            //XDTMessagePassNumber: nil,
+                            XDTMessageLineNumber: [NSNumber numberWithUnsignedInteger:[[obj substringWithRange:[match rangeAtIndex:2]] integerValue] + 1],
+                            XDTMessageCodeLine: [obj substringWithRange:[match rangeAtIndex:3]],
+                            XDTMessageText: [obj substringWithRange:[match rangeAtIndex:1]],
+                            XDTMessageType: [NSNumber numberWithUnsignedInteger:(XDTMessageTypeAll != treatingType)? treatingType : XDTMessageTypeWarning]
+                            };
+                } else {
+                    /* old school style of Assembler warnings */
+                    msg = @{
+                            //XDTMessageFileURL: nil,
+                            XDTMessagePassNumber: @2,
+                            //XDTMessageLineNumber: nil,
+                            //XDTMessageCodeLine: @"",
+                            XDTMessageText: obj,
+                            XDTMessageType: [NSNumber numberWithUnsignedInteger:(XDTMessageTypeAll != treatingType)? treatingType : XDTMessageTypeError]
+                            };
+                }
+            }
+        }
+        [newMessages addObject:msg];
+    }];
+    _messages = newMessages;
+    [_messages sortUsingDescriptors:_usedSortDescriptors];
 }
 
 
@@ -373,6 +444,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)addMessages:(XDTMessage *)messages
 {
+    // TODO: update the underlying Python data!
     [self willChangeValueForKey:NSStringFromSelector(@selector(count))];
     [_messages unionOrderedSet:messages->_messages];
     [self didChangeValueForKey:NSStringFromSelector(@selector(count))];
@@ -381,6 +453,7 @@ NS_ASSUME_NONNULL_END
 
 - (void)replaceMessagesOfType:(XDTMessageTypeValue)type withMessagesOfSameType:(XDTMessage *)messages
 {
+    // TODO: update the underlying Python data!
     NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", XDTMessageType, type];
     NSOrderedSet<NSDictionary<XDTMessageTypeKey,id> *> *messagesOfSameType = [messages->_messages filteredOrderedSetUsingPredicate:p];
 

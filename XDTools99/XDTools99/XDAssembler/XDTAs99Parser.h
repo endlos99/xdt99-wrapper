@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (copy, nullable) NSString *path;
 @property (readonly, copy, nullable) XDTAs99Symbols *symbols;
-@property (readonly, nullable) XDTMessage *messages;
+@property (copy, nullable) XDTMessage *messages;
 @property (readonly, copy, nullable) XDTAs99Preprocessor *preprocessor;
 
 /**

@@ -30,6 +30,7 @@
 #import "HighlighterDelegate.h"
 
 #import <XDTools99/XDAssembler.h>
+#import <XDTMessage.h>
 
 
 @interface AssemblerDocument ()
@@ -577,6 +578,14 @@
     XDTAs99Objcode *result = [assembler assembleSourceFile:[self fileURL] error:&tempErr];
     [self setAssemblingResult:result];
     [self setGeneratorMessages:assembler.messages];
+
+#if 0
+    if (nil != result) {
+        //[(XDTAs99Parser *)self.parser setMessages:[XDTMessage message]];
+        [XDTAs99Optimizer.optimizer optimizeCode:result usingParser:(XDTAs99Parser *)self.parser forMnemonic:@"B" arguments:@[@"@$+2"]];
+        XDTMessage *m = [(XDTAs99Parser *)self.parser messages];
+    }
+#endif
 
     /* set the number of digits of line numbers in the superclass to configure the log format */
     [super setValue:@4 forKey:@"lineNumberDigits"];

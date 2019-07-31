@@ -121,6 +121,7 @@
     }
 
     self = [super initWithPythonInstance:zipfile];
+    Py_DECREF(zipfile);
     if (nil == self) {
         return nil;
     }

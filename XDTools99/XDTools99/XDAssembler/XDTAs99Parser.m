@@ -35,6 +35,8 @@
 #import "XDTAs99Objdummy.h"
 #import "XDTAs99Preprocessor.h"
 
+#import "XDTMessage.h"
+
 
 #define XDTClassNameParser "Parser"
 
@@ -87,7 +89,7 @@ NS_ASSUME_NONNULL_END
      */
     PyObject *pSymbolsFunc = PyObject_GetAttrString(pModule, XDTAs99Symbols.pythonClassName.UTF8String);
     if (NULL == pSymbolsFunc || !PyCallable_Check(pSymbolsFunc)) {
-        NSLog(@"%s ERROR: Cannot find class \"%s\" in module %s", __FUNCTION__, XDTAs99Symbols.pythonClassName.UTF8String, PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot find class \"%@\" in module %s", __FUNCTION__, XDTAs99Symbols.pythonClassName, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -113,10 +115,26 @@ NS_ASSUME_NONNULL_END
     /* creating symbols object:
         symbols = Symbols(add_registers=self.optr, add_defs=self.defs)
      */
+    Py_XINCREF(pAddRegisters);
     PyObject *pSymbolsArgs = PyTuple_Pack(2, pAddRegisters, pDefs);
     PyObject *pSymbols = PyObject_CallObject(pSymbolsFunc, pSymbolsArgs);
     Py_XDECREF(pSymbolsArgs);
     Py_DECREF(pSymbolsFunc);
+    if (NULL == pSymbols) {
+        NSLog(@"%s ERROR: calling constructor %@(%s, []) failed!", __FUNCTION__, XDTAs99Symbols.pythonClassName,
+              useRegisterSymbol? "true" : "false");
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+//            if (nil != error) {
+//                *error = [NSError errorWithPythonError:exeption code:-2 localizedRecoverySuggestion:nil];
+//            }
+            PyErr_Print();
+        }
+#if !__has_feature(objc_arc)
+        [self release];
+#endif
+        return nil;
+    }
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameParser);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
@@ -156,6 +174,7 @@ NS_ASSUME_NONNULL_END
     }
 
     self = [super initWithPythonInstance:parser];
+    Py_DECREF(parser);
     if (nil == self) {
         return nil;
     }
@@ -182,7 +201,9 @@ NS_ASSUME_NONNULL_END
         return NO;
     }
 
-    return 1 == PyObject_IsTrue(pResult);
+    BOOL retVal = 1 == PyObject_IsTrue(pResult);
+    Py_DECREF(pResult);
+    return retVal;
 }
 
 
@@ -275,11 +296,41 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (XDTAs99Preprocessor *)preprocessor
+- (XDTMessage *)messages
 {
-    if (NULL == self.pythonInstance) {
+    PyObject *messageList = PyObject_GetAttrString(self.pythonInstance, "console");
+    if (NULL == messageList) {
         return nil;
     }
+
+    XDTMutableMessage *retVal = [XDTMutableMessage messageWithPythonList:messageList];
+    Py_DECREF(messageList);
+    if (0 < retVal.count) {
+        [retVal sortByPriorityAscendingType];
+    }
+
+    return retVal;
+}
+
+
+- (void)setMessages:(XDTMessage *)messages
+{
+    PyObject *console = (nil == messages)? Py_None : messages.pythonInstance;
+    int result = PyObject_SetAttrString(self.pythonInstance, "console", console);
+    if (0 != result) {
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+//            if (nil != error) {
+//                *error = [NSError errorWithPythonError:exeption code:-2 localizedRecoverySuggestion:nil];
+//            }
+            PyErr_Print();
+        }
+    }
+}
+
+
+- (XDTAs99Preprocessor *)preprocessor
+{
     PyObject *pPrep = PyObject_GetAttrString(self.pythonInstance, "prep");
     if (NULL == pPrep) {
         return nil;
@@ -347,8 +398,12 @@ NS_ASSUME_NONNULL_END
     PyObject *pOps = ops.asPythonType;
     PyObject *pResult = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pFilename, pMacro, pOps, NULL);
     Py_XDECREF(pOps);
-    Py_XDECREF(pMacro);
-    Py_XDECREF(pFilename);
+    if (Py_None != pMacro) {
+        Py_XDECREF(pMacro);
+    }
+    if (Py_None != pFilename) {
+        Py_XDECREF(pFilename);
+    }
     Py_XDECREF(methodName);
     NSLog(@"%s ERROR: open(\"%@\", \"%@\", @[%@]) returns NULL!", __FUNCTION__, fileName, macroName, ops);
     if (NULL == pResult) {

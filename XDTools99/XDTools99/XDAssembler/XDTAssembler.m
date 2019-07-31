@@ -159,7 +159,7 @@ NS_ASSUME_NONNULL_END
     PyObject *pArgs = PyTuple_Pack(6, pTarget, pOptrR, pDefs, pIncludes, pStrict, pWarnings);
     PyObject *assembler = PyObject_CallObject(pFunc, pArgs);
     Py_XDECREF(pArgs);
-    Py_XDECREF(pFunc);
+    Py_DECREF(pFunc);
     if (NULL == assembler) {
         NSLog(@"%s ERROR: calling constructor %s(\"%s\", %s, [], %@, %s, %s) failed!", __FUNCTION__, XDTClassNameAssembler,
               [XDTAssembler targetTypeAsCString:targetType], useRegisterSymbol? "true" : "false", (0 >= urls)? @"." : urls, beStrict? "true" : "false", outputWarnings? "true" : "false");
@@ -177,6 +177,7 @@ NS_ASSUME_NONNULL_END
     }
 
     self = [super initWithPythonInstance:assembler];
+    Py_DECREF(assembler);
     if (nil == self) {
         return nil;
     }
@@ -203,7 +204,9 @@ NS_ASSUME_NONNULL_END
         return NO;
     }
 
-    return 1 == PyObject_IsTrue(pResult);
+    BOOL retVal = 1 == PyObject_IsTrue(pResult);
+    Py_DECREF(pResult);
+    return retVal;
 }
 
 
@@ -290,6 +293,7 @@ NS_ASSUME_NONNULL_END
 - (XDTMessage *)messages
 {
     if (nil != _messages) {
+        [_messages refresh];
         return _messages;
     }
 

@@ -336,7 +336,8 @@
     [[_generatorMessages sortedByPriorityAscendingType] enumerateMessagesUsingBlock:^(NSDictionary<XDTMessageTypeKey,id> *obj, BOOL *stop) {
         const XDTMessageTypeValue messageType = (XDTMessageTypeValue)[(NSNumber *)[obj valueForKey:XDTMessageType] unsignedIntegerValue];
 
-        NSString *fileName = [(NSURL *)[obj valueForKey:XDTMessageFileURL] lastPathComponent];
+        id fileUrl = [obj valueForKey:XDTMessageFileURL];
+        NSString *fileName = (nil == fileUrl || NSNull.null == fileUrl)? nil : [(NSURL *)fileUrl lastPathComponent];
         if (nil == fileName) {
             fileName = [[self fileURL] lastPathComponent];
         }

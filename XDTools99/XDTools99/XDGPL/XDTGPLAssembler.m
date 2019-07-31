@@ -147,7 +147,7 @@ NS_ASSUME_NONNULL_END
     PyObject *pArgs = PyTuple_Pack(7, pSyntaxType, pGromAddress, pAorgAddress, pTargetType, pIncludePath, pDefs, pOutputWarnings);
     PyObject *pAssembler = PyObject_CallObject(pFunc, pArgs);
     Py_XDECREF(pArgs);
-    Py_XDECREF(pFunc);
+    Py_DECREF(pFunc);
     if (NULL == pAssembler) {
         NSLog(@"%s ERROR: calling constructor %@(\"%s\", 0x%lx, 0x%lx, \"%s\", %@, None) failed!", __FUNCTION__,
               pFunc, [XDTGa99Syntax syntaxTypeAsCString:self.syntaxType], self.gromAddress, self.aorgAddress, [self.class targetTypeAsCString:self.targetType], urls);
@@ -166,6 +166,7 @@ NS_ASSUME_NONNULL_END
     }
 
     self = [super initWithPythonInstance:pAssembler];
+    Py_DECREF(pAssembler);
     if (nil == self) {
         return nil;
     }
@@ -208,7 +209,9 @@ NS_ASSUME_NONNULL_END
         return 0;
     }
 
-    return PyLong_AsUnsignedLong(pResult);
+    NSUInteger retVal = PyLong_AsUnsignedLong(pResult);
+    Py_DECREF(pResult);
+    return retVal;
 }
 
 
@@ -227,7 +230,9 @@ NS_ASSUME_NONNULL_END
         return 0;
     }
 
-    return PyLong_AsUnsignedLong(pResult);
+    NSUInteger retVal = PyLong_AsUnsignedLong(pResult);
+    Py_DECREF(pResult);
+    return retVal;
 }
 
 
@@ -282,9 +287,10 @@ NS_ASSUME_NONNULL_END
 
 - (void)setTargetType:(XDTGa99TargetType)targetType
 {
-    const char *tt = [self.class targetTypeAsCString:targetType];
     // TODO: datt is midden defs verwurschtet...
-    //(void)PyObject_SetAttrString(self.pythonInstance, nil, PyString_FromString(tt));
+    //PyObject *tt = PyString_FromString([self.class targetTypeAsCString:targetType]);
+    //(void)PyObject_SetAttrString(self.pythonInstance, nil, tt);
+    //Py_XDECREF(tt);
 }
 
 
@@ -295,7 +301,9 @@ NS_ASSUME_NONNULL_END
         return NO;
     }
 
-    return 1 == PyObject_IsTrue(pResult);
+    BOOL retVal = 1 == PyObject_IsTrue(pResult);
+    Py_DECREF(pResult);
+    return retVal;
 }
 
 
@@ -310,23 +318,26 @@ NS_ASSUME_NONNULL_END
 - (XDTMessage *)messages
 {
     if (nil != _messages) {
+        [_messages refresh];
         return _messages;
     }
 
-    PyObject *messageList = PyObject_GetAttrString(self.pythonInstance, "console");
-    if (NULL == messageList) {
-        return nil;
-    }
+    @synchronized (self) {
+        PyObject *messageList = PyObject_GetAttrString(self.pythonInstance, "console");
+        if (NULL == messageList) {
+            return nil;
+        }
 
-    XDTMutableMessage *retVal = [XDTMutableMessage messageWithPythonList:messageList];
-    Py_DECREF(messageList);
-    if (0 >= retVal.count) {
-        return nil;
-    }
-    [retVal sortByPriorityAscendingType];
+        XDTMutableMessage *retVal = [XDTMutableMessage messageWithPythonList:messageList];
+        Py_DECREF(messageList);
+        if (0 >= retVal.count) {
+            return nil;
+        }
+        [retVal sortByPriorityAscendingType];
 
-    _messages = retVal;
-    return _messages;
+        _messages = retVal;
+        return _messages;
+    }
 }
 
 

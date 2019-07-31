@@ -181,7 +181,9 @@ NS_ASSUME_NONNULL_END
 
 - (void)setOutputWarnings:(BOOL)outputWarnings
 {
-    (void)PyObject_SetAttrString(self.pythonInstance, "warnings_enabled", PyBool_FromLong(outputWarnings));
+    PyObject *pWarnings = PyBool_FromLong(outputWarnings);
+    (void)PyObject_SetAttrString(self.pythonInstance, "warnings_enabled", pWarnings);
+    Py_XDECREF(pWarnings);
 }
 
 
@@ -353,8 +355,9 @@ NS_ASSUME_NONNULL_END
     PyObject *methodName = PyString_FromString("parse");
     PyObject *lcTracker = NULL;
     PyObject *dummy = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, lcTracker, NULL);
-    Py_XDECREF(methodName);
     Py_XDECREF(dummy);
+    Py_XDECREF(lcTracker);
+    Py_XDECREF(methodName);
 
     [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
     //_messages = (XDTMessage *)newMessages;

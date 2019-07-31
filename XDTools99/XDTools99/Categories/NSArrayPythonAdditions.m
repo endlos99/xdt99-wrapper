@@ -167,7 +167,9 @@
 {
     PyObject *retVal = PyList_New(self.count);
     if (NULL == retVal) {
-        return Py_None;
+        retVal = Py_None;
+        Py_INCREF(retVal);
+        return retVal;
     }
 
     [self enumerateObjectsUsingBlock:^(NSObject *obj, NSUInteger idx, BOOL *stop) {

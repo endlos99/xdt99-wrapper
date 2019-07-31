@@ -33,12 +33,18 @@
     if (NULL == pyObj) {
         return nil;
     }
+    NSString *retVal = nil;
     const char * cString = PyString_AsString(pyObj);
     if (NULL == cString) {
         /* If pyObj is not a string object, try to make a more generic representation. */
         PyObject *pyStr = PyObject_Str(pyObj);
+        if (NULL == pyStr) {
+            return retVal;
+        }
         cString = PyString_AsString(pyStr);
-        Py_XDECREF(pyStr);
+        retVal = [NSString stringWithCString:cString encoding:enc];
+        Py_DECREF(pyStr);
+        return retVal;
     }
 
     return [NSString stringWithCString:cString encoding:enc];
