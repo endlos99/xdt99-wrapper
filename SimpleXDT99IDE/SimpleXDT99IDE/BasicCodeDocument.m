@@ -303,13 +303,13 @@
     BOOL successfullySaved = NO;
     switch (_outputFormatPopupButtonIndex) {
         case 0:
-            successfullySaved = [basic saveProgramFormatFile:[NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:&error];
+            successfullySaved = [basic saveProgramFormatFile:[NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:&error];
             break;
         case 1:
-            successfullySaved = [basic saveLongFormatFile:[NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:&error];
+            successfullySaved = [basic saveLongFormatFile:[NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:&error];
             break;
         case 2:
-            successfullySaved = [basic saveMergedFormatFile:[NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:&error];
+            successfullySaved = [basic saveMergedFormatFile:[NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:&error];
             break;
 
         default:

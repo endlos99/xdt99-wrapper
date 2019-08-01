@@ -201,7 +201,7 @@ NS_ASSUME_NONNULL_END
                     } else {
                         fileNameAddition = [NSString stringWithFormat:@"_%04x_b%d", (unsigned int)[address longValue], (int)[bank longValue]];
                     }
-                    NSURL *newOutputFileURL = [NSURL URLWithString:[[[[outputFileURL lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[outputFileURL pathExtension]]
+                    NSURL *newOutputFileURL = [NSURL fileURLWithPath:[[[[outputFileURL lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[outputFileURL pathExtension]]
                                                      relativeToURL:[outputFileURL URLByDeletingLastPathComponent]];
                     [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:&error];
                     if (nil != error) {
@@ -395,7 +395,7 @@ NS_ASSUME_NONNULL_END
                     } else {
                         fileNameAddition = [NSString stringWithFormat:@"_%04x_b%d", (unsigned int)[address longValue], (int)[base longValue]];
                     }
-                    NSURL *newOutputFileURL = [NSURL URLWithString:[[[[outputFileURL lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[outputFileURL pathExtension]]
+                    NSURL *newOutputFileURL = [NSURL fileURLWithPath:[[[[outputFileURL lastPathComponent] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[outputFileURL pathExtension]]
                                                      relativeToURL:[outputFileURL URLByDeletingLastPathComponent]];
                     [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:&error];
                     if (nil != error) {

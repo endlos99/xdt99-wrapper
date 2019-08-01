@@ -403,7 +403,7 @@
                     retVal = NO;
                     break;
                 }
-                NSURL *newOutpuFileURL = [NSURL URLWithString:newOutpuFileName relativeToURL:[self outputBasePathURL]];
+                NSURL *newOutpuFileURL = [NSURL fileURLWithPath:newOutpuFileName relativeToURL:[self outputBasePathURL]];
                 [data writeToURL:newOutpuFileURL options:NSDataWritingAtomic error:error];
                 if (nil != error && nil != *error) {
                     retVal = NO;
@@ -432,7 +432,7 @@
                 } else {
                     fileNameAddition = [NSString stringWithFormat:@"_%04x_b%d", (unsigned int)[address longValue], (int)[bank longValue]];
                 }
-                NSURL *newOutputFileURL = [NSURL URLWithString:[[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[[self outputFileName] pathExtension]]
+                NSURL *newOutputFileURL = [NSURL fileURLWithPath:[[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[[self outputFileName] pathExtension]]
                                                  relativeToURL:[self outputBasePathURL]];
                 [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
                 if (nil != error && nil != *error) {
@@ -469,7 +469,7 @@
                 }
             }
             if (nil == tempError && nil != fileContent && [fileContent length] > 0) {
-                NSURL *newOutpuFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+                NSURL *newOutpuFileURL = [NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]];
                 [fileContent writeToURL:newOutpuFileURL atomically:YES encoding:NSUTF8StringEncoding error:&tempError];
             } else {
                 retVal = NO;
@@ -485,7 +485,7 @@
                 retVal = NO;
                 break;
             }
-            NSURL *newOutputFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+            NSURL *newOutputFileURL = [NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]];
             [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
             retVal = nil != error && nil == *error;
             break;
@@ -496,7 +496,7 @@
                 retVal = NO;
                 break;
             }
-            NSURL *newOutputFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+            NSURL *newOutputFileURL = [NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]];
             [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
             retVal = nil != error && nil == *error;
             break;
@@ -527,7 +527,7 @@
                 break;
             }
 
-            NSURL *newOutputFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+            NSURL *newOutputFileURL = [NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]];
             XDTZipFile *zipfile = [XDTZipFile zipFileForWritingToURL:newOutputFileURL error:error];
             if ((nil != error && nil != *error) || nil == zipfile) {
                 retVal = NO;

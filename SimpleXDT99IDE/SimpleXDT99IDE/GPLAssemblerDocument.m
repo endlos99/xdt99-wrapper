@@ -399,7 +399,7 @@
                 } else {
                     fileNameAddition = [NSString stringWithFormat:@"_%04x_b%d", (unsigned int)[address longValue], (int)[base longValue]];
                 }
-                NSURL *newOutputFileURL = [NSURL URLWithString:[[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[[self outputFileName] pathExtension]]
+                NSURL *newOutputFileURL = [NSURL fileURLWithPath:[[[[self outputFileName] stringByDeletingPathExtension] stringByAppendingString:fileNameAddition] stringByAppendingPathExtension:[[self outputFileName] pathExtension]]
                                                  relativeToURL:[self outputBasePathURL]];
                 [data writeToURL:newOutputFileURL options:NSDataWritingAtomic error:error];
                 if (nil != error && nil != *error) {
@@ -426,7 +426,7 @@
 
             NSData *data = [_assemblingResult generateImageWithName:_cartridgeName error:error];
             if ((nil != error && nil == *error) && nil != data) {
-                NSURL *newOutpuFileURL = [NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]];
+                NSURL *newOutpuFileURL = [NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]];
                 [data writeToURL:newOutpuFileURL options:NSDataWritingAtomic error:error];
             }
             retVal = nil != error && nil == *error;
@@ -448,7 +448,7 @@
                 break;
             }
 
-            XDTZipFile *zipfile = [XDTZipFile zipFileForWritingToURL:[NSURL URLWithString:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:error];
+            XDTZipFile *zipfile = [XDTZipFile zipFileForWritingToURL:[NSURL fileURLWithPath:[self outputFileName] relativeToURL:[self outputBasePathURL]] error:error];
             if ((nil != error && nil != *error) || nil == zipfile) {
                 retVal = NO;
                 break;
