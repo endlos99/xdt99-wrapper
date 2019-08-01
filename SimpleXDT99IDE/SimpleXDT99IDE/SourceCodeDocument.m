@@ -24,6 +24,8 @@
 
 #import "SourceCodeDocument.h"
 
+#import "Terminal.h"
+
 #import "NSViewAutolayoutAdditions.h"
 #import "NSTextStorageAdditions.h"
 #import "NSColorAdditions.h"
@@ -37,9 +39,11 @@
 
 
 
-@interface SourceCodeDocument () {
+@interface SourceCodeDocument () <SBApplicationDelegate> {
     NoodleLineNumberView *_lineNumberRulerView;
     XDTObject<XDTParserProtocol> *_parser;
+
+    NSInteger _terminalId;
 }
 
 @property (retain) NSNumber *lineNumberDigits;
@@ -69,6 +73,8 @@
     _lineNumberRulerView = nil;
 
     _lineNumberDigits = nil;
+
+    _terminalId = NSNotFound;
 
     return self;
 }
@@ -293,6 +299,19 @@
 }
 
 
+#pragma mark - Implementation of SBApplicationDelegate
+
+
+/* Part of the SBApplicationDelegate protocol.
+    Called when an error occurs in Scripting Bridge method. */
+- (id)eventDidFail:(const AppleEvent *)event withError:(NSError *)error
+{
+    //[[NSAlert alertWithError:error] runModal];
+    NSLog(@"%s ERROR: AppleEvent error: %@", __FUNCTION__, error);
+    return nil;
+}
+
+
 #pragma mark - Accessor Methods
 
 
@@ -484,6 +503,12 @@
 }
 
 
+- (NSString *)commandLineInstruction
+{
+    return @"";
+}
+
+
 #pragma mark - Action Methods
 
 
@@ -506,7 +531,7 @@
  This method should be overridden to implement the document typical code generator.
  But it should call its super method to handle unsaved modifications for the document.
  */
-- (void)checkCode:(id)sender
+- (IBAction)checkCode:(id)sender
 {
     if (!self.isDocumentEdited) {
         return;
@@ -534,19 +559,70 @@
  This method should be overridden to implement the document typical code generator.
  But it should call its super method to handle unsaved modifications for the document.
  */
-- (void)generateCode:(id)sender
+- (IBAction)generateCode:(id)sender
 {
     [self checkCode:sender];
 }
 
 
-- (void)hideShowLog:(id)sender
+- (IBAction)runToolInTerminal:(id)sender
+{
+    /* Services kann nicht viel...
+    NSPasteboard *pboard = [NSPasteboard pasteboardWithName:@"NSPasteboardNameTerminalFolder"];
+    [pboard prepareForNewContentsWithOptions:NSPasteboardContentsCurrentHostOnly];
+    [pboard writeObjects:@[self.fileURL.URLByDeletingLastPathComponent]];
+    NSPerformService(@"New Terminal at Folder", pboard);
+     */
+    NSString *cli = self.commandLineInstruction;
+    if (0 >= cli.length) {  // usually always true
+        return;
+    }
+
+    TerminalApplication *_terminal = [SBApplication applicationWithBundleIdentifier:@"com.apple.Terminal"];
+    if (!_terminal.isRunning) {
+        _terminal.launchFlags = kLSLaunchDontAddToRecents | kLSLaunchAsync;
+    }
+    //_terminal.delegate = self;
+
+    TerminalTab *terminalTab = nil;
+    if (NSNotFound != _terminalId) {
+        TerminalWindow *win = [_terminal.windows objectWithID:[NSNumber numberWithInteger:_terminalId]];
+        if (nil != win && win.id == _terminalId && win.exists) {
+            win.frontmost = YES;
+            win.visible = YES;
+            terminalTab = [win.tabs objectAtLocation:@0];
+        } else {
+            terminalTab = nil;
+        }
+    }
+    if (nil == terminalTab) {
+        [_terminal open:@[self.fileURL.URLByDeletingLastPathComponent]];
+        TerminalWindow *win = [_terminal.windows objectAtLocation:@0];
+        win.frontmost = YES;
+        win.visible = YES;
+        _terminalId = win.id;
+
+        terminalTab = [win.tabs objectAtLocation:@0];
+        terminalTab = [_terminal doScript:nil in:terminalTab];
+        terminalTab.titleDisplaysFileName = NO;
+        terminalTab.titleDisplaysShellPath = NO;
+        terminalTab.titleDisplaysDeviceName = NO;
+        terminalTab.titleDisplaysWindowSize = NO;
+        terminalTab.titleDisplaysCustomTitle = YES;
+        terminalTab.customTitle = @"xdt99";
+    }
+    [_terminal activate];
+    (void) [_terminal doScript:cli in:terminalTab];
+}
+
+
+- (IBAction)hideShowLog:(id)sender
 {
     [self setShouldShowLog:[sender state] == NSOnState];
 }
 
 
-- (void)selectOutputFile:(id)sender
+- (IBAction)selectOutputFile:(id)sender
 {
     NSSavePanel *panel = [NSSavePanel savePanel];
     [panel setCanCreateDirectories:YES];
@@ -563,7 +639,7 @@
 }
 
 
-- (void)saveLog:(id)sender
+- (IBAction)saveLog:(id)sender
 {
     if (nil == _logView) {
         return;

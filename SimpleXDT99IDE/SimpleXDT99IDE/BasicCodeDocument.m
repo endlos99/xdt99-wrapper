@@ -308,6 +308,60 @@
 }
 
 
+- (NSString *)commandLineInstruction
+{
+    NSURL *baseURL = self.outputBasePathURL;
+    if (nil == baseURL) {
+        baseURL = self.fileURL.URLByDeletingLastPathComponent;
+    }
+    NSMutableArray<NSString *> *cliOptions = [NSMutableArray arrayWithCapacity:8];
+
+    NSURL *pythonModuleUrl = [NSBundle.mainBundle.resourceURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%s.py", XDTBas99ModuleName]];
+    [cliOptions addObject:[pythonModuleUrl.path stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]];
+
+    [cliOptions addObject:@"-c"];
+
+    switch (self.outputFormatPopupButtonIndex) {
+        case 0: /* Program format */
+            break;
+        case 1: /* Long format */
+            [cliOptions addObject:@"--long"];
+            break;
+        case 2: /* Merge format */
+            [cliOptions addObject:@"--merge"];
+            break;
+
+        default:
+            break;
+    }
+
+    if (!self.shouldShowWarningsInLog) {
+        [cliOptions addObject:@"-w"];
+    }
+    if (self.shouldProtectFile) {
+        [cliOptions addObject:@"--protect"];
+    }
+    /*if (self.shouldDumpTokensInLog) {
+        [cliOptions addObject:@"--dump"];   // not allowed with argument -c/-l/-d
+    }*/
+    if (self.shouldJoinSourceLines) {
+        [cliOptions addObject:[NSString stringWithFormat:@"-j %ld", _lineDelta]];
+    }
+
+    if (nil != self.outputFileName) {
+        NSString *outputFileName = [self.outputFileName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (0 < outputFileName.length) {
+            NSURL *outputFileUrl = [NSURL fileURLWithPath:outputFileName relativeToURL:baseURL];
+            [cliOptions addObject:[NSString stringWithFormat:@"-o %@", [outputFileUrl.relativePath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]]];
+        }
+    }
+
+    NSURL *inputFileUrl = [NSURL fileURLWithPath:self.fileURL.lastPathComponent relativeToURL:self.fileURL.URLByDeletingLastPathComponent];
+    NSString *inputFileName = ([inputFileUrl.baseURL isNotEqualTo:baseURL])? inputFileUrl.path : inputFileUrl.relativePath;
+    return [NSString stringWithFormat:@"%@ %@", [cliOptions componentsJoinedByString:@" "], [inputFileName stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]];
+}
+
+
 #pragma mark - Action Methods
 
 

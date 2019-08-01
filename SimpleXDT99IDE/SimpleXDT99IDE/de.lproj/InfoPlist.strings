@@ -5,5 +5,8 @@
 "CFBundleGetInfoString" = "0.5rc4, build 201021";
 
 /* (No Comment) */
+"NSAppleEventsUsageDescription" = "Benötigt den Zugriff, damit das xdt99 Tool im Terminal ausgeführt werden kann.";
+
+/* (No Comment) */
 "NSHumanReadableCopyright" = "Urherberrecht © 2016-2020 Henrik Wedekind (auch bekannt als Hackmac). Alle Rechte vorbehalten.";
 

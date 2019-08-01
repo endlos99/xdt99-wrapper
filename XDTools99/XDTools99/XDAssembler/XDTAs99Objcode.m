@@ -324,50 +324,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    char *textConfig = "";
-    switch (mode) {
-        case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
-            textConfig = "a4r";
-            break;
-        case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord:
-            textConfig = "a4";
-            break;
-        case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionReverse:
-            textConfig = "a2r";
-            break;
-        case XDTGenerateTextModeOutputAssembler:
-            textConfig = "a2";
-            break;
-
-        case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
-            textConfig = "b4r";
-            break;
-        case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionWord:
-            textConfig = "b4";
-            break;
-        case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionReverse:
-            textConfig = "b2r";
-            break;
-        case XDTGenerateTextModeOutputBasic:
-            textConfig = "b2";
-            break;
-
-        case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
-            textConfig = "c4r";
-            break;
-        case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionWord:
-            textConfig = "c4";
-            break;
-        case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionReverse:
-            textConfig = "c2r";
-            break;
-        case XDTGenerateTextModeOutputC:
-            textConfig = "c2";
-            break;
-
-        default:
-            break;
-    }
+    const char *textConfig = [self.class textConfigAsCString:mode];
 
     /*
      Function call in Python:
@@ -589,6 +546,59 @@ NS_ASSUME_NONNULL_END
     Py_DECREF(symbolsString);
 
     return retVal;
+}
+
+
+#pragma mark -
+
+
++ (const char *)textConfigAsCString:(XDTGenerateTextMode)mode
+{
+    char *textConfig = "";
+    switch (mode) {
+        case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
+            textConfig = "a4r";
+            break;
+        case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionWord:
+            textConfig = "a4";
+            break;
+        case XDTGenerateTextModeOutputAssembler + XDTGenerateTextModeOptionReverse:
+            textConfig = "a2r";
+            break;
+        case XDTGenerateTextModeOutputAssembler:
+            textConfig = "a2";
+            break;
+
+        case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
+            textConfig = "b4r";
+            break;
+        case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionWord:
+            textConfig = "b4";
+            break;
+        case XDTGenerateTextModeOutputBasic + XDTGenerateTextModeOptionReverse:
+            textConfig = "b2r";
+            break;
+        case XDTGenerateTextModeOutputBasic:
+            textConfig = "b2";
+            break;
+
+        case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionWord + XDTGenerateTextModeOptionReverse:
+            textConfig = "c4r";
+            break;
+        case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionWord:
+            textConfig = "c4";
+            break;
+        case XDTGenerateTextModeOutputC + XDTGenerateTextModeOptionReverse:
+            textConfig = "c2r";
+            break;
+        case XDTGenerateTextModeOutputC:
+            textConfig = "c2";
+            break;
+
+        default:
+            break;
+    }
+    return textConfig;
 }
 
 @end

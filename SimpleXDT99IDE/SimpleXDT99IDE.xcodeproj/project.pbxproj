@@ -16,7 +16,9 @@
 		AF5CF8B41DFF30F900C08E36 /* BasicOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF5CF8B61DFF30F900C08E36 /* BasicOptionsView.xib */; };
 		AF64ED6C22D71C9D000E0AB4 /* PreferencesPaneController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF64ED6B22D71C9D000E0AB4 /* PreferencesPaneController.m */; };
 		AF64ED7022D738D4000E0AB4 /* PreferencesPane.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF64ED7222D738D4000E0AB4 /* PreferencesPane.xib */; };
+		AF70E0B822F5BC080024BBDF /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF70E0B722F5BC080024BBDF /* ScriptingBridge.framework */; };
 		AF87FF9B1E040CF800CF752F /* GPLAssemblerDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = AF87FF9A1E040CF800CF752F /* GPLAssemblerDocument.m */; };
+		AFA4DC7322F5CBBE00B70699 /* Terminal.app in Sources */ = {isa = PBXBuildFile; fileRef = AFA4DC7222F5CBBE00B70699 /* Terminal.app */; };
 		AFADBC351DF9D4DE000AD2F2 /* XDTools99.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */; };
 		AFADBC371DF9D5B7000AD2F2 /* XDTools99.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AFADBC341DF9D28A000AD2F2 /* XDTools99.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		AFB73F191E002FF40063BBCC /* NSViewAutolayoutAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFB73F181E002FF40063BBCC /* NSViewAutolayoutAdditions.m */; };
@@ -39,6 +41,20 @@
 		AFFDB6881DFC6A95006788CC /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = AFFDB6851DFC6A95006788CC /* Credits.html */; };
 		AFFF3A3A1E05640700909C6C /* HWHexNumberFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = AFFF3A391E05640700909C6C /* HWHexNumberFormatter.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		AFA4DC6F22F5C79C00B70699 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.app";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILES_DIR)/$(INPUT_FILE_BASE).h",
+			);
+			script = "# Type a script or drag a script file from your workspace to insert its path.\n#sdef /Applications/iTunes.app | sdp -fh --basename iTunes\nsdef \"$INPUT_FILE_PATH\" | sdp -fh -o \"$DERIVED_FILES_DIR\" --basename \"$INPUT_FILE_BASE\" --bundleid `defaults read \"$INPUT_FILE_PATH/Contents/Info\" CFBundleIdentifier`\n";
+		};
+/* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
 		AFADBC331DF9D28A000AD2F2 /* PBXContainerItemProxy */ = {
@@ -94,8 +110,10 @@
 		AF64ED6B22D71C9D000E0AB4 /* PreferencesPaneController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PreferencesPaneController.m; sourceTree = "<group>"; };
 		AF64ED7122D738D4000E0AB4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreferencesPane.xib; sourceTree = "<group>"; };
 		AF64ED7422D738DD000E0AB4 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/PreferencesPane.strings; sourceTree = "<group>"; };
+		AF70E0B722F5BC080024BBDF /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		AF87FF991E040CF800CF752F /* GPLAssemblerDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPLAssemblerDocument.h; sourceTree = "<group>"; };
 		AF87FF9A1E040CF800CF752F /* GPLAssemblerDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPLAssemblerDocument.m; sourceTree = "<group>"; };
+		AFA4DC7222F5CBBE00B70699 /* Terminal.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Terminal.app; path = /System/Applications/Utilities/Terminal.app; sourceTree = "<absolute>"; };
 		AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XDTools99.xcodeproj; path = ../XDTools99/XDTools99.xcodeproj; sourceTree = "<group>"; };
 		AFADBC381DF9D5B7000AD2F2 /* SimpleXDT99IDE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleXDT99IDE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFB73F171E002FF40063BBCC /* NSViewAutolayoutAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NSViewAutolayoutAdditions.h; path = Categories/NSViewAutolayoutAdditions.h; sourceTree = "<group>"; };
@@ -139,6 +157,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF70E0B822F5BC080024BBDF /* ScriptingBridge.framework in Frameworks */,
 				AFADBC351DF9D4DE000AD2F2 /* XDTools99.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -209,6 +228,7 @@
 				AFDECF261DF176B1008870F7 /* SimpleXDT99IDE */,
 				AFF9585D1DF1A7C200062DEB /* Frameworks */,
 				AFADBC3B1DF9D68F000AD2F2 /* Products */,
+				AFA4DC7222F5CBBE00B70699 /* Terminal.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -264,6 +284,7 @@
 		AFF9585D1DF1A7C200062DEB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AF70E0B722F5BC080024BBDF /* ScriptingBridge.framework */,
 				AFADBC2F1DF9D28A000AD2F2 /* XDTools99.xcodeproj */,
 				AF0944C81E0C109C00EE41B7 /* NoodleKit */,
 			);
@@ -283,6 +304,7 @@
 				AFE630481DF9B785005FFD01 /* Embed Frameworks */,
 			);
 			buildRules = (
+				AFA4DC6F22F5C79C00B70699 /* PBXBuildRule */,
 			);
 			dependencies = (
 				AFADBC3A1DF9D63D000AD2F2 /* PBXTargetDependency */,
@@ -382,6 +404,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AFA4DC7322F5CBBE00B70699 /* Terminal.app in Sources */,
 				AFDECF2F1DF176B1008870F7 /* SourceCodeDocument.m in Sources */,
 				AF64ED6C22D71C9D000E0AB4 /* PreferencesPaneController.m in Sources */,
 				AFE86BA522C8CA280007CB8C /* HighlighterDelegate.m in Sources */,

@@ -4,3 +4,4 @@
 CFBundleDisplayName = "SimpleXDTIDE";
 CFBundleGetInfoString = "0.5rc4, build 201021";
 NSHumanReadableCopyright = "Copyright © 2016-2020 Henrik Wedekind (aka hackmac). All rights reserved.";
+NSAppleEventsUsageDescription = "Needs the access so that the xdt99 tool can be executed in the terminal.";

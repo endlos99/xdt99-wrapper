@@ -380,6 +380,85 @@
 }
 
 
+- (NSString *)commandLineInstruction
+{
+    NSURL *baseURL = self.outputBasePathURL;
+    if (nil == baseURL) {
+        baseURL = self.fileURL.URLByDeletingLastPathComponent;
+    }
+    NSMutableArray<NSString *> *cliOptions = [NSMutableArray arrayWithCapacity:10];
+
+    NSURL *pythonModuleUrl = [NSBundle.mainBundle.resourceURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%s.py", XDTGa99ModuleName]];
+    [cliOptions addObject:[pythonModuleUrl.path stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]];
+
+    switch (self.syntaxType) {
+        case XDTGa99SyntaxTypeRAGGPL:       /* R.A.G GPL is obsolete and included in the native type */
+        case XDTGa99SyntaxTypeNativeXDT99:
+            break;
+        case XDTGa99SyntaxTypeTIImageTool:
+            [cliOptions addObject:@"-y mizapf"];
+            break;
+
+        default:
+            break;
+    }
+
+    switch (self.targetType) {
+        case XDTGa99TargetTypeHeaderedByteCode:
+            [cliOptions addObject:@"-i"];
+            break;
+        case XDTGa99TargetTypePlainByteCode:
+            break;
+        case XDTGa99TargetTypeMESSCartridge:
+            [cliOptions addObject:@"-c"];
+            break;
+
+        default:
+            break;
+    }
+
+    if (0 < self.aorgAddress && NSNotFound != self.aorgAddress) {
+        [cliOptions addObject:[NSString stringWithFormat:@"-A 0x%04X", (unsigned short)self.aorgAddress]];
+    }
+    if (0 < self.gromAddress && NSNotFound != self.gromAddress) {
+        [cliOptions addObject:[NSString stringWithFormat:@"-G 0x%04X", (unsigned short)self.gromAddress]];
+    }
+
+    if (nil != self.cartridgeName && (XDTGa99TargetTypeHeaderedByteCode == self.targetType || XDTGa99TargetTypeMESSCartridge == self.targetType)) {
+        NSString *cartName = [self.cartridgeName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (0 < cartName.length) {
+            BOOL hasSpaces = NSNotFound != [cartName rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]].location;
+            [cliOptions addObject:[NSString stringWithFormat:(hasSpaces)? @"-n \"%@\"" : @"-n %@", cartName]];
+        }
+    }
+    if (self.shouldShowSymbolsAsEqus) {
+        NSString *symbolsFileName = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
+        NSURL *listFileUrl = [[NSURL fileURLWithPath:symbolsFileName relativeToURL:baseURL] URLByAppendingPathExtension:@"sym"];
+        [cliOptions addObject:[NSString stringWithFormat:@"-E %@", [listFileUrl.relativePath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]]];
+    }
+    if (self.shouldShowListingInLog) {
+        NSString *listFileName = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
+        NSURL *listFileUrl = [[NSURL fileURLWithPath:listFileName relativeToURL:baseURL] URLByAppendingPathExtension:@"lst"];
+        [cliOptions addObject:[NSString stringWithFormat:@"-L %@", [listFileUrl.relativePath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]]];
+        if (self.shouldShowSymbolsInListing) {
+            [cliOptions addObject:@"-S"];
+        }
+    }
+
+    if (nil != self.outputFileName) {
+        NSString *outputFileName = [self.outputFileName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (0 < outputFileName.length) {
+            NSURL *outputFileUrl = [NSURL fileURLWithPath:outputFileName relativeToURL:baseURL];
+            [cliOptions addObject:[NSString stringWithFormat:@"-o %@", [outputFileUrl.relativePath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]]];
+        }
+    }
+
+    NSURL *inputFileUrl = [NSURL fileURLWithPath:self.fileURL.lastPathComponent relativeToURL:self.fileURL.URLByDeletingLastPathComponent];
+    NSString *inputFileName = ([inputFileUrl.baseURL isNotEqualTo:baseURL])? inputFileUrl.path : inputFileUrl.relativePath;
+    return [NSString stringWithFormat:@"%@ %@", [cliOptions componentsJoinedByString:@" "], [inputFileName stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]];
+}
+
+
 #pragma mark - Action Methods
 
 

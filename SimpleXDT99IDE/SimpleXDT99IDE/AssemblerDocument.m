@@ -427,6 +427,95 @@
 }
 
 
+- (NSString *)commandLineInstruction
+{
+    NSURL *baseURL = self.outputBasePathURL;
+    if (nil == baseURL) {
+        baseURL = self.fileURL.URLByDeletingLastPathComponent;
+    }
+    NSMutableArray<NSString *> *cliOptions = [NSMutableArray arrayWithCapacity:8];
+
+    NSURL *pythonModuleUrl = [NSBundle.mainBundle.resourceURL URLByAppendingPathComponent:[NSString stringWithFormat:@"%s.py", XDTAs99ModuleName]];
+    [cliOptions addObject:[pythonModuleUrl.path stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]];
+
+    switch (self.targetType) {
+        case XDTAs99TargetTypeProgramImage:
+            [cliOptions addObject:@"-i"];
+            break;
+
+        case XDTAs99TargetTypeMESSCartridge:
+            [cliOptions addObject:@"-c"];
+            if (nil != self.cartridgeName) {
+                NSString *cartName = [self.cartridgeName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                if (0 < cartName.length) {
+                    BOOL hasSpaces = NSNotFound != [cartName rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]].location;
+                    [cliOptions addObject:[NSString stringWithFormat:(hasSpaces)? @"-n \"%@\"" : @"-n %@", cartName]];
+                }
+            }
+            break;
+
+        case XDTAs99TargetTypeRawBinary:
+            [cliOptions addObject:@"-b"];
+            if (0 < self.baseAddress && NSNotFound != self.baseAddress) {
+                [cliOptions addObject:[NSString stringWithFormat:@"--base 0x%04X", (unsigned short)self.baseAddress]];
+            }
+            break;
+
+        case XDTAs99TargetTypeTextBinaryAsm:
+        case XDTAs99TargetTypeTextBinaryBas:
+        case XDTAs99TargetTypeTextBinaryC:
+            [cliOptions addObject:[NSString stringWithFormat:@"-t %s", [XDTAs99Objcode textConfigAsCString:_binaryTextMode]]];
+            break;
+
+        case XDTAs99TargetTypeEmbededXBasic:
+            [cliOptions addObject:@"--embed-xb"];
+            break;
+
+        case XDTAs99TargetTypeObjectCode:
+        default:
+            if (self.shouldCompressObjectCode) {
+                [cliOptions addObject:@"-C"];
+            }
+            break;
+    }
+
+    if (self.shouldBeStrict) {
+        [cliOptions addObject:@"-s"];
+    }
+    if (!self.shouldShowWarningsInLog) {
+        [cliOptions addObject:@"-w"];
+    }
+    if (self.shouldUseRegisterSymbols) {
+        [cliOptions addObject:@"-R"];
+    }
+    if (self.shouldShowSymbolsInListing) {
+        [cliOptions addObject:@"-S"];
+    }
+    if (self.shouldShowSymbolsAsEqus) {
+        NSString *symbolsFileName = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
+        NSURL *listFileUrl = [[NSURL fileURLWithPath:symbolsFileName relativeToURL:baseURL] URLByAppendingPathExtension:@"sym"];
+        [cliOptions addObject:[NSString stringWithFormat:@"-E %@", [listFileUrl.relativePath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]]];
+    }
+    if (self.shouldShowListingInLog) {
+        NSString *listFileName = self.fileURL.lastPathComponent.stringByDeletingPathExtension;
+        NSURL *listFileUrl = [[NSURL fileURLWithPath:listFileName relativeToURL:baseURL] URLByAppendingPathExtension:@"lst"];
+        [cliOptions addObject:[NSString stringWithFormat:@"-L %@", [listFileUrl.relativePath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]]];
+    }
+
+    if (nil != self.outputFileName) {
+        NSString *outputFileName = [self.outputFileName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (0 < outputFileName.length) {
+            NSURL *outputFileUrl = [NSURL fileURLWithPath:outputFileName relativeToURL:baseURL];
+            [cliOptions addObject:[NSString stringWithFormat:@"-o %@", [outputFileUrl.relativePath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]]];
+        }
+    }
+
+    NSURL *inputFileUrl = [NSURL fileURLWithPath:self.fileURL.lastPathComponent relativeToURL:self.fileURL.URLByDeletingLastPathComponent];
+    NSString *inputFileName = ([inputFileUrl.baseURL isNotEqualTo:baseURL])? inputFileUrl.path : inputFileUrl.relativePath;
+    return [NSString stringWithFormat:@"%@ %@", [cliOptions componentsJoinedByString:@" "], [inputFileName stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]];
+}
+
+
 #pragma mark - Action Methods
 
 
@@ -586,6 +675,7 @@
     if (nil == [self fileURL]) {    // there must be a file which can be assembled
         return NO;
     }
+
     XDTAssembler *assembler = [XDTAssembler assemblerWithIncludeURL:[self fileURL] target:xdtTargetType usingRegisterSymbol:self.shouldUseRegisterSymbols strictness:self.shouldBeStrict outputWarnings:self.shouldShowWarningsInLog];
 
     NSError *tempErr = nil;

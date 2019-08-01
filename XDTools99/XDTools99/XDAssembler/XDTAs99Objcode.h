@@ -51,6 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
  *
  **/
 
++ (const char *)textConfigAsCString:(XDTGenerateTextMode)mode;
+
 - (nullable NSData *)generateDump:(NSError **)error;
 - (nullable NSData *)generateObjCode:(BOOL)shouldCompress error:(NSError **)error;
 - (nullable NSArray<NSArray<id> *> *)generateRawBinaryAt:(NSUInteger)baseAddr error:(NSError **)error;

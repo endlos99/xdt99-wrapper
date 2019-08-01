@@ -141,6 +141,13 @@
                                     </binding>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="unb-rz-cNK"/>
+                            <menuItem title="Run in Terminal" toolTip="Runs the xdt99 tool diretly as a command line instruction of the Terminal." id="yJY-fe-7XR">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="runToolInTerminal:" target="-1" id="2FI-Vk-TX6"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="7eP-kJ-Kjr"/>
                             <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                 <connections>

@@ -59,6 +59,8 @@
 @property (retain, nonatomic) XDTMessage *generatorMessages;
 @property (readonly) NSMutableAttributedString *generatedLogMessage;
 
+@property (readonly, copy) NSString *commandLineInstruction;
+
 - (BOOL)setupSyntaxHighlighting;
 
 - (BOOL)openNestedFiles:(NSError **)error;
