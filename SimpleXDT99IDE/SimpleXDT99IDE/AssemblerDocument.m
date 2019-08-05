@@ -73,6 +73,8 @@
 
 @property (readonly) XDTAs99TargetType targetType;
 
+- (void)refreshHighlighting;
+
 - (BOOL)assembleCode:(XDTAs99TargetType)xdtTargetType error:(NSError **)error;
 - (BOOL)exportBinaries:(XDTAs99TargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error;
 
@@ -285,8 +287,6 @@
         return NO;
     }
 
-    self.parser = nil;
-
     [self setSourceCode:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
     [self setCartridgeName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]];
     [self setOutputFileName:[_cartridgeName stringByAppendingString:@"-obj"]];
@@ -302,6 +302,10 @@
 - (void)setSourceCode:(NSString *)newSourceCode
 {
     super.sourceCode = newSourceCode;
+    if (nil != self.parser) {
+        [self refreshHighlighting];
+        [self checkCode:nil];
+    }
 }
 
 
@@ -482,6 +486,24 @@
 #pragma mark - Private Methods
 
 
+- (void)refreshHighlighting
+{
+    if (nil == self.highlighterDelegate) {
+        return;
+    }
+
+    NSMutableAttributedString *newSourceCode = self.attributedSourceCode.mutableCopy;
+    [newSourceCode beginEditing];
+    [newSourceCode.mutableString enumerateSubstringsInRange:(NSRange)NSMakeRange(0, newSourceCode.length)
+                                                    options:NSStringEnumerationByLines + NSStringEnumerationSubstringNotRequired
+                                                 usingBlock:^(NSString *line, NSRange lineRange, NSRange enclosingRange, BOOL *stop) {
+                                                     [self.highlighterDelegate processAttributesOfText:newSourceCode inRange:lineRange];
+                                                 }];
+    [newSourceCode endEditing];
+    self.attributedSourceCode = newSourceCode;
+}
+
+
 - (BOOL)setupSyntaxHighlighting
 {
     BOOL useSyntaxHighlighting = [super setupSyntaxHighlighting];
@@ -500,15 +522,7 @@
     }
     self.sourceView.textStorage.delegate = self.highlighterDelegate;
 
-    NSMutableAttributedString *newSourceCode = self.attributedSourceCode.mutableCopy;
-    [newSourceCode beginEditing];
-    [newSourceCode.mutableString enumerateSubstringsInRange:(NSRange)NSMakeRange(0, newSourceCode.length)
-                                                    options:NSStringEnumerationByLines + NSStringEnumerationSubstringNotRequired
-                                                 usingBlock:^(NSString *line, NSRange lineRange, NSRange enclosingRange, BOOL *stop) {
-                                                     [self.highlighterDelegate processAttributesOfText:newSourceCode inRange:lineRange];
-                                                 }];
-    [newSourceCode endEditing];
-    self.attributedSourceCode = newSourceCode;
+    [self refreshHighlighting];
 
     return useSyntaxHighlighting;
 }
