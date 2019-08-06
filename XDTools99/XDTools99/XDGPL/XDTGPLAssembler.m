@@ -26,15 +26,15 @@
 
 #import <Python/Python.h>
 
-#import "NSErrorPythonAdditions.h"
 #import "NSArrayPythonAdditions.h"
+#import "NSErrorPythonAdditions.h"
+#import "NSStringPythonAdditions.h"
 
 #import "XDTException.h"
 #import "XDTMessage.h"
 #import "XDTGa99Objcode.h"
 
 
-#define XDTModuleNameGPLAssembler "xga99"
 #define XDTClassNameGPLAssembler "Assembler"
 
 
@@ -63,27 +63,13 @@ NS_ASSUME_NONNULL_END
 
 NS_ASSUME_NONNULL_BEGIN
 
-XDTGa99OptionKey const XDTGa99OptionGROM = @"XDTGa99OptionGROM";
-XDTGa99OptionKey const XDTGa99OptionAORG = @"XDTGa99OptionAORG";
-XDTGa99OptionKey const XDTGa99OptionStyle = @"XDTGa99OptionStyle";
-XDTGa99OptionKey const XDTGa99OptionTarget = @"XDTGa99OptionTarget";
-XDTGa99OptionKey const XDTGa99OptionWarnings = @"XDTGa99OptionWarnings";
-
-
 @interface XDTGPLAssembler () {
-    const PyObject *assemblerPythonModule;
-    PyObject *assemblerPythonClass;
     XDTMessage *_messages;
 }
 
-@property NSString *version;
-@property XDTGa99TargetType targetType;
-@property XDTGa99SyntaxType syntaxType;
+- (nullable instancetype)initWithModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls grom:(NSUInteger)gromAddress aorg:(NSUInteger)aorgAddress target:(XDTGa99TargetType)targetType syntax:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings;
 
-- (nullable instancetype)initWithOptions:(NSDictionary<XDTGa99OptionKey, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls;
-
-- (nullable const char *)syntaxTypeAsCString;
-- (nullable const char *)targetTypeAsCString;
++ (nullable const char *)targetTypeAsCString:(XDTGa99TargetType)targetType;
 
 @end
 
@@ -92,71 +78,21 @@ NS_ASSUME_NONNULL_END
 
 @implementation XDTGPLAssembler
 
-+ (BOOL)checkRequiredModuleVersion
++ (NSString *)pythonClassName
 {
-    PyObject *pName = PyString_FromString(XDTModuleNameGPLAssembler);
-    PyObject *pModule = PyImport_Import(pName);
-    if (NULL == pModule) {
-        NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
-        Py_XDECREF(pName);
-        PyObject *exeption = PyErr_Occurred();
-        if (NULL != exeption) {
-//            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
-//            }
-            PyErr_Print();
-        }
-        return NO;
-    }
-    Py_XDECREF(pName);
-
-    PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
-    if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"%s ERROR: Cannot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
-        Py_XDECREF(pModule);
-        if (PyErr_Occurred()) {
-            PyErr_Print();
-        }
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return NO;
-    }
-    Py_XDECREF(pModule);
-    if (0 != strcmp(PyString_AsString(pVar), XDTGPLAssemblerVersionRequired)) {
-        NSLog(@"%s ERROR: Wrong GPL Assembler version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTGPLAssemblerVersionRequired);
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return NO;
-    }
-    Py_XDECREF(pVar);
-
-    return YES;
+    return [NSString stringWithUTF8String:XDTClassNameGPLAssembler];
 }
 
 
 #pragma mark Initializers
 
-+ (instancetype)gplAssemblerWithOptions:(NSDictionary<XDTGa99OptionKey, id> *)options includeURL:(NSURL *)url
++ (instancetype)gplAssemblerWithIncludeURL:(NSURL *)url grom:(NSUInteger)gromAddress aorg:(NSUInteger)aorgAddress target:(XDTGa99TargetType)targetType syntax:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings
 {
-    assert(NULL != options);
     assert(nil != url);
 
     @synchronized (self) {
-        PyObject *pModule = PyImport_ImportModuleNoBlock(XDTModuleNameGPLAssembler);
+        PyObject *pModule = self.xdtGa99ModuleInstance;
         if (NULL == pModule) {
-            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, XDTModuleNameGPLAssembler, Py_GetPath());
-            PyObject *exeption = PyErr_Occurred();
-            if (NULL != exeption) {
-//            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
-//            }
-                PyErr_Print();
-                //@throw [XDTException exceptionWithError:[NSError errorWithPythonError:exeption RecoverySuggestion:nil]];
-            }
             return nil;
         }
 
@@ -166,8 +102,7 @@ NS_ASSUME_NONNULL_END
                 url = [url URLByDeletingLastPathComponent];
             }
         }
-        XDTGPLAssembler *retVal = [[XDTGPLAssembler alloc] initWithOptions:options forModule:pModule includeURL:@[url]];
-        Py_DECREF(pModule);
+        XDTGPLAssembler *retVal = [[XDTGPLAssembler alloc] initWithModule:pModule includeURL:@[url] grom:gromAddress aorg:aorgAddress target:targetType syntax:syntaxType outputWarnings:outputWarnings];
 #if !__has_feature(objc_arc)
         return [retVal autorelease];
 #endif
@@ -176,36 +111,10 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (instancetype)initWithOptions:(NSDictionary<XDTGa99OptionKey, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls
+- (instancetype)initWithModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls grom:(NSUInteger)gromAddress aorg:(NSUInteger)aorgAddress target:(XDTGa99TargetType)targetType syntax:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings
 {
     assert(NULL != pModule);
     assert(nil != urls);
-
-    self = [super init];
-    if (nil == self) {
-        return nil;
-    }
-
-    PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
-    if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"%s ERROR: annot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
-        if (PyErr_Occurred()) {
-            PyErr_Print();
-        }
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return nil;
-    }
-    if (0 != strcmp(PyString_AsString(pVar), XDTGPLAssemblerVersionRequired)) {
-        NSLog(@"%s ERROR: Wrong GPL Assembler version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTGPLAssemblerVersionRequired);
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return nil;
-    }
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameGPLAssembler);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
@@ -213,7 +122,6 @@ NS_ASSUME_NONNULL_END
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
-        Py_XDECREF(pVar);
         Py_XDECREF(pFunc);
 #if !__has_feature(objc_arc)
         [self release];
@@ -221,37 +129,28 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    /* reading option from dictionary */
-    _targetType = [[options valueForKey:XDTGa99OptionTarget] unsignedIntegerValue];
-    _syntaxType = [[options valueForKey:XDTGa99OptionStyle] unsignedIntegerValue];
-    _aorgAddress = [[options valueForKey:XDTGa99OptionAORG] unsignedIntegerValue];
-    _gromAddress = [[options valueForKey:XDTGa99OptionGROM] unsignedIntegerValue];
-    _outputWarnings = [[options valueForKey:XDTGa99OptionWarnings] boolValue];
-    _version = [NSString stringWithCString:PyString_AsString(pVar) encoding:NSUTF8StringEncoding];
-    Py_XDECREF(pVar);
-
     /* preparing parameters */
-    PyObject *target = PyString_FromString([self targetTypeAsCString]);
-    PyObject *syntax = PyString_FromString([self syntaxTypeAsCString]);
-    PyObject *grom = PyInt_FromLong(_gromAddress);
-    PyObject *aorg = PyInt_FromLong(_aorgAddress);
-    PyObject *includePath = PyList_New(0);
+    PyObject *pTargetType = PyString_FromString([self.class targetTypeAsCString:targetType]);
+    PyObject *pSyntaxType = PyString_FromString([XDTGa99Syntax syntaxTypeAsCString:syntaxType]);
+    PyObject *pGromAddress = PyInt_FromLong(gromAddress);
+    PyObject *pAorgAddress = PyInt_FromLong(aorgAddress);
+    PyObject *pIncludePath = PyList_New(0);
     for (NSURL *url in urls) {
-        PyList_Append(includePath, PyString_FromString([[url path] UTF8String]));
+        PyList_Append(pIncludePath, PyString_FromString([[url path] UTF8String]));
     }
-    PyObject *defs = PyList_New(0);
-    PyObject *outputWarnings = PyBool_FromLong(_outputWarnings);
+    PyObject *pDefs = PyList_New(0);
+    PyObject *pOutputWarnings = PyBool_FromLong(outputWarnings);
 
     /* creating assembler object:
         asm = Assembler(syntax, grom, aorg, target="", include_path=None, defs=(), warnings=True):
      */
-    PyObject *pArgs = PyTuple_Pack(7, syntax, grom, aorg, target, includePath, defs, outputWarnings);
-    PyObject *assembler = PyObject_CallObject(pFunc, pArgs);
+    PyObject *pArgs = PyTuple_Pack(7, pSyntaxType, pGromAddress, pAorgAddress, pTargetType, pIncludePath, pDefs, pOutputWarnings);
+    PyObject *pAssembler = PyObject_CallObject(pFunc, pArgs);
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
-    if (NULL == assembler) {
+    if (NULL == pAssembler) {
         NSLog(@"%s ERROR: calling constructor %@(\"%s\", 0x%lx, 0x%lx, \"%s\", %@, None) failed!", __FUNCTION__,
-              pFunc, [self syntaxTypeAsCString], _gromAddress, _aorgAddress, [self targetTypeAsCString], urls);
+              pFunc, [XDTGa99Syntax syntaxTypeAsCString:self.syntaxType], self.gromAddress, self.aorgAddress, [self.class targetTypeAsCString:self.targetType], urls);
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
@@ -266,9 +165,10 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    assemblerPythonModule = pModule;
-    Py_INCREF(assemblerPythonModule);
-    assemblerPythonClass = assembler;
+    self = [super initWithPythonInstance:pAssembler];
+    if (nil == self) {
+        return nil;
+    }
 
     return self;
 }
@@ -276,43 +176,18 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_CLEAR(assemblerPythonClass);
-    Py_CLEAR(assemblerPythonModule);
-
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif
 }
 
 
-#pragma mark - Accessors
+#pragma mark - Property Wrapper
 
 
-+ (const char *)syntaxTypeAsCString:(XDTGa99SyntaxType)syntaxType
++ (const char *)targetTypeAsCString:(XDTGa99TargetType)targetType
 {
-    switch (syntaxType) {
-        case XDTGa99SyntaxTypeRAGGPL:
-            //return "rag";     // removed in xga99 v1.8.5 - RAG is combined with Ryte
-        case XDTGa99SyntaxTypeNativeXDT99:
-            return "xdt99";
-        case XDTGa99SyntaxTypeTIImageTool:
-            return "mizapf";
-
-        default:
-            return NULL;
-    }
-}
-
-
-- (const char *)syntaxTypeAsCString
-{
-    return [self.class syntaxTypeAsCString:_syntaxType];
-}
-
-
-- (const char *)targetTypeAsCString
-{
-    switch (_targetType) {
+    switch (targetType) {
         case XDTGa99TargetTypePlainByteCode:
             return "gbc";
         case XDTGa99TargetTypeHeaderedByteCode:
@@ -326,18 +201,125 @@ NS_ASSUME_NONNULL_END
 }
 
 
+- (NSUInteger)aorgAddress
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "aorg");
+    if (NULL == pResult) {
+        return 0;
+    }
+
+    return PyLong_AsUnsignedLong(pResult);
+}
+
+
+- (void)setAorgAddress:(NSUInteger)aorgAddress
+{
+    PyObject * pAORG = PyLong_FromUnsignedLong(aorgAddress);
+    (void)PyObject_SetAttrString(self.pythonInstance, "aorg", pAORG);
+    Py_XDECREF(pAORG);
+}
+
+
+- (NSUInteger)gromAddress
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "grom");
+    if (NULL == pResult) {
+        return 0;
+    }
+
+    return PyLong_AsUnsignedLong(pResult);
+}
+
+
+- (void)setGromAddress:(NSUInteger)gromAddress
+{
+    PyObject *pGROM = PyLong_FromUnsignedLong(gromAddress);
+    (void)PyObject_SetAttrString(self.pythonInstance, "grom", pGROM);
+    Py_XDECREF(pGROM);
+}
+
+
+- (XDTGa99SyntaxType)syntaxType
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "syntax");
+    if (NULL == pResult) {
+        return XDTGa99SyntaxTypeNativeXDT99;
+    }
+
+    NSString *syntaxType = [NSString stringWithPythonString:pResult encoding:NSUTF8StringEncoding];
+    Py_XDECREF(pResult);
+    if ([@"xdt99" isEqualToString:syntaxType]) {
+        return XDTGa99SyntaxTypeNativeXDT99;
+    } else if ([@"mizapf" isEqualToString:syntaxType]) {
+        return XDTGa99SyntaxTypeTIImageTool;
+    } else {
+        NSLog(@"Got unknown syntax type from Python class: %@", syntaxType);
+    }
+    return XDTGa99SyntaxTypeNativeXDT99;
+}
+
+
+- (void)setSyntaxType:(XDTGa99SyntaxType)syntaxType
+{
+    PyObject *pSyntax = PyString_FromString([XDTGa99Syntax syntaxTypeAsCString:syntaxType]);
+    (void)PyObject_SetAttrString(self.pythonInstance, "syntax", pSyntax);
+    Py_XDECREF(pSyntax);
+}
+
+
+- (XDTGa99TargetType)targetType
+{
+    // TODO: datt muss aussn defs rausgezogen werden...
+    PyObject *pResult = NULL; //PyObject_GetAttrString(self.pythonInstance, );
+    if (NULL == pResult) {
+        return XDTGa99TargetTypePlainByteCode;
+    }
+    XDTGa99TargetType retVal = (XDTGa99TargetType)PyLong_AsUnsignedLong(pResult);
+    Py_DECREF(pResult);
+    return retVal;
+}
+
+
+- (void)setTargetType:(XDTGa99TargetType)targetType
+{
+    const char *tt = [self.class targetTypeAsCString:targetType];
+    // TODO: datt is midden defs verwurschtet...
+    //(void)PyObject_SetAttrString(self.pythonInstance, nil, PyString_FromString(tt));
+}
+
+
+- (BOOL)outputWarnings
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "warnings");
+    if (NULL == pResult) {
+        return NO;
+    }
+
+    return 1 == PyObject_IsTrue(pResult);
+}
+
+
+- (void)setOutputWarnings:(BOOL)outputWarnings
+{
+    PyObject *pWarnings = PyBool_FromLong(outputWarnings);
+    (void)PyObject_SetAttrString(self.pythonInstance, "warnings", pWarnings);
+    Py_XDECREF(pWarnings);
+}
+
+
 - (XDTMessage *)messages
 {
     if (nil != _messages) {
         return _messages;
     }
 
-    PyObject *messageList = PyObject_GetAttrString(assemblerPythonClass, "console");
+    PyObject *messageList = PyObject_GetAttrString(self.pythonInstance, "console");
     if (NULL == messageList) {
         return nil;
     }
 
     XDTMutableMessage *retVal = [XDTMutableMessage messageWithPythonList:messageList];
+    Py_DECREF(messageList);
     if (0 >= retVal.count) {
         return nil;
     }
@@ -348,7 +330,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-#pragma mark - Parsing Methods
+#pragma mark - Method Wrapper
 
 
 - (XDTGa99Objcode *)assembleSourceFile:(NSURL *)srcname error:(NSError **)error
@@ -365,8 +347,8 @@ NS_ASSUME_NONNULL_END
      code, errors, warnings = asm.assemble(basename)
      */
     PyObject *methodName = PyString_FromString("assemble");
-    PyObject *pbaseName = PyString_FromString([basename UTF8String]);
-    PyObject *pValueTupel = PyObject_CallMethodObjArgs(assemblerPythonClass, methodName, pbaseName, NULL);
+    PyObject *pbaseName = basename.asPythonType;
+    PyObject *pValueTupel = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pbaseName, NULL);
     Py_XDECREF(pbaseName);
     Py_XDECREF(methodName);
     if (NULL == pValueTupel) {
@@ -384,10 +366,6 @@ NS_ASSUME_NONNULL_END
     /*
      Don't need to process the dedicated error return value. So skip the item 1 of the value tupel.
      Modern version of xas99 has a console return value which contains all messages (errors and warnings).
-
-     Fetching the console return value which contains all messages the assembler generates is also skiped
-     here for the item 2 of the value tupel. The messages can be obtained via the console property of the
-     Assembler object.
      */
 
     [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
@@ -414,9 +392,7 @@ NS_ASSUME_NONNULL_END
     if (NULL != objectCodeObject) {
         retVal = [XDTGa99Objcode gplObjectcodeWithPythonInstance:objectCodeObject];
     }
-
     Py_DECREF(pValueTupel);
-
     return retVal;
 }
 

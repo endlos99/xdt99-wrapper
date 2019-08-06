@@ -1,11 +1,11 @@
 //
 //  XDTAs99Objdummy.m
-//  SimpleXDT99
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 30.06.19.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -32,11 +32,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XDTAs99Objdummy () {
-    PyObject *objdummyPythonClass;
-}
+@interface XDTAs99Objdummy ()
 
-- (nullable instancetype)initWithPythonInstance:(void *)object;
+- (nullable instancetype)initWithPythonInstance:(PyObject *)object;
 
 @end
 
@@ -45,7 +43,13 @@ NS_ASSUME_NONNULL_END
 
 @implementation XDTAs99Objdummy
 
-+ (instancetype)objdummyWithPythonInstance:(void *)object
++ (NSString *)pythonClassName
+{
+    return [NSString stringWithUTF8String:XDTClassNameObjdummy];
+}
+
+
++ (instancetype)objdummyWithPythonInstance:(PyObject *)object
 {
     XDTAs99Objdummy *retVal = [[XDTAs99Objdummy alloc] initWithPythonInstance:object];
 #if !__has_feature(objc_arc)
@@ -55,15 +59,14 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (instancetype)initWithPythonInstance:(void *)object
+- (instancetype)initWithPythonInstance:(PyObject *)object
 {
-    self = [super init];
+    self = [super initWithPythonInstance:object];
     if (nil == self) {
         return nil;
     }
 
-    objdummyPythonClass = object;
-    Py_INCREF(objdummyPythonClass);
+    // nothing to do here
 
     return self;
 }
@@ -71,8 +74,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_CLEAR(objdummyPythonClass);
-
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif

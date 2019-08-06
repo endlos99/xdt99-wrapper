@@ -22,8 +22,6 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#import <Foundation/Foundation.h>
-
 #import "XDTObject.h"
 
 typedef NS_ENUM(NSUInteger, XDTGenerateTextMode) {
@@ -45,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface XDTAs99Objcode : XDTObject
 
 @property (readonly, copy) XDTAs99Symbols *symbols;
+@property (assign, getter=isStrict) BOOL strict;
 
 /**
  *
@@ -64,6 +63,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSData *)generateListing:(BOOL)outputSymbols error:(NSError **)error;
 - (nullable NSData *)generateSymbols:(BOOL)useEqu error:(NSError **)error;
+
+- (void)enumerateSegmentsUsingBlock:(void (^)(NSUInteger bank, NSUInteger finalLineCount, BOOL reloc, BOOL dummy, NSArray *code))block;
 
 @end
 

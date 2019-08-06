@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 09.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,8 @@
 
 #import "NSDataPythonAdditions.h"
 
+#import <Python/Python.h>
+
 
 @implementation NSData (NSDataPythonAdditions)
 
@@ -35,6 +37,14 @@
     }
     char *bytes = PyString_AsString(data);
     return [NSData dataWithBytes:bytes length:byteSize];
+}
+
+
+- (PyObject *)asPythonType
+{
+    PyObject *retVal = PyString_FromStringAndSize(self.bytes, self.length);
+
+    return retVal;
 }
 
 @end

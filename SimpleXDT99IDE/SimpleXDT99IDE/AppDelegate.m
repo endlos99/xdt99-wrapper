@@ -193,12 +193,7 @@ NS_ASSUME_NONNULL_END
             default:
                 break;
         }
-        NSDictionary *options = @{
-                                  XDTAs99OptionRegister: [defaults objectForKey:UserDefaultKeyAssemblerOptionUseRegisterSymbols],
-                                  XDTAs99OptionStrict: [defaults objectForKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions],
-                                  XDTAs99OptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType]
-                                  };
-        XDTAssembler *assembler = [XDTAssembler assemblerWithOptions:options includeURL:assemblerFileURL];
+        XDTAssembler *assembler = [XDTAssembler assemblerWithIncludeURL:assemblerFileURL target:xdtTargetType usingRegisterSymbol:[[defaults objectForKey:UserDefaultKeyAssemblerOptionUseRegisterSymbols] boolValue] strictness:[[defaults objectForKey:UserDefaultKeyAssemblerOptionDisableXDTExtensions] boolValue] outputWarnings:[[defaults objectForKey:UserDefaultKeyDocumentOptionShowWarningsInLog] boolValue]];
 
         NSError *error = nil;
         XDTAs99Objcode *assemblingResult = [assembler assembleSourceFile:assemblerFileURL error:&error];
@@ -390,13 +385,7 @@ NS_ASSUME_NONNULL_END
             default:
                 break;
         }
-        NSDictionary *options = @{
-                                  XDTGa99OptionAORG: [defaults objectForKey:UserDefaultKeyGPLOptionAORGAddress],
-                                  XDTGa99OptionGROM: [defaults objectForKey:UserDefaultKeyGPLOptionGROMAddress],
-                                  XDTGa99OptionStyle: [NSNumber numberWithUnsignedInteger:xdtSyntaxType],
-                                  XDTGa99OptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType]
-                                  };
-        XDTGPLAssembler *assembler = [XDTGPLAssembler gplAssemblerWithOptions:options includeURL:gplFileURL];
+        XDTGPLAssembler *assembler = [XDTGPLAssembler gplAssemblerWithIncludeURL:gplFileURL grom:[[defaults objectForKey:UserDefaultKeyGPLOptionGROMAddress] unsignedIntegerValue] aorg:[[defaults objectForKey:UserDefaultKeyGPLOptionAORGAddress] unsignedIntegerValue] target:xdtTargetType syntax:xdtSyntaxType outputWarnings:[[defaults objectForKey:UserDefaultKeyDocumentOptionShowWarningsInLog] boolValue]];
 
         NSError *error = nil;
         XDTGa99Objcode *assemblingResult = [assembler assembleSourceFile:gplFileURL error:&error];
@@ -520,13 +509,14 @@ NS_ASSUME_NONNULL_END
     [self processSourceFileURL:basicFileURL withXDTprocess:^BOOL(NSURL * _Nonnull outputFileURL) {
         NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
         NSDictionary *options = @{
-                                  XDTBasicOptionProtectFile: [defaults objectForKey:UserDefaultKeyBasicOptionShouldProtectFile],
-                                  XDTBasicOptionJoinLines: [defaults objectForKey:UserDefaultKeyBasicOptionShouldJoinSourceLines]
+                                  NSStringFromSelector(@selector(protect)): [defaults objectForKey:UserDefaultKeyBasicOptionShouldProtectFile],
+                                  NSStringFromSelector(@selector(join)): [defaults objectForKey:UserDefaultKeyBasicOptionShouldJoinSourceLines]
                                   };
-        XDTBasic *basic = [XDTBasic basicWithOptions:options];
+        XDTBasic *basic = [XDTBasic basic];
         if (nil == basic) {
             return NO;
         }
+        [basic setValuesForKeysWithDictionary:options];
         NSError *error = nil;
         /*
          If you will implement to load binary files formats for converting them, i.e. from internal to long format, 

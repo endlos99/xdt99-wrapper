@@ -1,5 +1,5 @@
 //
-//  XDTParser.m
+//  XDTAs99Parser.m
 //  XDTools99
 //
 //  Created by Henrik Wedekind on 30.06.19.
@@ -33,32 +33,19 @@
 #import "XDTLineScanner.h"
 #import "XDTAs99Symbols.h"
 #import "XDTAs99Objdummy.h"
+#import "XDTAs99Preprocessor.h"
 
 
-#define XDTModuleNameAssembler "xas99"
 #define XDTClassNameParser "Parser"
-
-#define XDTClassNameSymbols "Symbols"   /* defined in XDTSymbols.m */
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-XDTAs99ParserOptionKey const XDTAs99ParserOptionRegister = @"XDTAs99ParserOptionRegister";
-XDTAs99ParserOptionKey const XDTAs99ParserOptionStrict = @"XDTAs99ParserOptionStrict";
-XDTAs99ParserOptionKey const XDTAs99ParserOptionWarnings = @"XDTAs99ParserOptionWarnings";
-
-
 @interface XDTAs99Parser () {
-    const PyObject *parserPythonModule;
-    PyObject *parserPythonClass;
     //PyObject *_objdummy;
 }
 
-@property BOOL beStrict;
-@property BOOL useRegisterSymbols;
-@property BOOL outputWarnings;
-
-- (instancetype)initWithOptions:(NSDictionary<XDTAs99ParserOptionKey, id> *)options forModule:(PyObject *)pModule;
+- (instancetype)initWithModule:(PyObject *)pModule path:(NSString *)path usingRegisterSymbol:(BOOL)useRegisterSymbol strictness:(BOOL)beStrict outputWarnings:(BOOL)outputWarnings;
 
 @end
 
@@ -67,24 +54,21 @@ NS_ASSUME_NONNULL_END
 
 @implementation XDTAs99Parser
 
-+ (nullable instancetype)parserWithOptions:(NSDictionary<XDTAs99ParserOptionKey,id> *)options
++ (NSString *)pythonClassName
+{
+    return [NSString stringWithUTF8String:XDTClassNameParser];
+}
+
+
++ (nullable instancetype)parserForPath:(NSString *)path usingRegisterSymbol:(BOOL)useRegisterSymbol strictness:(BOOL)beStrict outputWarnings:(BOOL)outputWarnings
 {
     @synchronized (self) {
-        PyObject *pModule = PyImport_ImportModuleNoBlock(XDTModuleNameAssembler);
+        PyObject *pModule = self.xdtAs99ModuleInstance;
         if (NULL == pModule) {
-            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, XDTModuleNameAssembler, Py_GetPath());
-            PyObject *exeption = PyErr_Occurred();
-            if (NULL != exeption) {
-//            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption code:-2 RecoverySuggestion:nil];
-//            }
-                PyErr_Print();
-            }
             return nil;
         }
 
-        XDTAs99Parser *retVal = [[XDTAs99Parser alloc] initWithOptions:options forModule:pModule];
-        Py_DECREF(pModule);
+        XDTAs99Parser *retVal = [[XDTAs99Parser alloc] initWithModule:pModule path:path usingRegisterSymbol:useRegisterSymbol strictness:beStrict outputWarnings:outputWarnings];
 #if !__has_feature(objc_arc)
         return [retVal autorelease];
 #else
@@ -94,46 +78,16 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (instancetype)initWithOptions:(NSDictionary<XDTAs99ParserOptionKey, id> *)options forModule:(PyObject *)pModule
+- (instancetype)initWithModule:(PyObject *)pModule path:(NSString *)path usingRegisterSymbol:(BOOL)useRegisterSymbol strictness:(BOOL)beStrict outputWarnings:(BOOL)outputWarnings
 {
-    self = [super init];
-    if (nil == self) {
-        return nil;
-    }
-
-    PyObject *pVersion = PyObject_GetAttrString(pModule, "VERSION");
-    if (NULL == pVersion || !PyString_Check(pVersion)) {
-        NSLog(@"%s ERROR: Cannot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
-        if (PyErr_Occurred()) {
-            PyErr_Print();
-        }
-        Py_XDECREF(pVersion);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return nil;
-    }
-    if (0 != strcmp(PyString_AsString(pVersion), XDTAssemblerVersionRequired)) {
-        NSLog(@"%s ERROR: Wrong Assembler version %s! Required is %s", __FUNCTION__, PyString_AsString(pVersion), XDTAssemblerVersionRequired);
-        Py_XDECREF(pVersion);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return nil;
-    }
-    Py_XDECREF(pVersion);
-
-    /* reading options from dictionary */
-    _beStrict = [[options valueForKey:XDTAs99ParserOptionStrict] boolValue];
-    _useRegisterSymbols = [[options valueForKey:XDTAs99ParserOptionRegister] boolValue];
-    _outputWarnings = [[options valueForKey:XDTAs99ParserOptionWarnings] boolValue];
+    assert(NULL != pModule);
 
     /*
      Create instance of the Symbol class which will be passed as a parameter for the constructor of Parser()
      */
-    PyObject *pSymbolsFunc = PyObject_GetAttrString(pModule, XDTClassNameSymbols);
+    PyObject *pSymbolsFunc = PyObject_GetAttrString(pModule, XDTAs99Symbols.pythonClassName.UTF8String);
     if (NULL == pSymbolsFunc || !PyCallable_Check(pSymbolsFunc)) {
-        NSLog(@"%s ERROR: Cannot find class \"%s\" in module %s", __FUNCTION__, XDTClassNameSymbols, PyModule_GetName(pModule));
+        NSLog(@"%s ERROR: Cannot find class \"%s\" in module %s", __FUNCTION__, XDTAs99Symbols.pythonClassName.UTF8String, PyModule_GetName(pModule));
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
@@ -145,24 +99,24 @@ NS_ASSUME_NONNULL_END
     }
 
     /* preparing parameters */
-    PyObject *defs = PyList_New(0);
-    PyObject *path = PyString_FromString(".");
-    PyObject *includePath = PyList_New(0);
+    PyObject *pDefs = PyList_New(0);
+    PyObject *pPath = (nil == path)? PyString_FromString(".") : path.asPythonType;
+    PyObject *pIncludePath = PyList_New(0);
     /*for (NSURL *url in urls) {
      PyList_Append(includePath, PyString_FromString([[url path] UTF8String]));
      }*/
-    PyObject *strictMode = PyBool_FromLong(_beStrict);
-    PyObject *outputWarnings = PyBool_FromLong(_outputWarnings);
-    PyObject *addRegisters = PyBool_FromLong(_useRegisterSymbols);
-    PyObject *console = PyList_New(0);
+    PyObject *pStrictMode = PyBool_FromLong(beStrict);
+    PyObject *pOutputWarnings = PyBool_FromLong(outputWarnings);
+    PyObject *pAddRegisters = PyBool_FromLong(useRegisterSymbol);
+    PyObject *pConsole = PyList_New(0);
 
     /* creating symbols object:
         symbols = Symbols(add_registers=self.optr, add_defs=self.defs)
      */
-    PyObject *pSymbolsArgs = PyTuple_Pack(2, addRegisters, defs);
-    PyObject *symbols = PyObject_CallObject(pSymbolsFunc, pSymbolsArgs);
+    PyObject *pSymbolsArgs = PyTuple_Pack(2, pAddRegisters, pDefs);
+    PyObject *pSymbols = PyObject_CallObject(pSymbolsFunc, pSymbolsArgs);
     Py_XDECREF(pSymbolsArgs);
-    Py_XDECREF(pSymbolsFunc);
+    Py_DECREF(pSymbolsFunc);
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameParser);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
@@ -181,13 +135,13 @@ NS_ASSUME_NONNULL_END
         parser = Parser(symbols, path=path, includes=self.includes, strict=self.strict, warnings=self.warnings,
                         use_R=self.optr, console=self.console)
      */
-    PyObject *pArgs = PyTuple_Pack(7, symbols, path, includePath, strictMode, outputWarnings, addRegisters, console);
+    PyObject *pArgs = PyTuple_Pack(7, pSymbols, pPath, pIncludePath, pStrictMode, pOutputWarnings, pAddRegisters, pConsole);
     PyObject *parser = PyObject_CallObject(pFunc, pArgs);
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
     if (NULL == parser) {
-        NSLog(@"%s ERROR: calling constructor %s([], [], %@, %@, %@, []) failed!", __FUNCTION__, XDTClassNameParser,
-              _beStrict? @"true" : @"false", _outputWarnings? @"true" : @"false", _useRegisterSymbols? @"true" : @"false");
+        NSLog(@"%s ERROR: calling constructor %s([], [], %s, %s, %s, []) failed!", __FUNCTION__, XDTClassNameParser,
+              self.beStrict? "true" : "false", outputWarnings? "true" : "false", useRegisterSymbol? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
@@ -201,10 +155,10 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    parserPythonModule = pModule;
-    Py_INCREF(parserPythonModule);
-    parserPythonClass = parser;
-    Py_INCREF(parserPythonClass);
+    self = [super initWithPythonInstance:parser];
+    if (nil == self) {
+        return nil;
+    }
 
     return self;
 }
@@ -212,8 +166,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_CLEAR(parserPythonClass);
-
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif
@@ -223,48 +175,129 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Property Wrapper
 
 
+- (BOOL)useRegisterSymbols
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "use_R");
+    if (NULL == pResult) {
+        return NO;
+    }
+
+    return 1 == PyObject_IsTrue(pResult);
+}
+
+
+- (void)setUseRegisterSymbols:(BOOL)useRegisterSymbols
+{
+    PyObject *pUseR = PyBool_FromLong(useRegisterSymbols);
+    (void)PyObject_SetAttrString(self.pythonInstance, "use_R", pUseR);
+    Py_XDECREF(pUseR);
+}
+
+
+- (BOOL)beStrict
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "strict");
+    if (NULL == pResult) {
+        return NO;
+    }
+
+    BOOL retVal = 1 == PyObject_IsTrue(pResult);
+    Py_DECREF(pResult);
+    return retVal;
+}
+
+
+- (void)setBeStrict:(BOOL)beStrict
+{
+    PyObject *pStrict = PyBool_FromLong(beStrict);
+    (void)PyObject_SetAttrString(self.pythonInstance, "strict", pStrict);
+    Py_XDECREF(pStrict);
+}
+
+
+- (BOOL)outputWarnings
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "warnings_enabled");
+    if (NULL == pResult) {
+        return NO;
+    }
+
+    BOOL retVal = 1 == PyObject_IsTrue(pResult);
+    Py_DECREF(pResult);
+    return retVal;
+}
+
+
+- (void)setOutputWarnings:(BOOL)outputWarnings
+{
+    PyObject *pWarnings = PyBool_FromLong(outputWarnings);
+    (void)PyObject_SetAttrString(self.pythonInstance, "warnings_enabled", pWarnings);
+    Py_XDECREF(pWarnings);
+}
+
+
 /**
  Part of \p XDTParserProtocol
  */
 - (XDTAs99Symbols *)symbols
 {
-    PyObject *symbolObject = PyObject_GetAttrString(parserPythonClass, "symbols");
-    XDTAs99Symbols *codeSymbols = [XDTAs99Symbols symbolsWithPythonInstance:symbolObject];
-    Py_XDECREF(symbolObject);
+    PyObject *pSymbolObject = PyObject_GetAttrString(self.pythonInstance, "symbols");
+    if (NULL == pSymbolObject) {
+        return nil;
+    }
 
+    XDTAs99Symbols *codeSymbols = [XDTAs99Symbols symbolsWithPythonInstance:pSymbolObject];
+    Py_DECREF(pSymbolObject);
     return codeSymbols;
 }
 
 
 - (void)setPath:(NSString *)path
 {
-    PyStringObject *pathString = [path pythonString];
-    PyObject_SetAttrString(parserPythonClass, "path", (PyObject *)pathString);
-    /* TODO: Don't know if the reference count is changed after setting the attribute. */
-    Py_XDECREF(pathString);
+    PyObject *pathString = (nil == path)? Py_None : path.asPythonType;
+    (void)PyObject_SetAttrString(self.pythonInstance, "path", pathString);
+    if (Py_None != pathString) {
+        Py_XDECREF(pathString);
+    }
 }
 
 
 - (NSString *)path
 {
-    PyObject *pathString = PyObject_GetAttrString(parserPythonClass, "path");
+    PyObject *pathString = PyObject_GetAttrString(self.pythonInstance, "path");
     if (NULL == pathString) {
         return nil;
     }
 
     NSString *retVal = [NSString stringWithPythonString:pathString encoding:NSUTF8StringEncoding];
     Py_DECREF(pathString);
+    return retVal;
+}
 
+
+- (XDTAs99Preprocessor *)preprocessor
+{
+    if (NULL == self.pythonInstance) {
+        return nil;
+    }
+    PyObject *pPrep = PyObject_GetAttrString(self.pythonInstance, "prep");
+    if (NULL == pPrep) {
+        return nil;
+    }
+    
+    XDTAs99Preprocessor *retVal = [XDTAs99Preprocessor preprocessorWithPythonInstance:pPrep];
+    Py_DECREF(pPrep);
     return retVal;
 }
 
 
 - (void)setSource:(NSString *)source
 {
-    PyStringObject *sourceString = [source pythonString];
-    PyObject_SetAttrString(parserPythonClass, "source", (PyObject *)sourceString);
-    /* TODO: Don't know if the reference count is changed after setting the attribute. */
-    Py_XDECREF(sourceString);
+    PyObject *sourceString = (nil == source)? Py_None : source.asPythonType;
+    (void)PyObject_SetAttrString(self.pythonInstance, "source", sourceString);
+    if (Py_None != sourceString) {
+        Py_XDECREF(sourceString);
+    }
 }
 
 
@@ -273,17 +306,18 @@ NS_ASSUME_NONNULL_END
  */
 - (NSString *)literalForPlaceholder:(NSString *)key
 {
-    if (![key hasPrefix:@"'"] || ![key hasSuffix:@"'"]) {
+    if (NULL == self.pythonInstance || ![key hasPrefix:@"'"] || ![key hasSuffix:@"'"]) {
         return nil;
     }
 
-    PyObject *literalList = PyObject_GetAttrString(parserPythonClass, "text_literals");
+    PyObject *literalList = PyObject_GetAttrString(self.pythonInstance, "text_literals");
     if (NULL == literalList) {
         return nil;
     }
 
     const Py_ssize_t itemCount = PyList_Size(literalList);
     if (0 > itemCount) {
+        Py_DECREF(literalList);
         return nil;
     }
     NSString *retVal = nil;
@@ -301,6 +335,91 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Method Wrapper
 
 
+- (BOOL)openSourceFile:(NSString *)fileName macroBuffer:(NSString *)macroName ops:(NSArray<id> *)ops error:(NSError **)error
+{
+    /*
+     Function call in Python:
+     open(filename, macro, ops)
+     */
+    PyObject *methodName = PyString_FromString("open");
+    PyObject *pFilename = (nil == fileName)? Py_None : fileName.asPythonType;
+    PyObject *pMacro = (nil == macroName)? Py_None : macroName.asPythonType;
+    PyObject *pOps = ops.asPythonType;
+    PyObject *pResult = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pFilename, pMacro, pOps, NULL);
+    Py_XDECREF(pOps);
+    Py_XDECREF(pMacro);
+    Py_XDECREF(pFilename);
+    Py_XDECREF(methodName);
+    NSLog(@"%s ERROR: open(\"%@\", \"%@\", @[%@]) returns NULL!", __FUNCTION__, fileName, macroName, ops);
+    if (NULL == pResult) {
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return NO;
+    }
+
+    Py_DECREF(pResult);
+    return YES;
+}
+
+
+- (BOOL)resume:(NSError **)error
+{
+    /*
+     Function call in Python:
+     resume()
+     */
+    PyObject *methodName = PyString_FromString("resume");
+    PyObject *pResult = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
+    Py_XDECREF(methodName);
+    NSLog(@"%s ERROR: resume() returns NULL!", __FUNCTION__);
+    if (NULL == pResult) {
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return NO;
+    }
+    
+    BOOL retVal = 1 == PyObject_IsTrue(pResult);
+    Py_DECREF(pResult);
+    return retVal;
+}
+
+
+- (BOOL)stop:(NSError **)error
+{
+    /*
+     Function call in Python:
+     stop()
+     */
+    PyObject *methodName = PyString_FromString("stop");
+    PyObject *pResult = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
+    Py_XDECREF(methodName);
+    NSLog(@"%s ERROR: resume() returns NULL!", __FUNCTION__);
+    if (NULL == pResult) {
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return NO;
+    }
+
+    Py_DECREF(pResult);
+    return YES;
+}
+
+
 - (NSString *)findFile:(NSString *)name error:(NSError **_Nullable)error
 {
     /*
@@ -308,8 +427,8 @@ NS_ASSUME_NONNULL_END
      find(filename)
      */
     PyObject *methodName = PyString_FromString("find");
-    PyObject *pFilename = PyString_FromString([name UTF8String]);
-    PyObject *filePath = PyObject_CallMethodObjArgs(parserPythonClass, methodName, pFilename, NULL);
+    PyObject *pFilename = name.asPythonType;
+    PyObject *filePath = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pFilename, NULL);
     Py_XDECREF(pFilename);
     Py_XDECREF(methodName);
         NSLog(@"%s ERROR: find(\"%@\") returns NULL!", __FUNCTION__, name);
@@ -326,7 +445,6 @@ NS_ASSUME_NONNULL_END
 
     NSString *retVal = [NSString stringWithPythonString:filePath encoding:NSUTF8StringEncoding];
     Py_DECREF(filePath);
-
     return retVal;
 }
 
@@ -343,8 +461,9 @@ NS_ASSUME_NONNULL_END
      */
     PyObject *methodName = PyString_FromString("pass_1");
     PyObject *lcTracker = NULL;
-    PyObject *dummy = PyObject_CallMethodObjArgs(parserPythonClass, methodName, lcTracker, NULL);
+    PyObject *dummy = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, lcTracker, NULL);
     Py_XDECREF(methodName);
+    Py_XDECREF(lcTracker);
     Py_XDECREF(dummy);
 
     [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
@@ -365,7 +484,7 @@ NS_ASSUME_NONNULL_END
      errors = pass_2(source, code, errors)
      */
     PyObject *methodName = PyString_FromString("pass_2");
-    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(parserPythonClass, methodName, NULL);
+    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == lineCountInteger) {
         return NO;
@@ -392,8 +511,8 @@ NS_ASSUME_NONNULL_END
      label, mnemonic, operands, comment, is_stmt = line(line)
      */
     PyObject *methodName = PyString_FromString("line");
-    PyObject *pLine = PyString_FromString([line UTF8String]);
-    PyObject *pValueTupel = PyObject_CallMethodObjArgs(parserPythonClass, methodName, pLine, NULL);
+    PyObject *pLine = line.asPythonType;
+    PyObject *pValueTupel = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pLine, NULL);
     Py_XDECREF(pLine);
     Py_XDECREF(methodName);
     if (NULL == pValueTupel) {
@@ -408,7 +527,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    NSMutableArray<id> *retVal = [NSMutableArray arrayWithPyTuple:pValueTupel];
+    NSMutableArray<id> *retVal = [NSMutableArray arrayWithPythonTuple:pValueTupel];
     Py_DECREF(pValueTupel);
     if (![retVal.lastObject boolValue]) {
         /* line contains no statement */
@@ -439,8 +558,8 @@ NS_ASSUME_NONNULL_END
      filename = parser.filename(op)
      */
     PyObject *methodName = PyString_FromString("filename");
-    PyObject *pKey = PyString_FromString([key UTF8String]);
-    PyObject *pFilename = PyObject_CallMethodObjArgs(parserPythonClass, methodName, pKey, NULL);
+    PyObject *pKey = key.asPythonType;
+    PyObject *pFilename = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pKey, NULL);
     Py_XDECREF(pKey);
     Py_XDECREF(methodName);
     if (NULL == pFilename) {
@@ -457,7 +576,6 @@ NS_ASSUME_NONNULL_END
 
     NSString *retVal = [NSString stringWithPythonString:pFilename encoding:NSUTF8StringEncoding];
     Py_DECREF(pFilename);
-
     return retVal;
 }
 
@@ -472,8 +590,8 @@ NS_ASSUME_NONNULL_END
      text = parser.text(op)
      */
     PyObject *methodName = PyString_FromString("text");
-    PyObject *pKey = PyString_FromString([key UTF8String]);
-    PyObject *pText = PyObject_CallMethodObjArgs(parserPythonClass, methodName, pKey, NULL);
+    PyObject *pKey = key.asPythonType;
+    PyObject *pText = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pKey, NULL);
     Py_XDECREF(pKey);
     Py_XDECREF(methodName);
     if (NULL == pText) {
@@ -512,7 +630,7 @@ NS_ASSUME_NONNULL_END
 {
     NSMutableOrderedSet *retVal = [NSMutableOrderedSet orderedSet];
 
-    PyObject *sourceString = PyObject_GetAttrString(parserPythonClass, "source");
+    PyObject *sourceString = PyObject_GetAttrString(self.pythonInstance, "source");
     if (NULL == sourceString) {
         if (nil != error) {
             *error = nil;

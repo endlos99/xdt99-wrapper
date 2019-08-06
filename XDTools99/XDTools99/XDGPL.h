@@ -27,6 +27,8 @@
 
 #import "XDTObject.h"
 
+#import "XDTGa99SyntaxVariant.h"
+#import "XDTGa99Syntax.h"
 #import "XDTGa99Symbols.h"
 #import "XDTGa99Objcode.h"
 #import "XDTGa99Parser.h"

@@ -24,14 +24,16 @@
 
 #import <Foundation/Foundation.h>
 
-#import <Python/Python.h>
+#import <Python/object.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface NSError (NSErrorPythonAdditions)
 
 + (nullable instancetype)errorWithPythonError:(PyObject *)error localizedRecoverySuggestion:(nullable NSString *)recoverySuggestion;
 + (nullable instancetype)errorWithPythonError:(PyObject *)error localizedRecoverySuggestion:(nullable NSString *)recoverySuggestion clearErrorIndicator:(BOOL)clearIndicator;
 
 @end
+
 NS_ASSUME_NONNULL_END

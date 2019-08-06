@@ -24,7 +24,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <Python/Python.h>
+#import <Python/object.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable instancetype)stringWithPythonString:(PyObject *)pyObj encoding:(NSStringEncoding)enc;
 
-- (nullable PyStringObject *)pythonString;
+- (PyObject *)asPythonType;
 
 @end
 

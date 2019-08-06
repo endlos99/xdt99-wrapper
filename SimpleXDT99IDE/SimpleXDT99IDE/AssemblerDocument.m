@@ -166,6 +166,18 @@
     /* After syntax highlighting, messages get to be highlighted. */
     [self checkCode:nil];
 
+// test begin
+#if 0
+    [self.assemblingResult enumerateSegmentsUsingBlock:^(NSUInteger bank, NSUInteger finalLineCount, BOOL reloc, BOOL dummy, NSArray * _Nonnull code) {
+        return;
+    }];
+    XDTAs99Directives *directives = [XDTAs99Directives directives];
+    BOOL hasDings = [directives checkDirective:@"dings"];
+    BOOL hasCOPY = [directives checkDirective:@"COPY"];
+    NSArray *ignos = directives.ignored;
+#endif
+// test end
+
     /* Recursive load nested files */
     BOOL openNestedFiles = [defaults boolForKey:UserDefaultKeyDocumentOptionOpenNestedFiles];
     if (openNestedFiles) {
@@ -477,18 +489,12 @@
     }
 
     if (nil == self.parser) {
-        NSDictionary *options = @{
-                                  XDTAs99ParserOptionRegister: [NSNumber numberWithBool:self.shouldUseRegisterSymbols],
-                                  XDTAs99ParserOptionStrict: [NSNumber numberWithBool:self.shouldBeStrict],
-                                  XDTAs99ParserOptionWarnings: [NSNumber numberWithBool:self.shouldShowWarningsInLog]
-                                  };
-        self.parser = [XDTAs99Parser parserWithOptions:options];
-        [(XDTAs99Parser *)self.parser setPath:self.fileURL.URLByDeletingLastPathComponent.path];
+        self.parser = [XDTAs99Parser parserForPath:self.fileURL.URLByDeletingLastPathComponent.path usingRegisterSymbol:self.shouldUseRegisterSymbols strictness:self.shouldBeStrict outputWarnings:self.shouldShowWarningsInLog];
         self.parser.source = self.sourceView.textStorage.mutableString;
 
         if (nil == self.highlighterDelegate) {
             self.highlighterDelegate = [HighlighterDelegate highlighterWithLineScanner:[XDTLineScanner scannerWithParser:self.parser
-                                                                                                                 symbols:self.assemblingResult.symbols.symbolList]];
+                                                                                                                 symbols:self.assemblingResult.symbols.symbolNames]];
         }
     }
     self.sourceView.textStorage.delegate = self.highlighterDelegate;
@@ -565,13 +571,7 @@
     if (nil == [self fileURL]) {    // there must be a file which can be assembled
         return NO;
     }
-    NSDictionary *options = @{
-                              XDTAs99OptionRegister: [NSNumber numberWithBool:[self shouldUseRegisterSymbols]],
-                              XDTAs99OptionStrict: [NSNumber numberWithBool:[self shouldBeStrict]],
-                              XDTAs99OptionTarget: [NSNumber numberWithUnsignedInteger:xdtTargetType],
-                              XDTAs99OptionWarnings: [NSNumber numberWithBool:[self shouldShowWarningsInLog]]
-                              };
-    XDTAssembler *assembler = [XDTAssembler assemblerWithOptions:options includeURL:[self fileURL]];
+    XDTAssembler *assembler = [XDTAssembler assemblerWithIncludeURL:[self fileURL] target:xdtTargetType usingRegisterSymbol:self.shouldUseRegisterSymbols strictness:self.shouldBeStrict outputWarnings:self.shouldShowWarningsInLog];
 
     NSError *tempErr = nil;
     XDTAs99Objcode *result = [assembler assembleSourceFile:[self fileURL] error:&tempErr];

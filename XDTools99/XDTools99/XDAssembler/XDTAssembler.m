@@ -28,11 +28,12 @@
 
 #import "NSErrorPythonAdditions.h"
 #import "NSArrayPythonAdditions.h"
+#import "NSStringPythonAdditions.h"
+
 #import "XDTMessage.h"
 #import "XDTAs99Objcode.h"
 
 
-#define XDTModuleNameAssembler "xas99"
 #define XDTClassNameAssembler "Assembler"
 
 
@@ -56,6 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (XDTAs99Objcode *)assembleSourceFile:(NSString *)basename pathName:(NSString *)dirname error:(NSError **)error;
 
++ (const char *)targetTypeAsCString:(XDTAs99TargetType)targetType;
+
 @end
 
 NS_ASSUME_NONNULL_END
@@ -63,26 +66,13 @@ NS_ASSUME_NONNULL_END
 
 NS_ASSUME_NONNULL_BEGIN
 
-XDTAs99OptionKey const XDTAs99OptionRegister = @"XDTAs99OptionRegister";
-XDTAs99OptionKey const XDTAs99OptionStrict = @"XDTAs99OptionStrict";
-XDTAs99OptionKey const XDTAs99OptionTarget = @"XDTAs99OptionTarget";
-XDTAs99OptionKey const XDTAs99OptionWarnings = @"XDTAs99OptionWarnings";
-
-
 @interface XDTAssembler () {
-    const PyObject *assemblerPythonModule;
-    PyObject *assemblerPythonClass;
     XDTMessage *_messages;
 }
 
-@property NSString *version;
-@property BOOL beStrict;
-@property BOOL useRegisterSymbols;
-@property BOOL outputWarnings;
-@property XDTAs99TargetType targetType;
 @property (readonly, nullable) const char *targetTypeAsCString;
 
-- (nullable instancetype)initWithOptions:(NSDictionary<XDTAs99OptionKey, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)url;
+- (nullable instancetype)initWithModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)url target:(XDTAs99TargetType) targetType usingRegisterSymbol:(BOOL)useRegisterSymbol strictness:(BOOL)beStrict outputWarnings:(BOOL)outputWarnings;
 
 @end
 
@@ -91,71 +81,22 @@ NS_ASSUME_NONNULL_END
 
 @implementation XDTAssembler
 
-+ (BOOL)checkRequiredModuleVersion
++ (NSString *)pythonClassName
 {
-    PyObject *pName = PyString_FromString(XDTModuleNameAssembler);
-    PyObject *pModule = PyImport_Import(pName);
-    if (NULL == pModule) {
-        NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
-        Py_XDECREF(pName);
-        PyObject *exeption = PyErr_Occurred();
-        if (NULL != exeption) {
-//            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
-//            }
-            PyErr_Print();
-        }
-        return NO;
-    }
-    Py_XDECREF(pName);
-
-    PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
-    if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"%s ERROR: Cannot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
-        Py_XDECREF(pModule);
-        if (PyErr_Occurred()) {
-            PyErr_Print();
-        }
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return NO;
-    }
-    Py_XDECREF(pModule);
-    if (0 != strcmp(PyString_AsString(pVar), XDTAssemblerVersionRequired)) {
-        NSLog(@"%s ERROR: Wrong Assembler version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTAssemblerVersionRequired);
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return NO;
-    }
-    Py_XDECREF(pVar);
-
-    return YES;
+    return [NSString stringWithUTF8String:XDTClassNameAssembler];
 }
 
 
 #pragma mark Initializers
 
 /* This class method initialize this singleton. It takes care of all python module related things. */
-+ (instancetype)assemblerWithOptions:(NSDictionary<XDTAs99OptionKey, id> *)options includeURL:(NSURL *)url
++ (instancetype)assemblerWithIncludeURL:(NSURL *)url target:(XDTAs99TargetType)targetType usingRegisterSymbol:(BOOL)useRegisterSymbol strictness:(BOOL)beStrict outputWarnings:(BOOL)outputWarnings
 {
-    assert(NULL != options);
     assert(nil != url);
 
     @synchronized (self) {
-        PyObject *pModule = PyImport_ImportModuleNoBlock(XDTModuleNameAssembler);
+        PyObject *pModule = self.xdtAs99ModuleInstance;
         if (NULL == pModule) {
-            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, XDTModuleNameAssembler, Py_GetPath());
-            PyObject *exeption = PyErr_Occurred();
-            if (NULL != exeption) {
-//            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
-//            }
-                PyErr_Print();
-            }
             return nil;
         }
 
@@ -165,8 +106,7 @@ NS_ASSUME_NONNULL_END
                 url = [url URLByDeletingLastPathComponent];
             }
         }
-        XDTAssembler *retVal = [[XDTAssembler alloc] initWithOptions:options forModule:pModule includeURL:@[url]];
-        Py_DECREF(pModule);
+        XDTAssembler *retVal = [[XDTAssembler alloc] initWithModule:pModule includeURL:@[url] target:targetType usingRegisterSymbol:useRegisterSymbol strictness:beStrict outputWarnings:outputWarnings];
 #if !__has_feature(objc_arc)
         return [retVal autorelease];
 #endif
@@ -175,36 +115,10 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (instancetype)initWithOptions:(NSDictionary<XDTAs99OptionKey, id> *)options forModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls
+- (instancetype)initWithModule:(PyObject *)pModule includeURL:(NSArray<NSURL *> *)urls target:(XDTAs99TargetType)targetType usingRegisterSymbol:(BOOL)useRegisterSymbol strictness:(BOOL)beStrict outputWarnings:(BOOL)outputWarnings
 {
     assert(NULL != pModule);
     assert(nil != urls);
-
-    self = [super init];
-    if (nil == self) {
-        return nil;
-    }
-
-    PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
-    if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"%s ERROR: Cannot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
-        if (PyErr_Occurred()) {
-            PyErr_Print();
-        }
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return nil;
-    }
-    if (0 != strcmp(PyString_AsString(pVar), XDTAssemblerVersionRequired)) {
-        NSLog(@"%s ERROR: Wrong Assembler version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTAssemblerVersionRequired);
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return nil;
-    }
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameAssembler);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
@@ -212,7 +126,6 @@ NS_ASSUME_NONNULL_END
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
-        Py_XDECREF(pVar);
         Py_XDECREF(pFunc);
 #if !__has_feature(objc_arc)
         [self release];
@@ -220,40 +133,36 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    /* reading option from dictionary */
-    _targetType = [[options valueForKey:XDTAs99OptionTarget] unsignedIntegerValue];
-    _beStrict = [[options valueForKey:XDTAs99OptionStrict] boolValue];
-    _useRegisterSymbols = [[options valueForKey:XDTAs99OptionRegister] boolValue];
-    _outputWarnings = [[options valueForKey:XDTAs99OptionWarnings] boolValue];
-    _version = [NSString stringWithCString:PyString_AsString(pVar) encoding:NSUTF8StringEncoding];
-    Py_XDECREF(pVar);
-
     /* preparing parameters */
-    PyObject *target = PyString_FromString([self targetTypeAsCString]);
-    PyObject *addRegisters = PyBool_FromLong(_useRegisterSymbols);
-    PyObject *strictMode = PyBool_FromLong(_beStrict);
-    PyObject *outputWarnings = PyBool_FromLong(_outputWarnings);
-    PyObject *includePath = PyList_New(0);
-    for (NSURL *url in urls) {
-        PyList_Append(includePath, PyString_FromString([[url path] UTF8String]));
+    PyObject *pTarget = PyString_FromString([XDTAssembler targetTypeAsCString:targetType]);
+    PyObject *pOptrR = PyBool_FromLong(useRegisterSymbol);
+    PyObject *pDefs = PyList_New(0);
+    PyObject *pIncludes = PyList_New(0);
+    if (0 >= urls.count) {
+        PyList_Append(pIncludes, @".".asPythonType);
+    } else {
+        for (NSURL *url in urls) {
+            PyList_Append(pIncludes, url.path.asPythonType);
+        }
     }
-    PyObject *defs = PyList_New(0);
+    PyObject *pStrict = PyBool_FromLong(beStrict);
+    PyObject *pWarnings = PyBool_FromLong(outputWarnings);
 
     /* creating assembler object:
         asm = Assembler(target=target,
-                        addRegisters=opts.optr,
+                        optr=opts.optr,
                         defs=opts.defs or [],
-                        includePath=inclpath,
-                        strictMode=opts.strict,
-                        warnings=outputWarnings)
+                        includes=inclpath,
+                        strict=opts.strict,
+                        warnings=not opts.nowarn)
      */
-    PyObject *pArgs = PyTuple_Pack(6, target, addRegisters, defs, includePath, strictMode, outputWarnings);
+    PyObject *pArgs = PyTuple_Pack(6, pTarget, pOptrR, pDefs, pIncludes, pStrict, pWarnings);
     PyObject *assembler = PyObject_CallObject(pFunc, pArgs);
     Py_XDECREF(pArgs);
     Py_XDECREF(pFunc);
     if (NULL == assembler) {
-        NSLog(@"%s ERROR: calling constructor %s(\"%s\", %@, [], %@, %@, %@) failed!", __FUNCTION__, XDTClassNameAssembler,
-              [self targetTypeAsCString], _useRegisterSymbols? @"true" : @"false", urls, _beStrict? @"true" : @"false", _outputWarnings? @"true" : @"false");
+        NSLog(@"%s ERROR: calling constructor %s(\"%s\", %s, [], %@, %s, %s) failed!", __FUNCTION__, XDTClassNameAssembler,
+              [XDTAssembler targetTypeAsCString:targetType], useRegisterSymbol? "true" : "false", (0 >= urls)? @"." : urls, beStrict? "true" : "false", outputWarnings? "true" : "false");
         PyObject *exeption = PyErr_Occurred();
         if (NULL != exeption) {
 //            if (nil != error) {
@@ -267,10 +176,10 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    assemblerPythonModule = pModule;
-    Py_INCREF(assemblerPythonModule);
-    assemblerPythonClass = assembler;
-    Py_INCREF(assemblerPythonClass);
+    self = [super initWithPythonInstance:assembler];
+    if (nil == self) {
+        return nil;
+    }
 
     return self;
 }
@@ -278,21 +187,85 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_CLEAR(assemblerPythonClass);
-    Py_CLEAR(assemblerPythonModule);
-
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif
 }
 
 
-#pragma mark - Accessors 
+#pragma mark - Property Wrapper
+
+
+- (BOOL)useRegisterSymbols
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "optr");
+    if (NULL == pResult) {
+        return NO;
+    }
+
+    return 1 == PyObject_IsTrue(pResult);
+}
+
+
+- (void)setUseRegisterSymbols:(BOOL)useRegisterSymbols
+{
+    PyObject *pOptR = PyBool_FromLong(useRegisterSymbols);
+    (void)PyObject_SetAttrString(self.pythonInstance, "optr", pOptR);
+    Py_XDECREF(pOptR);
+}
+
+
+- (BOOL)beStrict
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "strict");
+    if (NULL == pResult) {
+        return NO;
+    }
+
+    BOOL retVal = 1 == PyObject_IsTrue(pResult);
+    Py_DECREF(pResult);
+    return retVal;
+}
+
+
+- (void)setBeStrict:(BOOL)beStrict
+{
+    PyObject *pStrict = PyBool_FromLong(beStrict);
+    PyObject_SetAttrString(self.pythonInstance, "strict", pStrict);
+    Py_XDECREF(pStrict);
+}
+
+
+- (BOOL)outputWarnings
+{
+    PyObject *pResult = PyObject_GetAttrString(self.pythonInstance, "warnings");
+    if (NULL == pResult) {
+        return NO;
+    }
+
+    BOOL retVal = 1 == PyObject_IsTrue(pResult);
+    Py_DECREF(pResult);
+    return retVal;
+}
+
+
+- (void)setOutputWarnings:(BOOL)outputWarnings
+{
+    PyObject *pWarnings = PyBool_FromLong(outputWarnings);
+    PyObject_SetAttrString(self.pythonInstance, "warnings", pWarnings);
+    Py_XDECREF(pWarnings);
+}
 
 
 - (const char *)targetTypeAsCString
 {
-    switch (_targetType) {
+    return [XDTAssembler targetTypeAsCString:_targetType];
+}
+
+
++ (const char *)targetTypeAsCString:(XDTAs99TargetType)targetType
+{
+    switch (targetType) {
         case XDTAs99TargetTypeRawBinary:
             return "bin";
         case XDTAs99TargetTypeTextBinaryC:
@@ -320,13 +293,14 @@ NS_ASSUME_NONNULL_END
         return _messages;
     }
 
-    PyObject *messageList = PyObject_GetAttrString(assemblerPythonClass, "console");
+    PyObject *messageList = PyObject_GetAttrString(self.pythonInstance, "console");
     if (NULL == messageList) {
         return nil;
     }
 
     XDTMutableMessage *retVal = [XDTMutableMessage messageWithPythonList:messageList];
-    if (0 >= retVal.count) {
+    Py_DECREF(messageList);
+    if (nil == retVal || 0 >= retVal.count) {
         return nil;
     }
     [retVal sortByPriorityAscendingType];
@@ -336,7 +310,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-#pragma mark - Parsing Methods
+#pragma mark - Method Wrapper
 
 
 - (XDTAs99Objcode *)assembleSourceFile:(NSURL *)srcFile error:(NSError **)error
@@ -351,9 +325,9 @@ NS_ASSUME_NONNULL_END
         code, errors, warnings = asm.assemble(dirname, basename)
      */
     PyObject *methodName = PyString_FromString("assemble");
-    PyObject *pDirName = PyString_FromString([dirName UTF8String]);
-    PyObject *pbaseName = PyString_FromString([baseName UTF8String]);
-    PyObject *pValueTupel = PyObject_CallMethodObjArgs(assemblerPythonClass, methodName, pDirName, pbaseName, NULL);
+    PyObject *pDirName = dirName.asPythonType;
+    PyObject *pbaseName = baseName.asPythonType;
+    PyObject *pValueTupel = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pDirName, pbaseName, NULL);
     Py_XDECREF(pbaseName);
     Py_XDECREF(pDirName);
     Py_XDECREF(methodName);
@@ -370,12 +344,8 @@ NS_ASSUME_NONNULL_END
     }
 
     /*
-     Don't need to process the dedicated error return value. So skip the item 1 of the value tupel.
+     Don't need to process the dedicated error return value. So skip the item at index 1 of the value tupel.
      Modern version of xas99 has a console return value which contains all messages (errors and warnings).
-
-     Fetching the console return value which contains all messages the assembler generates is also skiped
-     here for the item 2 of the value tupel. The messages can be obtained via the console property of the
-     Assembler object.
      */
 
     [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
@@ -402,7 +372,6 @@ NS_ASSUME_NONNULL_END
     if (NULL != objectCodeObject) {
         retVal = [XDTAs99Objcode objectcodeWithPythonInstance:objectCodeObject];
     }
-
     Py_DECREF(pValueTupel);
 
     return retVal;

@@ -22,12 +22,7 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#import <Foundation/Foundation.h>
-
 #import "XDTObject.h"
-
-
-#define XDTAssemblerVersionRequired "2.0.2"
 
 
 typedef NS_ENUM(NSUInteger, XDTAs99TargetType) {
@@ -47,26 +42,16 @@ typedef NS_ENUM(NSUInteger, XDTAs99TargetType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * XDTAs99OptionKey NS_EXTENSIBLE_STRING_ENUM; /* Keys for use in the NSDictionry */
-
-FOUNDATION_EXPORT XDTAs99OptionKey const XDTAs99OptionRegister;   /* (NSNumber) A BOOL to enable R notaion for registers */
-FOUNDATION_EXPORT XDTAs99OptionKey const XDTAs99OptionStrict;     /* (NSNumber) A BOOL to indicate the strict mode */
-FOUNDATION_EXPORT XDTAs99OptionKey const XDTAs99OptionTarget;     /* (NSNumber) A XDTAs99TargetType to choose the generated result */
-FOUNDATION_EXPORT XDTAs99OptionKey const XDTAs99OptionWarnings;   /* (NSNumber) A BOOL to indicate that warning messages should be generated */
-
-
 @interface XDTAssembler : XDTObject
 
-@property (readonly) NSString *version;
-@property (readonly) BOOL beStrict;
-@property (readonly) BOOL useRegisterSymbols;
-@property (readonly) BOOL outputWarnings;
-@property (readonly, nullable) XDTMessage *messages;
+@property (assign) BOOL beStrict;
+@property (assign) BOOL useRegisterSymbols;
+@property (assign) BOOL outputWarnings;
 @property (readonly) XDTAs99TargetType targetType;
 
-+ (BOOL)checkRequiredModuleVersion;
+@property (readonly, nullable) XDTMessage *messages;
 
-+ (nullable instancetype)assemblerWithOptions:(NSDictionary<XDTAs99OptionKey, id> *)options includeURL:(NSURL *)url;
++ (nullable instancetype)assemblerWithIncludeURL:(NSURL *)url target:(XDTAs99TargetType)targetType usingRegisterSymbol:(BOOL)useRegisterSymbol strictness:(BOOL)beStrict outputWarnings:(BOOL)outputWarnings;
 
 - (nullable XDTAs99Objcode *)assembleSourceFile:(NSURL *)srcFile error:(NSError **)error;
 

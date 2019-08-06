@@ -24,6 +24,9 @@
 
 #import "NSSetPythonAdditions.h"
 
+#import <Python/Python.h>
+
+#import "NSObjectPythonAdditions.h"
 #import "NSDataPythonAdditions.h"
 #import "NSArrayPythonAdditions.h"
 #import "NSStringPythonAdditions.h"
@@ -31,7 +34,7 @@
 
 @implementation NSSet (NSSetPythonAdditions)
 
-+ (nullable NSSet<id> *)setWithPyTuple:(PyObject *)dataTuple
++ (nullable NSSet<id> *)setWithPythonTuple:(PyObject *)dataTuple
 {
     assert(NULL != dataTuple && PyTuple_Check(dataTuple));
 
@@ -43,25 +46,8 @@
     for (Py_ssize_t i = 0; i < dataCount; i++) {
         PyObject *dataItem = PyTuple_GetItem(dataTuple, i);
         if (NULL != dataItem) {
-            if (PyInt_Check(dataItem)) {
-                NSNumber *object = [NSNumber numberWithLong:PyInt_AsLong(dataItem)];
-                [retVal addObject:object];
-            } else if (PyString_Check(dataItem)) {
-                NSData *object = [NSData dataWithPythonString:dataItem];
-                [retVal addObject:object];
-            } else if (PyList_Check(dataItem)) {
-                NSArray *object = [NSArray arrayWithPyList:dataItem];
-                [retVal addObject:object];
-            } else if (PyTuple_Check(dataItem)) {
-                NSArray *object = [NSArray arrayWithPyTuple:dataItem];
-                [retVal addObject:object];
-            } else if (Py_None == dataItem) {
-                NSNull *object = [NSNull null];
-                [retVal addObject:object];
-            } else {
-                PyTypeObject *dataType = dataItem->ob_type;
-                NSLog(@"%s ERROR: Cannot convert Python type '%s' to an Objective-C type", __FUNCTION__, dataType->tp_name);
-            }
+            id object = [NSObject objectWithPythonObject:dataItem];
+            [retVal addObject:object];
         }
     }
 
@@ -69,7 +55,7 @@
 }
 
 
-+ (nullable NSSet<id> *)setWithPyList:(PyObject *)dataList
++ (nullable NSSet<id> *)setWithPythonList:(PyObject *)dataList
 {
     assert(NULL != dataList && PyList_Check(dataList));
 
@@ -81,25 +67,8 @@
     for (Py_ssize_t i = 0; i < dataCount; i++) {
         PyObject *dataItem = PyTuple_GetItem(dataList, i);
         if (NULL != dataItem) {
-            if (PyInt_Check(dataItem)) {
-                NSNumber *object = [NSNumber numberWithLong:PyInt_AsLong(dataItem)];
-                [retVal addObject:object];
-            } else if (PyString_Check(dataItem)) {
-                NSData *object = [NSData dataWithPythonString:dataItem];
-                [retVal addObject:object];
-            } else if (PyList_Check(dataItem)) {
-                NSArray *object = [NSArray arrayWithPyList:dataItem];
-                [retVal addObject:object];
-            } else if (PyTuple_Check(dataItem)) {
-                NSArray *object = [NSArray arrayWithPyTuple:dataItem];
-                [retVal addObject:object];
-            } else if (Py_None == dataItem) {
-                NSNull *object = [NSNull null];
-                [retVal addObject:object];
-            } else {
-                PyTypeObject *dataType = dataItem->ob_type;
-                NSLog(@"%s ERROR: Cannot convert Python type '%s' to an Objective-C type", __FUNCTION__, dataType->tp_name);
-            }
+            id object = [NSObject objectWithPythonObject:dataItem];
+            [retVal addObject:object];
         }
     }
 
@@ -107,7 +76,7 @@
 }
 
 
-+ (nullable NSSet<NSArray<id> *> *)setWithPyListOfTuple:(PyObject *)dataList
++ (nullable NSSet<NSArray<id> *> *)setWithPythonListOfTuple:(PyObject *)dataList
 {
     assert(NULL != dataList && PyList_Check(dataList));
 
@@ -127,7 +96,7 @@
     for (Py_ssize_t i = 0; i < dataCount; i++) {
         PyObject *dataTupel = PyList_GetItem(dataList, i);
         if (NULL != dataTupel) {
-            NSArray<id> *dataArray = [NSArray arrayWithPyTuple:dataTupel];
+            NSArray<id> *dataArray = [NSArray arrayWithPythonTuple:dataTupel];
             [retVal addObject:dataArray];
         }
     }
@@ -136,7 +105,7 @@
 }
 
 
-+ (nullable NSMutableSet<NSData *> *)setWithPyListOfData:(PyObject *)dataList
++ (nullable NSMutableSet<NSData *> *)setWithPythonListOfData:(PyObject *)dataList
 {
     assert(NULL != dataList && PyList_Check(dataList));
 
@@ -160,7 +129,7 @@
 }
 
 
-+ (nullable NSMutableSet<NSString *> *)setWithPyListOfString:(PyObject *)dataList
++ (nullable NSMutableSet<NSString *> *)setWithPythonListOfString:(PyObject *)dataList
 {
     assert(NULL != dataList && PyList_Check(dataList));
 
@@ -183,6 +152,14 @@
             [retVal addObject:[NSString stringWithPythonString:dataItem encoding:NSUTF8StringEncoding]];
         }
     }
+
+    return retVal;
+}
+
+
+- (PyObject *)asPythonType
+{
+    PyObject *retVal = [self.allObjects asPythonType];
 
     return retVal;
 }

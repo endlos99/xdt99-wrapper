@@ -28,33 +28,23 @@
 
 #import "NSErrorPythonAdditions.h"
 #import "NSArrayPythonAdditions.h"
+#import "NSDictionaryPythonAdditions.h"
 #import "NSDataPythonAdditions.h"
+#import "NSStringPythonAdditions.h"
 
 #import "XDTMessage.h"
 
 
-#define XDTModuleNameBasic "xbas99"
 #define XDTClassNameBasic "BasicProgram"
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-XDTBasicOptionKey const XDTBasicOptionJoinLines = @"XDTBasicOptionJoinLines";
-XDTBasicOptionKey const XDTBasicOptionLineDelta = @"XDTBasicOptionLineDelta";
-XDTBasicOptionKey const XDTBasicOptionProtectFile = @"XDTBasicOptionProtectFile";
-XDTBasicOptionKey const XDTBasicOptionTarget = @"XDTBasicOptionTarget";
-
-
 @interface XDTBasic () {
-    const PyObject *basicPythonModule;
-    PyObject *basicProgramPythonClass;
-
     NSArray<NSString *>*_codeLines;
 }
 
-@property NSString *version;
-
-- (nullable instancetype)initWithOptions:(NSDictionary<XDTBasicOptionKey, id> *)options forModule:(PyObject *)pModule;
+- (nullable instancetype)initWithModule:(PyObject *)pModule;
 
 - (BOOL)loadData:(NSData *)data usingLongFormat:(BOOL)useLongFormat error:(NSError **)error;
 
@@ -65,111 +55,36 @@ NS_ASSUME_NONNULL_END
 
 @implementation XDTBasic
 
-+ (BOOL)checkRequiredModuleVersion
++ (NSString *)pythonClassName
 {
-    PyObject *pName = PyString_FromString(XDTModuleNameBasic);
-    PyObject *pModule = PyImport_Import(pName);
-    if (NULL == pModule) {
-        NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, PyString_AsString(pName), Py_GetPath());
-        Py_XDECREF(pName);
-        PyObject *exeption = PyErr_Occurred();
-        if (NULL != exeption) {
-//            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
-//            }
-            PyErr_Print();
-        }
-        return NO;
-    }
-    Py_XDECREF(pName);
-
-    PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
-    if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"%s ERROR: Cannot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
-        Py_XDECREF(pModule);
-        if (PyErr_Occurred()) {
-            PyErr_Print();
-        }
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return NO;
-    }
-    Py_XDECREF(pModule);
-    if (0 != strcmp(PyString_AsString(pVar), XDTBasicVersionRequired)) {
-        NSLog(@"%s ERROR: Wrong Basic version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTBasicVersionRequired);
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return NO;
-    }
-    Py_XDECREF(pVar);
-
-    return YES;
+    return [NSString stringWithUTF8String:XDTClassNameBasic];
 }
 
 
 #pragma mark Initializers
 
 /* This class method initialize this singleton. It takes care of all python module related things. */
-+ (instancetype)basicWithOptions:(NSDictionary<XDTBasicOptionKey, id> *)options
++ (instancetype)basic
 {
-    assert(NULL != options);
-
     @synchronized (self) {
-        PyObject *pModule = PyImport_ImportModuleNoBlock(XDTModuleNameBasic);
+        PyObject *pModule = self.xdtBas99ModuleInstance;
         if (NULL == pModule) {
-            NSLog(@"%s ERROR: Importing module '%s' failed! Python path: %s", __FUNCTION__, XDTModuleNameBasic, Py_GetPath());
-            PyObject *exeption = PyErr_Occurred();
-            if (NULL != exeption) {
-//            if (nil != error) {
-//                *error = [NSError errorWithPythonError:exeption RecoverySuggestion:nil];
-//            }
-            }
             return nil;
         }
 
-        XDTBasic *retVal = [[XDTBasic alloc] initWithOptions:options forModule:pModule];
-        Py_DECREF(pModule);
+        XDTBasic *retVal = [[XDTBasic alloc] initWithModule:pModule];
 #if !__has_feature(objc_arc)
         return [retVal autorelease];
-#endif
+#else
         return retVal;
+#endif
     }
 }
 
 
-- (instancetype)initWithOptions:(NSDictionary<XDTBasicOptionKey, id> *)options forModule:(PyObject *)pModule
+- (instancetype)initWithModule:(PyObject *)pModule
 {
     assert(NULL != pModule);
-
-    self = [super init];
-    if (nil == self) {
-        return nil;
-    }
-
-    PyObject *pVar = PyObject_GetAttrString(pModule, "VERSION");
-    if (NULL == pVar || !PyString_Check(pVar)) {
-        NSLog(@"%s ERROR: Cannot get version string of module %s", __FUNCTION__, PyModule_GetName(pModule));
-        if (PyErr_Occurred()) {
-            PyErr_Print();
-        }
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return nil;
-    }
-    if (0 != strcmp(PyString_AsString(pVar), XDTBasicVersionRequired)) {
-        NSLog(@"%s ERROR: Wrong Basic version %s! Required is %s", __FUNCTION__, PyString_AsString(pVar), XDTBasicVersionRequired);
-        Py_XDECREF(pVar);
-#if !__has_feature(objc_arc)
-        [self release];
-#endif
-        return nil;
-    }
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameBasic);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
@@ -177,21 +92,12 @@ NS_ASSUME_NONNULL_END
         if (PyErr_Occurred()) {
             PyErr_Print();
         }
-        Py_XDECREF(pVar);
         Py_XDECREF(pFunc);
 #if !__has_feature(objc_arc)
         [self release];
 #endif
         return nil;
     }
-
-    /* reading options from dictionary */
-    _protect = [[options valueForKey:XDTBasicOptionProtectFile] boolValue];
-    _join = [[options valueForKey:XDTBasicOptionJoinLines] boolValue];
-    NSNumber *number = [options valueForKey:XDTBasicOptionLineDelta];
-    _lineDelta = (nil == number)? 3 : [number unsignedIntegerValue];
-    _version = [NSString stringWithCString:PyString_AsString(pVar) encoding:NSUTF8StringEncoding];
-    Py_XDECREF(pVar);
 
     /* creating basic object:
      basic = BasicProgram(data=None, source=None, long_=False)
@@ -219,9 +125,10 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    basicPythonModule = pModule;
-    Py_INCREF(basicPythonModule);
-    basicProgramPythonClass = basicObject;
+    self = [super initWithPythonInstance:basicObject];
+    if (nil == self) {
+        return nil;
+    }
 
     _codeLines = nil;
 
@@ -231,9 +138,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_CLEAR(basicProgramPythonClass);
-    Py_CLEAR(basicPythonModule);
-
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif
@@ -245,21 +149,12 @@ NS_ASSUME_NONNULL_END
 
 - (NSDictionary<NSNumber *, NSArray *> *)lines
 {
-    PyObject *linesObject = PyObject_GetAttrString(basicProgramPythonClass, "lines");
+    PyObject *linesObject = PyObject_GetAttrString(self.pythonInstance, "lines");
     if (NULL == linesObject) {
         return nil;
     }
 
-    const Py_ssize_t lineCount = PyDict_Size(linesObject);
-    NSMutableDictionary *retVal = [NSMutableDictionary dictionaryWithCapacity:lineCount];
-    Py_ssize_t i = 0;
-    PyObject *key = nil;
-    PyObject *value = nil;
-    while (PyDict_Next(linesObject, &i, &key, &value)) {
-        long lineNumber = PyInt_AsLong(key);
-        [retVal setObject:[NSArray arrayWithPyListOfData:value] forKey:[NSNumber numberWithInteger:lineNumber]];
-    }
-
+    NSDictionary *retVal = [NSDictionary dictionaryWithPythonDictionary:linesObject];
     Py_DECREF(linesObject);
 
     return retVal;
@@ -268,7 +163,7 @@ NS_ASSUME_NONNULL_END
 
 - (XDTMessage *)messages
 {
-    PyObject *warningsObject = PyObject_GetAttrString(basicProgramPythonClass, "warnings");
+    PyObject *warningsObject = PyObject_GetAttrString(self.pythonInstance, "warnings");
     if (NULL == warningsObject) {
         return nil;
     }
@@ -309,9 +204,9 @@ NS_ASSUME_NONNULL_END
      load(data, long_)
      */
     PyObject *methodName = PyString_FromString("load");
-    PyObject *pData = PyString_FromStringAndSize([data bytes], [data length]);
+    PyObject *pData = data.asPythonType;
     PyObject *pLong = PyBool_FromLong(useLongFormat);
-    PyObject *pNonValue = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pData, pLong, NULL);
+    PyObject *pNonValue = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pData, pLong, NULL);
     Py_XDECREF(pLong);
     Py_XDECREF(pData);
     Py_XDECREF(methodName);
@@ -339,8 +234,8 @@ NS_ASSUME_NONNULL_END
      merge(data)
      */
     PyObject *methodName = PyString_FromString("merge");
-    PyObject *pData = PyString_FromStringAndSize([data bytes], [data length]);
-    PyObject *pNonValue = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pData, NULL);
+    PyObject *pData = data.asPythonType;
+    PyObject *pNonValue = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pData, NULL);
     Py_XDECREF(pData);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
@@ -367,7 +262,7 @@ NS_ASSUME_NONNULL_END
      text = get_source()
      */
     PyObject *methodName = PyString_FromString("get_source");
-    PyObject *pSourceCode = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, NULL);
+    PyObject *pSourceCode = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == pSourceCode) {
         NSLog(@"%s ERROR: get_source() returns NULL!", __FUNCTION__);
@@ -381,7 +276,8 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    NSString *retVal = [NSString stringWithCString:PyString_AsString(pSourceCode) encoding:NSUTF8StringEncoding];
+    NSString *retVal = [NSString stringWithPythonString:pSourceCode encoding:NSUTF8StringEncoding];
+    Py_DECREF(pSourceCode);
     return retVal;
 }
 
@@ -394,7 +290,7 @@ NS_ASSUME_NONNULL_END
     PyObject *methodName = PyString_FromString("get_image");
     PyObject *pLongOpt = PyBool_FromLong(useLongFormat);
     PyObject *pProtectOpt = PyBool_FromLong(_protect);
-    PyObject *pProgramData = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pLongOpt, pProtectOpt, NULL);
+    PyObject *pProgramData = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pLongOpt, pProtectOpt, NULL);
     Py_XDECREF(pProtectOpt);
     Py_XDECREF(pLongOpt);
     Py_XDECREF(methodName);
@@ -411,9 +307,7 @@ NS_ASSUME_NONNULL_END
     }
 
     NSData *imageData = [NSData dataWithPythonString:pProgramData];
-
     Py_DECREF(pProgramData);
-
     return imageData;
 }
 
@@ -429,14 +323,14 @@ NS_ASSUME_NONNULL_END
     }
 
     /* preparing source code matching Pythons data structure */
-    NSArray<NSString *> *lines = [sourceCode componentsSeparatedByString:@"\n"];    /* TODO: respect other line endings... */
+    NSArray<NSString *> *lines = [sourceCode componentsSeparatedByCharactersInSet:NSCharacterSet.newlineCharacterSet];
     PyObject *pLinesList = PyList_New(0);
     if (NULL == pLinesList) {
         return NO;
     }
     for (NSString *line in lines) {
-        NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" \t\n"]];
-        PyObject *pLine = PyString_FromString([trimmedLine UTF8String]);
+        NSString *trimmedLine = [line stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+        PyObject *pLine = trimmedLine.asPythonType;
         PyList_Append(pLinesList, pLine);
     }
 
@@ -448,7 +342,7 @@ NS_ASSUME_NONNULL_END
         PyObject *methodName = PyString_FromString("join");
         PyObject *pMinLineDelta = PyInt_FromLong(1);
         PyObject *pMaxLineDelta = PyInt_FromLong(_lineDelta);
-        PyObject *joinedLines = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pLinesList, pMinLineDelta, pMaxLineDelta, NULL);
+        PyObject *joinedLines = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pLinesList, pMinLineDelta, pMaxLineDelta, NULL);
         Py_XDECREF(pMaxLineDelta);
         Py_XDECREF(pMinLineDelta);
         Py_XDECREF(methodName);
@@ -472,7 +366,7 @@ NS_ASSUME_NONNULL_END
      parse(lines)
      */
     PyObject *methodName = PyString_FromString("parse");
-    PyObject *pNonValue = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, pLinesList, NULL);
+    PyObject *pNonValue = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pLinesList, NULL);
     Py_DECREF(pLinesList);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
@@ -488,6 +382,7 @@ NS_ASSUME_NONNULL_END
     }
 
     assert(Py_None == pNonValue);
+    Py_DECREF(pNonValue);
     return YES;
 }
 
@@ -534,7 +429,7 @@ NS_ASSUME_NONNULL_END
      result = dump_tokens()
      */
     PyObject *methodName = PyString_FromString("dump_tokens");
-    PyObject *pDumpString = PyObject_CallMethodObjArgs(basicProgramPythonClass, methodName, NULL);
+    PyObject *pDumpString = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == pDumpString) {
         NSLog(@"%s ERROR: dump_tokens() returns NULL!", __FUNCTION__);
@@ -548,7 +443,8 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    NSString *retVal = [NSString stringWithUTF8String:PyString_AsString(pDumpString)];
+    NSString *retVal = [NSString stringWithPythonString:pDumpString encoding:NSUTF8StringEncoding];
+    Py_DECREF(pDumpString);
     return retVal;
 }
 

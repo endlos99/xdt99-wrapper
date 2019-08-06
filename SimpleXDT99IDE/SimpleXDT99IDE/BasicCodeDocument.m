@@ -193,7 +193,7 @@
 #endif
     } else if ([@"Xbas99BinaryType" isEqualToString:typeName]) {
         NSString *fileExtension = [[self fileURL] pathExtension];
-        XDTBasic *basic = [XDTBasic basicWithOptions:@{}];
+        XDTBasic *basic = [XDTBasic basic];
 
         NSString *fileFormat = nil;
         if ([@"bin" isEqualToString:fileExtension]) {
@@ -407,10 +407,10 @@
 
 - (XDTBasic *)parseCode:(NSError **)error
 {
-    XDTBasic *basic = [XDTBasic basicWithOptions:@{XDTBasicOptionJoinLines: [NSNumber numberWithBool:_shouldJoinSourceLines],
-                                                   XDTBasicOptionLineDelta: [NSNumber numberWithUnsignedInteger:_lineDelta],
-                                                   XDTBasicOptionProtectFile: [NSNumber numberWithBool:_shouldProtectFile]
-                                                   }];
+    XDTBasic *basic = [XDTBasic basic];
+    basic.join = _shouldJoinSourceLines;
+    basic.lineDelta = _lineDelta;
+    basic.protect = _shouldProtectFile;
     if (![basic parseSourceCode:[self sourceCode] error:error]) {
         return nil;
     }

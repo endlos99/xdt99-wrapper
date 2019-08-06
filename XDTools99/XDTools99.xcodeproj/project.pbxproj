@@ -67,17 +67,35 @@
 		AF2D96BA1DFABF39006EE618 /* XDTObject.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96B21DFABF39006EE618 /* XDTObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF2D96C91DFAFF29006EE618 /* NSDataPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96C71DFAFF29006EE618 /* NSDataPythonAdditions.h */; };
 		AF2D96CA1DFAFF29006EE618 /* NSDataPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96C81DFAFF29006EE618 /* NSDataPythonAdditions.m */; };
+		AF42F8D92346787A00ED254D /* XDTAs99ExternalReference.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CB1BC22DF176100FBF6D3 /* XDTAs99ExternalReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF42F8DA234678D900ED254D /* NSNumberPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AF6167F522EADD6D00FFF8E3 /* NSNumberPythonAdditions.h */; };
+		AF5CB1B622DF16E300FBF6D3 /* XDTAs99Line.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CB1B422DF16E300FBF6D3 /* XDTAs99Line.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF5CB1B722DF16E300FBF6D3 /* XDTAs99Line.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CB1B522DF16E300FBF6D3 /* XDTAs99Line.m */; };
+		AF5CB1BA22DF171800FBF6D3 /* XDTAs99Address.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CB1B822DF171800FBF6D3 /* XDTAs99Address.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF5CB1BB22DF171800FBF6D3 /* XDTAs99Address.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CB1B922DF171800FBF6D3 /* XDTAs99Address.m */; };
+		AF5CB1BF22DF176100FBF6D3 /* XDTAs99ExternalReference.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CB1BD22DF176100FBF6D3 /* XDTAs99ExternalReference.m */; };
+		AF5CB1C222DF177F00FBF6D3 /* XDTAs99Block.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CB1C022DF177F00FBF6D3 /* XDTAs99Block.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF5CB1C322DF177F00FBF6D3 /* XDTAs99Block.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CB1C122DF177F00FBF6D3 /* XDTAs99Block.m */; };
+		AF5CB1C622DF17AA00FBF6D3 /* XDTAs99DelayedAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CB1C422DF17AA00FBF6D3 /* XDTAs99DelayedAddress.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF5CB1C722DF17AA00FBF6D3 /* XDTAs99DelayedAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CB1C522DF17AA00FBF6D3 /* XDTAs99DelayedAddress.m */; };
 		AF5CB1D222DF220600FBF6D3 /* XDTLineScanner.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CB1D022DF220500FBF6D3 /* XDTLineScanner.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF5CB1D322DF220600FBF6D3 /* XDTLineScanner.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CB1D122DF220600FBF6D3 /* XDTLineScanner.m */; };
 		AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A21DFF246400C08E36 /* XDTBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CF8A31DFF246400C08E36 /* XDTBasic.m */; };
 		AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A61DFF266B00C08E36 /* XDBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF6167F822EADD6D00FFF8E3 /* NSNumberPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AF6167F622EADD6D00FFF8E3 /* NSNumberPythonAdditions.m */; };
 		AF63832D22CB56D000150E5D /* XDTGa99Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = AF63832B22CB56D000150E5D /* XDTGa99Parser.m */; };
 		AF63832E22CB56D000150E5D /* XDTGa99Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = AF63832C22CB56D000150E5D /* XDTGa99Parser.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF7941B722E5D55400A55F7A /* XDTGa99SyntaxVariant.h in Headers */ = {isa = PBXBuildFile; fileRef = AF7941B522E5D55400A55F7A /* XDTGa99SyntaxVariant.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF7941B822E5D55400A55F7A /* XDTGa99SyntaxVariant.m in Sources */ = {isa = PBXBuildFile; fileRef = AF7941B622E5D55400A55F7A /* XDTGa99SyntaxVariant.m */; };
 		AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF9C22081E06D88A00BB02FC /* XDTGPLAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */; };
 		AF9C220B1E06FD4E00BB02FC /* XDTGa99Objcode.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22091E06FD4E00BB02FC /* XDTGa99Objcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF9C220C1E06FD4E00BB02FC /* XDTGa99Objcode.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C220A1E06FD4E00BB02FC /* XDTGa99Objcode.m */; };
+		AF9DAC1A22DF667B007991B4 /* NSObjectPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9DAC1822DF667B007991B4 /* NSObjectPythonAdditions.h */; };
+		AF9DAC1B22DF667B007991B4 /* NSObjectPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9DAC1922DF667B007991B4 /* NSObjectPythonAdditions.m */; };
+		AFA225ED22E5C99D00D1D7C2 /* XDTGa99Syntax.h in Headers */ = {isa = PBXBuildFile; fileRef = AFA225EB22E5C99D00D1D7C2 /* XDTGa99Syntax.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AFA225EE22E5C99D00D1D7C2 /* XDTGa99Syntax.m in Sources */ = {isa = PBXBuildFile; fileRef = AFA225EC22E5C99D00D1D7C2 /* XDTGa99Syntax.m */; };
 		AFBDC41E22BA8B8C00DDD4C2 /* XDTMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBDC41C22BA8B8C00DDD4C2 /* XDTMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFBDC41F22BA8B8C00DDD4C2 /* XDTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = AFBDC41D22BA8B8C00DDD4C2 /* XDTMessage.m */; };
 		AFC501D522DDFDB00008A88E /* XDTGa99Symbols.h in Headers */ = {isa = PBXBuildFile; fileRef = AFC501D322DDFDB00008A88E /* XDTGa99Symbols.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -86,6 +104,14 @@
 		AFC6A7D122CA3BC200CDF34A /* XDTAs99Objdummy.h in Headers */ = {isa = PBXBuildFile; fileRef = AFC6A7CF22CA3BC200CDF34A /* XDTAs99Objdummy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFC6A7D422CA3BD900CDF34A /* XDTAs99Parser.h in Headers */ = {isa = PBXBuildFile; fileRef = AFC6A7D222CA3BD900CDF34A /* XDTAs99Parser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFC6A7D522CA3BD900CDF34A /* XDTAs99Parser.m in Sources */ = {isa = PBXBuildFile; fileRef = AFC6A7D322CA3BD900CDF34A /* XDTAs99Parser.m */; };
+		AFCD3BC122E2693B00A501BC /* XDTAs99Preprocessor.h in Headers */ = {isa = PBXBuildFile; fileRef = AFCD3BBF22E2693B00A501BC /* XDTAs99Preprocessor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AFCD3BC222E2693B00A501BC /* XDTAs99Preprocessor.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCD3BC022E2693B00A501BC /* XDTAs99Preprocessor.m */; };
+		AFD7B7AF22E06852006FC9CB /* XDTAs99LocalReference.h in Headers */ = {isa = PBXBuildFile; fileRef = AFD7B7AD22E06852006FC9CB /* XDTAs99LocalReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AFD7B7B022E06852006FC9CB /* XDTAs99LocalReference.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD7B7AE22E06852006FC9CB /* XDTAs99LocalReference.m */; };
+		AFD7B7B322E06FAA006FC9CB /* NSDictionaryPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AFD7B7B122E06FAA006FC9CB /* NSDictionaryPythonAdditions.h */; };
+		AFD7B7B422E06FAA006FC9CB /* NSDictionaryPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD7B7B222E06FAA006FC9CB /* NSDictionaryPythonAdditions.m */; };
+		AFD7B7B822E07E58006FC9CB /* XDTAs99Directives.h in Headers */ = {isa = PBXBuildFile; fileRef = AFD7B7B622E07E58006FC9CB /* XDTAs99Directives.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AFD7B7B922E07E58006FC9CB /* XDTAs99Directives.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD7B7B722E07E58006FC9CB /* XDTAs99Directives.m */; };
 		AFE630581DF9BB67005FFD01 /* XDTools99.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE630561DF9BB67005FFD01 /* XDTools99.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE6305F1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h */; };
 		AFE6306E1DF9BB9E005FFD01 /* NSArrayPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE630601DF9BB9E005FFD01 /* NSArrayPythonAdditions.m */; };
@@ -135,17 +161,35 @@
 		AF2D96B21DFABF39006EE618 /* XDTObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDTObject.h; sourceTree = "<group>"; };
 		AF2D96C71DFAFF29006EE618 /* NSDataPythonAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataPythonAdditions.h; sourceTree = "<group>"; };
 		AF2D96C81DFAFF29006EE618 /* NSDataPythonAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataPythonAdditions.m; sourceTree = "<group>"; };
+		AF5CB1B422DF16E300FBF6D3 /* XDTAs99Line.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99Line.h; path = XDAssembler/XDTAs99Line.h; sourceTree = "<group>"; };
+		AF5CB1B522DF16E300FBF6D3 /* XDTAs99Line.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99Line.m; path = XDAssembler/XDTAs99Line.m; sourceTree = "<group>"; };
+		AF5CB1B822DF171800FBF6D3 /* XDTAs99Address.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99Address.h; path = XDAssembler/XDTAs99Address.h; sourceTree = "<group>"; };
+		AF5CB1B922DF171800FBF6D3 /* XDTAs99Address.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99Address.m; path = XDAssembler/XDTAs99Address.m; sourceTree = "<group>"; };
+		AF5CB1BC22DF176100FBF6D3 /* XDTAs99ExternalReference.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99ExternalReference.h; path = XDAssembler/XDTAs99ExternalReference.h; sourceTree = "<group>"; };
+		AF5CB1BD22DF176100FBF6D3 /* XDTAs99ExternalReference.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99ExternalReference.m; path = XDAssembler/XDTAs99ExternalReference.m; sourceTree = "<group>"; };
+		AF5CB1C022DF177F00FBF6D3 /* XDTAs99Block.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99Block.h; path = XDAssembler/XDTAs99Block.h; sourceTree = "<group>"; };
+		AF5CB1C122DF177F00FBF6D3 /* XDTAs99Block.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99Block.m; path = XDAssembler/XDTAs99Block.m; sourceTree = "<group>"; };
+		AF5CB1C422DF17AA00FBF6D3 /* XDTAs99DelayedAddress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99DelayedAddress.h; path = XDAssembler/XDTAs99DelayedAddress.h; sourceTree = "<group>"; };
+		AF5CB1C522DF17AA00FBF6D3 /* XDTAs99DelayedAddress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99DelayedAddress.m; path = XDAssembler/XDTAs99DelayedAddress.m; sourceTree = "<group>"; };
 		AF5CB1D022DF220500FBF6D3 /* XDTLineScanner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XDTLineScanner.h; sourceTree = "<group>"; };
 		AF5CB1D122DF220600FBF6D3 /* XDTLineScanner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XDTLineScanner.m; sourceTree = "<group>"; };
 		AF5CF8A21DFF246400C08E36 /* XDTBasic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTBasic.h; path = XDBasic/XDTBasic.h; sourceTree = "<group>"; };
 		AF5CF8A31DFF246400C08E36 /* XDTBasic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTBasic.m; path = XDBasic/XDTBasic.m; sourceTree = "<group>"; };
 		AF5CF8A61DFF266B00C08E36 /* XDBasic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDBasic.h; sourceTree = "<group>"; };
+		AF6167F522EADD6D00FFF8E3 /* NSNumberPythonAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSNumberPythonAdditions.h; sourceTree = "<group>"; };
+		AF6167F622EADD6D00FFF8E3 /* NSNumberPythonAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSNumberPythonAdditions.m; sourceTree = "<group>"; };
 		AF63832B22CB56D000150E5D /* XDTGa99Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTGa99Parser.m; path = XDGPL/XDTGa99Parser.m; sourceTree = "<group>"; };
 		AF63832C22CB56D000150E5D /* XDTGa99Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTGa99Parser.h; path = XDGPL/XDTGa99Parser.h; sourceTree = "<group>"; };
+		AF7941B522E5D55400A55F7A /* XDTGa99SyntaxVariant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTGa99SyntaxVariant.h; path = XDGPL/XDTGa99SyntaxVariant.h; sourceTree = "<group>"; };
+		AF7941B622E5D55400A55F7A /* XDTGa99SyntaxVariant.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTGa99SyntaxVariant.m; path = XDGPL/XDTGa99SyntaxVariant.m; sourceTree = "<group>"; };
 		AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTGPLAssembler.h; path = XDGPL/XDTGPLAssembler.h; sourceTree = "<group>"; };
 		AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTGPLAssembler.m; path = XDGPL/XDTGPLAssembler.m; sourceTree = "<group>"; };
 		AF9C22091E06FD4E00BB02FC /* XDTGa99Objcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTGa99Objcode.h; path = XDGPL/XDTGa99Objcode.h; sourceTree = "<group>"; };
 		AF9C220A1E06FD4E00BB02FC /* XDTGa99Objcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTGa99Objcode.m; path = XDGPL/XDTGa99Objcode.m; sourceTree = "<group>"; };
+		AF9DAC1822DF667B007991B4 /* NSObjectPythonAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSObjectPythonAdditions.h; sourceTree = "<group>"; };
+		AF9DAC1922DF667B007991B4 /* NSObjectPythonAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSObjectPythonAdditions.m; sourceTree = "<group>"; };
+		AFA225EB22E5C99D00D1D7C2 /* XDTGa99Syntax.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTGa99Syntax.h; path = XDGPL/XDTGa99Syntax.h; sourceTree = "<group>"; };
+		AFA225EC22E5C99D00D1D7C2 /* XDTGa99Syntax.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTGa99Syntax.m; path = XDGPL/XDTGa99Syntax.m; sourceTree = "<group>"; };
 		AFADBC3F1DF9DD8B000AD2F2 /* xas99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xas99.py; path = ../xdt99/xas99.py; sourceTree = "<group>"; };
 		AFADBC411DF9DD8B000AD2F2 /* xbas99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xbas99.py; path = ../xdt99/xbas99.py; sourceTree = "<group>"; };
 		AFADBC421DF9DD8B000AD2F2 /* xga99.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = xga99.py; path = ../xdt99/xga99.py; sourceTree = "<group>"; };
@@ -159,6 +203,14 @@
 		AFC6A7CF22CA3BC200CDF34A /* XDTAs99Objdummy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTAs99Objdummy.h; path = XDAssembler/XDTAs99Objdummy.h; sourceTree = "<group>"; };
 		AFC6A7D222CA3BD900CDF34A /* XDTAs99Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XDTAs99Parser.h; path = XDAssembler/XDTAs99Parser.h; sourceTree = "<group>"; };
 		AFC6A7D322CA3BD900CDF34A /* XDTAs99Parser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XDTAs99Parser.m; path = XDAssembler/XDTAs99Parser.m; sourceTree = "<group>"; };
+		AFCD3BBF22E2693B00A501BC /* XDTAs99Preprocessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99Preprocessor.h; path = XDAssembler/XDTAs99Preprocessor.h; sourceTree = "<group>"; };
+		AFCD3BC022E2693B00A501BC /* XDTAs99Preprocessor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99Preprocessor.m; path = XDAssembler/XDTAs99Preprocessor.m; sourceTree = "<group>"; };
+		AFD7B7AD22E06852006FC9CB /* XDTAs99LocalReference.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99LocalReference.h; path = XDAssembler/XDTAs99LocalReference.h; sourceTree = "<group>"; };
+		AFD7B7AE22E06852006FC9CB /* XDTAs99LocalReference.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99LocalReference.m; path = XDAssembler/XDTAs99LocalReference.m; sourceTree = "<group>"; };
+		AFD7B7B122E06FAA006FC9CB /* NSDictionaryPythonAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSDictionaryPythonAdditions.h; sourceTree = "<group>"; };
+		AFD7B7B222E06FAA006FC9CB /* NSDictionaryPythonAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSDictionaryPythonAdditions.m; sourceTree = "<group>"; };
+		AFD7B7B622E07E58006FC9CB /* XDTAs99Directives.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XDTAs99Directives.h; path = XDAssembler/XDTAs99Directives.h; sourceTree = "<group>"; };
+		AFD7B7B722E07E58006FC9CB /* XDTAs99Directives.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = XDTAs99Directives.m; path = XDAssembler/XDTAs99Directives.m; sourceTree = "<group>"; };
 		AFE630531DF9BB67005FFD01 /* XDTools99.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XDTools99.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFE630561DF9BB67005FFD01 /* XDTools99.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XDTools99.h; sourceTree = "<group>"; };
 		AFE630571DF9BB67005FFD01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -194,12 +246,28 @@
 		AF2D96A81DFAB8DE006EE618 /* XDAssembler */ = {
 			isa = PBXGroup;
 			children = (
+				AF5CB1B822DF171800FBF6D3 /* XDTAs99Address.h */,
+				AF5CB1B922DF171800FBF6D3 /* XDTAs99Address.m */,
+				AF5CB1C422DF17AA00FBF6D3 /* XDTAs99DelayedAddress.h */,
+				AF5CB1C522DF17AA00FBF6D3 /* XDTAs99DelayedAddress.m */,
+				AFD7B7AD22E06852006FC9CB /* XDTAs99LocalReference.h */,
+				AFD7B7AE22E06852006FC9CB /* XDTAs99LocalReference.m */,
+				AF5CB1BC22DF176100FBF6D3 /* XDTAs99ExternalReference.h */,
+				AF5CB1BD22DF176100FBF6D3 /* XDTAs99ExternalReference.m */,
+				AF5CB1C022DF177F00FBF6D3 /* XDTAs99Block.h */,
+				AF5CB1C122DF177F00FBF6D3 /* XDTAs99Block.m */,
+				AF5CB1B422DF16E300FBF6D3 /* XDTAs99Line.h */,
+				AF5CB1B522DF16E300FBF6D3 /* XDTAs99Line.m */,
 				AF2D96AB1DFABF39006EE618 /* XDTAs99Symbols.h */,
 				AF2D96AC1DFABF39006EE618 /* XDTAs99Symbols.m */,
+				AFD7B7B622E07E58006FC9CB /* XDTAs99Directives.h */,
+				AFD7B7B722E07E58006FC9CB /* XDTAs99Directives.m */,
 				AF2D96AF1DFABF39006EE618 /* XDTAs99Objcode.h */,
 				AF2D96AD1DFABF39006EE618 /* XDTAs99Objcode.m */,
 				AFC6A7CF22CA3BC200CDF34A /* XDTAs99Objdummy.h */,
 				AFC6A7CE22CA3BC200CDF34A /* XDTAs99Objdummy.m */,
+				AFCD3BBF22E2693B00A501BC /* XDTAs99Preprocessor.h */,
+				AFCD3BC022E2693B00A501BC /* XDTAs99Preprocessor.m */,
 				AFC6A7D222CA3BD900CDF34A /* XDTAs99Parser.h */,
 				AFC6A7D322CA3BD900CDF34A /* XDTAs99Parser.m */,
 				AF2D96B01DFABF39006EE618 /* XDTAssembler.h */,
@@ -220,6 +288,10 @@
 		AF9C22041E06D80E00BB02FC /* XDGPL */ = {
 			isa = PBXGroup;
 			children = (
+				AF7941B522E5D55400A55F7A /* XDTGa99SyntaxVariant.h */,
+				AF7941B622E5D55400A55F7A /* XDTGa99SyntaxVariant.m */,
+				AFA225EB22E5C99D00D1D7C2 /* XDTGa99Syntax.h */,
+				AFA225EC22E5C99D00D1D7C2 /* XDTGa99Syntax.m */,
 				AFC501D322DDFDB00008A88E /* XDTGa99Symbols.h */,
 				AFC501D422DDFDB00008A88E /* XDTGa99Symbols.m */,
 				AF9C22091E06FD4E00BB02FC /* XDTGa99Objcode.h */,
@@ -295,16 +367,22 @@
 		AFE6305E1DF9BB9E005FFD01 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				AF9DAC1822DF667B007991B4 /* NSObjectPythonAdditions.h */,
+				AF9DAC1922DF667B007991B4 /* NSObjectPythonAdditions.m */,
 				AF2D96C71DFAFF29006EE618 /* NSDataPythonAdditions.h */,
 				AF2D96C81DFAFF29006EE618 /* NSDataPythonAdditions.m */,
 				AFE6305F1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h */,
 				AFE630601DF9BB9E005FFD01 /* NSArrayPythonAdditions.m */,
 				AF06979122BE3081001E1749 /* NSSetPythonAdditions.h */,
 				AF06979222BE3081001E1749 /* NSSetPythonAdditions.m */,
+				AFD7B7B122E06FAA006FC9CB /* NSDictionaryPythonAdditions.h */,
+				AFD7B7B222E06FAA006FC9CB /* NSDictionaryPythonAdditions.m */,
 				AFE630611DF9BB9E005FFD01 /* NSErrorPythonAdditions.h */,
 				AFE630621DF9BB9E005FFD01 /* NSErrorPythonAdditions.m */,
 				AF157DFC1FBF06B300679D82 /* NSStringPythonAdditions.h */,
 				AF157DFD1FBF06B300679D82 /* NSStringPythonAdditions.m */,
+				AF6167F522EADD6D00FFF8E3 /* NSNumberPythonAdditions.h */,
+				AF6167F622EADD6D00FFF8E3 /* NSNumberPythonAdditions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -352,14 +430,24 @@
 			files = (
 				AFE630581DF9BB67005FFD01 /* XDTools99.h in Headers */,
 				AF125EBB1E0414A600F659AA /* XDGPL.h in Headers */,
+				AF7941B722E5D55400A55F7A /* XDTGa99SyntaxVariant.h in Headers */,
+				AFA225ED22E5C99D00D1D7C2 /* XDTGa99Syntax.h in Headers */,
 				AFC501D522DDFDB00008A88E /* XDTGa99Symbols.h in Headers */,
 				AF9C220B1E06FD4E00BB02FC /* XDTGa99Objcode.h in Headers */,
 				AF63832E22CB56D000150E5D /* XDTGa99Parser.h in Headers */,
 				AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */,
 				AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */,
+				AF5CB1BA22DF171800FBF6D3 /* XDTAs99Address.h in Headers */,
+				AF5CB1C622DF17AA00FBF6D3 /* XDTAs99DelayedAddress.h in Headers */,
+				AFD7B7AF22E06852006FC9CB /* XDTAs99LocalReference.h in Headers */,
+				AF42F8D92346787A00ED254D /* XDTAs99ExternalReference.h in Headers */,
+				AF5CB1C222DF177F00FBF6D3 /* XDTAs99Block.h in Headers */,
+				AF5CB1B622DF16E300FBF6D3 /* XDTAs99Line.h in Headers */,
 				AF2D96B31DFABF39006EE618 /* XDTAs99Symbols.h in Headers */,
+				AFD7B7B822E07E58006FC9CB /* XDTAs99Directives.h in Headers */,
 				AF2D96B71DFABF39006EE618 /* XDTAs99Objcode.h in Headers */,
 				AFC6A7D122CA3BC200CDF34A /* XDTAs99Objdummy.h in Headers */,
+				AFCD3BC122E2693B00A501BC /* XDTAs99Preprocessor.h in Headers */,
 				AFC6A7D422CA3BD900CDF34A /* XDTAs99Parser.h in Headers */,
 				AF2D96B81DFABF39006EE618 /* XDTAssembler.h in Headers */,
 				AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */,
@@ -369,11 +457,14 @@
 				AFE630791DF9BB9E005FFD01 /* XDTZipFile.h in Headers */,
 				AF157E021FBF4D4000679D82 /* XDTException.h in Headers */,
 				AFBDC41E22BA8B8C00DDD4C2 /* XDTMessage.h in Headers */,
+				AF9DAC1A22DF667B007991B4 /* NSObjectPythonAdditions.h in Headers */,
 				AF2D96C91DFAFF29006EE618 /* NSDataPythonAdditions.h in Headers */,
 				AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */,
 				AF06979322BE3081001E1749 /* NSSetPythonAdditions.h in Headers */,
+				AFD7B7B322E06FAA006FC9CB /* NSDictionaryPythonAdditions.h in Headers */,
 				AFE6306F1DF9BB9E005FFD01 /* NSErrorPythonAdditions.h in Headers */,
 				AF157DFE1FBF06B300679D82 /* NSStringPythonAdditions.h in Headers */,
+				AF42F8DA234678D900ED254D /* NSNumberPythonAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,20 +594,33 @@
 			buildActionMask = 2147483647;
 			files = (
 				AFBDC41F22BA8B8C00DDD4C2 /* XDTMessage.m in Sources */,
+				AF5CB1BB22DF171800FBF6D3 /* XDTAs99Address.m in Sources */,
+				AFD7B7B922E07E58006FC9CB /* XDTAs99Directives.m in Sources */,
 				AF157E031FBF4D4000679D82 /* XDTException.m in Sources */,
 				AF2D96B91DFABF39006EE618 /* XDTObject.m in Sources */,
 				AF9C22081E06D88A00BB02FC /* XDTGPLAssembler.m in Sources */,
+				AF5CB1BF22DF176100FBF6D3 /* XDTAs99ExternalReference.m in Sources */,
 				AF06979422BE3081001E1749 /* NSSetPythonAdditions.m in Sources */,
 				AF63832D22CB56D000150E5D /* XDTGa99Parser.m in Sources */,
+				AFD7B7B422E06FAA006FC9CB /* NSDictionaryPythonAdditions.m in Sources */,
 				AFC501D622DDFDB00008A88E /* XDTGa99Symbols.m in Sources */,
 				AF9C220C1E06FD4E00BB02FC /* XDTGa99Objcode.m in Sources */,
+				AF5CB1B722DF16E300FBF6D3 /* XDTAs99Line.m in Sources */,
 				AF2D96B41DFABF39006EE618 /* XDTAs99Symbols.m in Sources */,
+				AFD7B7B022E06852006FC9CB /* XDTAs99LocalReference.m in Sources */,
+				AFCD3BC222E2693B00A501BC /* XDTAs99Preprocessor.m in Sources */,
+				AFA225EE22E5C99D00D1D7C2 /* XDTGa99Syntax.m in Sources */,
 				AF5CB1D322DF220600FBF6D3 /* XDTLineScanner.m in Sources */,
 				AFE6306E1DF9BB9E005FFD01 /* NSArrayPythonAdditions.m in Sources */,
 				AFC6A7D022CA3BC200CDF34A /* XDTAs99Objdummy.m in Sources */,
+				AF5CB1C722DF17AA00FBF6D3 /* XDTAs99DelayedAddress.m in Sources */,
 				AF157DFF1FBF06B300679D82 /* NSStringPythonAdditions.m in Sources */,
+				AF9DAC1B22DF667B007991B4 /* NSObjectPythonAdditions.m in Sources */,
+				AF6167F822EADD6D00FFF8E3 /* NSNumberPythonAdditions.m in Sources */,
+				AF7941B822E5D55400A55F7A /* XDTGa99SyntaxVariant.m in Sources */,
 				AF2D96B51DFABF39006EE618 /* XDTAs99Objcode.m in Sources */,
 				AFC6A7D522CA3BD900CDF34A /* XDTAs99Parser.m in Sources */,
+				AF5CB1C322DF177F00FBF6D3 /* XDTAs99Block.m in Sources */,
 				AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */,
 				AF2D96B61DFABF39006EE618 /* XDTAssembler.m in Sources */,
 				AFE630701DF9BB9E005FFD01 /* NSErrorPythonAdditions.m in Sources */,

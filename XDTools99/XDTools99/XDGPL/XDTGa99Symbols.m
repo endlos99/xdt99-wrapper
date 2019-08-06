@@ -26,6 +26,7 @@
 
 #import <Python/Python.h>
 
+#import "NSDictionaryPythonAdditions.h"
 #import "NSStringPythonAdditions.h"
 
 
@@ -34,11 +35,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XDTGa99Symbols () {
-    PyObject *symbolsPythonClass;
-}
+@interface XDTGa99Symbols ()
 
-- (nullable instancetype)initWithPythonInstance:(void *)object;
+- (nullable instancetype)initWithPythonInstance:(PyObject *)object;
 
 @end
 
@@ -47,25 +46,31 @@ NS_ASSUME_NONNULL_END
 
 @implementation XDTGa99Symbols
 
++ (NSString *)pythonClassName
+{
+    return [NSString stringWithUTF8String:XDTClassNameSymbols];
+}
+
+
 + (instancetype)symbolsWithPythonInstance:(void *)object
 {
     XDTGa99Symbols *retVal = [[XDTGa99Symbols alloc] initWithPythonInstance:object];
 #if !__has_feature(objc_arc)
-    [retVal autorelease];
-#endif
+    return [retVal autorelease];
+#else
     return retVal;
+#endif
 }
 
 
-- (instancetype)initWithPythonInstance:(void *)object
+- (instancetype)initWithPythonInstance:(PyObject *)object
 {
-    self = [super init];
+    self = [super initWithPythonInstance:object];
     if (nil == self) {
         return nil;
     }
 
-    symbolsPythonClass = object;
-    Py_INCREF(symbolsPythonClass);
+    // nothing to do here
 
     return self;
 }
@@ -73,8 +78,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_CLEAR(symbolsPythonClass);
-
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif
@@ -86,33 +89,21 @@ NS_ASSUME_NONNULL_END
 
 - (NSDictionary<NSString *, NSNumber *> *)symbols
 {
-    PyObject *symbolDict = PyObject_GetAttrString(symbolsPythonClass, "symbols");
+    PyObject *symbolDict = PyObject_GetAttrString(self.pythonInstance, "symbols");
     if (NULL == symbolDict) {
         return nil;
     }
 
-    Py_ssize_t itemCount = PyDict_Size(symbolDict);
-    if (0 > itemCount) {
-        return nil;
-    }
-    NSMutableDictionary<NSString *, NSNumber *> *retVal = [NSMutableDictionary dictionaryWithCapacity:itemCount];
-    PyObject *key, *list;
-    Py_ssize_t pos = 0;
-    while (PyDict_Next(symbolDict, &pos, &key, &list)) {
-        if (NULL != key) {
-            long value = PyInt_AsLong(list);
-            [retVal setValue:[NSNumber numberWithLong:value] forKey:[NSString stringWithPythonString:key encoding:NSUTF8StringEncoding]];
-        }
-    }
+    NSDictionary<NSString *, NSNumber *> *retVal = [NSDictionary dictionaryWithPythonDictionary:symbolDict];
     Py_DECREF(symbolDict);
 
     return retVal;
 }
 
 
-- (NSArray<NSString *> *)symbolList
+- (NSArray<NSString *> *)symbolNames
 {
-    PyObject *symbolDict = PyObject_GetAttrString(symbolsPythonClass, "symbols");
+    PyObject *symbolDict = PyObject_GetAttrString(self.pythonInstance, "symbols");
     if (NULL == symbolDict) {
         return nil;
     }

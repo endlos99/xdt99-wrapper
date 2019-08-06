@@ -26,6 +26,8 @@
 
 #import <Python/Python.h>
 
+#import "NSDictionaryPythonAdditions.h"
+#import "NSArrayPythonAdditions.h"
 #import "NSStringPythonAdditions.h"
 
 
@@ -34,38 +36,74 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XDTAs99Symbols () {
-    PyObject *symbolsPythonClass;
-}
+@interface XDTAs99SymbolEntry ()
 
-- (nullable instancetype)initWithPythonInstance:(void *)object;
+- initWithValue:(NSInteger)value weakness:(BOOL)isWeak trackingInfo:(XDTAs99SymbolTrackingInfo)info;
+
+@end
+
+
+@interface XDTAs99Symbols ()
+
+- (nullable instancetype)initWithPythonInstance:(PyObject *)object;
 
 @end
 
 NS_ASSUME_NONNULL_END
 
 
-@implementation XDTAs99Symbols
-
-+ (instancetype)symbolsWithPythonInstance:(void *)object
-{
-    XDTAs99Symbols *retVal = [[XDTAs99Symbols alloc] initWithPythonInstance:object];
-#if !__has_feature(objc_arc)
-    [retVal autorelease];
-#endif
-    return retVal;
-}
+#pragma mark -
 
 
-- (instancetype)initWithPythonInstance:(void *)object
+@implementation XDTAs99SymbolEntry
+
+- (id)initWithValue:(NSInteger)value weakness:(BOOL)isWeak trackingInfo:(XDTAs99SymbolTrackingInfo)info
 {
     self = [super init];
     if (nil == self) {
         return nil;
     }
 
-    symbolsPythonClass = object;
-    Py_INCREF(symbolsPythonClass);
+    _value = value;
+    _weak = isWeak;
+    _trackingInfo = info;
+
+    return self;
+}
+
+@end
+
+
+#pragma mark -
+
+
+@implementation XDTAs99Symbols
+
++ (NSString *)pythonClassName
+{
+    return [NSString stringWithUTF8String:XDTClassNameSymbols];
+}
+
+
++ (instancetype)symbolsWithPythonInstance:(PyObject *)object
+{
+    XDTAs99Symbols *retVal = [[XDTAs99Symbols alloc] initWithPythonInstance:object];
+#if !__has_feature(objc_arc)
+    return [retVal autorelease];
+#else
+    return retVal;
+#endif
+}
+
+
+- (instancetype)initWithPythonInstance:(PyObject *)object
+{
+    self = [super initWithPythonInstance:object];
+    if (nil == self) {
+        return nil;
+    }
+
+    // nothing to do here
 
     return self;
 }
@@ -73,8 +111,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_CLEAR(symbolsPythonClass);
-
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif
@@ -84,36 +120,45 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Property Wrapper
 
 
-- (NSDictionary<NSString *, NSArray<id> *> *)symbols
+- (NSDictionary<NSString *,NSNumber *> *)extSymbols
 {
-    PyObject *symbolDict = PyObject_GetAttrString(symbolsPythonClass, "symbols");
-    if (NULL == symbolDict) {
+    PyObject *extSymbolDict = PyObject_GetAttrString(self.pythonInstance, "exts");
+    if (NULL == extSymbolDict) {
         return nil;
     }
 
-    Py_ssize_t itemCount = PyDict_Size(symbolDict);
-    if (0 > itemCount) {
-        return nil;
-    }
-    NSMutableDictionary<NSString *, id/*NSArray<id> **/> *retVal = [NSMutableDictionary dictionaryWithCapacity:itemCount];
-    PyObject *key, *list;
-    Py_ssize_t pos = 0;
-    // Values for keys are tripel: symbols[name] = (value, weak, unused)
-    while (PyDict_Next(symbolDict, &pos, &key, &list)) {
-        if (NULL != key) {
-            long value = PyInt_AsLong(list);
-            [retVal setValue:[NSNumber numberWithLong:value] forKey:[NSString stringWithPythonString:key encoding:NSUTF8StringEncoding]];
-        }
-    }
-    Py_DECREF(symbolDict);
+    NSDictionary<NSString *, NSNumber *> *retVal = [NSDictionary dictionaryWithPythonDictionary:extSymbolDict];
+    Py_DECREF(extSymbolDict);
 
     return retVal;
 }
 
 
-- (NSArray<NSString *> *)symbolList
+- (NSDictionary<NSString *, XDTAs99SymbolEntry *> *)symbols
 {
-    PyObject *symbolDict = PyObject_GetAttrString(symbolsPythonClass, "symbols");
+    PyObject *symbolDict = PyObject_GetAttrString(self.pythonInstance, "symbols");
+    if (NULL == symbolDict) {
+        return nil;
+    }
+
+    // Values for keys are tripel: symbols[name] = (value, weak, unused)
+    NSMutableDictionary<NSString *, id/*NSArray<id> **/> *retVal = [NSMutableDictionary dictionaryWithPythonDictionary:symbolDict];
+    Py_DECREF(symbolDict);
+    [retVal enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSArray<id> *tuple, BOOL *stop) {
+        NSNumber *ti = [tuple objectAtIndex:2];
+        XDTAs99SymbolEntry *entry = [[XDTAs99SymbolEntry alloc] initWithValue:[[tuple objectAtIndex:0] integerValue]
+                                                                     weakness:[[tuple objectAtIndex:1] boolValue]
+                                                                 trackingInfo:(nil == ti)? XDTAs99SymbolTrackingInfoNoTracking : ([ti boolValue])? XDTAs99SymbolTrackingInfoUnused : XDTAs99SymbolTrackingInfoNotUnused];
+        [retVal setObject:entry forKey:key];
+    }];
+
+    return retVal;
+}
+
+
+- (NSArray<NSString *> *)symbolNames
+{
+    PyObject *symbolDict = PyObject_GetAttrString(self.pythonInstance, "symbols");
     if (NULL == symbolDict) {
         return nil;
     }
@@ -139,22 +184,12 @@ NS_ASSUME_NONNULL_END
 
 - (NSArray<NSString *> *)refdefs
 {
-    PyObject *refdefsList = PyObject_GetAttrString(symbolsPythonClass, "refdefs");
+    PyObject *refdefsList = PyObject_GetAttrString(self.pythonInstance, "refdefs");
     if (NULL == refdefsList) {
         return nil;
     }
 
-    const Py_ssize_t itemCount = PyList_Size(refdefsList);
-    if (0 > itemCount) {
-        return nil;
-    }
-    NSMutableArray<NSString *> *retVal = [NSMutableArray arrayWithCapacity:itemCount];
-    for (int i = 0; i < itemCount; i++) {
-        PyObject *name = PyList_GetItem(refdefsList, i);
-        if (NULL != name) {
-            [retVal addObject:[NSString stringWithUTF8String:PyString_AsString(name)]];
-        }
-    }
+    NSArray<NSString *> *retVal = [NSArray arrayWithPythonList:refdefsList];
     Py_DECREF(refdefsList);
 
     return retVal;
@@ -163,23 +198,12 @@ NS_ASSUME_NONNULL_END
 
 - (NSDictionary<NSString *, NSNumber *> *)xops
 {
-    PyObject *xopDict = PyObject_GetAttrString(symbolsPythonClass, "xops");
+    PyObject *xopDict = PyObject_GetAttrString(self.pythonInstance, "xops");
     if (NULL == xopDict) {
         return nil;
     }
 
-    Py_ssize_t itemCount = PyDict_Size(xopDict);
-    if (0 > itemCount) {
-        return nil;
-    }
-    NSMutableDictionary<NSString *, NSNumber *> *retVal = [NSMutableDictionary dictionaryWithCapacity:itemCount];
-    PyObject *key, *value;
-    Py_ssize_t pos = 0;
-    while (PyDict_Next(xopDict, &pos, &key, &value)) {
-        if (NULL != key) {
-            [retVal setValue:[NSNumber numberWithLong:PyInt_AsLong(value)] forKey:[NSString stringWithUTF8String:PyString_AsString(key)]];
-        }
-    }
+    NSDictionary<NSString *, NSNumber *> *retVal = [NSDictionary dictionaryWithPythonDictionary:xopDict];
     Py_DECREF(xopDict);
 
     return retVal;
@@ -188,7 +212,7 @@ NS_ASSUME_NONNULL_END
 
 - (NSDictionary<NSString *, NSNumber *> *)locations
 {
-    PyObject *locationsList = PyObject_GetAttrString(symbolsPythonClass, "locations");
+    PyObject *locationsList = PyObject_GetAttrString(self.pythonInstance, "locations");
     if (NULL == locationsList) {
         return nil;
     }
@@ -212,6 +236,20 @@ NS_ASSUME_NONNULL_END
 }
 
 
+- (NSArray<NSArray *> *)autoGeneratedConstants
+{
+    PyObject *refdefsList = PyObject_GetAttrString(self.pythonInstance, "autogens");
+    if (NULL == refdefsList) {
+        return nil;
+    }
+
+    NSArray<NSArray *> *retVal = [NSArray arrayWithPythonList:refdefsList];
+    Py_DECREF(refdefsList);
+
+    return retVal;
+}
+
+
 #pragma mark - Method Wrapper
 
 
@@ -222,7 +260,7 @@ NS_ASSUME_NONNULL_END
      reset_LC()
      */
     PyObject *methodName = PyString_FromString("reset_LC");
-    PyObject *dummy = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, NULL);
+    PyObject *dummy = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
     Py_XDECREF(methodName);
     Py_XDECREF(dummy);
 }
@@ -235,7 +273,7 @@ NS_ASSUME_NONNULL_END
      effective_LC()
      */
     PyObject *methodName = PyString_FromString("effective_LC");
-    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, NULL);
+    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == lineCountInteger) {
         return NSNotFound;
@@ -248,17 +286,20 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (BOOL)addSymbolName:(NSString *)name withValue:(NSUInteger)value
+- (BOOL)addSymbolValue:(NSInteger)value forName:(NSString *)name
 {
     /*
      Function call in Python:
-     add_symbol(name, value)
+     add_symbol(name, value, weak=False, tracked=False)
      */
     PyObject *methodName = PyString_FromString("add_symbol");
-    PyObject *pSymbolName = PyString_FromString([name UTF8String]);
+    PyObject *pSymbolName = name.asPythonType;
     PyObject *pSymbolValue = PyInt_FromLong(value);
-    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pSymbolName, pSymbolValue, NULL);
-    BOOL retVal = lineCountInteger == pSymbolName;
+    PyObject *resultName = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pSymbolName, pSymbolValue, NULL);
+    BOOL retVal = resultName == pSymbolName;
+    if (!retVal) {
+        Py_XDECREF(resultName);
+    }
     Py_XDECREF(pSymbolValue);
     Py_XDECREF(pSymbolName);
     Py_XDECREF(methodName);
@@ -267,34 +308,84 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (BOOL)addLabel:(NSString *)label withLineIndex:(NSUInteger)lineIdx
-{
-    return [self addLabel:label withLineIndex:lineIdx usingEffectiveLineCount:NO];
-}
-
-
-- (BOOL)addLabel:(NSString *)label withLineIndex:(NSUInteger)lineIdx usingEffectiveLineCount:(BOOL)realLineCount
+- (NSArray<NSString *> *)unusedSymbolNames
 {
     /*
      Function call in Python:
-     add_label(lidx, label, realLC=False)
+     get_unused()
      */
-    PyObject *methodName = PyString_FromString("add_label");
-    PyObject *pLIdx = PyInt_FromLong(lineIdx);
-    PyObject *pLabel = PyString_FromString([label UTF8String]);
-    PyObject *pRealLC = PyBool_FromLong(realLineCount);
-    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pLIdx, pLabel, pRealLC, NULL);
-    Py_XDECREF(pRealLC);
-    Py_XDECREF(pLabel);
-    Py_XDECREF(pLIdx);
+    PyObject *methodName = PyString_FromString("get_unused");
+    PyObject *unusedList = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
     Py_XDECREF(methodName);
-    BOOL retVal = NULL != lineCountInteger;
+
+    NSArray *retVal = [NSArray arrayWithPythonListOfString:unusedList];
+    Py_DECREF(unusedList);
 
     return retVal;
 }
 
 
-- (BOOL)addLocalLabel:(NSString *)label withLineIndex:(NSUInteger)lineIdx
+- (BOOL)addSymbol:(XDTAs99SymbolEntry *)symbolEntry forName:(NSString *)name
+{
+    /*
+     Function call in Python:
+     add_symbol(name, value, weak=False, tracked=False)
+     */
+    PyObject *methodName = PyString_FromString("add_symbol");
+    PyObject *pSymbolName = name.asPythonType;
+    PyObject *pSymbolValue = PyInt_FromLong(symbolEntry.value);
+    PyObject *pSymbolWeakness = PyBool_FromLong(symbolEntry.isWeak);
+    PyObject *pSymbolTracked = PyBool_FromLong(XDTAs99SymbolTrackingInfoNoTracking != symbolEntry.trackingInfo);
+    PyObject *resultName = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pSymbolName, pSymbolValue, pSymbolWeakness, pSymbolTracked, NULL);
+    BOOL retVal = resultName == pSymbolName;
+    if (!retVal) {
+        Py_XDECREF(resultName);
+    }
+    Py_XDECREF(pSymbolTracked);
+    Py_XDECREF(pSymbolWeakness);
+    Py_XDECREF(pSymbolValue);
+    Py_XDECREF(pSymbolName);
+    Py_XDECREF(methodName);
+
+    return retVal;
+}
+
+
+- (BOOL)addLineIndex:(NSUInteger)lineIdx forLabel:(NSString *)label
+{
+    /*
+     Function call in Python:
+     add_label(lidx, label, realLC=False, tracked=False)
+     */
+    return [self addLineIndex:lineIdx forLabel:label usingEffectiveLineCount:NO tracked:NO];
+}
+
+
+- (BOOL)addLineIndex:(NSUInteger)lineIdx forLabel:(NSString *)label usingEffectiveLineCount:(BOOL)realLineCount tracked:(BOOL)tracked
+{
+    /*
+     Function call in Python:
+     add_label(lidx, label, realLC=False, tracked=False)
+     */
+    PyObject *methodName = PyString_FromString("add_label");
+    PyObject *pLIdx = PyInt_FromLong(lineIdx);
+    PyObject *pLabel = label.asPythonType;
+    PyObject *pRealLC = PyBool_FromLong(realLineCount);
+    PyObject *pTracked = PyBool_FromLong(tracked);
+    PyObject *result = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pLIdx, pLabel, pRealLC, pTracked, NULL);
+    BOOL retVal = NULL != result;
+    Py_XDECREF(result);
+    Py_XDECREF(pTracked);
+    Py_XDECREF(pRealLC);
+    Py_XDECREF(pLabel);
+    Py_XDECREF(pLIdx);
+    Py_XDECREF(methodName);
+
+    return retVal;
+}
+
+
+- (BOOL)addLineIndex:(NSUInteger)lineIdx forLocalLabel:(NSString *)label
 {
     /*
      Function call in Python:
@@ -302,12 +393,13 @@ NS_ASSUME_NONNULL_END
      */
     PyObject *methodName = PyString_FromString("add_local_label");
     PyObject *pLIdx = PyInt_FromLong(lineIdx);
-    PyObject *pLabel = PyString_FromString([label UTF8String]);
-    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pLIdx, pLabel, NULL);
+    PyObject *pLabel = label.asPythonType;
+    PyObject *result = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pLIdx, pLabel, NULL);
+    BOOL retVal = NULL != result;
+    Py_XDECREF(result);
     Py_XDECREF(pLabel);
     Py_XDECREF(pLIdx);
     Py_XDECREF(methodName);
-    BOOL retVal = NULL != lineCountInteger;
 
     return retVal;
 }
@@ -320,11 +412,12 @@ NS_ASSUME_NONNULL_END
      add_def(name)
      */
     PyObject *methodName = PyString_FromString("add_def");
-    PyObject *pName = PyString_FromString([name UTF8String]);
-    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pName, NULL);
+    PyObject *pName = name.asPythonType;
+    PyObject *result = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pName, NULL);
+    BOOL retVal = NULL != result;
+    Py_XDECREF(result);
     Py_XDECREF(pName);
     Py_XDECREF(methodName);
-    BOOL retVal = NULL != lineCountInteger;
 
     return retVal;
 }
@@ -337,68 +430,69 @@ NS_ASSUME_NONNULL_END
      add_ref(name)
      */
     PyObject *methodName = PyString_FromString("add_ref");
-    PyObject *pName = PyString_FromString([name UTF8String]);
-    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pName, NULL);
+    PyObject *pName = name.asPythonType;
+    PyObject *result = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pName, NULL);
+    BOOL retVal = NULL != result;
+    Py_XDECREF(result);
     Py_XDECREF(pName);
     Py_XDECREF(methodName);
-    BOOL retVal = NULL != lineCountInteger;
 
     return retVal;
 }
 
 
-- (BOOL)addXop:(NSString *)name mode:(NSUInteger)mode
+- (BOOL)addXop:(NSString *)name usingMode:(NSUInteger)mode
 {
     /*
      Function call in Python:
      add_XOP(name, mode)
      */
     PyObject *methodName = PyString_FromString("add_XOP");
-    PyObject *pName = PyString_FromString([name UTF8String]);
+    PyObject *pName = name.asPythonType;
     PyObject *pMode = PyInt_FromLong(mode);
-    PyObject *lineCountInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pName, pMode, NULL);
+    PyObject *result = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pName, pMode, NULL);
+    BOOL retVal = NULL != result;
+    Py_XDECREF(result);
     Py_XDECREF(pMode);
     Py_XDECREF(pName);
     Py_XDECREF(methodName);
-    BOOL retVal = NULL != lineCountInteger;
 
     return retVal;
 }
 
 
-- (NSUInteger)getSymbol:(NSString *)name
+- (NSInteger)getSymbol:(NSString *)name
 {
     /*
      Function call in Python:
      get_symbol(name)
      */
     PyObject *methodName = PyString_FromString("get_symbol");
-    PyObject *pName = PyString_FromString([name UTF8String]);
-    PyObject *symbolValueInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pName, NULL);
+    PyObject *pName = name.asPythonType;
+    PyObject *symbolValueInteger = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pName, NULL);
     Py_XDECREF(pName);
     Py_XDECREF(methodName);
     if (NULL == symbolValueInteger) {
         return NSNotFound;
     }
 
-    NSUInteger retVal = PyInt_AsLong(symbolValueInteger);
+    NSInteger retVal = PyInt_AsLong(symbolValueInteger);
     Py_DECREF(symbolValueInteger);
-
     return retVal;
 }
 
 
-- (NSUInteger)getLocal:(NSString *)name position:(NSUInteger)lpos distance:(NSUInteger)distance
+- (NSInteger)getLocal:(NSString *)name position:(NSUInteger)lpos distance:(NSUInteger)distance
 {
     /*
      Function call in Python:
      get_local(name, lpos, distance)
      */
     PyObject *methodName = PyString_FromString("get_local");
-    PyObject *pName = PyString_FromString([name UTF8String]);
+    PyObject *pName = name.asPythonType;
     PyObject *pLpos = PyInt_FromLong(lpos);
     PyObject *pDistance = PyInt_FromLong(distance);
-    PyObject *localValueInteger = PyObject_CallMethodObjArgs(symbolsPythonClass, methodName, pName, pLpos, pDistance, NULL);
+    PyObject *localValueInteger = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pName, pLpos, pDistance, NULL);
     Py_XDECREF(pDistance);
     Py_XDECREF(pLpos);
     Py_XDECREF(pName);
@@ -407,9 +501,8 @@ NS_ASSUME_NONNULL_END
         return NSNotFound;
     }
 
-    NSUInteger retVal = PyInt_AsLong(localValueInteger);
+    NSInteger retVal = PyInt_AsLong(localValueInteger);
     Py_DECREF(localValueInteger);
-
     return retVal;
 }
 

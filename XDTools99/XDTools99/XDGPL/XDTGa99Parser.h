@@ -24,32 +24,25 @@
 
 #import "XDTObject.h"
 
+#import "XDTGPLAssembler.h"
 
-#define XDTGPLAssemblerVersionRequired "2.0.2"
 
-
-@class XDTGPLObjcode, XDTMessage;
+@class XDTGPLObjcode, XDTGa99SyntaxVariant, XDTMessage;
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * XDTGa99ParserOptionKey NS_EXTENSIBLE_STRING_ENUM; /* Keys for use in the NSDictionry */
-
-FOUNDATION_EXPORT XDTGa99ParserOptionKey const XDTGa99ParserOptionWarnings;
-FOUNDATION_EXPORT XDTGa99ParserOptionKey const XDTGa99ParserOptionSyntaxType;
-
-
 @interface XDTGa99Parser : XDTObject <XDTParserProtocol>
 
+@property (assign) BOOL outputWarnings;
+@property (copy, nullable) XDTGa99SyntaxVariant *syntaxVariant;
 @property (copy, nullable) NSString *path;
 @property (readonly, nullable) XDTMessage *messages;
 
 /**
- Creates an autoreleased instance of XDTParser
-
- @param options  A dictionary containig key value pairs to specify options for the parser. See XDTAssembler for some of the keys.
+ Creates an autoreleased instance of XDTParser with default options
  */
-+ (nullable instancetype)parserWithOptions:(NSDictionary<XDTGa99ParserOptionKey,id> *)options;
++ (nullable instancetype)parserWithSyntaxType:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings;
 
 /**
  Set the source code where the parser works on.

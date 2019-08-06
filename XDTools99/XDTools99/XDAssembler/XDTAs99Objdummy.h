@@ -1,11 +1,11 @@
 //
 //  XDTAs99Objdummy.h
-//  SimpleXDT99
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 30.06.19.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -22,16 +22,16 @@
 //  License along with this program; if not, see <http://www.gnu.org/licenses/>
 //
 
-#import <Foundation/Foundation.h>
-
 #import <XDTObject.h>
+
+#import <Python/object.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface XDTAs99Objdummy : XDTObject
 
-+ (instancetype)objdummyWithPythonInstance:(void *)object;
++ (instancetype)objdummyWithPythonInstance:(PyObject *)object;
 
 @end
 

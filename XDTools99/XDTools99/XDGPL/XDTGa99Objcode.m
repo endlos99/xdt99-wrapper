@@ -24,9 +24,12 @@
 
 #import "XDTGa99Objcode.h"
 
+#import <Python/Python.h>
+
 #import "NSArrayPythonAdditions.h"
 #import "NSDataPythonAdditions.h"
 #import "NSErrorPythonAdditions.h"
+#import "NSStringPythonAdditions.h"
 
 #import "XDTGa99Symbols.h"
 
@@ -35,19 +38,25 @@
 
 
 NS_ASSUME_NONNULL_BEGIN
-@interface XDTGa99Objcode () {
-    PyObject *objectcodePythonClass;
-}
 
-+ (nullable instancetype)gplObjectcodeWithPythonInstance:(void *)object;
+@interface XDTGa99Objcode ()
+
++ (nullable instancetype)gplObjectcodeWithPythonInstance:(PyObject *)object;
 
 - (nullable instancetype)initWithPythonInstance:(PyObject *)object;
 
 @end
+
 NS_ASSUME_NONNULL_END
 
 
 @implementation XDTGa99Objcode
+
++ (NSString *)pythonClassName
+{
+    return [NSString stringWithUTF8String:XDTClassNameObjcode];
+}
+
 
 #pragma mark Initializers
 
@@ -60,25 +69,25 @@ NS_ASSUME_NONNULL_END
  **/
 
 
-+ (instancetype)gplObjectcodeWithPythonInstance:(void *)object
++ (instancetype)gplObjectcodeWithPythonInstance:(PyObject *)object
 {
-    XDTGa99Objcode *retVal = [[XDTGa99Objcode alloc] initWithPythonInstance:(PyObject *)object];
+    XDTGa99Objcode *retVal = [[XDTGa99Objcode alloc] initWithPythonInstance:object];
 #if !__has_feature(objc_arc)
-    [retVal autorelease];
-#endif
+    return [retVal autorelease];
+#else
     return retVal;
+#endif
 }
 
 
 - (instancetype)initWithPythonInstance:(PyObject *)object
 {
-    self = [super init];
+    self = [super initWithPythonInstance:object];
     if (nil == self) {
         return nil;
     }
 
-    objectcodePythonClass = object;
-    Py_INCREF(objectcodePythonClass);
+    // nothing to do here
 
     return self;
 }
@@ -86,7 +95,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_CLEAR(objectcodePythonClass);
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif
@@ -98,7 +106,7 @@ NS_ASSUME_NONNULL_END
 
 - (XDTGa99Symbols *)symbols
 {
-    PyObject *symbolObject = PyObject_GetAttrString(objectcodePythonClass, "symbols");
+    PyObject *symbolObject = PyObject_GetAttrString(self.pythonInstance, "symbols");
     XDTGa99Symbols *codeSymbols = [XDTGa99Symbols symbolsWithPythonInstance:symbolObject];
     Py_XDECREF(symbolObject);
 
@@ -134,7 +142,7 @@ NS_ASSUME_NONNULL_END
      groms = self.generate_byte_code()
      */
     PyObject *methodName = PyString_FromString("generate_byte_code");
-    PyObject *gromList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
+    PyObject *gromList = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == gromList) {
         NSLog(@"%s ERROR: generate_byte_code() returns NULL!", __FUNCTION__);
@@ -148,7 +156,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    NSArray<NSArray<id> *> *retVal = [NSArray arrayWithPyListOfTuple:gromList];
+    NSArray<NSArray<id> *> *retVal = [NSArray arrayWithPythonListOfTuple:gromList];
     Py_DECREF(gromList);
 
     return retVal;
@@ -165,8 +173,8 @@ NS_ASSUME_NONNULL_END
      image = self.generate_image(name)
      */
     PyObject *methodName = PyString_FromString("generate_image");
-    PyObject *pCartName = PyString_FromString([cartridgeName UTF8String]);
-    PyObject *cartImage = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pCartName, NULL);
+    PyObject *pCartName = cartridgeName.asPythonType;
+    PyObject *cartImage = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pCartName, NULL);
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartImage) {
@@ -182,9 +190,7 @@ NS_ASSUME_NONNULL_END
     }
 
     NSData *retVal = [NSData dataWithPythonString:cartImage];
-
     Py_DECREF(cartImage);
-
     return retVal;
 }
 
@@ -205,8 +211,8 @@ NS_ASSUME_NONNULL_END
      data, layout, metainf = code.generate_cart(name)
      */
     PyObject *methodName = PyString_FromString("generate_cart");
-    PyObject *pCartName = PyString_FromString([cartridgeName UTF8String]);
-    PyObject *cartTuple = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pCartName, NULL);
+    PyObject *pCartName = cartridgeName.asPythonType;
+    PyObject *cartTuple = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pCartName, NULL);
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartTuple) {
@@ -251,7 +257,7 @@ NS_ASSUME_NONNULL_END
      */
     PyObject *methodName = PyString_FromString("generate_list");
     PyObject *pOutputSymbols = PyBool_FromLong(outputSymbols);
-    PyObject *listingString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pOutputSymbols, NULL);
+    PyObject *listingString = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pOutputSymbols, NULL);
     Py_XDECREF(pOutputSymbols);
     Py_XDECREF(methodName);
     if (NULL == listingString) {
@@ -281,7 +287,7 @@ NS_ASSUME_NONNULL_END
      */
     PyObject *methodName = PyString_FromString("generate_symbols");
     PyObject *pUseEqu = PyBool_FromLong(useEqu);
-    PyObject *symbolsString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pUseEqu, NULL);
+    PyObject *symbolsString = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pUseEqu, NULL);
     Py_XDECREF(pUseEqu);
     Py_XDECREF(methodName);
     if (NULL == symbolsString) {

@@ -27,7 +27,14 @@
 
 #import "XDTObject.h"
 
+#import "XDTAs99Address.h"
+#import "XDTAs99DelayedAddress.h"
+#import "XDTAs99LocalReference.h"
+#import "XDTAs99ExternalReference.h"
+#import "XDTAs99Block.h"
+#import "XDTAs99Line.h"
 #import "XDTAs99Symbols.h"
+#import "XDTAs99Directives.h"
 #import "XDTAs99Objcode.h"
 #import "XDTAs99Parser.h"
 #import "XDTAssembler.h"

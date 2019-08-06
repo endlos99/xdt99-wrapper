@@ -24,18 +24,20 @@
 
 #import <Foundation/Foundation.h>
 
-#import <Python/Python.h>
+#import <Python/object.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NSSet (NSSetPythonAdditions)
 
-+ (nullable NSSet<id> *)setWithPyTuple:(PyObject *)dataTuple;
-+ (nullable NSSet<id> *)setWithPyList:(PyObject *)dataTuple;
-+ (nullable NSSet<NSArray<id> *> *)setWithPyListOfTuple:(PyObject *)dataList;
-+ (nullable NSSet<NSData *> *)setWithPyListOfData:(PyObject *)dataList;
-+ (nullable NSSet<NSString *> *)setWithPyListOfString:(PyObject *)dataList;
++ (nullable NSSet<id> *)setWithPythonTuple:(PyObject *)dataTuple;
++ (nullable NSSet<id> *)setWithPythonList:(PyObject *)dataTuple;
++ (nullable NSSet<NSArray<id> *> *)setWithPythonListOfTuple:(PyObject *)dataList;
++ (nullable NSSet<NSData *> *)setWithPythonListOfData:(PyObject *)dataList;
++ (nullable NSSet<NSString *> *)setWithPythonListOfString:(PyObject *)dataList;
+
+- (PyObject *)asPythonType;
 
 @end
 

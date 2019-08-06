@@ -364,7 +364,7 @@
 {
     NSError *error = nil;
 
-    XDTGa99Parser *parser = [XDTGa99Parser parserWithOptions:@{XDTGa99ParserOptionSyntaxType: [NSString stringWithCString:[XDTGPLAssembler syntaxTypeAsCString:self.syntaxType] encoding:NSUTF8StringEncoding]}];
+    XDTGa99Parser *parser = [XDTGa99Parser parserWithSyntaxType:self.syntaxType outputWarnings:self.shouldShowWarningsInLog];
     parser.path = [[self.fileURL URLByDeletingLastPathComponent] path];
     NSString *filePath = [parser findFile:name error:&error];
     if (nil != error) {
@@ -433,17 +433,13 @@
     }
 
     if (nil == self.parser) {
-        NSDictionary *options = @{
-                                  XDTGa99ParserOptionSyntaxType: [NSString stringWithUTF8String:[XDTGPLAssembler syntaxTypeAsCString:XDTGa99SyntaxTypeRAGGPL]],
-                                  XDTGa99ParserOptionWarnings: [NSNumber numberWithBool:self.shouldShowWarningsInLog]
-                                  };
-        self.parser = [XDTGa99Parser parserWithOptions:options];
+        self.parser = [XDTGa99Parser parserWithSyntaxType:XDTGa99SyntaxTypeRAGGPL outputWarnings:self.shouldShowWarningsInLog];
         [(XDTGa99Parser *)self.parser setPath:self.fileURL.URLByDeletingLastPathComponent.path];
         self.parser.source = self.sourceView.textStorage.mutableString;
 
         if (nil == self.highlighterDelegate) {
             self.highlighterDelegate = [HighlighterDelegate highlighterWithLineScanner:[XDTLineScanner scannerWithParser:self.parser
-                                                                                                                 symbols:self.assemblingResult.symbols.symbolList]];
+                                                                                                                 symbols:self.assemblingResult.symbols.symbolNames]];
         }
     }
     self.sourceView.textStorage.delegate = self.highlighterDelegate;
@@ -521,14 +517,8 @@
     if (nil == [self fileURL]) {    // there must be a file which can be assembled
         return NO;
     }
-    NSDictionary *options = @{
-                              XDTGa99OptionAORG: [NSNumber numberWithUnsignedInteger:[self aorgAddress]],
-                              XDTGa99OptionGROM: [NSNumber numberWithUnsignedInteger:[self gromAddress]],
-                              XDTGa99OptionStyle: [NSNumber numberWithUnsignedInteger:[self syntaxType]],
-                              XDTGa99OptionTarget: [NSNumber numberWithUnsignedInteger:[self targetType]],
-                              XDTGa99OptionWarnings: [NSNumber numberWithBool:[self shouldShowWarningsInLog]]
-                              };
-    XDTGPLAssembler *assembler = [XDTGPLAssembler gplAssemblerWithOptions:options includeURL:[self fileURL]];
+
+    XDTGPLAssembler *assembler = [XDTGPLAssembler gplAssemblerWithIncludeURL:[self fileURL] grom:self.gromAddress aorg:self.aorgAddress target:self.targetType syntax:self.syntaxType outputWarnings:self.shouldShowWarningsInLog];
 
     NSError *tempErr = nil;
     XDTGa99Objcode *result = [assembler assembleSourceFile:[self fileURL] error:&tempErr];

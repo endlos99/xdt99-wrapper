@@ -23,6 +23,9 @@
 //
 
 #import "NSErrorPythonAdditions.h"
+
+#import <Python/Python.h>
+
 #import "NSStringPythonAdditions.h"
 
 #import "XDTObject.h"

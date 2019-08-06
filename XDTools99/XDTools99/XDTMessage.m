@@ -103,9 +103,10 @@ NS_ASSUME_NONNULL_END
 {
     id retVal = [[[self class] alloc] initWithPythonList:messageList treatingAs:type];
 #if !__has_feature(objc_arc)
-    [retVal autorelease];
-#endif
+    return [retVal autorelease];
+#else
     return retVal;
+#endif
 }
 
 
@@ -126,8 +127,8 @@ NS_ASSUME_NONNULL_END
 
     /* Check if the messageList comes from xbas99, which delivers its messages in an array of strings, not an array of tuples like the other does. */
     NSMutableOrderedSet<NSDictionary<XDTMessageTypeKey, id> *> *newMessages = [NSMutableOrderedSet orderedSetWithCapacity:messageCount];
-    NSSet<NSString *> *messageStrings = [NSSet setWithPyListOfString:messageList];
-    if (nil != messageStrings) {
+    NSSet<NSString *> *messageStrings = [NSSet setWithPythonListOfString:messageList];
+    if (nil != messageStrings && 0 < messageStrings.count) {
         // I'm still the old and ugly style of message exchange, that xbas99 still uses.
         [messageStrings enumerateObjectsUsingBlock:^(NSString *obj, BOOL *stop) {
             NSDictionary<XDTMessageTypeKey, id> *msg = nil;
@@ -184,7 +185,7 @@ NS_ASSUME_NONNULL_END
             [newMessages addObject:msg];
         }];
     } else {
-        NSSet<NSArray *> *messageTupel = [NSSet setWithPyListOfTuple:messageList];
+        NSSet<NSArray *> *messageTupel = [NSSet setWithPythonListOfTuple:messageList];
         [messageTupel enumerateObjectsUsingBlock:^(NSArray *messageItem, BOOL *stop) {
             NSDictionary<XDTMessageTypeKey, id> *msg = nil;
 

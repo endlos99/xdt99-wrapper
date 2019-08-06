@@ -1,5 +1,5 @@
 //
-//  XDTParser.h
+//  XDTAs99Parser.h
 //  XDTools99
 //
 //  Created by Henrik Wedekind on 30.06.19.
@@ -25,33 +25,32 @@
 #import <XDTObject.h>
 
 
-#define XDTAssemblerVersionRequired "2.0.2"
-
-
-@class XDTAs99Symbols, XDTMessage;
+@class XDTAs99Symbols, XDTAs99Preprocessor, XDTMessage;
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * XDTAs99ParserOptionKey NS_EXTENSIBLE_STRING_ENUM; /* Type for keys used in the options dictionry */
-
-FOUNDATION_EXPORT XDTAs99ParserOptionKey const XDTAs99ParserOptionRegister;
-FOUNDATION_EXPORT XDTAs99ParserOptionKey const XDTAs99ParserOptionStrict;
-FOUNDATION_EXPORT XDTAs99ParserOptionKey const XDTAs99ParserOptionWarnings;
-
-
 @interface XDTAs99Parser : XDTObject <XDTParserProtocol>
 
-@property (readonly, copy) XDTAs99Symbols *symbols;
-@property (readonly, nullable) XDTMessage *messages;
+@property (assign) BOOL beStrict;
+@property (assign) BOOL useRegisterSymbols;
+@property (assign) BOOL outputWarnings;
+
 @property (copy, nullable) NSString *path;
+@property (readonly, copy, nullable) XDTAs99Symbols *symbols;
+@property (readonly, nullable) XDTMessage *messages;
+@property (readonly, copy, nullable) XDTAs99Preprocessor *preprocessor;
 
 /**
- Creates an autoreleased instance of XDTAs99Parser
-
- @param options  A dictionary containig key value pairs to specify options for the parser.
+ Creates an autoreleased instance of XDTAs99Parser with default options
  */
-+ (nullable instancetype)parserWithOptions:(NSDictionary<XDTAs99ParserOptionKey,id> *)options;
++ (nullable instancetype)parserForPath:(NSString *)path usingRegisterSymbol:(BOOL)useRegisterSymbol strictness:(BOOL)beStrict outputWarnings:(BOOL)outputWarnings;
+
+- (BOOL)openSourceFile:(nullable NSString *)fileName macroBuffer:(nullable NSString *)macroName ops:(nullable NSArray<id> *)ops error:( NSError * _Nullable *)error;
+
+- (BOOL)resume:(NSError **)error;
+
+- (BOOL)stop:(NSError **)error;
 
 /**
  Set the source code where the parser works on.
@@ -73,12 +72,12 @@ FOUNDATION_EXPORT XDTAs99ParserOptionKey const XDTAs99ParserOptionWarnings;
 
 @interface XDTAs99Parser (XDTAs99ParserExtensionMethods)
 
-
 /**
  Starts the first pass of parsing the Assembler source code for gathering symbols and apply preprocessor.
  @return YES if the pass was successful, otherwise NO
  */
 - (BOOL)parseFirstPass;
+
 /**
  Starts the second pass of parsing the Assembler source code for generating code.
  @return YES if the pass was successful, otherwise NO

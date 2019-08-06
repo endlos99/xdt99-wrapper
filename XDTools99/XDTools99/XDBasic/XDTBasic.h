@@ -25,9 +25,6 @@
 #import "XDTObject.h"
 
 
-#define XDTBasicVersionRequired "2.0.1"
-
-
 typedef NSUInteger XDTBasicTargetType;
 NS_ENUM(XDTBasicTargetType) {
     XDTBasicTargetTypeInternalFormat,   /* TI (Extended) Basic internal format used with OLD, SAVE, RUN */
@@ -41,20 +38,13 @@ NS_ENUM(XDTBasicTargetType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * XDTBasicOptionKey NS_EXTENSIBLE_STRING_ENUM; /* Keys for use in the NSDictionry */
-
-FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionJoinLines;
-FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionLineDelta;
-FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionProtectFile;
-FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionTarget;
-
 @interface XDTBasic : XDTObject
 
-@property (readonly) NSString *version;
-@property (readonly) BOOL join;
-@property (readonly) NSUInteger lineDelta;
-@property (readonly) BOOL protect;
-@property (readonly) XDTBasicTargetType targetType;
+@property (assign) BOOL join;
+@property (assign) NSUInteger lineDelta;
+
+@property (assign) BOOL protect;
+@property (assign) XDTBasicTargetType targetType;
 
 /*
  Returns a structure which contains for each entry the basic line number (key of the dictionary) 
@@ -63,9 +53,7 @@ FOUNDATION_EXPORT XDTBasicOptionKey const XDTBasicOptionTarget;
 @property (nullable,readonly) NSDictionary<NSNumber *, NSArray *> *lines;
 @property (nullable,readonly) XDTMessage *messages;
 
-+ (BOOL)checkRequiredModuleVersion;
-
-+ (nullable instancetype)basicWithOptions:(NSDictionary<XDTBasicOptionKey, id> *)options;
++ (nullable instancetype)basic;
 
 /* Program to source code conversion */
 - (BOOL)loadProgramData:(NSData *)data error:(NSError **)error; // load tokenized BASIC program in internal format

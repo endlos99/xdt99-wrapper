@@ -24,10 +24,14 @@
 
 #import "XDTAs99Objcode.h"
 
+#import <Python/Python.h>
+
 #import "NSStringPythonAdditions.h"
 #import "NSArrayPythonAdditions.h"
 #import "NSDataPythonAdditions.h"
 #import "NSErrorPythonAdditions.h"
+
+#import "XDTAs99Line.h"
 #import "XDTAs99Symbols.h"
 
 
@@ -36,11 +40,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface XDTAs99Objcode () {
-    PyObject *objectcodePythonClass;
-}
+@interface XDTAs99Objcode ()
 
-+ (nullable instancetype)objectcodeWithPythonInstance:(void *)object;
++ (nullable instancetype)objectcodeWithPythonInstance:(PyObject *)object;
 
 - (nullable instancetype)initWithPythonInstance:(PyObject *)object;
 
@@ -53,6 +55,12 @@ NS_ASSUME_NONNULL_END
 
 @implementation XDTAs99Objcode
 
++ (NSString *)pythonClassName
+{
+    return [NSString stringWithUTF8String:XDTClassNameObjcode];
+}
+
+
 #pragma mark Initializers
 
 /**
@@ -64,9 +72,9 @@ NS_ASSUME_NONNULL_END
  **/
 
 
-+ (nullable instancetype)objectcodeWithPythonInstance:(void *)object
++ (nullable instancetype)objectcodeWithPythonInstance:(PyObject *)object
 {
-    XDTAs99Objcode *retVal = [[XDTAs99Objcode alloc] initWithPythonInstance:(PyObject *)object];
+    XDTAs99Objcode *retVal = [[XDTAs99Objcode alloc] initWithPythonInstance:object];
 #if !__has_feature(objc_arc)
     [retVal autorelease];
 #endif
@@ -76,13 +84,12 @@ NS_ASSUME_NONNULL_END
 
 - (instancetype)initWithPythonInstance:(PyObject *)object
 {
-    self = [super init];
+    self = [super initWithPythonInstance:object];
     if (nil == self) {
         return nil;
     }
 
-    objectcodePythonClass = object;
-    Py_INCREF(objectcodePythonClass);
+    // nothing to do here
 
     return self;
 }
@@ -90,7 +97,6 @@ NS_ASSUME_NONNULL_END
 
 - (void)dealloc
 {
-    Py_CLEAR(objectcodePythonClass);
 #if !__has_feature(objc_arc)
     [super dealloc];
 #endif
@@ -102,11 +108,75 @@ NS_ASSUME_NONNULL_END
 
 - (XDTAs99Symbols *)symbols
 {
-    PyObject *symbolObject = PyObject_GetAttrString(objectcodePythonClass, "symbols");
+    PyObject *symbolObject = PyObject_GetAttrString(self.pythonInstance, "symbols");
     XDTAs99Symbols *codeSymbols = [XDTAs99Symbols symbolsWithPythonInstance:symbolObject];
     Py_XDECREF(symbolObject);
 
     return codeSymbols;
+}
+
+
+- (BOOL)isStrict
+{
+    PyObject *strictObject = PyObject_GetAttrString(self.pythonInstance, "strict");
+    BOOL strictness = 1 == PyObject_IsTrue(strictObject);
+    Py_XDECREF(strictObject);
+
+    return strictness;
+}
+
+
+- (void)setStrict:(BOOL)strict
+{
+    PyObject *pStrict = PyBool_FromLong(strict);
+    (void)PyObject_SetAttrString(self.pythonInstance, "strict", pStrict);
+    Py_XDECREF(pStrict);
+}
+
+
+- (void)enumerateSegmentsUsingBlock:(void (^)(NSUInteger bank, NSUInteger finalLineCount, BOOL reloc, BOOL dummy, NSArray *code))block
+{
+    /*
+     In the Python class all methods which generates output calling self.prepare() before they do their actual work,
+     but the only generator which does not call prepare is the list generator. A bug?
+     So, for here just call prepare by hand.
+     
+     Function call in Python:
+     prepare()
+     */
+    PyObject *methodName = PyString_FromString("prepare");
+    PyObject *pNonValue = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
+    Py_XDECREF(methodName);
+    if (NULL == pNonValue) {
+        return;
+    }
+    Py_DECREF(pNonValue);
+    
+    PyObject *segmentList = PyObject_GetAttrString(self.pythonInstance, "segments");
+    if (NULL == segmentList) {
+        return;
+    }
+    const Py_ssize_t segmentListSize = PyList_Size(segmentList);
+    for (Py_ssize_t i = 0; i < segmentListSize; i++) {
+        // bank, final_LC, reloc, dummy, code
+        PyObject *partTuple = PyList_GetItem(segmentList, i);
+        if (NULL == partTuple || Py_None == partTuple) {
+            continue;
+        }
+        
+        NSUInteger bank = 0;
+        PyObject *pBank = PyTuple_GetItem(partTuple, 0);
+        if (Py_None != pBank) {
+            bank = PyInt_AsLong(pBank);
+        }
+        NSUInteger finalLineCount = PyInt_AsLong(PyTuple_GetItem(partTuple, 1));
+        BOOL isRelocatible = PyInt_AsLong(PyTuple_GetItem(partTuple, 2));
+        BOOL dummy = PyInt_AsLong(PyTuple_GetItem(partTuple, 3));
+        PyObject *codeList = PyTuple_GetItem(partTuple, 4);
+
+        block(bank, finalLineCount, isRelocatible, dummy, [NSArray arrayWithPythonListOfTuple:codeList]);
+    }
+    Py_DECREF(segmentList);
 }
 
 
@@ -142,7 +212,7 @@ NS_ASSUME_NONNULL_END
      */
     PyObject *methodName = PyString_FromString("generate_object_code");
     PyObject *pCompressed = PyBool_FromLong(shouldCompress);
-    PyObject *binaryString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pCompressed, NULL);
+    PyObject *binaryString = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pCompressed, NULL);
     Py_XDECREF(pCompressed);
     Py_XDECREF(methodName);
     if (NULL == binaryString) {
@@ -172,7 +242,7 @@ NS_ASSUME_NONNULL_END
      */
     PyObject *methodName = PyString_FromString("generate_binaries");
     PyObject *pBaseAddr = PyInt_FromLong(baseAddr);
-    PyObject *binaryList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pBaseAddr, NULL);
+    PyObject *binaryList = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pBaseAddr, NULL);
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
     if (NULL == binaryList) {
@@ -195,7 +265,7 @@ NS_ASSUME_NONNULL_END
     NSArray<NSArray<id> *> *retVal = nil;
     PyObject *binaryList = [self generateBinariesAt:baseAddr error:error];
     if (NULL != binaryList) {
-        retVal = [NSArray arrayWithPyListOfTuple:binaryList];
+        retVal = [NSArray arrayWithPythonListOfTuple:binaryList];
         Py_DECREF(binaryList);
     }
 
@@ -212,7 +282,7 @@ NS_ASSUME_NONNULL_END
     PyObject *methodName = PyString_FromString("generate_binaries");
     PyObject *pBaseAddr = PyInt_FromLong(baseAddr);
     PyObject *pSaves = NULL;    // TODO: PyInt_FromLong(saves);
-    PyObject *binaryList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pBaseAddr, pSaves, NULL);
+    PyObject *binaryList = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pBaseAddr, pSaves, NULL);
     Py_XDECREF(pSaves);
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
@@ -228,7 +298,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    NSArray<NSArray<id> *> *retVal = [NSArray arrayWithPyListOfTuple:binaryList];
+    NSArray<NSArray<id> *> *retVal = [NSArray arrayWithPythonListOfTuple:binaryList];
     Py_DECREF(binaryList);
 
     return retVal;
@@ -305,7 +375,7 @@ NS_ASSUME_NONNULL_END
      */
     PyObject *methodName = PyString_FromString("generate_text");
     PyObject *pMode = PyString_FromString(textConfig);
-    PyObject *dataText = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, binaryData, pMode, NULL);
+    PyObject *dataText = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, binaryData, pMode, NULL);
     Py_DECREF(binaryData);
     Py_XDECREF(pMode);
     Py_XDECREF(methodName);
@@ -343,7 +413,7 @@ NS_ASSUME_NONNULL_END
     PyObject *methodName = PyString_FromString("generate_image");
     PyObject *pBaseAddr = PyInt_FromLong(baseAddr);
     PyObject *pChunkSize = PyInt_FromLong(chunkSize);
-    PyObject *imageList = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pBaseAddr, pChunkSize, NULL);
+    PyObject *imageList = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pBaseAddr, pChunkSize, NULL);
     Py_XDECREF(pChunkSize);
     Py_XDECREF(pBaseAddr);
     Py_XDECREF(methodName);
@@ -359,7 +429,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
-    NSArray<NSData *> *retVal = [NSArray arrayWithPyListOfData:imageList];
+    NSArray<NSData *> *retVal = [NSArray arrayWithPythonListOfData:imageList];
     Py_DECREF(imageList);
 
     return retVal;
@@ -373,7 +443,7 @@ NS_ASSUME_NONNULL_END
      generate_XB_loader()
      */
     PyObject *methodName = PyString_FromString("generate_XB_loader");
-    PyObject *basicString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
+    PyObject *basicString = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == basicString) {
         NSLog(@"%s ERROR: generate_XB_loader() returns NULL!", __FUNCTION__);
@@ -410,8 +480,8 @@ NS_ASSUME_NONNULL_END
      data, layout, metainf = code.generate_cartridge(name)
      */
     PyObject *methodName = PyString_FromString("generate_cartridge");
-    PyObject *pCartName = PyString_FromString([cartridgeName UTF8String]);
-    PyObject *cartTuple = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pCartName, NULL);
+    PyObject *pCartName = cartridgeName.asPythonType;
+    PyObject *cartTuple = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pCartName, NULL);
     Py_XDECREF(pCartName);
     Py_XDECREF(methodName);
     if (NULL == cartTuple) {
@@ -443,7 +513,6 @@ NS_ASSUME_NONNULL_END
                                                   };
 
     Py_DECREF(cartTuple);
-
     return retVal;
 }
 
@@ -459,7 +528,7 @@ NS_ASSUME_NONNULL_END
      prepare()
      */
     PyObject *methodName = PyString_FromString("prepare");
-    PyObject *pNonValue = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, NULL);
+    PyObject *pNonValue = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, NULL);
     Py_XDECREF(methodName);
     if (NULL == pNonValue) {
         return nil;
@@ -471,7 +540,7 @@ NS_ASSUME_NONNULL_END
      */
     methodName = PyString_FromString("generate_list");
     PyObject *pOutputSymbols = PyBool_FromLong(outputSymbols);
-    PyObject *listingString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pOutputSymbols, NULL);
+    PyObject *listingString = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pOutputSymbols, NULL);
     Py_XDECREF(pOutputSymbols);
     Py_XDECREF(methodName);
     if (NULL == listingString) {
@@ -501,7 +570,7 @@ NS_ASSUME_NONNULL_END
      */
     PyObject *methodName = PyString_FromString("generate_symbols");
     PyObject *pUseEqu = PyBool_FromLong(useEqu);
-    PyObject *symbolsString = PyObject_CallMethodObjArgs(objectcodePythonClass, methodName, pUseEqu, NULL);
+    PyObject *symbolsString = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pUseEqu, NULL);
     Py_XDECREF(pUseEqu);
     Py_XDECREF(methodName);
     if (NULL == symbolsString) {

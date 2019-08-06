@@ -24,46 +24,29 @@
 
 #import "NSArrayPythonAdditions.h"
 
+#import <Python/Python.h>
+
+#import "NSObjectPythonAdditions.h"
 #import "NSDataPythonAdditions.h"
 #import "NSStringPythonAdditions.h"
 
 
 @implementation NSArray (NSArrayPythonAdditions)
 
-+ (nullable instancetype)arrayWithPyTuple:(PyObject *)dataTuple
++ (nullable instancetype)arrayWithPythonTuple:(PyObject *)dataTuple
 {
-    assert(NULL != dataTuple);
+    assert(NULL != dataTuple && PyTuple_Check(dataTuple));
 
     const Py_ssize_t dataCount = PyTuple_Size(dataTuple);
     if (0 > dataCount) {
         return nil;
     }
     NSMutableArray<id> *retVal = [NSMutableArray arrayWithCapacity:dataCount];
-    if (nil == retVal) {
-        return nil;
-    }
     for (Py_ssize_t i = 0; i < dataCount; i++) {
         PyObject *dataItem = PyTuple_GetItem(dataTuple, i);
         if (NULL != dataItem) {
-            if (PyInt_Check(dataItem)) {
-                NSNumber *object = [NSNumber numberWithLong:PyInt_AsLong(dataItem)];
-                [retVal addObject:object];
-            } else if (PyString_Check(dataItem)) {
-                NSData *object = [NSData dataWithPythonString:dataItem];
-                [retVal addObject:object];
-            } else if (PyList_Check(dataItem)) {
-                NSArray *object = [NSArray arrayWithPyList:dataItem];
-                [retVal addObject:object];
-            } else if (PyTuple_Check(dataItem)) {
-                NSArray *object = [NSArray arrayWithPyTuple:dataItem];
-                [retVal addObject:object];
-            } else if (Py_None == dataItem) {
-                NSNull *object = [NSNull null];
-                [retVal addObject:object];
-            } else {
-                PyTypeObject *dataType = dataItem->ob_type;
-                NSLog(@"%s ERROR: Cannot convert Python type '%s' to an Objective-C type", __FUNCTION__, dataType->tp_name);
-            }
+            id object = [NSObject objectWithPythonObject:dataItem];
+            [retVal addObject:object];
         }
     }
 
@@ -71,40 +54,20 @@
 }
 
 
-+ (nullable instancetype)arrayWithPyList:(PyObject *)dataList
++ (nullable instancetype)arrayWithPythonList:(PyObject *)dataList
 {
-    assert(NULL != dataList);
+    assert(NULL != dataList && PyList_Check(dataList));
 
     const Py_ssize_t dataCount = PyList_Size(dataList);
     if (0 > dataCount) {
         return nil;
     }
     NSMutableArray<id> *retVal = [NSMutableArray arrayWithCapacity:dataCount];
-    if (nil == retVal) {
-        return nil;
-    }
     for (Py_ssize_t i = 0; i < dataCount; i++) {
         PyObject *dataItem = PyList_GetItem(dataList, i);
         if (NULL != dataItem) {
-            if (PyInt_Check(dataItem)) {
-                NSNumber *object = [NSNumber numberWithLong:PyInt_AsLong(dataItem)];
-                [retVal addObject:object];
-            } else if (PyString_Check(dataItem)) {
-                NSData *object = [NSData dataWithPythonString:dataItem];
-                [retVal addObject:object];
-            } else if (PyList_Check(dataItem)) {
-                NSArray *object = [NSArray arrayWithPyList:dataItem];
-                [retVal addObject:object];
-            } else if (PyTuple_Check(dataItem)) {
-                NSArray *object = [NSArray arrayWithPyTuple:dataItem];
-                [retVal addObject:object];
-            } else if (Py_None == dataItem) {
-                NSNull *object = [NSNull null];
-                [retVal addObject:object];
-            } else {
-                PyTypeObject *dataType = dataItem->ob_type;
-                NSLog(@"%s ERROR: Cannot convert Python type '%s' to an Objective-C type", __FUNCTION__, dataType->tp_name);
-            }
+            id object = [NSObject objectWithPythonObject:dataItem];
+            [retVal addObject:object];
         }
     }
 
@@ -112,26 +75,27 @@
 }
 
 
-+ (nullable instancetype)arrayWithPyListOfTuple:(PyObject *)dataList
++ (nullable instancetype)arrayWithPythonListOfTuple:(PyObject *)dataList
 {
-    assert(NULL != dataList);
+    assert(NULL != dataList && PyList_Check(dataList));
 
     const Py_ssize_t dataCount = PyList_Size(dataList);
     if (0 > dataCount) {
         return nil;
     }
-    PyObject *dataItem = PyList_GetItem(dataList, 0);
-    if (!PyTuple_Check(dataItem)) {
-        return nil;
-    }
     NSMutableArray<NSArray<id> *> *retVal = [NSMutableArray arrayWithCapacity:dataCount];
-    if (nil == retVal) {
-        return nil;
+    if (0 == dataCount) {
+        return retVal;
+    }
+
+    PyObject *dataItem = PyList_GetItem(dataList, 0);
+    if (NULL == dataItem || !PyTuple_Check(dataItem)) {
+        return retVal;
     }
     for (Py_ssize_t i = 0; i < dataCount; i++) {
         PyObject *dataTupel = PyList_GetItem(dataList, i);
         if (NULL != dataTupel) {
-            NSArray<id> *dataArray = [NSArray arrayWithPyTuple:dataTupel];
+            NSArray<id> *dataArray = [NSArray arrayWithPythonTuple:dataTupel];
             [retVal addObject:dataArray];
         }
     }
@@ -140,9 +104,9 @@
 }
 
 
-+ (nullable instancetype)arrayWithPyListOfData:(PyObject *)dataList
++ (nullable instancetype)arrayWithPythonListOfData:(PyObject *)dataList
 {
-    assert(NULL != dataList);
+    assert(NULL != dataList && PyList_Check(dataList));
 
     const Py_ssize_t dataCount = PyList_Size(dataList);
     if (0 > dataCount) {
@@ -153,9 +117,10 @@
         return nil;
     }
     NSMutableArray<NSData *> *retVal = [NSMutableArray arrayWithCapacity:dataCount];
-    if (nil == retVal) {
-        return nil;
+    if (0 == dataCount) {
+        return retVal;
     }
+
     for (Py_ssize_t i = 0; i < dataCount; i++) {
         PyObject *dataItem = PyList_GetItem(dataList, i);
         if (NULL != dataItem) {
@@ -170,17 +135,22 @@
 }
 
 
-+ (nullable instancetype)arrayWithPyListOfString:(PyObject *)dataList
++ (nullable instancetype)arrayWithPythonListOfString:(PyObject *)dataList
 {
-    assert(NULL != dataList);
+    assert(NULL != dataList && PyList_Check(dataList));
 
     const Py_ssize_t dataCount = PyList_Size(dataList);
     if (0 > dataCount) {
         return nil;
     }
     NSMutableArray<NSString *> *retVal = [NSMutableArray arrayWithCapacity:dataCount];
-    if (nil == retVal) {
-        return nil;
+    if (0 == dataCount) {
+        return retVal;
+    }
+
+    PyObject *dataItem = PyList_GetItem(dataList, 0);
+    if (NULL == dataItem || !PyString_Check(dataItem)) {
+        return retVal;
     }
     for (Py_ssize_t i = 0; i < dataCount; i++) {
         PyObject *dataItem = PyList_GetItem(dataList, i);
@@ -188,6 +158,21 @@
             [retVal addObject:[NSString stringWithPythonString:dataItem encoding:NSUTF8StringEncoding]];
         }
     }
+
+    return retVal;
+}
+
+
+- (PyObject *)asPythonType
+{
+    PyObject *retVal = PyList_New(self.count);
+    if (NULL == retVal) {
+        return Py_None;
+    }
+
+    [self enumerateObjectsUsingBlock:^(NSObject *obj, NSUInteger idx, BOOL *stop) {
+        PyList_SetItem(retVal, idx, obj.asPythonType);
+    }];
 
     return retVal;
 }

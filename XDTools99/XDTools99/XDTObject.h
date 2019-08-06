@@ -5,7 +5,7 @@
 //  Created by Henrik Wedekind on 05.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import <Python/object.h>
+
 
 #define XDTErrorDomain @"XDTErrorDomain"
 
@@ -36,6 +38,18 @@ typedef NS_ENUM(NSInteger, XDTErrorCode) {
 
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef const char * XDTModuleName NS_EXTENSIBLE_STRING_ENUM;
+
+FOUNDATION_EXPORT XDTModuleName const XDTAs99ModuleName;    // XDTAs99ModuleName "xas99"
+#define XDTAs99RequiredVersion "2.0.2"
+
+FOUNDATION_EXPORT XDTModuleName const XDTGa99ModuleName;    // XDTGa99ModuleName "xga99"
+#define XDTGa99RequiredVersion "2.0.2"
+
+FOUNDATION_EXPORT XDTModuleName const XDTBas99ModuleName;   // XDTBas99ModuleName "xbas99"
+#define XDTBas99RequiredVersion "2.0.1"
+
 
 @class XDTObject;
 
@@ -153,7 +167,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface XDTObject : NSObject
 
+@property (class, readonly) PyObject *xdtAs99ModuleInstance;
+@property (class, readonly) PyObject *xdtGa99ModuleInstance;
+@property (class, readonly) PyObject *xdtBas99ModuleInstance;
+
++ (NSString *)pythonClassName;
+
++ (BOOL)checkInstanceForPythonObject:(PyObject *)pythonObject;
+
 + (void)reinitializeWithXDTModulePath:(NSString *)modulePath;
+
+@end
+
+
+@interface XDTObject (Private)
+
+@property (readonly) PyObject *pythonInstance;
+
+- (instancetype)initWithPythonInstance:(PyObject *_Nullable)object;
 
 @end
 

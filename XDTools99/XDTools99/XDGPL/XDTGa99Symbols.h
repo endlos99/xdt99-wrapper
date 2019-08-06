@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable instancetype)symbolsWithPythonInstance:(void *)object;
 
 @property (nullable, readonly, copy) NSDictionary<NSString *, NSNumber *> *symbols;
-@property (nullable, readonly, copy) NSArray<NSString *> *symbolList;
+@property (nullable, readonly, copy) NSArray<NSString *> *symbolNames;
 
 @end
 

@@ -24,10 +24,11 @@
 
 #import <Foundation/Foundation.h>
 
-#import <Python/Python.h>
+#import <Python/object.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface NSArray (NSArrayPythonAdditions)
 
 /**
@@ -38,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  The elements of the created array could have different types and will be converted from thier typical Python classes into compatible Objective-C classes.
  */
-+ (nullable instancetype)arrayWithPyTuple:(PyObject *)dataTuple;
++ (nullable instancetype)arrayWithPythonTuple:(PyObject *)dataTuple;
 
 /**
  Creates and returns an NSArray object with all elements from the given Python list.
@@ -48,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  The elements of the created array could have different types and will be converted from thier typical Python classes into compatible Objective-C classes.
  */
-+ (nullable instancetype)arrayWithPyList:(PyObject *)dataList;
++ (nullable instancetype)arrayWithPythonList:(PyObject *)dataList;
 
 /**
  Creates and returns an NSArray object with all tuple as an array from the given Python list.
@@ -58,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  The elements of the created array will all be of type NSArray, which could have different types and will be converted from thier typical Python classes into compatible Objective-C classes. The effective type is (NSArray<NSArray<id> *> *)
  */
-+ (nullable instancetype)arrayWithPyListOfTuple:(PyObject *)dataList;
++ (nullable instancetype)arrayWithPythonListOfTuple:(PyObject *)dataList;
 
 /**
  Creates and returns an NSArray object with all elements from the given Python list.
@@ -68,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 
  The elements getting from the Python list will all have unknown content, packed within a Python string type. For that reason these elements will be converted into NSData objects. The effective type is (NSArray<NSData *> *)
  */
-+ (nullable instancetype)arrayWithPyListOfData:(PyObject *)dataList;
++ (nullable instancetype)arrayWithPythonListOfData:(PyObject *)dataList;
 
 /**
  Creates and returns an NSArray object with all elements from the given Python list.
@@ -78,7 +79,13 @@ NS_ASSUME_NONNULL_BEGIN
 
  The elements getting from the Python list will all be Python string types. For that reason these elements will be converted into NSString objects with UTF-8 encoding. The effective type is (NSArray<NSString *> *)
  */
-+ (nullable instancetype)arrayWithPyListOfString:(PyObject *)dataList;
++ (nullable instancetype)arrayWithPythonListOfString:(PyObject *)dataList;
+
+/**
+ Converts all elements of the receiver as a new Python list (aka. PyList)
+ */
+@property (readonly) PyObject *asPythonType;
 
 @end
+
 NS_ASSUME_NONNULL_END

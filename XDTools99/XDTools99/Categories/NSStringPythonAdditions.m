@@ -24,6 +24,8 @@
 
 #import "NSStringPythonAdditions.h"
 
+#import <Python/Python.h>
+
 
 @implementation NSString (NSStringPythonAdditions)
 
@@ -43,9 +45,9 @@
 }
 
 
-- (PyStringObject *)pythonString
+- (PyObject *)asPythonType
 {
-    return (PyStringObject *)PyString_FromString(self.UTF8String);
+    return PyString_FromString(self.UTF8String);
 }
 
 @end

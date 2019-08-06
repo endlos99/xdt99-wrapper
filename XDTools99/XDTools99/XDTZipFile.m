@@ -1,11 +1,11 @@
 //
 //  XDTZipFile.m
-//  SimpleXDT99
+//  XDTools99
 //
 //  Created by Henrik Wedekind on 05.12.16.
 //
 //  XDTools99.framework a collection of Objective-C wrapper for xdt99
-//  Copyright © 2016 Henrik Wedekind (aka hackmac). All rights reserved.
+//  Copyright © 2016-2019 Henrik Wedekind (aka hackmac). All rights reserved.
 //
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,9 @@
 
 #import <Python/Python.h>
 
+#import "NSDataPythonAdditions.h"
 #import "NSErrorPythonAdditions.h"
+#import "NSStringPythonAdditions.h"
 
 
 #define XDTModuleNameZipFile "zipfile"
@@ -35,7 +37,6 @@
 
 @interface XDTZipFile() {
     PyObject *zipfilePythonModule;
-    PyObject *zipfilePythonClass;
 }
 
 - (instancetype)initForWritingToURL:(NSURL *)url forModule:(PyObject *)pModule error:(NSError * _Nullable __autoreleasing *)error;
@@ -44,6 +45,12 @@
 
 
 @implementation XDTZipFile
+
++ (NSString *)pythonClassName
+{
+    return [NSString stringWithUTF8String:XDTClassNameZipFile];
+}
+
 
 + (instancetype)zipFileForWritingToURL:(NSURL *)url error:(NSError * _Nullable __autoreleasing *)error
 {
@@ -69,11 +76,6 @@
 
 - (instancetype)initForWritingToURL:(NSURL *)url forModule:(PyObject *)pModule error:(NSError *__autoreleasing  _Nullable *)error
 {
-    self = [super init];
-    if (nil == self) {
-        return nil;
-    }
-
     PyObject *pFunc = PyObject_GetAttrString(pModule, XDTClassNameZipFile);
     if (NULL == pFunc || !PyCallable_Check(pFunc)) {
         PyObject *exeption = PyErr_Occurred();
@@ -118,9 +120,13 @@
         return nil;
     }
 
+    self = [super initWithPythonInstance:zipfile];
+    if (nil == self) {
+        return nil;
+    }
+
+    Py_INCREF(pModule);
     zipfilePythonModule = pModule;
-    Py_INCREF(zipfilePythonModule);
-    zipfilePythonClass = zipfile;
 
     return self;
 }
@@ -128,7 +134,6 @@
 
 - (void)dealloc
 {
-    Py_CLEAR(zipfilePythonClass);
     Py_CLEAR(zipfilePythonModule);
 
 #if !__has_feature(objc_arc)
@@ -144,9 +149,9 @@
      writestr("layout.xml", layout)
      */
     PyObject *methodName = PyString_FromString("writestr");
-    PyObject *pFileName = PyString_FromString([fileName UTF8String]);
-    PyObject *pFileData = PyString_FromStringAndSize([data bytes], [data length]);
-    PyObject *pValueTupel = PyObject_CallMethodObjArgs(zipfilePythonClass, methodName, pFileName, pFileData, NULL);
+    PyObject *pFileName = fileName.asPythonType;
+    PyObject *pFileData = data.asPythonType;
+    PyObject *pValueTupel = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pFileName, pFileData, NULL);
     Py_XDECREF(pFileData);
     Py_XDECREF(pFileName);
     Py_XDECREF(methodName);

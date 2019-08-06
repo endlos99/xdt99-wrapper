@@ -24,14 +24,8 @@
 
 #import "XDTObject.h"
 
+#import "XDTGa99Syntax.h"
 
-#define XDTGPLAssemblerVersionRequired "2.0.2"
-
-typedef NS_ENUM(NSUInteger, XDTGa99SyntaxType) {
-    XDTGa99SyntaxTypeNativeXDT99,   /* Ryte/RAG syntax variant */
-    XDTGa99SyntaxTypeRAGGPL,        /* RAG syntax variant. Obsolete with xga99 v1.8.5 - conbined with the Ryte syntax */
-    XDTGa99SyntaxTypeTIImageTool,   /* Syntax variant for the GPL disassembler of TIImageTool */
-};
 
 typedef NS_ENUM(NSUInteger, XDTGa99TargetType) {
     XDTGa99TargetTypePlainByteCode,
@@ -45,30 +39,17 @@ typedef NS_ENUM(NSUInteger, XDTGa99TargetType) {
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString * XDTGa99OptionKey NS_EXTENSIBLE_STRING_ENUM; /* Keys for use in the NSDictionry */
-
-FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionGROM;
-FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionAORG;
-FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionStyle;
-FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionTarget;
-FOUNDATION_EXPORT XDTGa99OptionKey const XDTGa99OptionWarnings;
-
-
 @interface XDTGPLAssembler : XDTObject
 
 @property (readonly) NSString *version;
-@property (readonly) NSUInteger gromAddress;
-@property (readonly) NSUInteger aorgAddress;
-@property (readonly) XDTGa99TargetType targetType;
-@property (readonly) XDTGa99SyntaxType syntaxType;
-@property (readonly) BOOL outputWarnings;
+@property (assign) NSUInteger gromAddress;
+@property (assign) NSUInteger aorgAddress;
+@property (assign) XDTGa99TargetType targetType;
+@property (assign) XDTGa99SyntaxType syntaxType;
+@property (assign) BOOL outputWarnings;
 @property (readonly, nullable) XDTMessage *messages;    /* Object that contains all messages (Error, Warning, etc) after the assembler run */
 
-+ (const char *_Nullable)syntaxTypeAsCString:(XDTGa99SyntaxType)syntaxType;
-
-+ (BOOL)checkRequiredModuleVersion;
-
-+ (nullable instancetype)gplAssemblerWithOptions:(NSDictionary<XDTGa99OptionKey, id> *)options includeURL:(NSURL *)url;
++ (nullable instancetype)gplAssemblerWithIncludeURL:(NSURL *)url grom:(NSUInteger)gromAddress aorg:(NSUInteger)aorgAddress target:(XDTGa99TargetType)targetType syntax:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings;
 
 - (nullable XDTGa99Objcode *)assembleSourceFile:(NSURL *)srcname error:(NSError **)error;
 - (nullable XDTGa99Objcode *)assembleSourceFile:(NSURL *)srcname pathName:(NSURL *)pathName error:(NSError **)error;
