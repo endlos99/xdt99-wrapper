@@ -49,7 +49,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingErrorMessage
 {
-    return [NSSet setWithObjects:@"shouldShowErrorsInLog", @"shouldShowLog", nil];
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), nil];
 }
 
 
@@ -184,7 +184,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingGeneratedLogMessage
 {
-    return [NSSet setWithObjects:@"shouldShowErrorsInLog", @"shouldShowLog", @"errorMessage", nil];
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(shouldShowErrorsInLog)), NSStringFromSelector(@selector(shouldShowLog)), NSStringFromSelector(@selector(errorMessage)), nil];
 }
 
 
@@ -209,7 +209,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingStatusImage
 {
-    return [NSSet setWithObjects:@"errorMessage", nil];
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(errorMessage)), nil];
 }
 
 

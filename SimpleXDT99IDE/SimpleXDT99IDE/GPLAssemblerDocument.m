@@ -168,7 +168,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingShouldUseCartName
 {
-    return [NSSet setWithObject:@"outputFormatPopupButtonIndex"];
+    return [NSSet setWithObject:NSStringFromSelector(@selector(outputFormatPopupButtonIndex))];
 }
 
 
@@ -180,7 +180,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingListOutput
 {
-    return [NSSet setWithObjects:@"assemblingResult", @"shouldShowSymbolsInListing", @"shouldShowSymbolsAsEqus", nil];
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(assemblingResult)), NSStringFromSelector(@selector(shouldShowSymbolsInListing)), NSStringFromSelector(@selector(shouldShowSymbolsAsEqus)), nil];
 }
 
 
@@ -216,11 +216,11 @@
 + (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
     NSSet *retVal = [super keyPathsForValuesAffectingValueForKey:key];
-    if ([@"generatedLogMessage" isEqualToString:key]) {
+    if ([NSStringFromSelector(@selector(generatedLogMessage)) isEqualToString:key]) {
         NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
-        [newSet addObject:@"shouldShowListingInLog"];
+        [newSet addObject:NSStringFromSelector(@selector(shouldShowListingInLog))];
         [newSet unionSet:[self keyPathsForValuesAffectingListOutput]];
-        [newSet removeObject:@"errorMessage"];  /* 'errorMessage' from the super class is overlayed by 'assemblingResult', so remove it */
+        [newSet removeObject:NSStringFromSelector(@selector(errorMessage))];  /* 'errorMessage' from the super class is overlayed by 'assemblingResult', so remove it */
         retVal = newSet;
     }
     return retVal;
@@ -309,7 +309,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingTargetType
 {
-    return [NSSet setWithObject:@"outputFormatPopupButtonIndex"];
+    return [NSSet setWithObject:NSStringFromSelector(@selector(outputFormatPopupButtonIndex))];
 }
 
 
@@ -336,7 +336,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingSyntaxType
 {
-    return [NSSet setWithObject:@"syntaxFormatPopupButtonIndex"];
+    return [NSSet setWithObject:NSStringFromSelector(@selector(syntaxFormatPopupButtonIndex))];
 }
 
 

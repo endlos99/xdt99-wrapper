@@ -238,9 +238,9 @@
 + (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
     NSSet *retVal = [super keyPathsForValuesAffectingValueForKey:key];
-    if ([@"generatedLogMessage" isEqualToString:key]) {
+    if ([NSStringFromSelector(@selector(generatedLogMessage)) isEqualToString:key]) {
         NSMutableSet *newSet = [NSMutableSet setWithSet:retVal];
-        [newSet addObjectsFromArray:@[@"shouldDumpTokensInLog", @"shouldShowWarningsInLog", @"compilingMessages", @"tokenDump"]];
+        [newSet addObjectsFromArray:@[NSStringFromSelector(@selector(shouldDumpTokensInLog)), NSStringFromSelector(@selector(shouldShowWarningsInLog)), NSStringFromSelector(@selector(compilingMessages)), NSStringFromSelector(@selector(tokenDump))]];
         retVal = newSet;
     }
     return retVal;

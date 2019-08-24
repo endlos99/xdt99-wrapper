@@ -634,13 +634,13 @@ NS_ASSUME_NONNULL_END
     newNameFieldValue = [newNameFieldValue stringByAppendingPathExtension:extension];
     [panel setNameFieldStringValue:newNameFieldValue];
 
-    [self willChangeValueForKey:@"shouldCartridgeNameActivated"];
+    [self willChangeValueForKey:NSStringFromSelector(@selector(shouldCartridgeNameActivated))];
     _shouldCartridgeNameActivated = (7 == outputFileType);
-    [self didChangeValueForKey:@"shouldCartridgeNameActivated"];
+    [self didChangeValueForKey:NSStringFromSelector(@selector(shouldCartridgeNameActivated))];
 
-    [self willChangeValueForKey:@"shouldBaseAddressActivated"];
+    [self willChangeValueForKey:NSStringFromSelector(@selector(shouldBaseAddressActivated))];
     _shouldBaseAddressActivated = (0 == outputFileType) || (4 == outputFileType) || (5 == outputFileType);
-    [self didChangeValueForKey:@"shouldBaseAddressActivated"];
+    [self didChangeValueForKey:NSStringFromSelector(@selector(shouldBaseAddressActivated))];
 }
 
 
@@ -665,9 +665,9 @@ NS_ASSUME_NONNULL_END
     newNameFieldValue = [newNameFieldValue stringByAppendingPathExtension:extension];
     [panel setNameFieldStringValue:newNameFieldValue];
 
-    [self willChangeValueForKey:@"shouldCartridgeNameActivated"];
+    [self willChangeValueForKey:NSStringFromSelector(@selector(shouldCartridgeNameActivated))];
     _shouldCartridgeNameActivated = (1 == outputFileType) || (2 == outputFileType);
-    [self didChangeValueForKey:@"shouldCartridgeNameActivated"];
+    [self didChangeValueForKey:NSStringFromSelector(@selector(shouldCartridgeNameActivated))];
 }
 
 
