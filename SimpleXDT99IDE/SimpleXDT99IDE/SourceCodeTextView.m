@@ -25,17 +25,41 @@
 #import "SourceCodeTextView.h"
 
 #import "AppDelegate.h"
+#import "HighlighterDelegate.h"
+#import "PrintPanelAccessoryController.h"
 
 
-@interface SourceCodeTextView ()
+@interface SourceCodeTextView () {
+    BOOL _observerAdded;
+
+    BOOL _previousPrintLineNumbers;     // Stores the last setting of whether to print line numbers
+    BOOL _previousHighlightSource;      // Stores the last setting of whether to highlight syntax
+}
 
 @property (assign) TabBehaviourType tabBehaviour;
 @property (assign) NSUInteger tabWidth;
+
+// Definitions from Cathegory SourceCodeTextView (NSPrinting)
+@property (assign) PrintPanelAccessoryController *printPanelAccessoryController;
+@property (assign) HighlighterDelegate *highlighterDelegate;
 
 @end
 
 
 @implementation SourceCodeTextView
+
+- (instancetype)initWithFrame:(NSRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (nil == self) {
+        return nil;
+    }
+
+    _observerAdded = NO; // No Observer will be added when initialized for NSPrinting
+
+    return self;
+}
+
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
@@ -54,6 +78,7 @@
                                           forKeyPath:UserDefaultKeyDocumentOptionTabWidth
                                              options:NSKeyValueObservingOptionNew
                                              context:NULL];
+    _observerAdded = YES;
 
     return self;
 }
@@ -61,10 +86,12 @@
 
 - (void)dealloc
 {
-    [NSUserDefaults.standardUserDefaults removeObserver:self
-                                             forKeyPath:UserDefaultKeyDocumentOptionTabWidth];
-    [NSUserDefaults.standardUserDefaults removeObserver:self
-                                             forKeyPath:UserDefaultKeyDocumentOptionTabBehaviour];
+    if (_observerAdded) {
+        [NSUserDefaults.standardUserDefaults removeObserver:self
+                                                 forKeyPath:UserDefaultKeyDocumentOptionTabWidth];
+        [NSUserDefaults.standardUserDefaults removeObserver:self
+                                                 forKeyPath:UserDefaultKeyDocumentOptionTabBehaviour];
+    }
 }
 
 
@@ -189,6 +216,38 @@ static NSUInteger const tabstops[] = {7, 12, 25, 30, 45, 59, 79, 0};
             break;
         }
     }
+}
+
+
+#pragma mark Overwritings of NSView(NSPrinting)
+
+
+/* Override of knowsPageRange: checks printing parameters against the last invocation, and if not the same, resizes the view and relays out the text.  On first invocation, the saved size will be 0,0, which will cause the text to be laid out.
+ */
+- (BOOL)knowsPageRange:(NSRangePointer)range
+{
+    if (_previousPrintLineNumbers != self.printPanelAccessoryController.printListing ||
+        _previousHighlightSource != self.printPanelAccessoryController.highlightSource) {
+        _previousPrintLineNumbers = self.printPanelAccessoryController.printListing;
+        _previousHighlightSource = self.printPanelAccessoryController.highlightSource;
+
+        [self.textStorage beginEditing];
+        if (_previousHighlightSource) {
+            [self.textStorage.mutableString enumerateSubstringsInRange:NSMakeRange(0, self.textStorage.length)
+                                                               options:NSStringEnumerationByLines + NSStringEnumerationSubstringNotRequired
+                                                            usingBlock:^(NSString *line, NSRange lineRange, NSRange enclosingRange, BOOL *stop) {
+                                                                [self.highlighterDelegate processAttributesOfText:self.textStorage inRange:lineRange];
+                                                            }];
+        } else {
+            [self.textStorage setAttributes:@{NSForegroundColorAttributeName: NSColor.blackColor,
+                                              NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]
+                                              }
+                                      range:NSMakeRange(0, self.textStorage.length)];
+        }
+        [self.textStorage endEditing];
+    }
+
+    return [super knowsPageRange:range];
 }
 
 @end

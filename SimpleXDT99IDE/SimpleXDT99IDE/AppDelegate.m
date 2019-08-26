@@ -96,6 +96,8 @@ NS_ASSUME_NONNULL_END
                                    UserDefaultKeyDocumentOptionHighlightMessages: @YES,
                                    UserDefaultKeyDocumentOptionTabBehaviour: [NSNumber numberWithUnsignedInteger:TabBehaviourTIStyle],
                                    UserDefaultKeyDocumentOptionTabWidth: @4,
+                                   UserDefaultKeyDocumentOptionPrintUsingHighlighting: @NO,
+                                   UserDefaultKeyDocumentOptionPrintListing: @NO,
 
                                    UserDefaultKeyAssemblerOptionOutputTypePopupIndex: @1,
                                    UserDefaultKeyAssemblerOptionDisableXDTExtensions: @NO,

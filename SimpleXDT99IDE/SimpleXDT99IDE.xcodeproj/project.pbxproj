@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF04D4C1232FCD3A0079F454 /* PrintPanelAccessoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = AF04D4BF232FCD3A0079F454 /* PrintPanelAccessoryController.m */; };
+		AF04D4C2232FCD3A0079F454 /* PrintPanelAccessory.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF04D4C0232FCD3A0079F454 /* PrintPanelAccessory.xib */; };
 		AF0944CB1E0C10CC00EE41B7 /* NoodleLineNumberView.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0944CA1E0C10CC00EE41B7 /* NoodleLineNumberView.m */; };
 		AF0944CE1E0C156C00EE41B7 /* NoodleLineNumberMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = AF0944CD1E0C156C00EE41B7 /* NoodleLineNumberMarker.m */; };
 		AF125EBF1E0415E600F659AA /* GPLAssemblerOptionsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AF125EC11E0415E600F659AA /* GPLAssemblerOptionsView.xib */; };
@@ -96,6 +98,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AF04D4BE232FCD3A0079F454 /* PrintPanelAccessoryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrintPanelAccessoryController.h; sourceTree = "<group>"; };
+		AF04D4BF232FCD3A0079F454 /* PrintPanelAccessoryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PrintPanelAccessoryController.m; sourceTree = "<group>"; };
+		AF04D4C0232FCD3A0079F454 /* PrintPanelAccessory.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrintPanelAccessory.xib; sourceTree = "<group>"; };
 		AF0944C91E0C10CC00EE41B7 /* NoodleLineNumberView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberView.h; path = ../NoodleKit/NoodleLineNumberView.h; sourceTree = "<group>"; };
 		AF0944CA1E0C10CC00EE41B7 /* NoodleLineNumberView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleLineNumberView.m; path = ../NoodleKit/NoodleLineNumberView.m; sourceTree = "<group>"; };
 		AF0944CC1E0C156C00EE41B7 /* NoodleLineNumberMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleLineNumberMarker.h; path = ../NoodleKit/NoodleLineNumberMarker.h; sourceTree = "<group>"; };
@@ -251,6 +256,9 @@
 				AF64ED7222D738D4000E0AB4 /* PreferencesPane.xib */,
 				AF64ED6A22D71C9D000E0AB4 /* PreferencesPaneController.h */,
 				AF64ED6B22D71C9D000E0AB4 /* PreferencesPaneController.m */,
+				AF04D4C0232FCD3A0079F454 /* PrintPanelAccessory.xib */,
+				AF04D4BE232FCD3A0079F454 /* PrintPanelAccessoryController.h */,
+				AF04D4BF232FCD3A0079F454 /* PrintPanelAccessoryController.m */,
 				AFDECF331DF176B1008870F7 /* Assets.xcassets */,
 				AFDECF381DF176B1008870F7 /* Info.plist */,
 				AFF5D048225E511700A69BEB /* Localizable.strings */,
@@ -397,6 +405,7 @@
 				AFFDB6871DFC6A95006788CC /* InfoPlist.strings in Resources */,
 				AFBF2B681FE95B1B008248B6 /* COPYING in Resources */,
 				AFBF2B671FE95B1B008248B6 /* xga99.py in Resources */,
+				AF04D4C2232FCD3A0079F454 /* PrintPanelAccessory.xib in Resources */,
 				AF5CF8B41DFF30F900C08E36 /* BasicOptionsView.xib in Resources */,
 				AF5CF8B11DFF30F400C08E36 /* AssemblerOptionsView.xib in Resources */,
 			);
@@ -422,6 +431,7 @@
 				AFCD690522DE28F1003B3C36 /* NSTextStorageAdditions.m in Sources */,
 				AFDECF2C1DF176B1008870F7 /* main.m in Sources */,
 				AF0944CB1E0C10CC00EE41B7 /* NoodleLineNumberView.m in Sources */,
+				AF04D4C1232FCD3A0079F454 /* PrintPanelAccessoryController.m in Sources */,
 				AF5CF8A01DFF1FEC00C08E36 /* BasicCodeDocument.m in Sources */,
 				AF87FF9B1E040CF800CF752F /* GPLAssemblerDocument.m in Sources */,
 				AFE5BAF722CCC237002C046B /* NSColorAdditions.m in Sources */,

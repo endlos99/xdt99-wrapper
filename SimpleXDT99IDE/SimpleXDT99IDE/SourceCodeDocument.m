@@ -31,6 +31,7 @@
 #import "NSColorAdditions.h"
 
 #import "AppDelegate.h"
+#import "PrintPanelAccessoryController.h"
 
 #import "NoodleLineNumberView.h"
 
@@ -162,6 +163,37 @@
         *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
     }
     return NO;
+}
+
+
+- (NSPrintOperation *)printOperationWithSettings:(NSDictionary<NSPrintInfoAttributeKey,id> *)printSettings error:(NSError **)outError
+{
+    NSPrintInfo *tempPrintInfo = [self.printInfo copy];
+    [tempPrintInfo.dictionary addEntriesFromDictionary:printSettings];
+
+    PrintPanelAccessoryController *accessoryController = [[PrintPanelAccessoryController alloc] init];
+    
+    SourceCodeTextView *printingView = [[SourceCodeTextView alloc] initWithFrame:tempPrintInfo.imageablePageBounds];
+    [printingView.textStorage setAttributedString:[[NSAttributedString alloc] initWithString:self.sourceView.string
+                                                                                  attributes:@{NSForegroundColorAttributeName: NSColor.blackColor,
+                                                                                               NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]
+                                                                                               }]];
+    printingView.layoutOrientation = self.sourceView.layoutOrientation;
+    if ([self respondsToSelector:@selector(highlighterDelegate)]) {
+        [printingView setHighlighterDelegate:[self performSelector:@selector(highlighterDelegate)]];
+    }
+    printingView.printPanelAccessoryController = accessoryController;
+
+    NSPrintOperation *retVal = [NSPrintOperation printOperationWithView:printingView printInfo:tempPrintInfo];
+    retVal.showsPrintPanel = YES;
+    retVal.showsProgressPanel = YES;
+    retVal.jobTitle = self.sourceView.printJobTitle;
+
+    NSPrintPanel *printPanel = retVal.printPanel;
+    printPanel.options = printPanel.options | NSPrintPanelShowsPaperSize | NSPrintPanelShowsOrientation;
+    [printPanel addAccessoryController:accessoryController];
+
+    return retVal;
 }
 
 

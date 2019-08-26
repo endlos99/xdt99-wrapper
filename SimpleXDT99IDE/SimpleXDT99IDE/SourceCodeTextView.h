@@ -56,4 +56,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
+@class PrintPanelAccessoryController;
+@class HighlighterDelegate;
+
+
+@interface SourceCodeTextView (NSPrinting)
+
+- (void)setPrintPanelAccessoryController:(PrintPanelAccessoryController *)controller;
+
+- (void)setHighlighterDelegate:(HighlighterDelegate *)delegate;
+
+@end
+
 NS_ASSUME_NONNULL_END
