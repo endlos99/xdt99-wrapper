@@ -236,7 +236,7 @@ static NSUInteger const tabstops[] = {7, 12, 25, 30, 45, 59, 79, 0};
             [self.textStorage.mutableString enumerateSubstringsInRange:NSMakeRange(0, self.textStorage.length)
                                                                options:NSStringEnumerationByLines + NSStringEnumerationSubstringNotRequired
                                                             usingBlock:^(NSString *line, NSRange lineRange, NSRange enclosingRange, BOOL *stop) {
-                                                                [self.highlighterDelegate processAttributesOfText:self.textStorage inRange:lineRange];
+                                                                [self.highlighterDelegate highlightSyntaxForText:self.textStorage inRange:lineRange];
                                                             }];
         } else {
             [self.textStorage setAttributes:@{NSForegroundColorAttributeName: NSColor.blackColor,

@@ -317,6 +317,77 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Method Wrapper
 
 
+- (XDTAs99Objcode *)assembleSourceCode:(NSString *)srcCode error:(NSError **)error
+{
+    NSURL *fileURL = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
+    [NSFileManager.defaultManager createDirectoryAtURL:fileURL withIntermediateDirectories:NO attributes:nil error:error];
+
+    fileURL = [[fileURL URLByAppendingPathComponent:@"sourceCode"] URLByAppendingPathExtension:@"a99"];
+    [NSFileManager.defaultManager removeItemAtURL:fileURL error:error];
+    [srcCode writeToURL:fileURL atomically:YES encoding:NSUTF8StringEncoding error:error];
+
+    return [self assembleSourceFile:fileURL error:error];
+}
+- (XDTAs99Objcode *)nix:(NSString *)srcCode error:(NSError **)error {
+    NSString *dirName = @".";
+
+    /* calling assembler:
+     code, errors = asm.assemble(dirname, srcCode)
+     */
+    PyObject *methodName = PyString_FromString("assemble_text");
+    PyObject *pDirName = dirName.asPythonType;
+    PyObject *pSrcCode = srcCode.asPythonType;
+    PyObject *pValueTupel = PyObject_CallMethodObjArgs(self.pythonInstance, methodName, pDirName, pSrcCode, NULL);
+    Py_XDECREF(pSrcCode);
+    Py_XDECREF(pDirName);
+    Py_XDECREF(methodName);
+    if (NULL == pValueTupel) {
+        NSLog(@"%s ERROR: assemble(\"%@\", \"%@...\") returns NULL!", __FUNCTION__, dirName, [srcCode substringToIndex:12]);
+        PyObject *exeption = PyErr_Occurred();
+        if (NULL != exeption) {
+            if (nil != error) {
+                *error = [NSError errorWithPythonError:exeption localizedRecoverySuggestion:nil];
+            }
+            PyErr_Print();
+        }
+        return nil;
+    }
+
+    /*
+     Don't need to process the dedicated error return value. So skip the item at index 1 of the value tupel.
+     Modern version of xas99 has a console return value which contains all messages (errors and warnings).
+     */
+
+    [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
+    _messages = nil;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(messages))];
+
+    XDTMessage *newMessages = self.messages;
+    const NSUInteger errCount = [newMessages countOfType:XDTMessageTypeError];
+    if (0 < errCount) {
+        if (nil != error) {
+            NSBundle *myBundle = [NSBundle bundleForClass:[self class]];
+            NSDictionary *errorDict = @{
+                                        NSLocalizedDescriptionKey: NSLocalizedStringFromTableInBundle(@"Error occured while assembling given source code", nil, myBundle, @"Description for an error object, discribing that the Assembler faild assembling a given source code."),
+                                        NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedStringFromTableInBundle(@"Assembler ends with %ld found error(s).", nil, myBundle, @"Reason for an error object, why the Assembler stopped abnormally."), errCount],
+                                        NSLocalizedRecoverySuggestionErrorKey: NSLocalizedStringFromTableInBundle(@"For more information see messages in the log view. Please check your code and all assembler options and try again.", nil, myBundle, @"Recovery suggestion for an error object, when the Assembler terminates abnormally.")
+                                        };
+            *error = [NSError errorWithDomain:XDTErrorDomain code:-1 userInfo:errorDict];
+        }
+        NSLog(@"Assembler found %ld error(s) while assembling '%@...'", errCount, [srcCode substringToIndex:12]);
+    }
+
+    XDTAs99Objcode *retVal = nil;
+    PyObject *objectCodeObject = PyTuple_GetItem(pValueTupel, 0);
+    if (NULL != objectCodeObject) {
+        retVal = [XDTAs99Objcode objectcodeWithPythonInstance:objectCodeObject];
+    }
+    Py_DECREF(pValueTupel);
+
+    return retVal;
+}
+
+
 - (XDTAs99Objcode *)assembleSourceFile:(NSURL *)srcFile error:(NSError **)error
 {
     return [self assembleSourceFile:[srcFile lastPathComponent] pathName:[[srcFile URLByDeletingLastPathComponent] path] error:error];

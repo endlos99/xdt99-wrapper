@@ -165,6 +165,24 @@ NS_ASSUME_NONNULL_END
 #pragma mark - Accessor Methods
 
 
+- (BOOL)isEqual:(id)other
+{
+    if (other == self) {
+        return YES;
+    }
+    if (![super isEqual:other]) {
+        return NO;
+    }
+    return [other isKindOfClass:XDTMessage.class] && [_messages.set isEqualToSet:((XDTMessage *)other)->_messages.set];
+}
+
+
+- (NSUInteger)hash
+{
+    return _messages.set.hash;
+}
+
+
 - (instancetype)messagesForLineNumberRange:(NSRange)lineNumberRange
 {
     if (0 == lineNumberRange.length) {

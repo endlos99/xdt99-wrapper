@@ -24,12 +24,16 @@
 
 #import "BasicCodeDocument.h"
 
+#import "NSColorAdditions.h"
+
 #import "AppDelegate.h"
 
 #import <XDTools99/XDBasic.h>
 
 
 @interface BasicCodeDocument ()
+
+@property (retain) NSString *sourceCode;
 
 @property (retain) IBOutlet NSView *specialLogOptionView;
 
@@ -105,17 +109,11 @@
 
     self.contentMinWidth.constant = self.xdt99OptionsToolbarItem.minSize.width + 16;
 
-    /* Setup syntax highlighting */
-    // TODO: Probably in future Basic will get its own highlighting [self setupSyntaxHighlighting];
+    (void)[self setupSyntaxHighlighting];
 
-    // The Method -refreshHighlighting repositions the cursor at the end of the source code.
-    if (self.sourceView.textStorage.length >= self.sourceView.selectedRange.location && 0 >= self.sourceView.selectedRange.length) {
-        self.sourceView.selectedRange = NSMakeRange(0, 0);
-        [self.sourceView scrollRangeToVisible:self.sourceView.selectedRange];
-    }
-
-    /* After syntax highlighting, messages get to be highlighted. */
-    [self checkCode:nil];
+    self.sourceView.textStorage.attributedString = [[NSAttributedString alloc] initWithString:self.sourceCode
+                                                                                   attributes:@{NSForegroundColorAttributeName: [NSColor XDTSourceTextColor],
+                                                                                                NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]}];
 }
 
 
@@ -170,7 +168,8 @@
 }
 
 
-- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
+- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
+{
     // Insert code here to write your document to data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning nil.
     // You can also choose to override -fileWrapperOfType:error:, -writeToURL:ofType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
     if (![@"Xbas99DocumentType" isEqualToString:typeName]) {
@@ -181,7 +180,7 @@
     }
 
     /* Saves only the source code variant. Generating any tagged/binary output only via the generateCode method. */
-    NSData *retVal = [[self sourceCode] dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *retVal = [self.sourceView.string dataUsingEncoding:NSUTF8StringEncoding];
     return retVal;
 }
 
@@ -193,10 +192,7 @@
     // You can also choose to override -readFromFileWrapper:ofType:error: or -readFromURL:ofType:error: instead.
     // If you override either of these, you should also override -isEntireFileLoaded to return NO if the contents are lazily loaded.
     if ([@"Xbas99DocumentType" isEqualToString:typeName]) {
-        [self setSourceCode:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-#if !__has_feature(objc_arc)
-        [[self sourceCode] autorelease];
-#endif
+        self.sourceCode = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     } else if ([@"Xbas99BinaryType" isEqualToString:typeName]) {
         NSString *fileExtension = [[self fileURL] pathExtension];
         XDTBasic *basic = [XDTBasic basic];
@@ -250,7 +246,7 @@
         }
 
         [self setGeneratorMessages:basic.messages];
-        [self setSourceCode:[basic getSource:&error]];
+        self.sourceCode = [basic getSource:&error];
 
         if (nil == error) {
             /* binary Basic files cannot be handled as source code files, so force to save as a new file. */
@@ -278,6 +274,17 @@
         *outError = error;
     }
     return NO;
+}
+
+
+- (BOOL)setupSyntaxHighlighting
+{
+    BOOL useSyntaxHighlighting = [super setupSyntaxHighlighting];
+    if (useSyntaxHighlighting) {
+        // todo...
+    }
+
+    return useSyntaxHighlighting;
 }
 
 
@@ -467,7 +474,7 @@
     basic.join = _shouldJoinSourceLines;
     basic.lineDelta = _lineDelta;
     basic.protect = _shouldProtectFile;
-    if (![basic parseSourceCode:[self sourceCode] error:error]) {
+    if (![basic parseSourceCode:self.sourceCode error:error]) {
         return nil;
     }
 

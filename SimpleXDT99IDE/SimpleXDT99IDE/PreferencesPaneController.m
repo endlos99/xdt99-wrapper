@@ -62,12 +62,16 @@ static PreferencesPaneController *_sharedPreferencesPane = nil;
 - (IBAction)toggleAllHighlighting:(id)sender
 {
     NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
+    
     BOOL enableHighlighting = [defaults boolForKey:UserDefaultKeyDocumentOptionEnableHighlighting];
     if (!enableHighlighting) {
         [defaults setBool:NO forKey:UserDefaultKeyDocumentOptionHighlightSyntax];
         [defaults setBool:NO forKey:UserDefaultKeyDocumentOptionHighlightMessages];
-        [self toggleSyntaxHighlighting:sender];
-        //[self toggleMessageHighlighting:sender];
+        [NSDocumentController.sharedDocumentController.documents enumerateObjectsUsingBlock:^(SourceCodeDocument *doc, NSUInteger idx, BOOL *stop) {
+            [doc.sourceView.textStorage edited:NSTextStorageEditedAttributes
+                                         range:NSMakeRange(0, doc.sourceView.textStorage.length)
+                                changeInLength:0];
+        }];
     }
 }
 
@@ -75,11 +79,9 @@ static PreferencesPaneController *_sharedPreferencesPane = nil;
 - (IBAction)toggleSyntaxHighlighting:(id)sender
 {
     [NSDocumentController.sharedDocumentController.documents enumerateObjectsUsingBlock:^(SourceCodeDocument *doc, NSUInteger idx, BOOL *stop) {
-        NSRange saveSelection = doc.sourceView.selectedRange;
-        [doc setupSyntaxHighlighting];
-        doc.sourceView.selectedRange = saveSelection;
-        [doc.sourceView scrollRangeToVisible:saveSelection];
-        doc.generatorMessages = doc.generatorMessages;
+        [doc.sourceView.textStorage edited:NSTextStorageEditedAttributes
+                                     range:NSMakeRange(0, doc.sourceView.textStorage.length)
+                            changeInLength:0];
     }];
 }
 
@@ -87,7 +89,9 @@ static PreferencesPaneController *_sharedPreferencesPane = nil;
 - (IBAction)toggleMessageHighlighting:(id)sender
 {
     [NSDocumentController.sharedDocumentController.documents enumerateObjectsUsingBlock:^(SourceCodeDocument *doc, NSUInteger idx, BOOL *stop) {
-        doc.generatorMessages = doc.generatorMessages;
+        [doc.sourceView.textStorage edited:NSTextStorageEditedAttributes
+                                     range:NSMakeRange(0, doc.sourceView.textStorage.length)
+                            changeInLength:0];
     }];
 }
 

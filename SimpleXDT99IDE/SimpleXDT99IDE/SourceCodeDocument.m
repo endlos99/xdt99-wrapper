@@ -31,6 +31,7 @@
 #import "NSColorAdditions.h"
 
 #import "AppDelegate.h"
+#import "HighlighterDelegate.h"
 #import "PrintPanelAccessoryController.h"
 
 #import "NoodleLineNumberView.h"
@@ -68,7 +69,6 @@
 
 - (IBAction)saveLog:(nullable id)sender;
 
-- (void)updateMessagesToSource;
 - (void)buildLabelMenu:(NSMenu *)labelMenu;
 
 @end
@@ -89,6 +89,9 @@
 
     _lineNumberDigits = nil;
 
+    _highlighterDelegate = nil;
+    _parser = nil;
+
     _terminalId = NSNotFound;
 
     return self;
@@ -104,6 +107,7 @@
     [_lineNumberRulerView release];
     [_lineNumberDigits release];
 
+    [_highlighterDelegate release];
     [_parser release];
     
     [super dealloc];
@@ -201,10 +205,8 @@
 {
     NSUserDefaults *defaults = NSUserDefaultsController.sharedUserDefaultsController.defaults;
     BOOL useSyntaxHighlighting = [defaults boolForKey:UserDefaultKeyDocumentOptionHighlightSyntax];
-    if (!useSyntaxHighlighting) {
-        self.sourceView.textStorage.delegate = nil;
-        self.sourceCode = self.sourceView.textStorage.mutableString;
-    }
+
+    _sourceView.textStorage.delegate = self;
 
     return useSyntaxHighlighting;
 }
@@ -326,6 +328,74 @@
 }
 
 
+#pragma mark - Protocol implementation of NSTextStorageDelegate
+
+
+- (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
+{
+    if (nil == _highlighterDelegate || 0 >= textStorage.length || textStorage.length < NSMaxRange(editedRange)) {
+        return;
+    }
+
+    if (0 != (NSTextStorageEditedCharacters & editedMask)) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(validateSource:) object:self];
+    }
+
+    NSUserDefaults *defaults = NSUserDefaultsController.sharedUserDefaultsController.defaults;
+    BOOL useSyntaxHighlighting = [defaults doubleForKey:UserDefaultKeyDocumentOptionHighlightSyntax];
+    __block BOOL useMessageHighlighting = [defaults boolForKey:UserDefaultKeyDocumentOptionHighlightMessages];
+
+    NSEnumerator<NSDictionary<XDTMessageTypeKey, id> *> *messageEnumerator = nil;
+    __block NSDictionary<XDTMessageTypeKey, id> *currentMessage = nil;
+    if (useMessageHighlighting) {
+        messageEnumerator = _generatorMessages.objectEnumerator;
+        currentMessage = messageEnumerator.nextObject;
+        useMessageHighlighting = (nil != currentMessage);
+    }
+
+    [textStorage beginEditing];
+    NSRange editedLineRange = [textStorage.mutableString lineRangeForRange:editedRange];
+    [textStorage setAttributes:@{NSForegroundColorAttributeName: [NSColor XDTSourceTextColor],
+                                 NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]} range:editedLineRange];
+    __block NSRange lineNumberRange = [textStorage lineNumberRangeForTextRange:editedLineRange];
+    // For that case multiple lines are pasted into the source code, just iterate all lines separately.
+    [textStorage.mutableString enumerateSubstringsInRange:editedLineRange
+                                                  options:NSStringEnumerationByLines + NSStringEnumerationSubstringNotRequired
+                                               usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+                                                   NSRange lineRange = [textStorage.mutableString lineRangeForRange:substringRange];
+
+                                                   if (useSyntaxHighlighting) {
+                                                       [self.highlighterDelegate highlightSyntaxForText:textStorage inRange:lineRange];
+                                                   }
+
+                                                   if (useMessageHighlighting) {
+                                                       NSNumber *lineNumberObj = [currentMessage valueForKey:XDTMessageLineNumber];
+                                                       while (nil != currentMessage &&
+                                                              ([[NSNull null] isEqualTo:lineNumberObj] || [lineNumberObj unsignedIntegerValue] < lineNumberRange.location)) {
+                                                           currentMessage = messageEnumerator.nextObject;
+                                                           lineNumberObj = [currentMessage valueForKey:XDTMessageLineNumber];
+                                                       }
+                                                       if (nil != currentMessage && [lineNumberObj unsignedIntegerValue] == lineNumberRange.location) {
+                                                           XDTMessageTypeValue messageType = (useMessageHighlighting)? [[currentMessage valueForKey:XDTMessageType] unsignedIntegerValue] : XDTMessageTypeAll;
+                                                           [self.highlighterDelegate highlightMessage:[currentMessage valueForKey:XDTMessageText] messageType:messageType forText:textStorage inRange:lineRange];
+                                                       }
+                                                       useMessageHighlighting = (nil != currentMessage);
+                                                       ++lineNumberRange.location;
+                                                       --lineNumberRange.length;
+                                                   }
+                                               }];
+    [textStorage endEditing];
+
+    if (0 != (NSTextStorageEditedCharacters & editedMask)) {
+        NSTimeInterval highlightingDelay = [defaults doubleForKey:UserDefaultKeyDocumentOptionHighlightingDelay];
+        if (0.0 == highlightingDelay) {
+            highlightingDelay = 2.0;
+        }
+        [self performSelector:@selector(validateSource:) withObject:self afterDelay:highlightingDelay];
+    }
+}
+
+
 #pragma mark - Implementation of NSTextViewDelegate
 
 
@@ -417,28 +487,13 @@
 
 - (void)setGeneratorMessages:(XDTMessage *)generatorMessages
 {
-    _generatorMessages = generatorMessages;
-
-    [self updateMessagesToSource];
-}
-
-
-/* subclasses should override this method to implement attributings */
-- (void)setSourceCode:(NSString *)newSourceCode
-{
-    if (nil != self.parser) {
-        [self.parser setSource:newSourceCode];
+    if (nil != _generatorMessages && [_generatorMessages isEqual:generatorMessages]) {
+        return;
     }
-    self.attributedSourceCode = [[NSAttributedString alloc] initWithString:newSourceCode
-                                                                attributes:@{NSForegroundColorAttributeName: [NSColor XDTSourceTextColor],
-                                                                             NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]
-                                                                             }];
-}
-
-
-- (NSString *)sourceCode
-{
-    return _attributedSourceCode.string;
+    [self willChangeValueForKey:NSStringFromSelector(@selector(generatorMessages))];
+    _generatorMessages = generatorMessages;
+    [_sourceView.textStorage edited:NSTextStorageEditedAttributes range:NSMakeRange(0, _sourceView.textStorage.length) changeInLength:0];
+    [self didChangeValueForKey:NSStringFromSelector(@selector(generatorMessages))];
 }
 
 
@@ -613,7 +668,7 @@
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
     if (menuItem.action == @selector(jumpToLineNumber:)) {
-        return 0 < self.sourceView.textStorage.length;
+        return 0 < _sourceView.textStorage.length;
     }
 
     if (menuItem.action == @selector(jumpToLabel:)) {
@@ -849,6 +904,12 @@
 }
 
 
+- (IBAction)validateSource:(id)sender
+{
+    // Nothing to do. Subclasses have to implement functionallity.
+}
+
+
 /*
  This method should be overridden to implement the document typical code generator.
  But it should call its super method to handle unsaved modifications for the document.
@@ -888,8 +949,8 @@
     NSModalResponse returnCode = [NSApp runModalForWindow:self.windowForSheet];
     if (NSModalResponseContinue == returnCode ||
         NSAlertFirstButtonReturn == returnCode) {
-        [self saveDocument:sender];
         [self updateChangeCount:NSChangeCleared];
+        [self saveDocument:sender];
     }
 }
 
@@ -1012,76 +1073,6 @@
 #pragma mark - Private Methods
 
 
-- (void)updateMessagesToSource
-{
-    [_sourceView.textStorage beginEditing];
-
-    [_sourceView.textStorage removeAttribute:NSBackgroundColorAttributeName range:NSMakeRange(0, _sourceView.textStorage.length)];
-    [_sourceView.textStorage removeAttribute:NSToolTipAttributeName range:NSMakeRange(0, _sourceView.textStorage.length)];
-
-    NSUserDefaults *defaults = [[NSUserDefaultsController sharedUserDefaultsController] defaults];
-    BOOL useMessageHighlighting = [defaults boolForKey:UserDefaultKeyDocumentOptionHighlightMessages];
-    if (!useMessageHighlighting) {
-        [_sourceView.textStorage endEditing];
-        return;
-    }
-
-    NSEnumerator<NSDictionary<XDTMessageTypeKey, id> *> *messageEnumerator = _generatorMessages.objectEnumerator;
-    __block NSDictionary<XDTMessageTypeKey, id> *currentMessage = messageEnumerator.nextObject;
-    if (nil != currentMessage) {
-        NSNumber *lineNumberObj = [currentMessage valueForKey:XDTMessageLineNumber];
-        while([[NSNull null] isEqualTo:lineNumberObj]) {
-            currentMessage = messageEnumerator.nextObject;
-            lineNumberObj = [currentMessage valueForKey:XDTMessageLineNumber];
-        }
-
-        __block NSUInteger currentMessageLineNumber = [lineNumberObj unsignedIntegerValue];
-        __block XDTMessageTypeValue currentMessageType = [[currentMessage valueForKey:XDTMessageType] unsignedIntegerValue];
-        [_sourceView.textStorage enumerateLinesUsingBlock:^(NSRange lineRange, NSUInteger lineNumber, BOOL *stop) {
-            if (lineNumber < currentMessageLineNumber) {
-                return;
-            }
-
-            NSColor *backgroundColor = nil;
-            NSString *toolTip = nil;
-            switch (currentMessageType) {
-                case XDTMessageTypeError:
-                    backgroundColor = [NSColor XDTErrorBackgroundColor];
-                    toolTip = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Error", @"the word 'Error'"), [currentMessage valueForKey:XDTMessageText]];
-                    break;
-
-                case XDTMessageTypeWarning:
-                    backgroundColor = [NSColor XDTWarningBackgroundColor];
-                    toolTip = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Warning", @"the word 'Warning'"), [currentMessage valueForKey:XDTMessageText]];
-                    break;
-
-                default:
-                    break;
-            }
-            if (nil != backgroundColor) {
-                [self.sourceView.textStorage addAttribute:NSBackgroundColorAttributeName value:backgroundColor range:lineRange];
-                [self.sourceView.textStorage addAttribute:NSToolTipAttributeName value:toolTip range:lineRange];
-            }
-
-            do {
-                currentMessage = messageEnumerator.nextObject;
-                if (nil == currentMessage) {
-                    *stop = YES;
-                    return;
-                }
-                NSNumber *lineNumber = [currentMessage valueForKey:XDTMessageLineNumber];
-                if ([NSNull.null isNotEqualTo:lineNumber]) {
-                    currentMessageLineNumber = [lineNumber unsignedIntegerValue];
-                }
-            } while (lineNumber == currentMessageLineNumber);   // skip other messages with lower priority
-            currentMessageType = [[currentMessage valueForKey:XDTMessageType] unsignedIntegerValue];
-        }];
-    }
-
-    [_sourceView.textStorage endEditing];
-}
-
-
 /**
  Builds the specified menu with a list of all labels from the current (GPL-)Assembler document that will be used as jump locations.
  @param labelMenu   The Menu which will contain all available labels defined in the source code. All existing menu items will be removed.
@@ -1091,7 +1082,7 @@
     [labelMenu removeAllItems];
 
     __block NSInteger lineCounter = 0;
-    [self.sourceView.textStorage.mutableString enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+    [_sourceView.textStorage.mutableString enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
         lineCounter++;
         NSArray<id> *lineComponents = [self.parser splitLine:line];
         if (0 >= lineComponents.count) {    // comment or empty line?

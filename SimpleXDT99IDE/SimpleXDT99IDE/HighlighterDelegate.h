@@ -29,11 +29,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HighlighterDelegate : NSObject <NSTextStorageDelegate, XDTConsumerProtocol>
+@interface HighlighterDelegate : NSObject <XDTConsumerProtocol>
 
 + (instancetype)highlighterWithLineScanner:(NSObject<XDTLineScannerProtocol> *)lineScanner;
 
-- (void)processAttributesOfText:(NSMutableAttributedString *)text inRange:(NSRange)lineRange;
+- (void)highlightSyntaxForText:(NSMutableAttributedString *)text inRange:(NSRange)lineRange;
+- (void)highlightMessage:(NSString *)messageText messageType:(XDTMessageTypeValue)messageType forText:(NSMutableAttributedString *)lineText inRange:(NSRange)lineRange;
 
 @end
 

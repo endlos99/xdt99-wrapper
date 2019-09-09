@@ -32,6 +32,7 @@
 #define UserDefaultKeyDocumentOptionEnableHighlighting @"DocumentOptionEnableHighlighting"
 #define UserDefaultKeyDocumentOptionHighlightSyntax @"DocumentOptionHighlightSyntax"
 #define UserDefaultKeyDocumentOptionHighlightMessages @"DocumentOptionHighlightMessages"
+#define UserDefaultKeyDocumentOptionHighlightingDelay @"DocumentOptionHighlightingDelay"
 #define UserDefaultKeyDocumentOptionTabBehaviour @"DocumentOptionTabBehaviour"
 #define UserDefaultKeyDocumentOptionTabWidth @"DocumentOptionTabWidth"
 #define UserDefaultKeyDocumentOptionPrintUsingHighlighting @"DocumentOptionPrintUsingHighlighting"

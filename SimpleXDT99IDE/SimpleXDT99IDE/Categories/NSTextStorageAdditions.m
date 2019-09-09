@@ -51,4 +51,24 @@
     return retVal;
 }
 
+
+- (NSRange)lineNumberRangeForTextRange:(NSRange)textRange
+{
+    __block NSRange retVal = {NSNotFound, 0};
+    [self enumerateLinesUsingBlock:^(NSRange lineRange, NSUInteger ln, BOOL *stop) {
+        if (NSNotFound == retVal.location) {
+            if (NSLocationInRange(lineRange.location, textRange)) {
+                retVal.location = ln;
+                retVal.length = 1;
+            }
+        } else {
+            if (!NSLocationInRange(NSMaxRange(lineRange), textRange)) {
+                retVal.length += ln - retVal.location;
+                *stop = YES;
+            }
+        }
+    }];
+    return retVal;
+}
+
 @end

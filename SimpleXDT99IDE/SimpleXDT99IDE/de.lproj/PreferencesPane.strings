@@ -28,11 +28,29 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Enable or disable global higlighting."; ObjectID = "d1g-vy-3ad"; */
 "d1g-vy-3ad.ibShadowedToolTip" = "Hervorhebungen (de-)aktivieren";
 
+/* Class = "NSTextFieldCell"; title = "Delay:"; ObjectID = "DSD-MH-F5O"; */
+"DSD-MH-F5O.title" = "Verzögern:";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Highligthing of lines of source code with an issue."; ObjectID = "ez0-iX-Lmy"; */
 "ez0-iX-Lmy.ibShadowedToolTip" = "Hervorhebung von Zeilen im Quell-Code mit Problemfällen.";
 
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "2.00"; ObjectID = "Fvf-gD-6Hj"; */
+"Fvf-gD-6Hj.ibShadowedIsNilPlaceholder" = "2,00";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedNotApplicablePlaceholder = "2.00"; ObjectID = "Fvf-gD-6Hj"; */
+"Fvf-gD-6Hj.ibShadowedNotApplicablePlaceholder" = "2,00";
+
+/* Class = "NSStepper"; ibShadowedToolTip = "Adjusts the highlighting delay time in 0.25 second intervals."; ObjectID = "hLA-Lf-jmq"; */
+"hLA-Lf-jmq.ibShadowedToolTip" = "Einstellung der Verzögerungszeit für die Hervorhebung in Schritten von 0,25 Sekunden.";
+
+/* Class = "NSTextFieldCell"; placeholderString = "2.00"; ObjectID = "L70-28-60u"; */
+"L70-28-60u.placeholderString" = "2,00";
+
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Select the behaviour of the tab key."; ObjectID = "mU9-rS-XdU"; */
 "mU9-rS-XdU.ibShadowedToolTip" = "Auswahl des Verhaltens der Tabulatortaste.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Specify the delay for program code revalidation and refresh highlighting after source code changes."; ObjectID = "MwS-3M-zu8"; */
+"MwS-3M-zu8.ibShadowedToolTip" = "Legt die Verzögerung für die Überprüfung des Programmcodes und die Aktualisierung der Hervorhebungen nach Quellcode-Änderungen fest.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Coloring the source code depending syntactical contexts."; ObjectID = "oYd-fN-HkE"; */
 "oYd-fN-HkE.ibShadowedToolTip" = "Einfärbung des Quell-Codes abhängig vom syntaktischen Kontext.";
@@ -52,6 +70,12 @@
 /* Class = "NSTextFieldCell"; title = "Tab width:"; ObjectID = "tdU-UN-mS5"; */
 "tdU-UN-mS5.title" = "Tab-Weite:";
 
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "2.00"; ObjectID = "vko-Sd-Hmm"; */
+"vko-Sd-Hmm.ibShadowedIsNilPlaceholder" = "2,00";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedNotApplicablePlaceholder = "2.00"; ObjectID = "vko-Sd-Hmm"; */
+"vko-Sd-Hmm.ibShadowedNotApplicablePlaceholder" = "2,00";
+
 /* Class = "NSButtonCell"; title = "Message highlighting"; ObjectID = "vsB-wO-863"; */
 "vsB-wO-863.title" = "Problemmeldungen hervorheben";
 
@@ -60,4 +84,7 @@
 
 /* Class = "NSTextFieldCell"; title = "Tab key:"; ObjectID = "WiD-LF-Uwf"; */
 "WiD-LF-Uwf.title" = "Tab-Taste:";
+
+/* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "z3n-8y-Nvh"; */
+"z3n-8y-Nvh.title" = "Sekunden";
 

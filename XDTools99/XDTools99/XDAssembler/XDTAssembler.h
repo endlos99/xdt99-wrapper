@@ -53,6 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable instancetype)assemblerWithIncludeURL:(NSURL *)url target:(XDTAs99TargetType)targetType usingRegisterSymbol:(BOOL)useRegisterSymbol strictness:(BOOL)beStrict outputWarnings:(BOOL)outputWarnings;
 
+- (nullable XDTAs99Objcode *)assembleSourceCode:(NSString *)srcCode error:(NSError **)error;
 - (nullable XDTAs99Objcode *)assembleSourceFile:(NSURL *)srcFile error:(NSError **)error;
 
 @end

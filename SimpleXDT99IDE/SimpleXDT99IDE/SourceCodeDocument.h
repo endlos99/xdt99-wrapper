@@ -28,13 +28,11 @@
 
 
 @protocol XDTParserProtocol;
-@class XDTObject, XDTMessage;
+@class XDTObject, XDTMessage, HighlighterDelegate;
 
-@interface SourceCodeDocument : NSDocument <NSTextViewDelegate>
+@interface SourceCodeDocument : NSDocument <NSTextViewDelegate, NSTextStorageDelegate>
 
-@property (retain) NSAttributedString *attributedSourceCode;
-@property (copy) NSString *sourceCode;
-
+@property (retain) HighlighterDelegate *highlighterDelegate;
 @property (retain) XDTObject<XDTParserProtocol> *parser;
 
 @property (assign) BOOL shouldShowLog;
@@ -67,6 +65,7 @@
 
 - (BOOL)openNestedFiles:(NSError **)error;
 
+- (IBAction)validateSource:(id)sender;
 - (IBAction)checkCode:(id)sender;
 - (IBAction)generateCode:(id)sender;
 

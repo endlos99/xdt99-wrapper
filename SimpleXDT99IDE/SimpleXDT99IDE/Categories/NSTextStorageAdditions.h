@@ -45,6 +45,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSRange)rangeForLineNumber:(NSUInteger)lineNumber;
 
+/**
+ */
+- (NSRange)lineNumberRangeForTextRange:(NSRange)textRange;
+
 @end
 
 NS_ASSUME_NONNULL_END

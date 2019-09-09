@@ -61,19 +61,15 @@
 @property (assign) XDTGenerateTextMode binaryTextMode;
 
 /* Log options */
-@property (assign, nonatomic) BOOL shouldShowListingInLog;
-@property (assign, nonatomic) BOOL shouldShowSymbolsInListing;
-@property (assign, nonatomic) BOOL shouldShowSymbolsAsEqus;
+@property (assign) BOOL shouldShowListingInLog;
+@property (assign) BOOL shouldShowSymbolsInListing;
+@property (assign) BOOL shouldShowSymbolsAsEqus;
 
 @property (retain) XDTAs99Objcode *assemblingResult;
 @property (readonly) NSString *listOutput;
 @property (readonly) NSString *symbolsOutput;
 
-@property (retain) HighlighterDelegate *highlighterDelegate;
-
 @property (readonly) XDTAs99TargetType targetType;
-
-- (void)refreshHighlighting;
 
 - (BOOL)assembleCode:(XDTAs99TargetType)xdtTargetType error:(NSError **)error;
 - (BOOL)exportBinaries:(XDTAs99TargetType)xdtTargetType compressObjectCode:(BOOL)shouldCompressObjectCode error:(NSError **)error;
@@ -112,7 +108,6 @@
 #if !__has_feature(objc_arc)
     [_assemblingResult release];
     [_cartridgeName release];
-    [_syntaxHighlighter release];
     
     [super dealloc];
 #endif
@@ -163,17 +158,34 @@
             break;
     }
 
-    /* Setup syntax highlighting */
     (void)[self setupSyntaxHighlighting];
 
-    // The Method -refreshHighlighting repositions the cursor at the end of the source code.
-    if (self.sourceView.textStorage.length >= self.sourceView.selectedRange.location && 0 >= self.sourceView.selectedRange.length) {
-        self.sourceView.selectedRange = NSMakeRange(0, 0);
-        [self.sourceView scrollRangeToVisible:self.sourceView.selectedRange];
-    }
+    if (nil != self.fileURL) {
+        NSError *err = nil;
+        NSDictionary *docOptions = @{
+                                     NSDocumentTypeDocumentOption: NSPlainTextDocumentType,
+                                     NSCharacterEncodingDocumentOption: [NSNumber numberWithUnsignedInteger:NSUTF8StringEncoding],
+                                     NSDefaultAttributesDocumentOption: @{NSForegroundColorAttributeName: [NSColor XDTSourceTextColor],
+                                                                          NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]}
+                                     };
+        NSAttributedString *sourceCode = [[NSAttributedString alloc] initWithURL:self.fileURL options:docOptions documentAttributes:nil error:&err];
+        if (nil == sourceCode) {
+            [self presentError:err];
+        } else {
+            // TODO: Same code as in - ValidateSource:
+            XDTAssembler *assembler = [XDTAssembler assemblerWithIncludeURL:self.fileURL
+                                                                     target:self.targetType
+                                                        usingRegisterSymbol:self.shouldUseRegisterSymbols
+                                                                 strictness:self.shouldBeStrict
+                                                             outputWarnings:self.shouldShowWarningsInLog];
 
-    /* After syntax highlighting, messages get to be highlighted. */
-    [self checkCode:nil];
+            XDTAs99Objcode *result = [assembler assembleSourceCode:sourceCode.string error:nil];
+            [self setAssemblingResult:result];
+            [self setGeneratorMessages:assembler.messages];
+
+            self.sourceView.textStorage.attributedString = sourceCode;
+        }
+    }
 
 // test begin
 #if 0
@@ -273,19 +285,25 @@
 }
 
 
-- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError {
+- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
+{
     if (![@"Xas99DocumentType" isEqualToString:typeName]) {
         if (outError) {
             *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
         }
         return nil;
     }
-    NSData *retVal = [[self sourceCode] dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *retVal = [self.sourceView.attributedString dataFromRange:NSMakeRange(0, self.sourceView.attributedString.length)
+                                                  documentAttributes:@{NSDocumentTypeDocumentAttribute: NSPlainTextDocumentType,
+                                                                       NSCharacterEncodingDocumentAttribute: [NSNumber numberWithUnsignedInteger:NSUTF8StringEncoding]
+                                                                       }
+                                                               error:outError];
     return retVal;
 }
 
 
-- (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError {
+- (BOOL)readFromURL:(NSURL *)url ofType:(NSString *)typeName error:(NSError **)outError
+{
     if (![@"Xas99DocumentType" isEqualToString:typeName]) {
         if (outError) {
             *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:kPOSIXErrorEFTYPE userInfo:nil];
@@ -293,26 +311,35 @@
         return NO;
     }
 
-    [self setSourceCode:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
-    [self setCartridgeName:[[[self fileURL] lastPathComponent] stringByDeletingPathExtension]];
-    [self setOutputFileName:[_cartridgeName stringByAppendingString:@"-obj"]];
-    [self setOutputBasePathURL:[[self fileURL] URLByDeletingLastPathComponent]];
+    self.cartridgeName = url.lastPathComponent.stringByDeletingPathExtension;
+    self.outputFileName = [_cartridgeName stringByAppendingString:@"-obj"];
+    self.outputBasePathURL = url.URLByDeletingLastPathComponent;
 
     return YES;
 }
 
 
-#pragma mark - Accessor Methods
-
-
-- (void)setSourceCode:(NSString *)newSourceCode
+- (BOOL)setupSyntaxHighlighting
 {
-    super.sourceCode = newSourceCode;
-    if (nil != self.parser) {
-        [self refreshHighlighting];
-        [self checkCode:nil];
+    BOOL useSyntaxHighlighting = [super setupSyntaxHighlighting];
+
+    if (nil == self.parser) {
+        self.parser = [XDTAs99Parser parserForPath:self.fileURL.URLByDeletingLastPathComponent.path
+                               usingRegisterSymbol:self.shouldUseRegisterSymbols
+                                        strictness:self.shouldBeStrict
+                                    outputWarnings:self.shouldShowWarningsInLog];
+        self.parser.source = self.sourceView.textStorage.mutableString;
     }
+
+    if (nil == self.highlighterDelegate) {
+        self.highlighterDelegate = [HighlighterDelegate highlighterWithLineScanner:[XDTLineScanner scannerWithParser:self.parser symbols:self.assemblingResult.symbols.symbolNames]];
+    }
+
+    return useSyntaxHighlighting;
 }
+
+
+#pragma mark - Accessor Methods
 
 
 + (NSSet *)keyPathsForValuesAffectingListOutput
@@ -525,6 +552,20 @@
 #pragma mark - Action Methods
 
 
+- (IBAction)validateSource:(id)sender
+{
+    XDTAssembler *assembler = [XDTAssembler assemblerWithIncludeURL:self.fileURL
+                                                             target:self.targetType
+                                                usingRegisterSymbol:self.shouldUseRegisterSymbols
+                                                         strictness:self.shouldBeStrict
+                                                     outputWarnings:self.shouldShowWarningsInLog];
+
+    XDTAs99Objcode *result = [assembler assembleSourceCode:self.sourceView.string error:nil];
+    [self setAssemblingResult:result];
+    [self setGeneratorMessages:assembler.messages];
+}
+
+
 - (IBAction)checkCode:(id)sender
 {
     [super checkCode:sender];
@@ -573,48 +614,6 @@
 
 
 #pragma mark - Private Methods
-
-
-- (void)refreshHighlighting
-{
-    if (nil == self.highlighterDelegate) {
-        return;
-    }
-
-    NSMutableAttributedString *newSourceCode = self.attributedSourceCode.mutableCopy;
-    [newSourceCode beginEditing];
-    [newSourceCode.mutableString enumerateSubstringsInRange:(NSRange)NSMakeRange(0, newSourceCode.length)
-                                                    options:NSStringEnumerationByLines + NSStringEnumerationSubstringNotRequired
-                                                 usingBlock:^(NSString *line, NSRange lineRange, NSRange enclosingRange, BOOL *stop) {
-                                                     [self.highlighterDelegate processAttributesOfText:newSourceCode inRange:lineRange];
-                                                 }];
-    [newSourceCode endEditing];
-    self.attributedSourceCode = newSourceCode;
-}
-
-
-- (BOOL)setupSyntaxHighlighting
-{
-    BOOL useSyntaxHighlighting = [super setupSyntaxHighlighting];
-    if (!useSyntaxHighlighting) {
-        return NO;
-    }
-
-    if (nil == self.parser) {
-        self.parser = [XDTAs99Parser parserForPath:self.fileURL.URLByDeletingLastPathComponent.path usingRegisterSymbol:self.shouldUseRegisterSymbols strictness:self.shouldBeStrict outputWarnings:self.shouldShowWarningsInLog];
-        self.parser.source = self.sourceView.textStorage.mutableString;
-
-        if (nil == self.highlighterDelegate) {
-            self.highlighterDelegate = [HighlighterDelegate highlighterWithLineScanner:[XDTLineScanner scannerWithParser:self.parser
-                                                                                                                 symbols:self.assemblingResult.symbols.symbolNames]];
-        }
-    }
-    self.sourceView.textStorage.delegate = self.highlighterDelegate;
-
-    [self refreshHighlighting];
-
-    return useSyntaxHighlighting;
-}
 
 
 + (NSSet *)keyPathsForValuesAffectingTargetType

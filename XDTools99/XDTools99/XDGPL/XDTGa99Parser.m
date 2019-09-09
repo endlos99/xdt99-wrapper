@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
     PyObject *objdummy;
 }
 
-- (instancetype)initWithModule:(PyObject *)pModule syntaxType:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings;
+- (instancetype)initWithModule:(PyObject *)pModule path:(NSString *)path syntaxType:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings;
 
 @end
 
@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-+ (nullable instancetype)parserWithSyntaxType:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings
++ (nullable instancetype)parserForPath:(NSString *)path usingSyntaxType:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings
 {
     @synchronized (self) {
         PyObject *pModule = self.xdtGa99ModuleInstance;
@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_END
             return nil;
         }
 
-        XDTGa99Parser *retVal = [[XDTGa99Parser alloc] initWithModule:pModule syntaxType:syntaxType outputWarnings:outputWarnings];
+        XDTGa99Parser *retVal = [[XDTGa99Parser alloc] initWithModule:pModule path:path syntaxType:syntaxType outputWarnings:outputWarnings];
 #if !__has_feature(objc_arc)
         return [retVal autorelease];
 #endif
@@ -76,7 +76,7 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (instancetype)initWithModule:(PyObject *)pModule syntaxType:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings
+- (instancetype)initWithModule:(PyObject *)pModule path:(NSString *)path syntaxType:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings
 {
     assert(NULL != pModule);
     
@@ -95,6 +95,7 @@ NS_ASSUME_NONNULL_END
 
     /* preparing parameters */
     PyObject *pDefs = PyList_New(0);
+    //PyObject *pPath = (nil == path)? PyString_FromString(".") : path.asPythonType;
     PyObject *pSyntaxType = PyString_FromString([XDTGa99Syntax syntaxTypeAsCString:syntaxType]);
     PyObject *pIncludePath = PyList_New(0);
     /*for (NSURL *url in urls) {
@@ -132,6 +133,7 @@ NS_ASSUME_NONNULL_END
         return nil;
     }
 
+    [self setPath:path];
     return self;
 }
 

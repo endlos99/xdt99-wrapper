@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Creates an autoreleased instance of XDTParser with default options
  */
-+ (nullable instancetype)parserWithSyntaxType:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings;
++ (nullable instancetype)parserForPath:(NSString *)path usingSyntaxType:(XDTGa99SyntaxType)syntaxType outputWarnings:(BOOL)outputWarnings;
 
 /**
  Set the source code where the parser works on.

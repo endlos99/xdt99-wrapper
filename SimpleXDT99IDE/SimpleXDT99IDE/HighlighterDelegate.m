@@ -25,6 +25,10 @@
 #import "HighlighterDelegate.h"
 
 #import "NSColorAdditions.h"
+#import "NSTextStorageAdditions.h"
+
+#import "AppDelegate.h"
+#import "SourceCodeDocument.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -81,16 +85,15 @@ NS_ASSUME_NONNULL_END
 }
 
 
-- (void)processAttributesOfText:(NSMutableAttributedString *)text inRange:(NSRange)lineRange
+- (void)highlightSyntaxForText:(NSMutableAttributedString *)text inRange:(NSRange)lineRange
 {
-    if (0 >= lineRange.length || 0 >= text.length || nil == _lineScanner) {
+    if (nil == _lineScanner || 0 >= text.length || 0 >= lineRange.length) {
         return;
     }
+    if (text.mutableString.length < NSMaxRange(lineRange)) {
+        lineRange.length = text.mutableString.length - lineRange.location;
+    }
     NSString *lineString = [text.mutableString substringWithRange:lineRange];
-
-    // First reset the whole line with standard color and font.
-    [text setAttributes:@{NSForegroundColorAttributeName: [NSColor XDTSourceTextColor],
-                          NSFontAttributeName: [NSFont fontWithName:@"Menlo" size:0.0]} range:lineRange];
 
     _processingText = text;
     _processingRange = lineRange;
@@ -98,26 +101,33 @@ NS_ASSUME_NONNULL_END
 }
 
 
-#pragma mark - Protocol implementation of NSTextStorageDelegate
-
-
-- (void)textStorage:(NSTextStorage *)textStorage didProcessEditing:(NSTextStorageEditActions)editedMask range:(NSRange)editedRange changeInLength:(NSInteger)delta
+- (void)highlightMessage:(NSString *)messageText messageType:(XDTMessageTypeValue)messageType forText:(NSMutableAttributedString *)lineText inRange:(NSRange)lineRange
 {
-    if (0 == (NSTextStorageEditedCharacters & editedMask) ||
-        nil == _lineScanner || 0 >= textStorage.length || textStorage.length <= editedRange.length) {
-        return;
-    }
+    NSColor *backgroundColor = nil;
+    NSString *toolTip = nil;
 
-    [textStorage beginEditing];
-    NSRange editedLineRange = [textStorage.mutableString lineRangeForRange:editedRange];
-    // For that case, that multiple lines are pasted into the source code, just iterate all lines separately.
-    [textStorage.mutableString enumerateSubstringsInRange:editedLineRange
-                                                  options:NSStringEnumerationByLines + NSStringEnumerationSubstringNotRequired
-                                               usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-                                                   NSRange lineRange = [textStorage.mutableString lineRangeForRange:substringRange];
-                                                   [self processAttributesOfText:textStorage inRange:lineRange];
-                                               }];
-    [textStorage endEditing];
+    switch (messageType) {
+        case XDTMessageTypeError:
+            backgroundColor = [NSColor XDTErrorBackgroundColor];
+            toolTip = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Error", @"the word 'Error'"), messageText];
+            break;
+
+        case XDTMessageTypeWarning:
+            backgroundColor = [NSColor XDTWarningBackgroundColor];
+            toolTip = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Warning", @"the word 'Warning'"), messageText];
+            break;
+
+        default:
+            break;
+    }
+    if (nil != backgroundColor) {
+        [lineText addAttribute:NSBackgroundColorAttributeName value:backgroundColor range:lineRange];
+        [lineText addAttribute:NSToolTipAttributeName value:toolTip range:lineRange];
+    } else {
+        // Usually the case where message highlighting is deactivated.
+        [lineText removeAttribute:NSBackgroundColorAttributeName range:lineRange];
+        [lineText removeAttribute:NSToolTipAttributeName range:lineRange];
+    }
 }
 
 
