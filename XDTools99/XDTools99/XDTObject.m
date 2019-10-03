@@ -24,7 +24,7 @@
 
 #import "XDTObject.h"
 
-#include <Python/Python.h>
+#import <Python/Python.h>
 
 
 @implementation XDTObject

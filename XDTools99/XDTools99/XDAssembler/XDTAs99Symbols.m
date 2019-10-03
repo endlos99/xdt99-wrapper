@@ -24,7 +24,7 @@
 
 #import "XDTAs99Symbols.h"
 
-#include <Python/Python.h>
+#import <Python/Python.h>
 
 
 #define XDTClassNameSymbols "Symbols"

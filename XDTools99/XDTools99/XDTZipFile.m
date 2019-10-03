@@ -24,7 +24,7 @@
 
 #import "XDTZipFile.h"
 
-#include <Python/Python.h>
+#import <Python/Python.h>
 
 #import "NSErrorPythonAdditions.h"
 

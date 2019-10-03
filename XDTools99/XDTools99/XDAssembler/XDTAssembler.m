@@ -24,7 +24,7 @@
 
 #import "XDTAssembler.h"
 
-#include <Python/Python.h>
+#import <Python/Python.h>
 
 #import "NSErrorPythonAdditions.h"
 #import "NSArrayPythonAdditions.h"
