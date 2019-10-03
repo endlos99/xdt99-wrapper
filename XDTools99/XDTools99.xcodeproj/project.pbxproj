@@ -72,6 +72,7 @@
 		AF2D96CA1DFAFF29006EE618 /* NSDataPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96C81DFAFF29006EE618 /* NSDataPythonAdditions.m */; };
 		AF42F8D92346787A00ED254D /* XDTAs99ExternalReference.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CB1BC22DF176100FBF6D3 /* XDTAs99ExternalReference.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF42F8DA234678D900ED254D /* NSNumberPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AF6167F522EADD6D00FFF8E3 /* NSNumberPythonAdditions.h */; };
+		AF42F8DB23467BD200ED254D /* XDTCallback.h in Headers */ = {isa = PBXBuildFile; fileRef = AF016E8722EA254A00443077 /* XDTCallback.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF5CB1B622DF16E300FBF6D3 /* XDTAs99Line.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CB1B422DF16E300FBF6D3 /* XDTAs99Line.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF5CB1B722DF16E300FBF6D3 /* XDTAs99Line.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CB1B522DF16E300FBF6D3 /* XDTAs99Line.m */; };
 		AF5CB1BA22DF171800FBF6D3 /* XDTAs99Address.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CB1B822DF171800FBF6D3 /* XDTAs99Address.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -471,11 +472,12 @@
 				AF2D96B81DFABF39006EE618 /* XDTAssembler.h in Headers */,
 				AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */,
 				AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */,
-				AF5CB1D222DF220600FBF6D3 /* XDTLineScanner.h in Headers */,
 				AF2D96BA1DFABF39006EE618 /* XDTObject.h in Headers */,
+				AF42F8DB23467BD200ED254D /* XDTCallback.h in Headers */,
 				AFE630791DF9BB9E005FFD01 /* XDTZipFile.h in Headers */,
 				AF157E021FBF4D4000679D82 /* XDTException.h in Headers */,
 				AFBDC41E22BA8B8C00DDD4C2 /* XDTMessage.h in Headers */,
+				AF5CB1D222DF220600FBF6D3 /* XDTLineScanner.h in Headers */,
 				AF9DAC1A22DF667B007991B4 /* NSObjectPythonAdditions.h in Headers */,
 				AF2D96C91DFAFF29006EE618 /* NSDataPythonAdditions.h in Headers */,
 				AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */,
