@@ -14,27 +14,27 @@
 		AF125EBB1E0414A600F659AA /* XDGPL.h in Headers */ = {isa = PBXBuildFile; fileRef = AF125EBA1E0414A000F659AA /* XDGPL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF157DFE1FBF06B300679D82 /* NSStringPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AF157DFC1FBF06B300679D82 /* NSStringPythonAdditions.h */; };
 		AF157DFF1FBF06B300679D82 /* NSStringPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AF157DFD1FBF06B300679D82 /* NSStringPythonAdditions.m */; };
-		AF157E021FBF4D4000679D82 /* XDTException.h in Headers */ = {isa = PBXBuildFile; fileRef = AF157E001FBF4D4000679D82 /* XDTException.h */; };
+		AF157E021FBF4D4000679D82 /* XDTException.h in Headers */ = {isa = PBXBuildFile; fileRef = AF157E001FBF4D4000679D82 /* XDTException.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF157E031FBF4D4000679D82 /* XDTException.m in Sources */ = {isa = PBXBuildFile; fileRef = AF157E011FBF4D4000679D82 /* XDTException.m */; };
 		AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96A91DFABAA0006EE618 /* XDAssembler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AF2D96B31DFABF39006EE618 /* XDTAs99Symbols.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96AB1DFABF39006EE618 /* XDTAs99Symbols.h */; };
+		AF2D96B31DFABF39006EE618 /* XDTAs99Symbols.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96AB1DFABF39006EE618 /* XDTAs99Symbols.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF2D96B41DFABF39006EE618 /* XDTAs99Symbols.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96AC1DFABF39006EE618 /* XDTAs99Symbols.m */; };
 		AF2D96B51DFABF39006EE618 /* XDTAs99Objcode.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96AD1DFABF39006EE618 /* XDTAs99Objcode.m */; };
 		AF2D96B61DFABF39006EE618 /* XDTAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96AE1DFABF39006EE618 /* XDTAssembler.m */; };
-		AF2D96B71DFABF39006EE618 /* XDTAs99Objcode.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96AF1DFABF39006EE618 /* XDTAs99Objcode.h */; };
-		AF2D96B81DFABF39006EE618 /* XDTAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96B01DFABF39006EE618 /* XDTAssembler.h */; };
+		AF2D96B71DFABF39006EE618 /* XDTAs99Objcode.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96AF1DFABF39006EE618 /* XDTAs99Objcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AF2D96B81DFABF39006EE618 /* XDTAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96B01DFABF39006EE618 /* XDTAssembler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF2D96B91DFABF39006EE618 /* XDTObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96B11DFABF39006EE618 /* XDTObject.m */; };
-		AF2D96BA1DFABF39006EE618 /* XDTObject.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96B21DFABF39006EE618 /* XDTObject.h */; };
+		AF2D96BA1DFABF39006EE618 /* XDTObject.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96B21DFABF39006EE618 /* XDTObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF2D96C91DFAFF29006EE618 /* NSDataPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AF2D96C71DFAFF29006EE618 /* NSDataPythonAdditions.h */; };
 		AF2D96CA1DFAFF29006EE618 /* NSDataPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2D96C81DFAFF29006EE618 /* NSDataPythonAdditions.m */; };
-		AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A21DFF246400C08E36 /* XDTBasic.h */; };
+		AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A21DFF246400C08E36 /* XDTBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF5CF8A51DFF246400C08E36 /* XDTBasic.m in Sources */ = {isa = PBXBuildFile; fileRef = AF5CF8A31DFF246400C08E36 /* XDTBasic.m */; };
 		AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = AF5CF8A61DFF266B00C08E36 /* XDBasic.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */; };
+		AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22051E06D88A00BB02FC /* XDTGPLAssembler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF9C22081E06D88A00BB02FC /* XDTGPLAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C22061E06D88A00BB02FC /* XDTGPLAssembler.m */; };
-		AF9C220B1E06FD4E00BB02FC /* XDTGa99Objcode.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22091E06FD4E00BB02FC /* XDTGa99Objcode.h */; };
+		AF9C220B1E06FD4E00BB02FC /* XDTGa99Objcode.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9C22091E06FD4E00BB02FC /* XDTGa99Objcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AF9C220C1E06FD4E00BB02FC /* XDTGa99Objcode.m in Sources */ = {isa = PBXBuildFile; fileRef = AF9C220A1E06FD4E00BB02FC /* XDTGa99Objcode.m */; };
-		AFBDC41E22BA8B8C00DDD4C2 /* XDTMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBDC41C22BA8B8C00DDD4C2 /* XDTMessage.h */; };
+		AFBDC41E22BA8B8C00DDD4C2 /* XDTMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBDC41C22BA8B8C00DDD4C2 /* XDTMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFBDC41F22BA8B8C00DDD4C2 /* XDTMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = AFBDC41D22BA8B8C00DDD4C2 /* XDTMessage.m */; };
 		AFE630581DF9BB67005FFD01 /* XDTools99.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE630561DF9BB67005FFD01 /* XDTools99.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE6305F1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h */; };
@@ -42,7 +42,7 @@
 		AFE6306F1DF9BB9E005FFD01 /* NSErrorPythonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE630611DF9BB9E005FFD01 /* NSErrorPythonAdditions.h */; };
 		AFE630701DF9BB9E005FFD01 /* NSErrorPythonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE630621DF9BB9E005FFD01 /* NSErrorPythonAdditions.m */; };
 		AFE630751DF9BB9E005FFD01 /* XDTZipFile.m in Sources */ = {isa = PBXBuildFile; fileRef = AFE630671DF9BB9E005FFD01 /* XDTZipFile.m */; };
-		AFE630791DF9BB9E005FFD01 /* XDTZipFile.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE6306B1DF9BB9E005FFD01 /* XDTZipFile.h */; };
+		AFE630791DF9BB9E005FFD01 /* XDTZipFile.h in Headers */ = {isa = PBXBuildFile; fileRef = AFE6306B1DF9BB9E005FFD01 /* XDTZipFile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AFE6308A1DF9C084005FFD01 /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFE630861DF9BD66005FFD01 /* Python.framework */; };
 /* End PBXBuildFile section */
 
@@ -226,25 +226,25 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF2D96B71DFABF39006EE618 /* XDTAs99Objcode.h in Headers */,
 				AFE630581DF9BB67005FFD01 /* XDTools99.h in Headers */,
-				AF2D96B81DFABF39006EE618 /* XDTAssembler.h in Headers */,
-				AF9C220B1E06FD4E00BB02FC /* XDTGa99Objcode.h in Headers */,
-				AF2D96B31DFABF39006EE618 /* XDTAs99Symbols.h in Headers */,
-				AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */,
-				AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */,
-				AFE630791DF9BB9E005FFD01 /* XDTZipFile.h in Headers */,
-				AF157DFE1FBF06B300679D82 /* NSStringPythonAdditions.h in Headers */,
-				AFE6306F1DF9BB9E005FFD01 /* NSErrorPythonAdditions.h in Headers */,
-				AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */,
-				AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */,
-				AF2D96BA1DFABF39006EE618 /* XDTObject.h in Headers */,
 				AF125EBB1E0414A600F659AA /* XDGPL.h in Headers */,
+				AF9C220B1E06FD4E00BB02FC /* XDTGa99Objcode.h in Headers */,
 				AF9C22071E06D88A00BB02FC /* XDTGPLAssembler.h in Headers */,
-				AFBDC41E22BA8B8C00DDD4C2 /* XDTMessage.h in Headers */,
-				AF06979322BE3081001E1749 /* NSSetPythonAdditions.h in Headers */,
+				AF2D96AA1DFABAAD006EE618 /* XDAssembler.h in Headers */,
+				AF2D96B31DFABF39006EE618 /* XDTAs99Symbols.h in Headers */,
+				AF2D96B71DFABF39006EE618 /* XDTAs99Objcode.h in Headers */,
+				AF2D96B81DFABF39006EE618 /* XDTAssembler.h in Headers */,
+				AF5CF8A71DFF268800C08E36 /* XDBasic.h in Headers */,
+				AF5CF8A41DFF246400C08E36 /* XDTBasic.h in Headers */,
+				AF2D96BA1DFABF39006EE618 /* XDTObject.h in Headers */,
+				AFE630791DF9BB9E005FFD01 /* XDTZipFile.h in Headers */,
 				AF157E021FBF4D4000679D82 /* XDTException.h in Headers */,
+				AFBDC41E22BA8B8C00DDD4C2 /* XDTMessage.h in Headers */,
 				AF2D96C91DFAFF29006EE618 /* NSDataPythonAdditions.h in Headers */,
+				AFE6306D1DF9BB9E005FFD01 /* NSArrayPythonAdditions.h in Headers */,
+				AF06979322BE3081001E1749 /* NSSetPythonAdditions.h in Headers */,
+				AFE6306F1DF9BB9E005FFD01 /* NSErrorPythonAdditions.h in Headers */,
+				AF157DFE1FBF06B300679D82 /* NSStringPythonAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,13 +25,13 @@
 #ifndef XDGPL_h
 #define XDGPL_h
 
-#import <XDTools99/XDTObject.h>
+#import "XDTObject.h"
 
-#import <XDTools99/XDGPL/XDTGa99Objcode.h>
-#import <XDTools99/XDGPL/XDTGPLAssembler.h>
+#import "XDTGa99Objcode.h"
+#import "XDTGPLAssembler.h"
 
-#import <XDTools99/XDTZipFile.h>
+#import "XDTZipFile.h"
 
-#import <XDTools99/XDTMessage.h>
+#import "XDTMessage.h"
 
 #endif /* XDGPL_h */

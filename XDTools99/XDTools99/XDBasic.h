@@ -25,8 +25,8 @@
 #ifndef XDBasic_h
 #define XDBasic_h
 
-#import <XDTools99/XDTObject.h>
+#import "XDTObject.h"
 
-#import <XDTools99/XDBasic/XDTBasic.h>
+#import "XDTBasic.h"
 
 #endif /* XDBasic_h */

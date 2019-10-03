@@ -32,6 +32,6 @@ FOUNDATION_EXPORT const unsigned char xdt99wrapperVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <xdt99wrapper/PublicHeader.h>
 
-#import <XDTools99/XDAssembler.h>
-#import <XDTools99/XDBasic.h>
-#import <XDTools99/XDGPL.h>
+#import "XDAssembler.h"
+#import "XDBasic.h"
+#import "XDGPL.h"

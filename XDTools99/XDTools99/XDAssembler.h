@@ -25,14 +25,14 @@
 #ifndef XDAssembler_h
 #define XDAssembler_h
 
-#import <XDTools99/XDTObject.h>
+#import "XDTObject.h"
 
-#import <XDTools99/XDAssembler/XDTAs99Symbols.h>
-#import <XDTools99/XDAssembler/XDTAs99Objcode.h>
-#import <XDTools99/XDAssembler/XDTAssembler.h>
+#import "XDTAs99Symbols.h"
+#import "XDTAs99Objcode.h"
+#import "XDTAssembler.h"
 
-#import <XDTools99/XDTZipFile.h>
+#import "XDTZipFile.h"
 
-#import <XDTools99/XDTMessage.h>
+#import "XDTMessage.h"
 
 #endif /* XDAssembler_h */
